@@ -56,10 +56,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="GameWakeMain"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="29" Y="28"/>
+        <CursorPos X="16" Y="10"/>
         <UsageCount Value="39"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -95,13 +96,10 @@
         <Filename Value="LanguageFile.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="LanguageFile"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="92"/>
         <CursorPos X="1" Y="113"/>
         <UsageCount Value="39"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit9>
       <Unit10>
