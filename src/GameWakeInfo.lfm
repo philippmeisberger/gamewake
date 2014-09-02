@@ -1,0 +1,305 @@
+object Info: TInfo
+  Left = 542
+  Height = 282
+  Top = 172
+  Width = 405
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsDialog
+  Caption = 'Über Game Wake'
+  ClientHeight = 282
+  ClientWidth = 405
+  Color = clBtnFace
+  Font.CharSet = ANSI_CHARSET
+  Font.Color = clBlack
+  Font.Height = -11
+  Font.Name = 'Sans'
+  Icon.Data = {
+    FE0200000000010001002020100001000400E802000016000000280000002000
+    0000400000000100040000000000800200000000000000000000000000000000
+    000000000000000080000080000000808000800000008000800080800000C0C0
+    C000808080000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFF
+    FF00000000000000000000000000000000000000000000077777777700000000
+    00000000000007777777777777000000000000000007777FFFF9FFFFFF770000
+    0000000000777FFFFFFFFFFFFFF7700000000000077FF9FFFFFFFFFFF9FF7700
+    0000000077F9FFFFFFFFFFFFFFFFF7700000000077FF9FFFFFFFFFFFFFFFFF70
+    000000077FFFF9FFFFFFFFFFFFFFFF77000000077F9FFF9FFFFFFFFFFFFF9FF7
+    00000077FFFFFFF9FFFFFFFFFFFFFFF770000077FFFFFFFF9FFFFFFFFFFFFFF7
+    70000077FFFFFFFFF9FFFFFFFFFFFFFF70000077FFFFFFFFFF000FFFFFFFFFFF
+    700000779FFFFFFFFF000FFFFFFFFF9F70000077FFFFFFFFFF000FFFFFFFFFFF
+    70000077FFFFFFFFF0F0FFFFFFFFFFF770000077FFFFFFFF0FF0FFFFFFFFFFF7
+    700000077FFFFFF0FFF0FFFFFFFFFFF7000000077FFFFF0FFFF0FFFFFFFF9F77
+    00000000779FF0FFFFF0FFFFFFFFFF700000000077FF0FFFFFFFFFFFFFFFF770
+    00000000077FFFFFFFFFFFFFFFFF7700000000007077FF9FFFFFFFFF9FF77070
+    00000077070777FFFFFFFFFFF7770707700000F77000077FFFF9FFFF77000077
+    7000000F7000000777777777000000F700000000000000000000000000000000
+    0000000000000000007770000000000000000000000000000F07070000000000
+    00000000000000000F0707000000000000000000000000000000000000000000
+    0000FFE00FFFFF8003FFFE0000FFFC00007FF800003FF000001FE000000FE000
+    000FC0000007C000000780000003800000038000000380000003800000038000
+    00038000000380000003C0000007C0000007E000000FE000000FF000001FC000
+    00078000000382000083C3800387E7E00FCFFFF83FFFFFF01FFFFFF01FFFFFF8
+    3FFF
+  }
+  OnCreate = FormCreate
+  Position = poScreenCenter
+  LCLVersion = '0.9.30.4'
+  object PageControl: TPageControl
+    Left = 0
+    Height = 286
+    Top = 0
+    Width = 408
+    ActivePage = tsInfo
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    TabIndex = 0
+    TabOrder = 0
+    object tsInfo: TTabSheet
+      Caption = 'Infos'
+      ClientHeight = 254
+      ClientWidth = 402
+      object lVersion: TLabel
+        Left = 24
+        Height = 14
+        Top = 56
+        Width = 30
+        Caption = 'v 3.0'
+        ParentColor = False
+      end
+      object Image: TImage
+        Left = 24
+        Height = 32
+        Top = 24
+        Width = 32
+        Picture.Data = {
+          055449636F6EFE0200000000010001002020100001000400E802000016000000
+          2800000020000000400000000100040000000000800200000000000000000000
+          0000000000000000000000000000800000800000008080008000000080008000
+          80800000C0C0C000808080000000FF0000FF000000FFFF00FF000000FF00FF00
+          FFFF0000FFFFFF00000000000000000000000000000000000000000000077777
+          77770000000000000000000007777777777777000000000000000007777FFFF9
+          FFFFFF7700000000000000777FFFFFFFFFFFFFF7700000000000077FF9FFFFFF
+          FFFFF9FF77000000000077F9FFFFFFFFFFFFFFFFF7700000000077FF9FFFFFFF
+          FFFFFFFFFF70000000077FFFF9FFFFFFFFFFFFFFFF77000000077F9FFF9FFFFF
+          FFFFFFFF9FF700000077FFFFFFF9FFFFFFFFFFFFFFF770000077FFFFFFFF9FFF
+          FFFFFFFFFFF770000077FFFFFFFFF9FFFFFFFFFFFFFF70000077FFFFFFFFFF00
+          0FFFFFFFFFFF700000779FFFFFFFFF000FFFFFFFFF9F70000077FFFFFFFFFF00
+          0FFFFFFFFFFF70000077FFFFFFFFF0F0FFFFFFFFFFF770000077FFFFFFFF0FF0
+          FFFFFFFFFFF7700000077FFFFFF0FFF0FFFFFFFFFFF7000000077FFFFF0FFFF0
+          FFFFFFFF9F7700000000779FF0FFFFF0FFFFFFFFFF700000000077FF0FFFFFFF
+          FFFFFFFFF77000000000077FFFFFFFFFFFFFFFFF7700000000007077FF9FFFFF
+          FFFF9FF7707000000077070777FFFFFFFFFFF7770707700000F77000077FFFF9
+          FFFF770000777000000F7000000777777777000000F700000000000000000000
+          0000000000000000000000000000007770000000000000000000000000000F07
+          07000000000000000000000000000F0707000000000000000000000000000000
+          0000000000000000FFE00FFFFF8003FFFE0000FFFC00007FF800003FF000001F
+          E000000FE000000FC0000007C000000780000003800000038000000380000003
+          80000003800000038000000380000003C0000007C0000007E000000FE000000F
+          F000001FC00000078000000382000083C3800387E7E00FCFFFF83FFFFFF01FFF
+          FFF01FFFFFF83FFF
+        }
+      end
+      object l_copy: TLabel
+        Left = 144
+        Height = 13
+        Top = 235
+        Width = 106
+        Anchors = [akBottom]
+        Caption = '© P.Meisberger 2014'
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object lBuild: TLabel
+        Left = 16
+        Height = 14
+        Top = 72
+        Width = 37
+        Caption = 'Build: '
+        ParentColor = False
+      end
+      object mInfo: TMemo
+        Left = 80
+        Height = 195
+        Top = 24
+        Width = 302
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        Lines.Strings = (
+          '"Game Wake ist ein virtueller Wecker, den man sich stellen kann, um nicht, z.B. während des exzessiven Gamings, die Pizza im Ofen zu vergessen. Aber auch sonst eignet sich Game Wake zum Erinnern an alle möglichen Dinge."'
+          ''
+          'Game Wake ist durch internationale Copyright-Gesetze geschützt und unterliegt dem Urheberrecht. Das Copyright für alle Programmteile liegt beim Autor von Game Wake Philipp Meisberger (PM Code Works). Für Schäden an Hard- und Software, die durch die Benutzung dieses Programms entstehen, wird keine Haftung übernommen.'
+          '03/2014'
+        )
+        ReadOnly = True
+        TabOrder = 0
+      end
+      object bOk: TButton
+        Left = 309
+        Height = 25
+        Top = 223
+        Width = 73
+        Anchors = [akRight, akBottom]
+        Caption = 'OK'
+        Default = True
+        OnClick = bOkClick
+        TabOrder = 1
+      end
+    end
+    object tsHistory: TTabSheet
+      Caption = 'Versions History'
+      ClientHeight = 254
+      ClientWidth = 402
+      ImageIndex = 1
+      object lCopy2: TLabel
+        Left = 144
+        Height = 13
+        Top = 235
+        Width = 106
+        Anchors = [akBottom]
+        Caption = '© P.Meisberger 2014'
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object mHistroy: TMemo
+        Left = 16
+        Height = 188
+        Top = 25
+        Width = 366
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        Lines.Strings = (
+          'Game Wake'
+          'Ein Freeware-Programm von PM Code Works'
+          ''
+          'History'
+          '--------'
+          ''
+          'Version 3.0  [16.03.14]'
+          ''
+          '- API Version 3'
+          '- Updatefunktion verbessert'
+          '- Plattformunabhängig verbessert'
+          '- Source-Code an vielen Stellen vereinfacht'
+          ''
+          '---------------------------------'
+          ''
+          'Version 2.1.2  [02.11.13]'
+          ''
+          '- Plattformunabhängig (momentan nur Windows/Debian/Ubuntu)'
+          '- neuer Beep-Sound'
+          '- Bug im Counter-Modus bei Stunden > 23 behoben'
+          '- Sonstige kleine Bug Fixes'
+          ''
+          '---------------------------------'
+          ''
+          'Version 2.1.1  [09.10.13]'
+          ''
+          '- Zeit wird nach Standby aktualisiert (nur Windows)'
+          '- Bei Klick auf Tray-Icon erscheint ein Balloon Tip mit der Alarmzeit'
+          '- Bug in "Herunterfahren"-Funktion behoben'
+          '- "Abbrechen"-Button ist bei Update von Anfang an verfügbar (nur Windows)'
+          ''
+          '---------------------------------'
+          ''
+          'Version 2.1  [21.06.13]'
+          ''
+          '- API Version 2.1'
+          '- neue Option: Stunden und Minuten können gekoppelt werden'
+          '- Zeit wird nun im Format "HH:MM:SS" dargestellt'
+          '- Änderungen im Fenstermanagement und GUI '
+          ''
+          '---------------------------------'
+          ''
+          'Version 2.0.1  [03.12.12]'
+          ''
+          '- Sprachunterstützung für Englisch und Französich hinzugefügt'
+          '- Update-Funktion verbessert'
+          '- automatische Updatesuche kann geändert werden'
+          '- GUI Änderungen im Optionenfenster'
+          '- Bug beim Speichervorgang behoben'
+          ''
+          '---------------------------------'
+          ''
+          'Version 2.0 (NT)  [18.11.12]'
+          ''
+          '- Game Wake NT: Source Code größtenteils neugeschrieben'
+          '  - Speichervorgang verbessert'
+          '  - Alarm als Thread'
+          '- neues Alarm-Event "Herunterfahren" hinzugefügt'
+          '- Counter hinzugefügt'
+          '- GUI verbessert'
+          '  - Buttons zur Alarmeinstellung hinzugefügt'
+          '- automatische und manuelle Updatefunktion hinzugefügt'
+          '- Zertifikat kann heruntergeladen werden'
+          '- kleinere Bug fixes'
+          ''
+          '---------------------------------'
+          ''
+          'Version 1.3.1  [09.11.11]'
+          ''
+          '- Neuer Alarm-Sound "Martinshorn" verfügbar'
+          '- jede Menge Bugfixes'
+          ''
+          '---------------------------------'
+          ''
+          'Version 1.3  [24.08.11]'
+          ''
+          '- Ein Optionen-Menü wurde unter "Bearbeiten" im Main Menu hinzugefügt'
+          '  - User kann selbst entscheiden, was gespeichert werden soll'
+          '- "Position speichern"-Funktion ist nun unter Reiter "Optionen" zu finden'
+          '- kleinere Bugfixes'
+          ''
+          '---------------------------------'
+          ''
+          'Version 1.2  [17.08.11]'
+          ''
+          '- Farbe des Blinkens kann frei gewählt und gespeichert werden '
+          '- Speicherung selbstkreierter Farben möglich'
+          '- Bugfixes'
+          ''
+          '---------------------------------'
+          ''
+          'Version 1.1  [14.08.11]'
+          ''
+          '- Main Menu hinzugefügt'
+          '  - Eingaben können gespeichert werden'
+          '  - Position speichern möglich'
+          '- Text kann bei Alarm angezeigt und (in userconfig) gespeichert werden'
+          '- Game Wake kann bei Alarm (rot) blinken'
+          ''
+          '---------------------------------'
+          ''
+          'Version 1.0  [10.08.11]'
+          ''
+          'Das Erste Mal Game Wake.'
+          ''
+          '-----------------------------------------------------------------------------------'
+          ''
+          'Game Wake ist Freeware. Das heißt, dass das Kopieren und die Weitergabe von Game Wake, sowie die Veröffentlichung auf WWW-Servern und Datenträgern erlaubt ist. Allerdings muss das Programm vollständig und in der Original-Form kopiert werden. Das Kopieren von Teilen des Programmes ist nicht erlaubt.'
+          'Soll Game Wake auf eine kommerzielle CD-ROM (mit Magazin) gepresst werden, wäre es nett, mir eine Ausgabe dieser CD-ROM (mit Magazin) zuschicken. Meine Adresse erfahren Sie unter "team@pm-codeworks.de".'
+          ''
+          '10/2013'
+        )
+        ReadOnly = True
+        ScrollBars = ssVertical
+        TabOrder = 0
+      end
+      object bOk2: TButton
+        Left = 309
+        Height = 25
+        Top = 223
+        Width = 73
+        Anchors = [akRight, akBottom]
+        Caption = 'OK'
+        OnClick = bOkClick
+        TabOrder = 1
+      end
+    end
+  end
+end

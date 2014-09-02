@@ -1,0 +1,4 @@
+## Uses glob syntax, regex sucks ;)
+syntax: glob
+
+bin/**
