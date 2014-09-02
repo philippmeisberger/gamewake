@@ -1,4 +1,5 @@
 ## Uses glob syntax, regex sucks ;)
 syntax: glob
 
+BACKUP/**
 bin/**
