@@ -106,18 +106,18 @@ procedure TOptions.SetLanguage();
 begin
   with FLang do
   begin
-    Caption := GetString(3);
-    gbSave.Caption := GetString(24);
-    cbSaveClock.Caption := GetString(25);
-    cbSaveText.Caption := GetString(26);
-    cbSavePos.Caption := GetString(27);
-    cbSaveSound.Caption := GetString(28);
-    cbSaveColor.Caption := GetString(29);
+    Caption := GetString(34);
+    gbSave.Caption := GetString(51);
+    cbSaveClock.Caption := GetString(52);
+    cbSaveText.Caption := GetString(53);
+    cbSavePos.Caption := GetString(54);
+    cbSaveSound.Caption := GetString(55);
+    cbSaveColor.Caption := GetString(56);
     gbGeneral.Caption := GetString(57);
-    cbCombine.Caption := GetString(65);
-    cbUpdate.Caption := GetString(64);
-    bReset.Caption := GetString(31);
-    bCancel.Caption := GetString(48);
+    cbCombine.Caption := GetString(58);
+    cbUpdate.Caption := GetString(59);
+    bReset.Caption := GetString(61);
+    bCancel.Caption := GetString(6);
   end;  //of with
 end;
 

@@ -1,7 +1,7 @@
 object Info: TInfo
   Left = 542
   Top = 172
-  BorderIcons = [biSystemMenu]
+  BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsDialog
   Caption = #220'ber Game Wake'
   ClientHeight = 282
@@ -64,7 +64,7 @@ object Info: TInfo
         Top = 56
         Width = 24
         Height = 14
-        Caption = 'v 3.1'
+        Caption = 'v 3.0'
         Color = clBtnFace
         ParentColor = False
       end
@@ -74,31 +74,31 @@ object Info: TInfo
         Width = 32
         Height = 32
         Picture.Data = {
-          055449636F6EFE0200000000010001002020100001000400E802000016000000
-          2800000020000000400000000100040000000000800200000000000000000000
-          0000000000000000000000000000800000800000008080008000000080008000
-          80800000C0C0C000808080000000FF0000FF000000FFFF00FF000000FF00FF00
-          FFFF0000FFFFFF00000000000000000000000000000000000000000000077777
-          77770000000000000000000007777777777777000000000000000007777FFFF9
-          FFFFFF7700000000000000777FFFFFFFFFFFFFF7700000000000077FF9FFFFFF
-          FFFFF9FF77000000000077F9FFFFFFFFFFFFFFFFF7700000000077FF9FFFFFFF
-          FFFFFFFFFF70000000077FFFF9FFFFFFFFFFFFFFFF77000000077F9FFF9FFFFF
-          FFFFFFFF9FF700000077FFFFFFF9FFFFFFFFFFFFFFF770000077FFFFFFFF9FFF
-          FFFFFFFFFFF770000077FFFFFFFFF9FFFFFFFFFFFFFF70000077FFFFFFFFFF00
-          0FFFFFFFFFFF700000779FFFFFFFFF000FFFFFFFFF9F70000077FFFFFFFFFF00
-          0FFFFFFFFFFF70000077FFFFFFFFF0F0FFFFFFFFFFF770000077FFFFFFFF0FF0
-          FFFFFFFFFFF7700000077FFFFFF0FFF0FFFFFFFFFFF7000000077FFFFF0FFFF0
-          FFFFFFFF9F7700000000779FF0FFFFF0FFFFFFFFFF700000000077FF0FFFFFFF
-          FFFFFFFFF77000000000077FFFFFFFFFFFFFFFFF7700000000007077FF9FFFFF
-          FFFF9FF7707000000077070777FFFFFFFFFFF7770707700000F77000077FFFF9
-          FFFF770000777000000F7000000777777777000000F700000000000000000000
-          0000000000000000000000000000007770000000000000000000000000000F07
-          07000000000000000000000000000F0707000000000000000000000000000000
-          0000000000000000FFE00FFFFF8003FFFE0000FFFC00007FF800003FF000001F
-          E000000FE000000FC0000007C000000780000003800000038000000380000003
-          80000003800000038000000380000003C0000007C0000007E000000FE000000F
-          F000001FC00000078000000382000083C3800387E7E00FCFFFF83FFFFFF01FFF
-          FFF01FFFFFF83FFF}
+          055449636F6E0000010001002020100001000400E80200001600000028000000
+          2000000040000000010004000000000080020000000000000000000000000000
+          0000000000000000000080000080000000808000800000008000800080800000
+          C0C0C000808080000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000
+          FFFFFF0000000000000000000000000000000000000000000007777777770000
+          000000000000000007777777777777000000000000000007777FFFF9FFFFFF77
+          00000000000000777FFFFFFFFFFFFFF7700000000000077FF9FFFFFFFFFFF9FF
+          77000000000077F9FFFFFFFFFFFFFFFFF7700000000077FF9FFFFFFFFFFFFFFF
+          FF70000000077FFFF9FFFFFFFFFFFFFFFF77000000077F9FFF9FFFFFFFFFFFFF
+          9FF700000077FFFFFFF9FFFFFFFFFFFFFFF770000077FFFFFFFF9FFFFFFFFFFF
+          FFF770000077FFFFFFFFF9FFFFFFFFFFFFFF70000077FFFFFFFFFF000FFFFFFF
+          FFFF700000779FFFFFFFFF000FFFFFFFFF9F70000077FFFFFFFFFF000FFFFFFF
+          FFFF70000077FFFFFFFFF0F0FFFFFFFFFFF770000077FFFFFFFF0FF0FFFFFFFF
+          FFF7700000077FFFFFF0FFF0FFFFFFFFFFF7000000077FFFFF0FFFF0FFFFFFFF
+          9F7700000000779FF0FFFFF0FFFFFFFFFF700000000077FF0FFFFFFFFFFFFFFF
+          F77000000000077FFFFFFFFFFFFFFFFF7700000000007077FF9FFFFFFFFF9FF7
+          707000000077070777FFFFFFFFFFF7770707700000F77000077FFFF9FFFF7700
+          00777000000F7000000777777777000000F70000000000000000000000000000
+          00000000000000000000007770000000000000000000000000000F0707000000
+          000000000000000000000F070700000000000000000000000000000000000000
+          00000000FFE00FFFFF8003FFFE0000FFFC00007FF800003FF000001FE000000F
+          E000000FC0000007C00000078000000380000003800000038000000380000003
+          800000038000000380000003C0000007C0000007E000000FE000000FF000001F
+          C00000078000000382000083C3800387E7E00FCFFFF83FFFFFF01FFFFFF01FFF
+          FFF83FFF}
       end
       object l_copy: TLabel
         Left = 144
@@ -133,18 +133,17 @@ object Info: TInfo
         Anchors = [akLeft, akTop, akRight, akBottom]
         Lines.Strings = (
           '"Game Wake ist ein virtueller Wecker, den man sich stellen '
-          'kann, um nicht, z.B. w'#228'hrend des exzessiven Gamings, '
-          'die Pizza im Ofen zu vergessen. Aber auch sonst eignet '
-          'sich Game Wake zum Erinnern an alle m'#246'glichen Dinge."'
+          'kann, um nicht, z.B. w'#228'hrend des exzessiven Gamings, die '
+          'Pizza im Ofen zu vergessen. Aber auch sonst eignet sich '
+          'Game Wake zum Erinnern an alle m'#246'glichen Dinge."'
           ''
           'Game Wake ist durch internationale Copyright-Gesetze '
-          'gesch'#252'tzt und unterliegt dem Urheberrecht. Das '
-          'Copyright f'#252'r alle Programmteile liegt beim Autor von '
-          'Game Wake Philipp Meisberger (PM Code Works). F'#252'r '
-          'Sch'#228'den an Hard- und Software, die durch die Benutzung '
-          'dieses Programms entstehen, wird keine Haftung '
-          #252'bernommen.'
-          '09/2014')
+          'gesch'#252'tzt und unterliegt dem Urheberrecht. Das Copyright '
+          'f'#252'r alle Programmteile liegt beim Autor von Game Wake '
+          'Philipp Meisberger (PM Code Works). F'#252'r Sch'#228'den an Hard- '
+          'und Software, die durch die Benutzung dieses Programms '
+          'entstehen, wird keine Haftung '#252'bernommen.'
+          '03/2014')
         ReadOnly = True
         TabOrder = 0
       end
@@ -238,8 +237,7 @@ object Info: TInfo
           ''
           'Version 2.0.1  [03.12.12]'
           ''
-          '- Sprachunterst'#252'tzung f'#252'r Englisch und Franz'#246'sich '
-          'hinzugef'#252'gt'
+          '- Sprachunterst'#252'tzung f'#252'r Englisch und Franz'#246'sich hinzugef'#252'gt'
           '- Update-Funktion verbessert'
           '- automatische Updatesuche kann ge'#228'ndert werden'
           '- GUI '#196'nderungen im Optionenfenster'
@@ -310,18 +308,20 @@ object Info: TInfo
             '-------------------'
           ''
           'Game Wake ist Freeware. Das hei'#223't, dass das Kopieren und die '
-          'Weitergabe von Game Wake, sowie die Ver'#246'ffentlichung auf '
-          'WWW-Servern und Datentr'#228'gern erlaubt ist. Allerdings muss das '
+          'Weitergabe von Game Wake, sowie die Ver'#246'ffentlichung auf WWW-'
           
-            'Programm vollst'#228'ndig und in der Original-Form kopiert werden. Da' +
-            's '
-          'Kopieren von Teilen des Programmes ist nicht erlaubt.'
+            'Servern und Datentr'#228'gern erlaubt ist. Allerdings muss das Progra' +
+            'mm '
+          
+            'vollst'#228'ndig und in der Original-Form kopiert werden. Das Kopiere' +
+            'n von '
+          'Teilen des Programmes ist nicht erlaubt.'
           'Soll Game Wake auf eine kommerzielle CD-ROM (mit Magazin) '
           'gepresst werden, w'#228're es nett, mir eine Ausgabe dieser CD-ROM '
           '(mit Magazin) zuschicken. Meine Adresse erfahren Sie unter '
           '"team@pm-codeworks.de".'
           ''
-          '09/2014')
+          '10/2013')
         ReadOnly = True
         ScrollBars = ssVertical
         TabOrder = 0

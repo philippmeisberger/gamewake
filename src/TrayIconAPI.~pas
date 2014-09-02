@@ -137,13 +137,13 @@ begin
     StrPLCopy(szTip, FTrayIconName, SizeOf(szTip) - 1);  //Name of Tray Icon
   end;  //of with
 
-  Shell_NotifyIcon(NIM_ADD, @FIconData);           //Add Tray-Icon
+  //Shell_NotifyIcon(NIM_ADD, @FIconData);           //Add Tray-Icon
 end;
 
 
 destructor TTrayIcon.Destroy;
 begin
-  Shell_NotifyIcon(NIM_DELETE, @FIconData);        //Remove Tray-Icon
+  //Shell_NotifyIcon(NIM_DELETE, @FIconData);        //Remove Tray-Icon
   DeallocateHWnd(FIconData.Wnd);
 end;
 
@@ -151,42 +151,42 @@ end;
 procedure TTrayIcon.DoNotifyOnClick;
 begin
   if Assigned(FOnClick) then
-    FOnClick(Self);
+     FOnClick(Self);
 end;
 
 
 procedure TTrayIcon.OnNotifyOnDblClick(X, Y: Integer);
 begin
   if Assigned(FOnDblClick) then
-    FOnDblClick(Self, X, Y);
+     FOnDblClick(Self, X, Y);
 end;
 
 
 procedure TTrayIcon.DoNotifyOnHide;
 begin
   if Assigned(FOnHide) then
-    FOnHide(Self);
+     FOnHide(Self);
 end;
 
 
 procedure TTrayIcon.DoNotifyOnMouseUp(AButton: TMouseButton; X, Y: Integer);
 begin
   if Assigned(FOnMouseUp) then
-    FOnMouseUp(Self, AButton, X, Y);
+     FOnMouseUp(Self, AButton, X, Y);
 end;
 
 
 procedure TTrayIcon.DoNotifyOnShow;
 begin
   if Assigned(FOnShow) then
-    FOnShow(Self);
+     FOnShow(Self);
 end;
 
 
 procedure TTrayIcon.DoNotifyOnTimeOut;
 begin
   if Assigned(FOnTimeOut) then
-    FOnTimeOut(Self);
+     FOnTimeOut(Self);
 end;
 
 
@@ -215,20 +215,20 @@ begin
   case Msg.LParam of
     WM_LBUTTONUP:
       begin
-        GetCoordinates(X, Y);
-        DoNotifyOnMouseUp(mbLeft, X, Y);
+      GetCoordinates(X, Y);
+      DoNotifyOnMouseUp(mbLeft, X, Y);
       end;  //of begin
 
     WM_RBUTTONUP:
       begin
-        GetCoordinates(X, Y);
-        DoNotifyOnMouseUp(mbRight, X, Y);
+      GetCoordinates(X, Y);
+      DoNotifyOnMouseUp(mbRight, X, Y);
       end;  //of begin
 
     WM_LBUTTONDBLCLK:
       begin
-        GetCoordinates(X, Y);
-        OnNotifyOnDblClick(X, Y);
+      GetCoordinates(X, Y);
+      OnNotifyOnDblClick(X, Y);
       end;  //of begin
 
     NIN_BALLOONSHOW:
@@ -273,7 +273,7 @@ begin
     dwInfoFlags := AIconID;    //NIIF_INFO, NIIF_ERROR, NIIF_WARNING
   end;  //of with
 
-  Shell_NotifyIcon(NIM_MODIFY, @FIconData);
+  //Shell_NotifyIcon(NIM_MODIFY, @FIconData);
 end;
 
 end.

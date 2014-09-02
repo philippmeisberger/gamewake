@@ -146,7 +146,12 @@ var
 
 implementation
 
+{$IFDEF MSWINDOWS}
 {$R *.dfm}
+{$ELSE}
+{$R *.lfm}
+{$ENDIF}
+
 
 uses GameWakeInfo, GameWakeOps;
 
@@ -177,7 +182,7 @@ begin
   Application.Restore;
   Show;
 
-  bStop.Caption := FLang.GetString(23);
+  bStop.Caption := FLang.GetString(50);
   bAlert.Default := False;
   bStop.Default := True;
   rgSounds.Enabled := False;
@@ -318,7 +323,7 @@ begin
     end;  //of try
 
   except
-    FLang.MessageBox(74, mtError);
+    FLang.MessageBox(73, mtError);
   end;  //of try
 end;
 
@@ -422,7 +427,7 @@ begin
     end;  //of try
 
   except
-    FLang.MessageBox(Format(FLang.GetString(74), [FConfigPath]), mtError);
+    FLang.MessageBox(Format(FLang.GetString(75), [FConfigPath]), mtError);
   end;  //of try
 end;
 
@@ -478,7 +483,11 @@ begin
         // Select current used language menu entry
         if (Langs[i] = APrefLang) then
         begin
+        {$IFDEF MSWINDOWS}
+          FLang.Lang := LangID;
+        {$ELSE}
           FLang.Lang := APrefLang;
+        {$ENDIF}
           LangInList := True;
           Item.Checked := True;
           Item.AutoCheck := True;
@@ -594,7 +603,7 @@ begin
     end;  //of try
 
   except
-    FLang.MessageBox(Format(FLang.GetString(75), [FConfigPath]), mtError);
+    FLang.MessageBox(Format(FLang.GetString(76), [FConfigPath]), mtError);
   end;  //of try
 end;
 
@@ -610,42 +619,42 @@ begin
   with FLang do
   begin
     // Set captions for TMenuItems
-    mmFile.Caption := GetString(0);
-    mmSave.Caption := GetString(1);
-    mmEdit.Caption := GetString(2);
-    mmOptions.Caption := GetString(3);
-    mmTimer.Caption := GetString(4);
-    mmCounter.Caption := GetString(5);
-    mmView.Caption := GetString(62);
-    mmLang.Caption := GetString(63);
-    mmHelp.Caption := GetString(6);
-    mmUpdate.Caption:= GetString(7);
-    mmDownloadCert.Caption := GetString(8);
-    mmReport.Caption := GetString(66);
-    mmWebsite.Caption := GetString(70);
+    mmFile.Caption := GetString(31);
+    mmSave.Caption := GetString(32);
+    mmEdit.Caption := GetString(33);
+    mmOptions.Caption := GetString(34);
+    mmTimer.Caption := GetString(35);
+    mmCounter.Caption := GetString(36);
+    mmView.Caption := GetString(10);
+    mmLang.Caption := GetString(25);
+    mmHelp.Caption := GetString(14);
+    mmUpdate.Caption:= GetString(15);
+    mmDownloadCert.Caption := GetString(16);
+    mmReport.Caption := GetString(26);
+    mmWebsite.Caption := GetString(29);
     lCopy.Hint := mmWebsite.Caption;
-    mmInfo.Caption := GetString(9);
+    mmInfo.Caption := GetString(17);
 
     // Set captions for "alert type" TRadioGroup
-    rgSounds.Caption := GetString(10);
+    rgSounds.Caption := GetString(37);
 
     for i := 0 to 4 do
-      rgSounds.Items[i] := GetString(i + 11);
+      rgSounds.Items[i] := GetString(i + 38);
 
     // Set captions for "at alert" TGroupBox
-    gpOther.Caption := GetString(16);
-    cbBlink.Caption := GetString(17);
-    bColor.Caption := GetString(18);
-    cbText.Caption := GetString(19);
-    bChange.Caption := GetString(20);
+    gpOther.Caption := GetString(43);
+    cbBlink.Caption := GetString(44);
+    bColor.Caption := GetString(45);
+    cbText.Caption := GetString(46);
+    bChange.Caption := GetString(47);
 
     // Set captions for buttons
-    bAlert.Caption := GetString(21);
-    bStop.Caption := GetString(22);
+    bAlert.Caption := GetString(48);
+    bStop.Caption := GetString(49);
 
     // Set captions for TPopupMenu items
-    pmOpen.Caption := GetString(76);
-    pmClose.Caption := GetString(77);
+    pmOpen.Caption := GetString(77);
+    pmClose.Caption := GetString(78);
   end;  //of with
 end;
 
@@ -665,11 +674,11 @@ begin
     // Show Balloon hint on left click
     mbLeft:
       if mmTimer.Checked then
-        FTrayIcon.BalloonTip(Format(FLang.GetString(33), [Clock.Alert.GetTime(False)]))
+        FTrayIcon.BalloonTip(Format(FLang.GetString(63), [Clock.Alert.GetTime(False)]))
       else
       begin
         Clock.GetTimeRemaining(Hour, Min, Sec);
-        FTrayIcon.BalloonTip(Format(FLang.GetString(69), [Hour, Min, Sec]));
+        FTrayIcon.BalloonTip(Format(FLang.GetString(72), [Hour, Min, Sec]));
       end;  //of if
 
     // Show PopupMenu on right click
@@ -831,7 +840,7 @@ procedure TMain.pmCloseClick(Sender: TObject);
 begin
   // Show confirmation
   with FLang do
-    if (MessageBox(GetString(39) +^J+ GetString(40), mtQuestion) = IDYes) then
+    if (MessageBox(GetString(69) +^J+ GetString(70), mtQuestion) = IDYes) then
     begin
       bStop.Click;
       Close;
@@ -1024,10 +1033,10 @@ begin
     mmTimer.Enabled := False;
     mmCounter.Enabled := False;
 
-    FLang.MessageBox(Format(FLang.GetString(32), [Clock.Alert.GetTime(False)]));
+    FLang.MessageBox(Format(FLang.GetString(62), [Clock.Alert.GetTime(False)]));
 
   except
-    FLang.MessageBox(46, mtWarning);
+    FLang.MessageBox(74, mtWarning);
   end;  //of try
 end;
 
@@ -1048,7 +1057,7 @@ begin
 
   // Reset GUI
   Caption := Application.Title;
-  bStop.Caption := FLang.GetString(22);
+  bStop.Caption := FLang.GetString(50);
   bStop.Default := False;
   bStop.Enabled := False;
   bAlert.Enabled := True;
@@ -1079,7 +1088,7 @@ begin
   else
     bChange.Enabled := False;
 
-  FLang.MessageBox(34);
+  FLang.MessageBox(64);
 end;
 
 { TMain.bColorClick
@@ -1382,7 +1391,7 @@ begin
       except
         FTrayIcon.Free;
         FTrayIcon := nil;
-        FLang.MessageBox(72, mtError);
+        FLang.MessageBox(79, mtError);
         Show;
       end;  //of try
     {$ENDIF}

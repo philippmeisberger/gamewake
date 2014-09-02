@@ -64,7 +64,7 @@ object Info: TInfo
         Top = 56
         Width = 24
         Height = 14
-        Caption = 'v 3.0'
+        Caption = 'v 3.1'
         Color = clBtnFace
         ParentColor = False
       end
