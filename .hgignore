@@ -1,5 +1,8 @@
 ## Uses glob syntax, regex sucks ;)
 syntax: glob
 
+**.o
+**.or
+**.ppu
 BACKUP/**
 bin/**

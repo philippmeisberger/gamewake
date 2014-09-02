@@ -38,6 +38,8 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
+        <HostApplicationFilename Value="\home\phil\Informatik\PMCW\Projekte\Game Wake\bin\Linux\gamewake"/>
+        <CommandLineParams Value="--lang ..\..\src\lang"/>
         <LaunchingApplication PathPlusParams="\usr\bin\xterm -T 'Lazarus Run Output' -e $(LazarusDir)\tools\runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>

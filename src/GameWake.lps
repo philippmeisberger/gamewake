@@ -8,13 +8,10 @@
         <Filename Value="GameWake.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GameWake"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="15" Y="11"/>
+        <CursorPos X="14" Y="11"/>
         <UsageCount Value="39"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit0>
       <Unit1>
@@ -59,10 +56,14 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="GameWakeMain"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="40" Y="6"/>
+        <CursorPos X="29" Y="28"/>
         <UsageCount Value="39"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit5>
       <Unit6>
@@ -96,8 +97,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="LanguageFile"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="29" Y="11"/>
+        <TopLine Value="92"/>
+        <CursorPos X="1" Y="113"/>
         <UsageCount Value="39"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit9>
@@ -300,8 +301,8 @@
     </General>
     <JumpHistory Count="1" HistoryIndex="0">
       <Position1>
-        <Filename Value="GameWake.lpr"/>
-        <Caret Line="11" Column="15" TopLine="1"/>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="28" Column="29" TopLine="1"/>
       </Position1>
     </JumpHistory>
   </ProjectSession>
