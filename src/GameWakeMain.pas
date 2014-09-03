@@ -163,6 +163,7 @@ uses GameWakeInfo, GameWakeOps;
 
 procedure TMain.AfterUpdate(Sender: TObject; ADownloadedFileName: string);
 begin
+{$IFDEF MSWINDOWS}
   if (ExtractFileExt(ADownloadedFileName) <> '.reg') then
   begin
     // Install update?
@@ -179,6 +180,7 @@ begin
   end  //of begin
   else
     mmDownloadCert.Enabled := False;
+{$ENDIF}
 end;
 
 { private TMain.Alert
@@ -476,9 +478,6 @@ begin
 
     FLang.AddListener(Self);
 
-    // Set loaded language as global
-    SetLanguage(Self);
-
     try
       // Add a menu entry for every found language
       for i := 0 to Langs.Count -1 do
@@ -504,6 +503,9 @@ begin
         Item.OnClick := mmLangClick;
         mmLang.Add(Item);
       end;  //of for
+
+      // Set loaded language as global
+      SetLanguage(Self);
 
     finally
       Langs.Free;

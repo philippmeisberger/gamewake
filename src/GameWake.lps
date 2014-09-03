@@ -11,7 +11,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="14" Y="11"/>
-        <UsageCount Value="39"/>
+        <UsageCount Value="40"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit0>
       <Unit1>
@@ -21,13 +21,13 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="39"/>
+        <UsageCount Value="40"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit1>
       <Unit2>
         <Filename Value="GameWakeInfo.dfm"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="39"/>
+        <UsageCount Value="40"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit2>
       <Unit3>
@@ -40,13 +40,13 @@
         <WindowIndex Value="0"/>
         <TopLine Value="17"/>
         <CursorPos X="10" Y="49"/>
-        <UsageCount Value="39"/>
+        <UsageCount Value="40"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
       <Unit4>
         <Filename Value="GameWakeMain.dfm"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="39"/>
+        <UsageCount Value="40"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit4>
       <Unit5>
@@ -60,8 +60,8 @@
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="16" Y="10"/>
-        <UsageCount Value="39"/>
+        <CursorPos X="43" Y="11"/>
+        <UsageCount Value="40"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -69,7 +69,7 @@
       <Unit6>
         <Filename Value="GameWakeOps.dfm"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="39"/>
+        <UsageCount Value="40"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit6>
       <Unit7>
@@ -82,14 +82,14 @@
         <WindowIndex Value="0"/>
         <TopLine Value="18"/>
         <CursorPos X="10" Y="54"/>
-        <UsageCount Value="39"/>
+        <UsageCount Value="40"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit7>
       <Unit8>
         <Filename Value="gamewakeupdate.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GameWakeUpdate"/>
-        <UsageCount Value="39"/>
+        <UsageCount Value="40"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit8>
       <Unit9>
@@ -97,9 +97,9 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="LanguageFile"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="92"/>
-        <CursorPos X="1" Y="113"/>
-        <UsageCount Value="39"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="40"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit9>
       <Unit10>
@@ -237,7 +237,7 @@
         <Filename Value="Updater.pas"/>
         <UnitName Value="Updater"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
+        <TopLine Value="169"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -299,15 +299,107 @@
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
-    <JumpHistory Count="2" HistoryIndex="1">
+    <JumpHistory Count="25" HistoryIndex="24">
       <Position1>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="28" Column="29" TopLine="1"/>
+        <Caret Line="460" Column="1" TopLine="434"/>
       </Position1>
       <Position2>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="10" Column="16" TopLine="1"/>
+        <Caret Line="461" Column="1" TopLine="434"/>
       </Position2>
+      <Position3>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="463" Column="1" TopLine="434"/>
+      </Position3>
+      <Position4>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="473" Column="1" TopLine="451"/>
+      </Position4>
+      <Position5>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="476" Column="1" TopLine="451"/>
+      </Position5>
+      <Position6>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="479" Column="1" TopLine="451"/>
+      </Position6>
+      <Position7>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="482" Column="1" TopLine="451"/>
+      </Position7>
+      <Position8>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="628" Column="1" TopLine="607"/>
+      </Position8>
+      <Position9>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="629" Column="1" TopLine="607"/>
+      </Position9>
+      <Position10>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="632" Column="1" TopLine="607"/>
+      </Position10>
+      <Position11>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="477" Column="14" TopLine="475"/>
+      </Position11>
+      <Position12>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="358" Column="1" TopLine="337"/>
+      </Position12>
+      <Position13>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="373" Column="1" TopLine="339"/>
+      </Position13>
+      <Position14>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="376" Column="1" TopLine="342"/>
+      </Position14>
+      <Position15>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="482" Column="1" TopLine="461"/>
+      </Position15>
+      <Position16>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="628" Column="1" TopLine="607"/>
+      </Position16>
+      <Position17>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="629" Column="1" TopLine="607"/>
+      </Position17>
+      <Position18>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="632" Column="1" TopLine="607"/>
+      </Position18>
+      <Position19>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="632" Column="1" TopLine="607"/>
+      </Position19>
+      <Position20>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="358" Column="1" TopLine="337"/>
+      </Position20>
+      <Position21>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="482" Column="1" TopLine="461"/>
+      </Position21>
+      <Position22>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="629" Column="13" TopLine="608"/>
+      </Position22>
+      <Position23>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="632" Column="1" TopLine="608"/>
+      </Position23>
+      <Position24>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="358" Column="1" TopLine="337"/>
+      </Position24>
+      <Position25>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="507" Column="7" TopLine="469"/>
+      </Position25>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>
