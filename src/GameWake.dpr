@@ -7,8 +7,7 @@ uses
   GameWakeInfo in 'GameWakeInfo.pas' {Info},
   GameWakeOps in 'GameWakeOps.pas' {Options},
   AlertThread in 'AlertThread.pas',
-  Mutex in 'Mutex.pas',
-  TrayIconAPI in 'TrayIconAPI.pas';
+  Mutex in 'Mutex.pas';
 
 {$R *.res}
 

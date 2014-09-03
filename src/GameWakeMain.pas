@@ -165,6 +165,14 @@ procedure TMain.AfterUpdate(Sender: TObject; ADownloadedFileName: string);
 begin
   if (ExtractFileExt(ADownloadedFileName) <> '.reg') then
   begin
+    // Install update?
+    if (FLang.MessageBox(11, mtQuestion, True) = ID_YES) then
+    begin
+      TOSUtils.ExecuteFile(ADownloadedFileName);
+      Close;
+      Abort;
+    end;  //of if
+
     // Caption "Search for update"
     mmUpdate.Caption := FLang.GetString(15);
     mmUpdate.Enabled := False;
@@ -365,9 +373,6 @@ begin
       // Load language file
       LoadLanguageFile(Language);
 
-      // Set loaded language as global
-      SetLanguage(Self);
-
       // Load last time?
       if Config.GetSaveValue('SaveClock') then
       begin
@@ -470,6 +475,9 @@ begin
   {$ENDIF}
 
     FLang.AddListener(Self);
+
+    // Set loaded language as global
+    SetLanguage(Self);
 
     try
       // Add a menu entry for every found language
@@ -789,7 +797,7 @@ begin
   LoadColor();
 
   // Init update notificator
-  FUpdateCheck := TUpdateCheck.Create('GameWake', FLang);
+  FUpdateCheck := TUpdateCheck.Create(Self, 'GameWake', FLang);
 
   // Search for updates on startup?
   if AutoUpdate then

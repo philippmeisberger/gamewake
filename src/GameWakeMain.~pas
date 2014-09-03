@@ -165,6 +165,14 @@ procedure TMain.AfterUpdate(Sender: TObject; ADownloadedFileName: string);
 begin
   if (ExtractFileExt(ADownloadedFileName) <> '.reg') then
   begin
+    // Install update?
+    if (FLang.MessageBox(11, mtQuestion, True) = ID_YES) then
+    begin
+      TOSUtils.ExecuteFile(ADownloadedFileName);
+      Close;
+      Abort;
+    end;  //of if
+
     // Caption "Search for update"
     mmUpdate.Caption := FLang.GetString(15);
     mmUpdate.Enabled := False;
@@ -235,7 +243,10 @@ begin
       mtQuestion, True) = IDYES) then
       // Create and show TUpdate form
       with TUpdate.Create(Self, FLang, FLang.GetString(24)) do
-        Download('game_wake_setup.exe', 'Game Wake Setup.exe')
+      begin
+        AddListener(Self);
+        Download('game_wake_setup.exe', 'Game Wake Setup.exe');
+      end  //of with
     else
       mmUpdate.Caption := GetString(24);
 {$ELSE}
@@ -365,9 +376,6 @@ begin
       // Load language file
       LoadLanguageFile(Language);
 
-      // Set loaded language as global
-      SetLanguage(Self);
-
       // Load last time?
       if Config.GetSaveValue('SaveClock') then
       begin
@@ -470,6 +478,9 @@ begin
   {$ENDIF}
 
     FLang.AddListener(Self);
+
+    // Set loaded language as global
+    SetLanguage(Self);
 
     try
       // Add a menu entry for every found language
@@ -790,6 +801,7 @@ begin
 
   // Init update notificator
   FUpdateCheck := TUpdateCheck.Create('GameWake', FLang);
+  FUpdateCheck.AddListener(Self);
 
   // Search for updates on startup?
   if AutoUpdate then
@@ -1057,7 +1069,7 @@ begin
 
   // Reset GUI
   Caption := Application.Title;
-  bStop.Caption := FLang.GetString(50);
+  bStop.Caption := FLang.GetString(49);
   bStop.Default := False;
   bStop.Enabled := False;
   bAlert.Enabled := True;
