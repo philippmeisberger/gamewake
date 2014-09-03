@@ -714,7 +714,7 @@ begin
     mbLeft:
       begin
         if mmTimer.Checked then
-          FTrayIcon.BalloonHint := Format(FLang.GetString(33), [Clock.Alert.GetTime(False)])
+          FTrayIcon.BalloonHint := Format(FLang.GetString(63), [Clock.Alert.GetTime(False)])
         else
         begin
           Clock.GetTimeRemaining(Hour, Min, Sec);

@@ -478,9 +478,6 @@ begin
 
     FLang.AddListener(Self);
 
-    // Set loaded language as global
-    SetLanguage(Self);
-
     try
       // Add a menu entry for every found language
       for i := 0 to Langs.Count -1 do
@@ -506,6 +503,9 @@ begin
         Item.OnClick := mmLangClick;
         mmLang.Add(Item);
       end;  //of for
+
+      // Set loaded language as global
+      SetLanguage(Self);
 
     finally
       Langs.Free;
