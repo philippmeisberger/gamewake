@@ -3,7 +3,7 @@
   <ProjectSession>
     <Version Value="9"/>
     <BuildModes Active="Default"/>
-    <Units Count="32">
+    <Units Count="33">
       <Unit0>
         <Filename Value="GameWake.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -38,8 +38,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="GameWakeInfo"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="17"/>
-        <CursorPos X="10" Y="49"/>
+        <TopLine Value="1"/>
+        <CursorPos X="35" Y="38"/>
         <UsageCount Value="40"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
@@ -60,7 +60,7 @@
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="43" Y="11"/>
+        <CursorPos X="121" Y="13"/>
         <UsageCount Value="40"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -295,11 +295,19 @@
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit31>
+      <Unit32>
+        <Filename Value="GameWakeInfo.lfm"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit32>
     </Units>
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
-    <JumpHistory Count="25" HistoryIndex="24">
+    <JumpHistory Count="26" HistoryIndex="25">
       <Position1>
         <Filename Value="GameWakeMain.pas"/>
         <Caret Line="460" Column="1" TopLine="434"/>
@@ -400,6 +408,10 @@
         <Filename Value="GameWakeMain.pas"/>
         <Caret Line="507" Column="7" TopLine="469"/>
       </Position25>
+      <Position26>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="680" Column="22" TopLine="666"/>
+      </Position26>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>

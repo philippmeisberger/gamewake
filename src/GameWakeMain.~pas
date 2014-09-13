@@ -163,6 +163,7 @@ uses GameWakeInfo, GameWakeOps;
 
 procedure TMain.AfterUpdate(Sender: TObject; ADownloadedFileName: string);
 begin
+{$IFDEF MSWINDOWS}
   if (ExtractFileExt(ADownloadedFileName) <> '.reg') then
   begin
     // Install update?
@@ -179,6 +180,7 @@ begin
   end  //of begin
   else
     mmDownloadCert.Enabled := False;
+{$ENDIF}
 end;
 
 { private TMain.Alert
@@ -243,10 +245,7 @@ begin
       mtQuestion, True) = IDYES) then
       // Create and show TUpdate form
       with TUpdate.Create(Self, FLang, FLang.GetString(24)) do
-      begin
-        AddListener(Self);
-        Download('game_wake_setup.exe', 'Game Wake Setup.exe');
-      end  //of with
+        Download('game_wake_setup.exe', 'Game Wake Setup.exe')
     else
       mmUpdate.Caption := GetString(24);
 {$ELSE}
@@ -479,9 +478,6 @@ begin
 
     FLang.AddListener(Self);
 
-    // Set loaded language as global
-    SetLanguage(Self);
-
     try
       // Add a menu entry for every found language
       for i := 0 to Langs.Count -1 do
@@ -507,6 +503,9 @@ begin
         Item.OnClick := mmLangClick;
         mmLang.Add(Item);
       end;  //of for
+
+      // Set loaded language as global
+      SetLanguage(Self);
 
     finally
       Langs.Free;
@@ -715,7 +714,7 @@ begin
     mbLeft:
       begin
         if mmTimer.Checked then
-          FTrayIcon.BalloonHint := Format(FLang.GetString(33), [Clock.Alert.GetTime(False)])
+          FTrayIcon.BalloonHint := Format(FLang.GetString(63), [Clock.Alert.GetTime(False)])
         else
         begin
           Clock.GetTimeRemaining(Hour, Min, Sec);
@@ -800,8 +799,7 @@ begin
   LoadColor();
 
   // Init update notificator
-  FUpdateCheck := TUpdateCheck.Create('GameWake', FLang);
-  FUpdateCheck.AddListener(Self);
+  FUpdateCheck := TUpdateCheck.Create(Self, 'GameWake', FLang);
 
   // Search for updates on startup?
   if AutoUpdate then
