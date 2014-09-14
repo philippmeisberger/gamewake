@@ -1385,7 +1385,7 @@ begin
 
       // Create TrayIcon
     {$IFDEF MSWINDOWS}
-      FTrayIcon := TTrayIcon.Create(Application.Title, Application.Icon.Handle);
+      FTrayIcon := TTrayIcon.Create(Application.Title, Self.Icon.Handle);
       FTrayIcon.OnMouseUp := TrayIconMouseUp;
     {$ELSE}
       FTrayIcon := TTrayIcon.Create(Self);
