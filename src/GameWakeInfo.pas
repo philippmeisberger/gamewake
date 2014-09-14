@@ -19,7 +19,6 @@ uses
 type
   { TInfo }
   TInfo = class(TForm)
-    lCopy: TLabel;
     PageControl: TPageControl;
     tsInfo: TTabSheet;
     tsHistory: TTabSheet;
@@ -30,6 +29,7 @@ type
     bOk2: TButton;
     lVersion: TLabel;
     Image: TImage;
+    l_copy: TLabel;
     lBuild: TLabel;
     procedure bOkClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);

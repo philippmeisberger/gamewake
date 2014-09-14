@@ -12,7 +12,6 @@
       <Title Value="Game Wake"/>
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
-      <Icon Value="0"/>
     </General>
     <i18n>
       <EnableI18N LFM="False"/>
@@ -22,7 +21,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="351"/>
+      <BuildNr Value="350"/>
       <Language Value="0407"/>
       <StringTable CompanyName="PM Code Works" FileDescription="Game Wake" LegalTrademarks="PM Code Works" ProductName="Game Wake" ProductVersion="3.1"/>
     </VersionInfo>
