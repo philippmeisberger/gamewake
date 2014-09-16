@@ -1,6 +1,6 @@
 object Main: TMain
-  Left = 440
-  Top = 316
+  Left = 360
+  Top = 201
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Game Wake'

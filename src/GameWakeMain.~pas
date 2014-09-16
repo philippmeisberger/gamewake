@@ -786,7 +786,10 @@ begin
       Position := poScreenCenter;
 
     // Check for Updates?
-    AutoUpdate := Global.GetSaveValue('AutoUpdate');
+    if Global.ValueExists('AutoUpdate') then
+      AutoUpdate := Global.GetSaveValue('AutoUpdate')
+    else
+      AutoUpdate := True;
 
     // Load hours minutes combining
     Combine := Global.GetSaveValue('Combine');
@@ -1282,11 +1285,11 @@ procedure TMain.mmDownloadCertClick(Sender: TObject);
 begin
 {$IFDEF MSWINDOWS}
   // Certificate already installed?
-  if (TOSUtils.PMCertExists() and (FLang.MessageBox(FLang.GetString(67) +^J+
-    FLang.GetString(68), mtQuestion) = IDYES)) then
+  if (TOSUtils.PMCertExists() and (FLang.MessageBox(FLang.GetString(27) +^J+
+    FLang.GetString(28), mtQuestion) = IDYES)) then
     // Download certificate
     with TUpdate.Create(Self, FLang, FLang.GetString(8)) do
-      DownloadCertificate;
+      DownloadCertificate();
 {$ENDIF}
 end;
 
@@ -1385,7 +1388,7 @@ begin
 
       // Create TrayIcon
     {$IFDEF MSWINDOWS}
-      FTrayIcon := TTrayIcon.Create(Application.Title, Application.Icon.Handle);
+      FTrayIcon := TTrayIcon.Create(Application.Title, Self.Icon.Handle);
       FTrayIcon.OnMouseUp := TrayIconMouseUp;
     {$ELSE}
       FTrayIcon := TTrayIcon.Create(Self);
