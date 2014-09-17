@@ -5,7 +5,7 @@ object Main: TMain
   BorderStyle = bsSingle
   Caption = 'Game Wake'
   ClientHeight = 270
-  ClientWidth = 298
+  ClientWidth = 297
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clBlack
@@ -2935,7 +2935,7 @@ object Main: TMain
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   DesignSize = (
-    298
+    297
     270)
   PixelsPerInch = 96
   TextHeight = 14
@@ -2985,7 +2985,7 @@ object Main: TMain
     OnMouseLeave = lCopyMouseLeave
   end
   object lVersion: TLabel
-    Left = 264
+    Left = 263
     Top = 8
     Width = 24
     Height = 14
@@ -3103,9 +3103,9 @@ object Main: TMain
     OnKeyUp = eMinKeyUp
   end
   object bStop: TButton
-    Left = 152
+    Left = 153
     Top = 214
-    Width = 137
+    Width = 136
     Height = 33
     Anchors = [akBottom]
     Caption = 'aus'
@@ -3153,7 +3153,7 @@ object Main: TMain
   object pText: TPanel
     Left = 8
     Top = 81
-    Width = 281
+    Width = 282
     Height = 124
     Caption = 'TEXT'
     Font.Charset = ANSI_CHARSET

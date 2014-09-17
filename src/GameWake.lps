@@ -39,7 +39,7 @@
         <UnitName Value="GameWakeInfo"/>
         <WindowIndex Value="0"/>
         <TopLine Value="17"/>
-        <CursorPos X="10" Y="49"/>
+        <CursorPos X="5" Y="19"/>
         <UsageCount Value="40"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
@@ -60,7 +60,7 @@
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
+        <CursorPos X="1" Y="2"/>
         <UsageCount Value="40"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>

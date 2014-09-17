@@ -407,7 +407,7 @@ object Info: TInfo
         Left = 80
         Top = 24
         Width = 302
-        Height = 195
+        Height = 188
         Anchors = [akLeft, akTop, akRight, akBottom]
         Lines.Strings = (
           '"Game Wake ist ein virtueller Wecker, den man sich stellen '
@@ -472,12 +472,16 @@ object Info: TInfo
           'History'
           '--------'
           ''
-          'Version 3.1  [14.09.14]'
+          'Version 3.1  [18.09.14]'
           ''
           '- Neuer Icon'
           '  - Vielen Dank an Rafi:'
           '    http://www.graphicsfuel.com/2012/08/alarm-clock-icon-psd/'
           '- Update-Funktion v2.1'
+          
+            '- "Speichern unter"-Dialog beim Herunterladen des Zertifikats en' +
+            'tfernt'
+          '- Sonstige kleinere Verbesserungen'
           ''
           '---------------------------------'
           ''
@@ -617,6 +621,7 @@ object Info: TInfo
         Height = 25
         Anchors = [akRight, akBottom]
         Caption = 'OK'
+        Default = True
         TabOrder = 1
         OnClick = bOkClick
       end

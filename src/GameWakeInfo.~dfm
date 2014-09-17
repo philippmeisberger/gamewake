@@ -407,7 +407,7 @@ object Info: TInfo
         Left = 80
         Top = 24
         Width = 302
-        Height = 195
+        Height = 188
         Anchors = [akLeft, akTop, akRight, akBottom]
         Lines.Strings = (
           '"Game Wake ist ein virtueller Wecker, den man sich stellen '
@@ -472,12 +472,15 @@ object Info: TInfo
           'History'
           '--------'
           ''
-          'Version 3.1  [14.09.14]'
+          'Version 3.1  [18.09.14]'
           ''
           '- Neuer Icon'
           '  - Vielen Dank an Rafi:'
           '    http://www.graphicsfuel.com/2012/08/alarm-clock-icon-psd/'
           '- Update-Funktion v2.1'
+          
+            '- "Speichern unter"-Dialog beim Herunterladen des Zertifikats en' +
+            'tfernt'
           ''
           '---------------------------------'
           ''
@@ -594,21 +597,18 @@ object Info: TInfo
             '----------------------------------------------------------------' +
             '-------------------'
           ''
-          'Game Wake ist Freeware. Das hei'#223't, dass das Kopieren und die '
-          'Weitergabe von Game Wake, sowie die Ver'#246'ffentlichung auf WWW-'
           
-            'Servern und Datentr'#228'gern erlaubt ist. Allerdings muss das Progra' +
-            'mm '
-          
-            'vollst'#228'ndig und in der Original-Form kopiert werden. Das Kopiere' +
-            'n von '
-          'Teilen des Programmes ist nicht erlaubt.'
+            'Game Wake wurde unter der BSD-Lizenz ver'#246'ffentlicht und ist somi' +
+            't '
+          'Open-Source. Der Quelltext kann auf der Website heruntergeladen '
+          'werden.'
+          ''
           'Soll Game Wake auf eine kommerzielle CD-ROM (mit Magazin) '
           'gepresst werden, w'#228're es nett, mir eine Ausgabe dieser CD-ROM '
           '(mit Magazin) zuschicken. Meine Adresse erfahren Sie unter '
           '"team@pm-codeworks.de".'
           ''
-          '10/2013')
+          '09/2014')
         ReadOnly = True
         ScrollBars = ssVertical
         TabOrder = 0
@@ -620,6 +620,7 @@ object Info: TInfo
         Height = 25
         Anchors = [akRight, akBottom]
         Caption = 'OK'
+        Default = True
         TabOrder = 1
         OnClick = bOkClick
       end
