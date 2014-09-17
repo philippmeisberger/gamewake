@@ -46,8 +46,6 @@ type
 
 implementation
 
-uses GameWakeAPI;
-
 { TAlertThread }
 
 { TAlertThread.Create
@@ -76,15 +74,24 @@ end;
   Thread main method that plays a *.wav file. }
 
 procedure TAlertThread.Execute;
+var
+  Path: string;
+
 begin
+{$IFDEF MSWINDOWS}
+  Path := '';
+{$ELSE}
+  Path := '/usr/lib/gamewake/';
+{$ENDIF}
+
   while not Terminated do
   begin
     Synchronize(DoNotifyOnAlert);
   
     // Play *.wav file
     case FAlertType of
-      atClock: TOSUtils.PlaySound('bell.wav', True);
-      atHorn:  TOSUtils.PlaySound('horn.wav', True);
+      atClock: TOSUtils.PlaySound(Path +'bell.wav', True);
+      atHorn:  TOSUtils.PlaySound(Path +'horn.wav', True);
     {$IFDEF MSWINDOWS}
       atBing:
         begin
@@ -92,9 +99,9 @@ begin
           Sleep(1000);
         end;  //of begin
     {$ELSE}
-      atBing:  TOSUtils.PlaySound('bing.wav', True);
+      atBing:  TOSUtils.PlaySound(Path +'bing.wav', True);
     {$ENDIF}
-      atBeep:  TOSUtils.PlaySound('beep.wav', True);
+      atBeep:  TOSUtils.PlaySound(Path +'beep.wav', True);
       else
         Break;
     end;  //of case

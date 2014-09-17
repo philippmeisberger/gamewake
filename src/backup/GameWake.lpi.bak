@@ -21,7 +21,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="353"/>
+      <BuildNr Value="354"/>
       <Language Value="0407"/>
       <StringTable CompanyName="PM Code Works" FileDescription="Game Wake" LegalTrademarks="PM Code Works" ProductName="Game Wake" ProductVersion="3.1"/>
     </VersionInfo>
@@ -37,7 +37,7 @@
       <local>
         <FormatVersion Value="1"/>
         <HostApplicationFilename Value="\home\phil\Informatik\PMCW\Projekte\Game Wake\bin\Linux\gamewake_x86_64\usr\lib\gamewake\gamewake"/>
-        <CommandLineParams Value="--lang \home\phil\Arbeitsfläche\phil\Informatik\PMCW\Projekte\Game Wake\bin\Linux\gamewake_amd64\etc\gamewake\lang"/>
+        <CommandLineParams Value="--lang &quot;\home\phil\Arbeitsfläche\phil\Informatik\PMCW\Projekte\Game Wake\bin\Linux\gamewake_x86_64\etc\gamewake\lang&quot;"/>
         <LaunchingApplication PathPlusParams="\usr\bin\xterm -T 'Lazarus Run Output' -e $(LazarusDir)\tools\runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>

@@ -182,7 +182,7 @@ begin
     end;  //of finally
 
   except
-    FLang.MessageBox(73, mtError);
+    FLang.MessageBox(76, mtError);
   end;  //of try
 
   Close;

@@ -114,7 +114,7 @@ type
     FLang: TLanguageFile;
     FTrayIcon: TTrayIcon;
     FColor: TColor;
-    FConfigPath, FLangPath: string;
+    FConfigPath, FLangPath, FPath: string;
     FUpdateCheck: TUpdateCheck;
     procedure AfterUpdate(Sender: TObject; ADownloadedFileName: string);
     procedure Alert(Sender: TObject);
@@ -758,9 +758,12 @@ begin
       FLangPath := ParamStr(4)
     else
       FLangPath := '/etc/gamewake/lang';
+
+  FPath := '/usr/lib/gamewake/';
 {$ELSE}
   FConfigPath := '';
   FLangPath := '';
+  FPath := '';
 {$ENDIF}
 
   // Init config file access
@@ -931,7 +934,7 @@ end;
 
 procedure TMain.bPlayClockClick(Sender: TObject);
 begin
-  TOSUtils.PlaySound('bell.wav');
+  TOSUtils.PlaySound(FPath +'bell.wav');
 end;
 
 { TMain.bPlayHornClick
@@ -940,7 +943,7 @@ end;
 
 procedure TMain.bPlayHornClick(Sender: TObject);
 begin
-  TOSUtils.PlaySound('horn.wav');
+  TOSUtils.PlaySound(FPath +'horn.wav');
 end;
 
 { TMain.bPlayBingClick
@@ -949,7 +952,7 @@ end;
 
 procedure TMain.bPlayBingClick(Sender: TObject);
 begin
-  TOSUtils.PlaySound('bing.wav');
+  TOSUtils.PlaySound(FPath +'bing.wav');
 end;
 
 { TMain.bPlayBeepClick
@@ -958,7 +961,7 @@ end;
 
 procedure TMain.bPlayBeepClick(Sender: TObject);
 begin
-  TOSUtils.PlaySound('beep.wav');
+  TOSUtils.PlaySound(FPath +'beep.wav');
 end;
 
 { TMain.eHourKeyPress
@@ -1172,12 +1175,12 @@ var
   UserInput: string;
 
 begin
-  UserInput := InputBox(FLang.GetString(35), FLang.GetString(36), pText.Caption);
+  UserInput := InputBox(FLang.GetString(65), FLang.GetString(66), pText.Caption);
 
   // Text length maximum 16 characters
   if (Length(UserInput) > 16) then
   begin
-    FLang.MessageBox(FLang.GetString(37) +^J+ FLang.GetString(38), mtWarning);
+    FLang.MessageBox(FLang.GetString(67) +^J+ FLang.GetString(68), mtWarning);
     bChange.Click;
   end  //of begin
   else
