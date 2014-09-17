@@ -36,8 +36,8 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
-        <HostApplicationFilename Value="\home\phil\Informatik\PMCW\Projekte\Game Wake\bin\Linux\gamewake_amd64\usr\lib\gamewake\gamewake"/>
-        <CommandLineParams Value="--lang &quot;\home\phil\Arbeitsfläche\phil\Informatik\PMCW\Projekte\Game Wake\bin\Linux\gamewake_amd64\etc\gamewake\lang&quot;"/>
+        <HostApplicationFilename Value="\home\phil\Informatik\PMCW\Projekte\Game Wake\bin\Linux\gamewake_x86_64\usr\lib\gamewake\gamewake"/>
+        <CommandLineParams Value="--lang \home\phil\Arbeitsfläche\phil\Informatik\PMCW\Projekte\Game Wake\bin\Linux\gamewake_amd64\etc\gamewake\lang"/>
         <LaunchingApplication PathPlusParams="\usr\bin\xterm -T 'Lazarus Run Output' -e $(LazarusDir)\tools\runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
@@ -113,7 +113,7 @@
     <Version Value="9"/>
     <PathDelim Value="\"/>
     <Target>
-      <Filename Value="..\bin\Linux\gamewake_amd64\usr\lib\gamewake\gamewake"/>
+      <Filename Value="..\bin\Linux\gamewake_$(TargetCPU)\usr\lib\gamewake\gamewake"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>

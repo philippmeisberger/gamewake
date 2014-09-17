@@ -75,8 +75,8 @@
 172=Alarm in %s:%s:%s
 173=Fehler beim Laden der Farben
 174=Einstellungen konnten nicht gespeichert werden!
-175=Fehler beim Laden der Einstellungen aus der config Datei: \"%s\"!
-176=Fehler beim Schreiben der Einstellungen in die config Datei: \"%s\"!
+175=Fehler beim Laden der Einstellungen aus der config Datei: "%s"!
+176=Fehler beim Schreiben der Einstellungen in die config Datei: "%s"!
 177=Öffnen
 178=Beenden
 179=Icon konnte nicht unter "/usr/share/pixmaps/gamewake.ico" gefunden werden!
@@ -157,8 +157,8 @@
 172=Alarm in %s:%s:%s
 173=Error while loading colors!
 174=Settings could not be saved!
-175=Error while loading settings from config file: \"%s\"!
-176=Error while writing settings into config file: \"%s\"!
+175=Error while loading settings from config file: "%s"!
+176=Error while writing settings into config file: "%s"!
 177=Open
 178=Quit
 179=Icon could not be found in "/usr/share/pixmaps/gamewake.ico"!
@@ -239,8 +239,8 @@
 172=Alarme en %s:%s:%s
 173=Erreur lors du chargement des couleurs!
 174=Paramètres ne pouvaient pas être sauvés!
-175=Erreur de charger sur les paramètres du fichier de configuration: \"%s\"!
-176=Erreur d'écriture sur les paramètres du fichier de configuration: \"%s\"!
+175=Erreur de charger sur les paramètres du fichier de configuration: "%s"!
+176=Erreur d'écriture sur les paramètres du fichier de configuration: "%s"!
 177=Ouvert
 178=Quitter
 179=Icône n'a pas pu être trouvée dans "/usr/share/pixmaps/gamewake.ico"!

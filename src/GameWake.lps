@@ -97,8 +97,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="LanguageFile"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
+        <TopLine Value="101"/>
+        <CursorPos X="1" Y="113"/>
         <UsageCount Value="40"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit9>
@@ -299,7 +299,7 @@
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
-    <JumpHistory Count="26" HistoryIndex="25">
+    <JumpHistory Count="27" HistoryIndex="26">
       <Position1>
         <Filename Value="GameWakeMain.pas"/>
         <Caret Line="460" Column="1" TopLine="434"/>
@@ -404,6 +404,10 @@
         <Filename Value="GameWakeMain.pas"/>
         <Caret Line="680" Column="22" TopLine="666"/>
       </Position26>
+      <Position27>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="2" Column="1" TopLine="1"/>
+      </Position27>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>
