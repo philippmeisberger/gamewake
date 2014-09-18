@@ -59,8 +59,8 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="732"/>
-        <CursorPos X="23" Y="703"/>
+        <TopLine Value="679"/>
+        <CursorPos X="39" Y="718"/>
         <UsageCount Value="41"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -299,7 +299,7 @@
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="29" HistoryIndex="28">
       <Position1>
         <Filename Value="GameWakeMain.pas"/>
         <Caret Line="482" Column="1" TopLine="451"/>
@@ -416,10 +416,6 @@
         <Filename Value="GameWakeMain.pas"/>
         <Caret Line="303" Column="8" TopLine="300"/>
       </Position29>
-      <Position30>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="15" Column="10" TopLine="1224"/>
-      </Position30>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>
