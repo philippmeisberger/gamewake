@@ -718,7 +718,7 @@ begin
         else
         begin
           Clock.GetTimeRemaining(Hour, Min, Sec);
-          FTrayIcon.BalloonHint := Format(FLang.GetString(69), [Hour, Min, Sec]);
+          FTrayIcon.BalloonHint := Format(FLang.GetString(72), [Hour, Min, Sec]);
         end;  //of if
 
         FTrayIcon.ShowBalloonHint;
