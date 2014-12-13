@@ -5,5 +5,7 @@ syntax: glob
 **.or
 **.ppu
 **.dcu
-BACKUP/**
-bin/**
+**.exe
+files/src/lib/**
+files/bin/Linux/**
+files/BACKUP/**

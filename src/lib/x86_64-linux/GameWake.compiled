@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<CONFIG>
-  <Compiler Value="/usr/bin/fpc" Date="1365944294"/>
-  <Params Value=" -MDelphi -Schi -O1 -gl -Xs -vewnhi -l &quot;-Fi/home/phil/Informatik/PMCW/Projekte/Game Wake/src/lib/x86_64-linux&quot; -Fu/usr/lib/lazarus/0.9.30.4/components/indy-10.2.0.3/lazarus/lib/x86_64-linux -Fu/usr/lib/lazarus/0.9.30.4/ideintf/units/x86_64-linux -Fu/usr/lib/lazarus/0.9.30.4/lcl/units/x86_64-linux -Fu/usr/lib/lazarus/0.9.30.4/lcl/units/x86_64-linux/gtk2 -Fu/usr/lib/lazarus/0.9.30.4/packager/units/x86_64-linux &quot;-Fu/home/phil/Informatik/PMCW/Projekte/Game Wake/src/&quot; -Fu. &quot;-FU/home/phil/Informatik/PMCW/Projekte/Game Wake/src/lib/x86_64-linux/&quot; &quot;-FE/home/phil/Informatik/PMCW/Projekte/Game Wake/bin/Linux/gamewake_x86_64/usr/lib/gamewake/&quot; -ogamewake -dLCL -dLCLgtk2 GameWake.lpr"/>
-</CONFIG>

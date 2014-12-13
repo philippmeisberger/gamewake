@@ -1,0 +1,37 @@
+.TH gamewake 1 "March 2014" "" "Game Wake"
+
+.SH NAME
+\fBgamewake\fP - Alert clock application
+
+.SH SYNOPSIS
+.nf
+.fam C
+\fBgamewake\fP [\fB--config\fP PATH | \fB--lang\fP PATH]
+.fam T
+.fi
+
+.SH DESCRIPTION
+\fBgamewake\fR is an alert clock application with acoustical and visual notification events. Four different sounds can be played. The sounds can be combined with a text message and a blinking form. A shutdown function can be chosen instead of notifications. The configuration is saved in a *.ini based file. There is a settings form where it is possible to setup what will be saved. \fBgamewake\fR has multi language support and is ready for new translations. For being up to date a light-weight update notificator is used.
+.br
+
+.SH OPTIONS
+
+.TP
+.B
+\fB--config\fR PATH
+Loads another configuration file from PATH.
+
+.TP
+.B
+\fB--lang\fR PATH
+Loads another language file from PATH.
+
+.SH FILES
+/etc/gamewake/gamewake.conf
+.br
+/etc/gamewake/lang
+
+.SH AUTHOR
+Philipp Meisberger <team@pm-codeworks.de> 
+
+Please send bug reports to this mail address. Visit http://www.pm-codeworks.de for more interesting projects.

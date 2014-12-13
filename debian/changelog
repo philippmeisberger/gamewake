@@ -1,0 +1,88 @@
+2014-09-18  Philipp Meisberger <team@pm-codeworks.de>
+
+  * Release 3.1
+  * New icon
+    * Thanks to Rafi: http://www.graphicsfuel.com/2012/08/alarm-clock-icon-psd/
+  * Update function v2.1
+  * Moved sounds to /usr/lib/gamewake/ instead of /opt/gamewake/
+  * Serveral small improvements
+  
+2014-03-16  Philipp Meisberger <team@pm-codeworks.de>
+
+  * Release 3.0
+  * Improved update function
+  * Improved platform independence
+
+2013-11-11  Philipp Meisberger <team@pm-codeworks.de>
+
+  * Release 2.1.2
+  * Now platform independent
+  * New Beep sound
+  * Bug fix in counter mode
+
+2013-10-09  Philipp Meisberger <team@pm-codeworks.de>
+
+  * Release 2.1.1
+  * Time will be refreshed after standby
+  * Bug fix in shutdown function
+  * Cancel button in update form will not be disabled
+
+2013-06-21  Philipp Meisberger <team@pm-codeworks.de>
+
+  * Release 2.1
+  * Added new option: Hours and minutes can be combined
+  * Changed time format to HH:MM:SS
+  * Changes in form management
+
+2012-12-03  Philipp Meisberger <team@pm-codeworks.de>
+
+  * Release 2.0.1
+  * Improved update function
+  * Added new option: automatically search for update on startup can be changed
+  * GUI changes in option form
+  * Bug fix in save progress 
+
+2012-11-18  Philipp Meisberger <team@pm-codeworks.de>
+
+  * Release 2.0 (NT)
+  * Total restructured
+    * Improved save progress
+    * Alert is now threaded
+  * Added new mode: counter
+  * Improved GUI
+    * Added buttons for easy setting up alert
+    * Added "search for update" button
+  * Added language support for english and french
+  * Added certificate downloaded routine
+  * Added shutdown feature
+
+2011-11-09  Philipp Meisberger <team@pm-codeworks.de>
+
+  * Release 1.3.1
+  * New sound: Horn
+  * Serveral bug fixes
+
+2011-08-24  Philipp Meisberger <team@pm-codeworks.de>
+
+  * Release 1.3
+  * Added option form
+  * Few bug fixes
+
+2011-08-17  Philipp Meisberger <team@pm-codeworks.de>
+
+  * Release 1.2
+  * Blinking color can be chosen
+
+2011-08-14  Philipp Meisberger <team@pm-codeworks.de>
+
+  * Release 1.1
+  * Added main menu
+  * Added save function
+  * Added feature to show a short text during alert
+  * Added blink feature
+
+2011-08-10  Philipp Meisberger <team@pm-codeworks.de>
+
+  * Initial release (1.0)
+
+ -- Philipp Meisberger <team@pm-codeworks.de>
