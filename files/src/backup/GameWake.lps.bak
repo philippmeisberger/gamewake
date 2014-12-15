@@ -302,14 +302,16 @@
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit32>
       <Unit33>
         <Filename Value="../../../../../Downloads/LazPackager-master/lazpackagerbase.pas"/>
         <UnitName Value="LazPackagerBase"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="172"/>
+        <TopLine Value="1"/>
         <CursorPos X="39" Y="193"/>
         <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit33>
     </Units>
     <General>

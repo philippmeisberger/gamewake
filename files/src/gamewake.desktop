@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=1.1
+Name=Game Wake
+Comment=Alert clock application
+Comment[de]=Wecker Anwendung
+Exec=/usr/bin/gamewake
+Icon=/usr/share/pixmaps/gamewake.png
+Terminal=false
+Categories=Utility;
+StartupNotify=false

@@ -113,7 +113,7 @@
     <Version Value="9"/>
     <PathDelim Value="\"/>
     <Target>
-      <Filename Value="..\bin\Linux\gamewake_$(TargetCPU)\usr\lib\gamewake\gamewake"/>
+      <Filename Value="..\bin\Linux\gamewake_$(TargetCPU)\gamewake"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
