@@ -5,7 +5,7 @@ gamewake (3.1) stable; urgency=low
     * Thanks to Rafi: http://www.graphicsfuel.com/2012/08/alarm-clock-icon-psd/
   * Update function v2.1
   * Moved sounds to /usr/lib/gamewake/ instead of /opt/gamewake/
-  * Serveral small improvements
+  * Several small improvements
 
  -- Philipp Meisberger <team@pm-codeworks.de>  Fri, 18 Sep 2014 17:16:12 +0200
 

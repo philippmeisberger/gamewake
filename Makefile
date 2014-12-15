@@ -2,7 +2,7 @@ LIBDIR = $(DESTDIR)/usr/lib/gamewake
 BINDIR = files/bin/$(shell uname)/gamewake_$(shell uname -m)
 ETCDIR = $(DESTDIR)/etc/gamewake
 
-all:	build	install
+all:	clean	build	install
 
 clean:
 	rm -f $(BINDIR)/usr/lib/gamewake/gamewake
@@ -13,16 +13,17 @@ build:
 
 install:
 	install -D --mode 755 $(BINDIR)/gamewake $(LIBDIR)/gamewake
-	ln -s $(LIBDIR)/gamewake /usr/bin/gamewake
-	install -D --mode 644 bin/beep.wav $(LIBDIR)/beep.wav
-	install -D --mode 644 bin/bing.wav $(LIBDIR)/bing.wav
-	install -D --mode 644 bin/bell.wav $(LIBDIR)/bell.wav
-	install -D --mode 644 bin/horn.wav $(LIBDIR)/horn.wav
-	install -D --mode 666 src/gamewake.conf $(ETCDIR)/gamewake.conf
-	install -D --mode 644 src/lang $(ETCDIR)/lang
-	install -D --mode 644 src/gamewake.ico $(DESTDIR)/usr/share/pixmaps/gamewake.ico
-	install -D --mode 644 src/gamewake.png $(DESTDIR)/usr/share/pixmaps/gamewake.png
-	install -D --mode 644 src/gamewake.desktop $(DESTDIR)/usr/share/applications/gamewake.desktop
+	mkdir -p $(DESTDIR)/usr/bin/
+	ln -s /usr/lib/gamewake/gamewake $(DESTDIR)/usr/bin/gamewake
+	install -D --mode 644 files/bin/beep.wav $(LIBDIR)/beep.wav
+	install -D --mode 644 files/bin/bing.wav $(LIBDIR)/bing.wav
+	install -D --mode 644 files/bin/bell.wav $(LIBDIR)/bell.wav
+	install -D --mode 644 files/bin/horn.wav $(LIBDIR)/horn.wav
+	install -D --mode 666 files/src/gamewake.conf $(ETCDIR)/gamewake.conf
+	install -D --mode 644 files/src/lang $(ETCDIR)/lang
+	install -D --mode 644 files/src/gamewake.ico $(DESTDIR)/usr/share/pixmaps/gamewake.ico
+	install -D --mode 644 files/src/gamewake.png $(DESTDIR)/usr/share/pixmaps/gamewake.png
+	install -D --mode 644 files/src/gamewake.desktop $(DESTDIR)/usr/share/applications/gamewake.desktop
 
 uninstall:
 	rm -rf $(LIBDIR)
