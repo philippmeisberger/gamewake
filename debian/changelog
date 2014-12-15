@@ -7,7 +7,7 @@ gamewake (3.1) stable; urgency=low
   * Moved sounds to /usr/lib/gamewake/ instead of /opt/gamewake/
   * Several small improvements
 
- -- Philipp Meisberger <team@pm-codeworks.de>  Fri, 18 Sep 2014 17:16:12 +0200
+ -- Philipp Meisberger <team@pm-codeworks.de>  Thu, 18 Sep 2014 17:16:12 +0200
 
 
 gamewake (3.0) unstable; urgency=low
@@ -16,7 +16,7 @@ gamewake (3.0) unstable; urgency=low
   * Improved update function
   * Improved platform independence
 
- -- Philipp Meisberger <team@pm-codeworks.de>  Fri, 16 Mar 2014 15:10:01 +0200
+ -- Philipp Meisberger <team@pm-codeworks.de>  Sun, 16 Mar 2014 15:10:09 +0200
 
 
 gamewake (2.1.2) stable; urgency=low
@@ -26,7 +26,7 @@ gamewake (2.1.2) stable; urgency=low
   * New Beep sound
   * Bug fix in counter mode
 
- -- Philipp Meisberger <team@pm-codeworks.de>  Fri, 11 Nov 2013 15:10:01 +0200
+ -- Philipp Meisberger <team@pm-codeworks.de>  Fri, 11 Nov 2013 15:17:01 +0200
 
 
 gamewake (2.1.1) stable; urgency=low
