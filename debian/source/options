@@ -1,0 +1,2 @@
+tar-ignore = "BACKUP"
+tar-ignore = ".hg"

@@ -8,4 +8,4 @@ syntax: glob
 **.exe
 files/src/lib/**
 files/bin/Linux/**
-files/BACKUP/**
+BACKUP/**

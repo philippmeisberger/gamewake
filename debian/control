@@ -6,7 +6,6 @@ Standards-Version: 3.9.4
 Build-Depends: lazarus, debhelper (>= 9)
 
 Package: gamewake
-Version: 3.1
 Depends: xdg-utils, alsa-utils, ${misc:Depends}, ${shlibs:Depends}
 Architecture: any
 Homepage: http://www.pm-codeworks.de/gamewake.html

@@ -5,7 +5,7 @@ ETCDIR = $(DESTDIR)/etc/gamewake
 all:	clean	build	install
 
 clean:
-	rm -f $(BINDIR)/usr/lib/gamewake/gamewake
+	rm -f "$(BINDIR)/usr/lib/gamewake/gamewake"
 
 build:
 	lazbuild files/src/GameWake.lpr
