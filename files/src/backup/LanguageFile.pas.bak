@@ -81,7 +81,7 @@ type
     function MessageBox(const AIndexes: array of Word; AType: TMessageType = mtInfo;
       AUpdate: Boolean = False): Integer; overload;
     function MessageBox(const AIndexes: array of Word;
-      const AArgs: array of {$IFDEF MSWINDOWS}TVarRec{$ELSE}const{$ENDIF};
+      const AArgs: array of {$IFDEF MSWINDOWS}TVarRec{$ELSE}TFormatSettings{$ENDIF};
       AType: TMessageType = mtInfo; AUpdate: Boolean = False): Integer; overload;
     procedure RemoveListener(AListener: IChangeLanguageListener);
     { external }

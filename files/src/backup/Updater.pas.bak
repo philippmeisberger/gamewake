@@ -143,7 +143,7 @@ procedure TUpdateCheck.OnCheckError(Sender: TThread; AResponseCode: Integer);
 begin
   if FUserUpdate then
     with FLang do
-      MessageBox(Format([12, NEW_LINE, 13, 19], [AResponseCode]), mtError, True);
+      MessageBox(FLang.Format([12, NEW_LINE, 13, 19], [AResponseCode]), mtError, True);
 end;
 
 { private TUpdateCheck.OnNoUpdateAvailable

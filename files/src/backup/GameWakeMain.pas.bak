@@ -645,7 +645,7 @@ begin
     mmOptions.Caption := GetString(34);
     mmTimer.Caption := GetString(35);
     mmCounter.Caption := GetString(36);
-    mmView.Caption := GetString(20);
+    mmView.Caption := GetString(10);
     mmLang.Caption := GetString(25);
     mmHelp.Caption := GetString(14);
     mmUpdate.Caption:= GetString(15);

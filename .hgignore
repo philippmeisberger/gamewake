@@ -6,6 +6,7 @@ syntax: glob
 **.ppu
 **.dcu
 **.exe
+debian/gamewake/**
 files/src/lib/**
 files/bin/Linux/**
 BACKUP/**

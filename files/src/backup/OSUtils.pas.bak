@@ -651,7 +651,6 @@ begin
     end  //of try
   else
     result := False;
-end;
 {$ELSE}
 begin
   result := TOSUtils.ExitWindows(EWX_SHUTDOWN or EWX_FORCE);
@@ -682,6 +681,6 @@ begin
               +'Unknown HKEY: "'+ AMainKey +'"!');
 end;
 {$ENDIF}
-
+end;
 end.
 
