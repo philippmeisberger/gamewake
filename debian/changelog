@@ -1,6 +1,16 @@
+gamewake (3.2) stable; urgency=low
+
+  * Minor release
+  * Fixed bug caused when "SaveClock"=False and "Counter Mode" was set
+  * Added usage of own INI file parser
+  * Update function v2.2
+
+ -- Philipp Meisberger <team@pm-codeworks.de>  Tue, 18 Dec 2014 19:08:16 +0200
+
+
 gamewake (3.1) stable; urgency=low
 
-  * Minor release (3.1)
+  * Minor release
   * New icon
     * Thanks to Rafi: http://www.graphicsfuel.com/2012/08/alarm-clock-icon-psd/
   * Update function v2.1
@@ -12,7 +22,7 @@ gamewake (3.1) stable; urgency=low
 
 gamewake (3.0) unstable; urgency=low
 
-  * Major release (3.0)
+  * Major release
   * Improved update function
   * Improved platform independence
 
@@ -21,7 +31,7 @@ gamewake (3.0) unstable; urgency=low
 
 gamewake (2.1.2) stable; urgency=low
 
-  * Service release (2.1.2)
+  * Service release
   * Now platform independent
   * New Beep sound
   * Bug fix in counter mode
@@ -31,7 +41,7 @@ gamewake (2.1.2) stable; urgency=low
 
 gamewake (2.1.1) stable; urgency=low
 
-  * Service release (2.1.1)
+  * Service release
   * Time will be refreshed after standby
   * Bug fix in shutdown function
   * Cancel button in update form will not be disabled
@@ -41,7 +51,7 @@ gamewake (2.1.1) stable; urgency=low
 
 gamewake (2.1) stable; urgency=low
 
-  * Minor release (2.1)
+  * Minor release
   * Added new option: Hours and minutes can be combined
   * Changed time format to HH:MM:SS
   * Changes in form management
@@ -51,7 +61,7 @@ gamewake (2.1) stable; urgency=low
 
 gamewake (2.0.1) stable; urgency=low
 
-  * Service release (2.0.1)
+  * Service release
   * Improved update function
   * Added new option: automatically search for update on startup can be changed
   * GUI changes in option form
@@ -62,7 +72,7 @@ gamewake (2.0.1) stable; urgency=low
 
 gamewake (2.0) unstable; urgency=low
 
-  * Major release (2.0)
+  * Major release
   * Total restructured
     * Improved save progress
     * Alert is now threaded
@@ -79,7 +89,7 @@ gamewake (2.0) unstable; urgency=low
 
 gamewake (1.3.1) stable; urgency=low
 
-  * Service release (1.3.1)
+  * Service release
   * New sound: Horn
   * Serveral bug fixes
 
@@ -88,7 +98,7 @@ gamewake (1.3.1) stable; urgency=low
 
 gamewake (1.3) stable; urgency=low
 
-  * Minor release (1.3)
+  * Minor release
   * Added option form
   * Few bug fixes
 
@@ -97,7 +107,7 @@ gamewake (1.3) stable; urgency=low
 
 gamewake (1.2) stable; urgency=low
 
-  * Minor release (1.2)
+  * Minor release
   * Blinking color can be chosen
 
  -- Philipp Meisberger <team@pm-codeworks.de>  Wed, 17 Aug 2011 20:17:01 +0200
@@ -105,7 +115,7 @@ gamewake (1.2) stable; urgency=low
 
 gamewake (1.1) stable; urgency=low
 
-  * Minor release (1.1)
+  * Minor release
   * Added main menu
   * Added save function
   * Added feature to show a short text during alert
@@ -116,6 +126,6 @@ gamewake (1.1) stable; urgency=low
 
 gamewake (1.0) unstable; urgency=low
 
-  * Initial release (1.0)
+  * Initial release
 
  -- Philipp Meisberger <team@pm-codeworks.de>  Wed, 10 Aug 2011 14:21:36 +0200
