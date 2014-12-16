@@ -272,7 +272,7 @@ object Main: TMain
     Height = 124
     Top = 81
     Width = 281
-    Caption = 'TEXT'
+    Caption = 'Game Wake'
     Font.CharSet = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -37

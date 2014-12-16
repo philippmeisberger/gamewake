@@ -177,6 +177,9 @@ begin
       Config.WriteBoolean('Global', 'AutoUpdate', cbUpdate.Checked);
       FClock.Alert.Combine := cbCombine.Checked;
 
+      // Save changes to config file
+      Config.Save();
+
     finally
       Config.Free;
     end;  //of finally

@@ -78,23 +78,23 @@ var
 
 begin
   try
-    Config := TConfigFile.Create('Global', FConfigPath);
+    Config := TConfigFile.Create(FConfigPath);
             
     try
-      cbSaveClock.Checked := Config.GetSaveValue('SaveClock');
-      cbSaveText.Checked := Config.GetSaveValue('SaveText');
-      cbSaveSound.Checked := Config.GetSaveValue('SaveSound');
-      cbSaveColor.Checked := Config.GetSaveValue('SaveColor');
-      cbSavePos.Checked := Config.GetSaveValue('SavePos');
-      cbCombine.Checked := Config.GetSaveValue('Combine');
-      cbUpdate.Checked := Config.GetSaveValue('AutoUpdate');
+      cbSaveClock.Checked := Config.ReadBoolean('Global', 'SaveClock');
+      cbSaveText.Checked := Config.ReadBoolean('Global', 'SaveText');
+      cbSaveSound.Checked := Config.ReadBoolean('Global', 'SaveSound');
+      cbSaveColor.Checked := Config.ReadBoolean('Global', 'SaveColor');
+      cbSavePos.Checked := Config.ReadBoolean('Global', 'SavePos');
+      cbCombine.Checked := Config.ReadBoolean('Global', 'Combine');
+      cbUpdate.Checked := Config.ReadBoolean('Global', 'AutoUpdate');
 
     finally
       Config.Free;
     end;  //of finally
 
   except
-    FLang.MessageBox(Format(FLang.GetString(74), [FConfigPath]), mtError);
+    FLang.MessageBox(FLang.Format(74, [FConfigPath]), mtError);
   end;  //of try
 end;
 
@@ -165,16 +165,16 @@ var
 
 begin
   try
-    Config := TConfigFile.Create('Global', FConfigPath);
+    Config := TConfigFile.Create(FConfigPath);
 
     try
-      Config.SetIniValue('SaveClock', cbSaveClock.Checked);
-      Config.SetIniValue('SaveText', cbSaveText.Checked);
-      Config.SetIniValue('SaveSound', cbSaveSound.Checked);
-      Config.SetIniValue('SaveColor', cbSaveColor.Checked);
-      Config.SetIniValue('SavePos', cbSavePos.Checked);
-      Config.SetIniValue('Combine', cbCombine.Checked);
-      Config.SetIniValue('AutoUpdate', cbUpdate.Checked);
+      Config.WriteBoolean('Global', 'SaveClock', cbSaveClock.Checked);
+      Config.WriteBoolean('Global', 'SaveText', cbSaveText.Checked);
+      Config.WriteBoolean('Global', 'SaveSound', cbSaveSound.Checked);
+      Config.WriteBoolean('Global', 'SaveColor', cbSaveColor.Checked);
+      Config.WriteBoolean('Global', 'SavePos', cbSavePos.Checked);
+      Config.WriteBoolean('Global', 'Combine', cbCombine.Checked);
+      Config.WriteBoolean('Global', 'AutoUpdate', cbUpdate.Checked);
       FClock.Alert.Combine := cbCombine.Checked;
 
     finally

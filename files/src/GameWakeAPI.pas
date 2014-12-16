@@ -15,10 +15,6 @@ interface
 uses
   SysUtils, Classes, ExtCtrls, Graphics, AlertThread, IniFileParser, OSUtils;
 
-const
-  URL_BASE = 'http://www.pm-codeworks.de/';
-  URL_CONTACT = URL_BASE +'kontakt.html';
-
 type
   { TConfigFile }
   TConfigFile = class(TIniFile)
@@ -552,6 +548,10 @@ end;
 
 { TClock }
 
+{ public TClock.Create
+
+  Constructor for creating a TClock instance. }
+
 constructor TClock.Create(AOwner: TComponent; ATimerMode: Boolean;
   ACombine: Boolean = False);
 begin
@@ -581,6 +581,10 @@ begin
     Enabled := ATimerMode;
   end;  //of with
 end;
+
+{ public TClock.Destroy
+
+  Destructor for destroying a TClock instance. }
 
 destructor TClock.Destroy;
 begin
