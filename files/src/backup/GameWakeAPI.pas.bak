@@ -1,6 +1,6 @@
 { *********************************************************************** }
 {                                                                         }
-{ Game Wake Cross API Interface Unit v3.2                                 }
+{ Game Wake Cross API Interface Unit v3.1                                 }
 {                                                                         }
 { Copyright (c) 2011-2014 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
@@ -140,11 +140,11 @@ implementation
 
 { public TConfigFile.ReadColor
 
-  Reads a TColor value from config . }
+  Returns a value as TColor. }
 
-function TConfigFile.ReadColor(ASection, AKey: string): TColor;
+function TConfigFile.ReadColor(AKey, AValue: string): TColor;
 begin
-  result := StringToColor(ReadString(ASection, AKey));
+  result := StringToColor(ReadString(AKey, AValue));
 end;
 
 { public TConfigFile.ReadColors
@@ -158,15 +158,6 @@ var
 begin
   for i := 0 to Length(AArray) -1 do
     AArray[i] := ReadString('CustomColors', 'Color'+ IntToStr(i));
-end;
-
-{ public TConfigFile.WriteColor
-
-  Writes a TColor value into config file. }
-
-procedure TConfigFile.WriteColor(ASection, AKey: string; AColor: TColor);
-begin
-  WriteString(ASection, AKey, ColorToString(AColor));
 end;
 
 { public TConfigFile.WriteColors

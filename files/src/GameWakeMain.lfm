@@ -94,7 +94,7 @@ object Main: TMain
     Top = 8
     Width = 25
     Anchors = [akTop, akRight]
-    Caption = 'v 3.1'
+    Caption = 'v 3.2'
     ParentColor = False
   end
   object bAlert: TButton

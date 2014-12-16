@@ -461,7 +461,7 @@ object Info: TInfo
           ''
           'Version 3.2  [XX.12.14]'
           ''
-          '- Eigener INI-Datei Parser'
+          '- Eigener Ini Parser'
           '- Speicherfunktion verbessert'
           '- Update-Funktion v2.2'
           ''

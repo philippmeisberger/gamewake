@@ -17,7 +17,7 @@ uses
 {$IFDEF MSWINDOWS}
   Windows;
 {$ELSE}
-  IniFiles, LCLType;
+  IniFileParser, LCLType;
 {$ENDIF}
 
 const
@@ -151,7 +151,7 @@ end;
 
 function TLanguageFile.GetString(const AIndex: Word) : string;
 begin
-  result := FIni.ReadString(FLang, IntToStr(AIndex + LANGUAGE_INTERVAL), '');
+  result := FIni.ReadString(FLang, IntToStr(AIndex + LANGUAGE_INTERVAL));
 end;
 
 { public TLanguageFile.GetLanguages
@@ -160,7 +160,7 @@ end;
 
 procedure TLanguageFile.GetLanguages(ASections: TStrings);
 begin
-  FIni.ReadSections(ASections);
+  FIni.GetSections(ASections);
 end;
 {$ENDIF}
 

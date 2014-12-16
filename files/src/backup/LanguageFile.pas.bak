@@ -17,7 +17,7 @@ uses
 {$IFDEF MSWINDOWS}
   Windows;
 {$ELSE}
-  IniFiles, LCLType;
+  IniFileParser, LCLType;
 {$ENDIF}
 
 const
@@ -81,7 +81,7 @@ type
     function MessageBox(const AIndexes: array of Word; AType: TMessageType = mtInfo;
       AUpdate: Boolean = False): Integer; overload;
     function MessageBox(const AIndexes: array of Word;
-      const AArgs: array of {$IFDEF MSWINDOWS}TVarRec{$ELSE}TFormatSettings{$ENDIF};
+      const AArgs: array of {$IFDEF MSWINDOWS}TVarRec{$ELSE}const{$ENDIF};
       AType: TMessageType = mtInfo; AUpdate: Boolean = False): Integer; overload;
     procedure RemoveListener(AListener: IChangeLanguageListener);
     { external }
@@ -151,7 +151,7 @@ end;
 
 function TLanguageFile.GetString(const AIndex: Word) : string;
 begin
-  result := FIni.ReadString(FLang, IntToStr(AIndex + LANGUAGE_INTERVAL), '');
+  result := FIni.ReadString(FLang, IntToStr(AIndex + LANGUAGE_INTERVAL));
 end;
 
 { public TLanguageFile.GetLanguages
