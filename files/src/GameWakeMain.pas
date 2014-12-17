@@ -188,7 +188,7 @@ begin
 
   FPath := '/usr/lib/gamewake/';
 {$ELSE}
-  FConfigPath := '';
+  FConfigPath := ExtractFilePath(ParamStr(0)) + 'gamewake.ini';
   FLangPath := '';
   FPath := '';
 {$ENDIF}
@@ -357,8 +357,11 @@ end;
   Event that is called by TUpdateCheck when TUpdateCheckThread finds an update. }
 
 procedure TMain.BeforeUpdate(Sender: TObject; const ANewBuild: Cardinal);
-begin
 {$IFDEF MSWINDOWS}
+var
+  Updater: TUpdate;
+
+begin
   // Show dialog: Ask for permitting download
   if (FLang.MessageBox([21, NEW_LINE, 22], [ANewBuild], mtQuestion, True) = IDYES) then
   begin
@@ -379,6 +382,7 @@ begin
   else
     mmUpdate.Caption := FLang.GetString(24);
 {$ELSE}
+begin
   with FLang do
     MessageBox([21, NEW_LINE, 22], [ANewBuild], mtInfo, True);
 {$ENDIF}
@@ -692,7 +696,7 @@ begin
       if mmSave.Checked then
       begin
       {$IFDEF MSWINDOWS}
-        Config.WriteInteger('Global', 'LangID', IntToStr(FLang.Lang));
+        Config.WriteInteger('Global', 'LangID', FLang.Lang);
       {$ELSE}
         Config.WriteString('Global', 'Lang', FLang.Lang);
       {$ENDIF}

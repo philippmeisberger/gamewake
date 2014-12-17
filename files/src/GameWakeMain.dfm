@@ -2990,7 +2990,7 @@ object Main: TMain
     Width = 24
     Height = 14
     Anchors = [akTop, akRight]
-    Caption = 'v 3.1'
+    Caption = 'v 3.2'
     Color = clBtnFace
     ParentColor = False
   end
@@ -3155,7 +3155,7 @@ object Main: TMain
     Top = 81
     Width = 282
     Height = 124
-    Caption = 'TEXT'
+    Caption = 'Game Wake'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -37

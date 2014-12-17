@@ -33,10 +33,6 @@ type
     lBuild: TLabel;
     procedure bOkClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-  private
-    { Private declarations }
-  public
-    { Public declarations }
   end;
 
 

@@ -114,7 +114,7 @@ type
     FLang: TLanguageFile;
     FTrayIcon: TTrayIcon;
     FColor: TColor;
-    FConfigPath, FLangPath: string;
+    FConfigPath, FLangPath, FPath: string;
     FUpdateCheck: TUpdateCheck;
     procedure AfterUpdate(Sender: TObject; ADownloadedFileName: string);
     procedure Alert(Sender: TObject);
@@ -152,10 +152,130 @@ implementation
 {$R *.lfm}
 {$ENDIF}
 
-
 uses GameWakeInfo, GameWakeOps;
 
 { TMain }
+
+{ TMain.FormCreate
+
+  VCL event that is called when form is being created. }
+
+procedure TMain.FormCreate(Sender: TObject);
+var
+  Config: TConfigFile;
+  Combine, AutoUpdate: Boolean;
+  Language: string;
+
+begin
+{$IFNDEF MSWINDOWS}
+  // Load other configuration?
+  if ((ParamStr(1) = '--config') and (ParamStr(2) <> '')) then
+    FConfigPath := ParamStr(2)
+  else
+    if ((ParamStr(3) = '--config') and (ParamStr(4) <> '')) then
+      FConfigPath := ParamStr(4)
+    else
+      FConfigPath := '/etc/gamewake/gamewake.conf';
+
+  // Load other language file?
+  if ((ParamStr(1) = '--lang') and (ParamStr(2) <> '')) then
+    FLangPath := ParamStr(2)
+  else
+    if ((ParamStr(3) = '--lang') and (ParamStr(4) <> '')) then
+      FLangPath := ParamStr(4)
+    else
+      FLangPath := '/etc/gamewake/lang';
+
+  FPath := '/usr/lib/gamewake/';
+{$ELSE}
+  FConfigPath := ExtractFilePath(ParamStr(0)) + 'gamewake.ini';
+  FLangPath := '';
+  FPath := '';
+{$ENDIF}
+
+  // Init config file access
+  Config := TConfigFile.Create(FConfigPath);
+
+  try
+    // Check if anything shall be loaded from config
+    if Config.ReadBoolean('Global', 'Save') then
+    begin
+      LoadFromIni();
+      mmOptions.Enabled := True;
+    end  //of begin
+    // Do not load anything instead of language
+    else
+    begin
+      mmSave.Checked := False;
+      mmOptions.Enabled := False;
+      LoadLanguageFile(Language);
+    end;  //of if
+
+    // Load last position?
+    if not Config.ReadBoolean('Global', 'SavePos') then
+      Position := poScreenCenter;
+
+    // Check for Updates?
+    if Config.KeyExists('Global', 'AutoUpdate') then
+      AutoUpdate := Config.ReadBoolean('Global', 'AutoUpdate')
+    else
+      AutoUpdate := True;
+
+    // Load hours minutes combining
+    Combine := Config.ReadBoolean('Global', 'Combine');
+
+  finally
+    Config.Free;
+  end;  //of finally
+
+  // Load last blink color
+  LoadColor();
+
+  // Init update notificator
+  FUpdateCheck := TUpdateCheck.Create(Self, 'GameWake', FLang);
+
+  // Search for updates on startup?
+  if AutoUpdate then
+    FUpdateCheck.CheckForUpdate(False);
+
+  {$IFDEF MSWINDOWS}
+    mmWebsite.Visible := False;
+  {$ELSE}
+    mmDownloadCert.Visible := False;
+  {$ENDIF}
+
+  // Init Clock
+  Clock := TClock.Create(Self, mmTimer.Checked, Combine);
+
+  with Clock do
+  begin
+    Alert.SetTime(StrToInt(eHour.Text), StrToInt(eMin.Text));
+    OnAlertStart := Self.Alert;
+    OnAlert := Blink;
+    OnAlertEnd := BlinkEnd;
+    OnCount := Self.Count;
+  end;  //of with
+end;
+
+{ TMain.FormDestroy
+
+  VCL event that is called when form has been closed. }
+
+procedure TMain.FormDestroy(Sender: TObject);
+begin
+  // Save configuration
+  SaveToIni();
+
+  FLang.Free;
+  Clock.Free;
+  FUpdateCheck.Free;
+
+{$IFNDEF MSWINDOWS}
+  // Delete icon from tray
+  if Assigned(FTrayIcon) then
+    FTrayIcon.Free;
+{$ENDIF}
+end;
 
 { private TMain.AfterUpdate
 
@@ -217,7 +337,7 @@ begin
     begin
       bAlert.Enabled := True;
       Close;
-	  end;  //of begin
+    end;  //of begin
   end  //of begin
   else
   begin
@@ -237,20 +357,34 @@ end;
   Event that is called by TUpdateCheck when TUpdateCheckThread finds an update. }
 
 procedure TMain.BeforeUpdate(Sender: TObject; const ANewBuild: Cardinal);
-begin
 {$IFDEF MSWINDOWS}
+var
+  Updater: TUpdate;
+
+begin
   // Show dialog: Ask for permitting download
-  with FLang do
-    if (MessageBox(Format(GetString(21) +^J+ GetString(22), [ANewBuild]),
-      mtQuestion, True) = IDYES) then
-      // Create and show TUpdate form
-      with TUpdate.Create(Self, FLang, FLang.GetString(24)) do
+  if (FLang.MessageBox([21, NEW_LINE, 22], [ANewBuild], mtQuestion, True) = IDYES) then
+  begin
+    // init TUpdate instance
+    Updater := TUpdate.Create(Self, FLang);
+
+    try
+      with Updater do
+      begin
+        Title := FLang.GetString(24);
         Download('game_wake_setup.exe', 'Game Wake Setup.exe')
-    else
-      mmUpdate.Caption := GetString(24);
+      end;  //of begin
+
+    finally
+      Updater.Free;
+    end;  //of try
+  end  //of begin
+  else
+    mmUpdate.Caption := FLang.GetString(24);
 {$ELSE}
+begin
   with FLang do
-    MessageBox(Format(GetString(21) +^J+ GetString(22), [ANewBuild]), mtInfo, True);
+    MessageBox([21, NEW_LINE, 22], [ANewBuild], mtInfo, True);
 {$ENDIF}
 end;
 
@@ -313,16 +447,16 @@ var
 
 begin
   try
-    Config := TConfigFile.Create('Global', FConfigPath);
+    Config := TConfigFile.Create(FConfigPath);
 
     try
       // Color "red" for default
       FColor := clRed;
 
-      if Config.GetSaveValue('SaveColor') then
+      if Config.ReadBoolean('Global', 'SaveColor') then
       begin
         // Load color from config file
-        BlinkColor := Config.GetIniValue('Alert', 'Color');
+        BlinkColor := Config.ReadString('Alert', 'Color');
 
         if (BlinkColor <> '') then
           FColor := StringToColor(BlinkColor);
@@ -344,20 +478,20 @@ end;
 procedure TMain.LoadFromIni();
 var
   Config: TConfigFile;
-  Language, LangID: string;
-  AlertType: Integer;
+  Language: string;
+  LangID, AlertType: Integer;
 
 begin
   try
-    Config := TConfigFile.Create('Global', FConfigPath);
+    Config := TConfigFile.Create(FConfigPath);
 
     try
       // Compability to old version
-      LangID := Config.GetIniValue('LangID');
+      LangID := Config.ReadInteger('Global', 'LangID');
 
-      if (LangID <> '') then
+      if (LangID <> -1) then
       begin
-        case StrToInt(LangID) of
+        case LangID of
           200: Language := LANG_ENGLISH;
           300: Language := LANG_FRENCH;
           else
@@ -365,27 +499,35 @@ begin
         end;  //of case
 
       {$IFNDEF MSWINDOWS}
-        Config.DeleteValue('LangID');
+        Config.Remove('Global', 'LangID');
       {$ENDIF}
       end  //of begin
       else
         // Load language from config
-        Language := Config.GetIniValue('Lang');
+        Language := Config.ReadString('Global', 'Lang');
 
       // Load language file
       LoadLanguageFile(Language);
 
+      // Load last mode
+      mmTimer.Checked := Config.ReadBoolean('Global', 'TimerMode');
+      mmCounter.Checked := not mmTimer.Checked;
+
       // Load last time?
-      if Config.GetSaveValue('SaveClock') then
+      if Config.ReadBoolean('Global', 'SaveClock') then
       begin
-        eHour.Text := Config.GetIniValue('Alert', 'Hour');
-        eMin.Text := Config.GetIniValue('Alert', 'Min');
-      end;  //of if
+        eHour.Text := Config.ReadString('Alert', 'Hour');
+        eMin.Text := Config.ReadString('Alert', 'Min');
+      end  //of if
+      else
+        // Counter can run at least 1 minute
+        if mmCounter.Checked then
+          eMin.Text := '01';
 
       // Load last sound?
-      if Config.GetSaveValue('SaveSound') then
+      if Config.ReadBoolean('Global', 'SaveSound') then
       begin
-        AlertType := StrToInt(Config.GetIniValue('Alert', 'Sound'));
+        AlertType := Config.ReadInteger('Alert', 'Sound');
 
         if (AlertType in [0..4]) then
           rgSounds.ItemIndex := AlertType
@@ -394,47 +536,41 @@ begin
       end;  //of if
 
       // Load last set alert text?
-      if Config.GetSaveValue('SaveText') then
-        pText.Caption := Config.GetIniValue('Alert', 'Text');
+      if Config.ReadBoolean('Global', 'SaveText') then
+        pText.Caption := Config.ReadString('Alert', 'Text');
 
       // Load last position?
-      if Config.GetSaveValue('SavePos') then
+      if Config.ReadBoolean('Global', 'SavePos') then
       begin
-        Left := StrToInt(Config.GetIniValue('Left'));
-        Top := StrToInt(Config.GetIniValue('Top'));
+        Left := Config.ReadInteger('Global', 'Left');
+        Top := Config.ReadInteger('Global', 'Top');
       end  //of begin
       else
         Position := poScreenCenter;
 
-      // Load last mode
-      if Config.GetSaveValue('TimerMode') then
-        mmTimer.Checked := True
-      else
-      begin
-        mmTimer.Checked := False;
-        mmCounter.Checked := True;
-      end;  //of if
-
       // Load last "show text" state?
-      if Config.GetSaveValue('Alert', 'ShowText') then
+      if Config.ReadBoolean('Alert', 'ShowText') then
       begin
         cbText.Checked := True;
         bChange.Enabled := True;
       end;  //of begin
 
       // Load last blink state
-      cbBlink.Checked := Config.GetSaveValue('Alert', 'Blink');
+      cbBlink.Checked := Config.ReadBoolean('Alert', 'Blink');
 
-      // Compability to old versions with no "AutoUpdate" value
-      if not Config.ValueExists('AutoUpdate') then
-        Config.SetIniValue('AutoUpdate', True);
+      // Missing "AutoUpdate"?
+      if not Config.KeyExists('Global', 'AutoUpdate') then
+      begin
+        Config.WriteBoolean('Global', 'AutoUpdate', True);
+        Config.Save();
+      end;  //of begin
 
     finally
       Config.Free;
     end;  //of try
 
   except
-    FLang.MessageBox(Format(FLang.GetString(75), [FConfigPath]), mtError);
+    FLang.MessageBox(FLang.Format(75, [FConfigPath]), mtError);
   end;  //of try
 end;
 
@@ -553,67 +689,66 @@ var
 
 begin
   try
-    Config := TConfigFile.Create('Global', FConfigPath);
+    Config := TConfigFile.Create(FConfigPath);
 
     try
       // Save anything?
       if mmSave.Checked then
       begin
       {$IFDEF MSWINDOWS}
-        Config.SetIniValue('LangID', IntToStr(FLang.Lang));
+        Config.WriteInteger('Global', 'LangID', FLang.Lang);
       {$ELSE}
-        Config.SetIniValue('Lang', FLang.Lang);
+        Config.WriteString('Global', 'Lang', FLang.Lang);
       {$ENDIF}
-        Config.SetIniValue('Save', True);
-        Config.SetIniValue('TimerMode', mmTimer.Checked);
+        Config.WriteBoolean('Global', 'Save', True);
+        Config.WriteBoolean('Global', 'TimerMode', mmTimer.Checked);
 
         // Save position?
-        if Config.GetSaveValue('SavePos') then
+        if Config.ReadBoolean('Global', 'SavePos') then
         begin
-          Config.SetIniValue('Left', IntToStr(Left));
-          Config.SetIniValue('Top', IntToStr(Top));
+          Config.WriteInteger('Global', 'Left', Left);
+          Config.WriteInteger('Global', 'Top', Top);
         end;  //of begin
 
         // Save time input?
-        if Config.GetSaveValue('SaveClock') then
+        if Config.ReadBoolean('Global', 'SaveClock') then
         begin
           if (eHour.Text <> '') then
-            Config.SetIniValue('Alert', 'Hour', eHour.Text)
-          else
-            Config.SetIniValue('Alert', 'Hour', '00');
+            Config.WriteString('Alert', 'Hour', eHour.Text);
 
           if (eMin.Text <> '') then
-            Config.SetIniValue('Alert', 'Min', eMin.Text)
-          else
-            Config.SetIniValue('Alert', 'Min', '00');
+            Config.WriteString('Alert', 'Min', eMin.Text);
         end;  //of if
 
         // Save current text input
-        if Config.GetSaveValue('SaveText') then
-          Config.SetIniValue('Alert', 'Text', pText.Caption);
+        if Config.ReadBoolean('Global', 'SaveText') then
+          Config.WriteString('Alert', 'Text', pText.Caption);
 
         // Save current selected sound?
-        if Config.GetSaveValue('SaveSound') then
-          Config.SetIniValue('Alert', 'Sound', IntToStr(rgSounds.ItemIndex));
+        if Config.ReadBoolean('Global', 'SaveSound') then
+          Config.WriteInteger('Alert', 'Sound', rgSounds.ItemIndex);
 
         // Save current selected color
-        if Config.GetSaveValue('SaveColor') then
-          Config.SetIniValue('Alert', 'Color', ColorToString(FColor));
+        if Config.ReadBoolean('Global', 'SaveColor') then
+          Config.WriteColor('Alert', 'Color', FColor);
 
         // Save current checks
-        Config.SetIniValue('Alert', 'Blink', cbBlink.Checked);
-        Config.SetIniValue('Alert', 'ShowText', cbText.Checked);
+        Config.WriteBoolean('Alert', 'Blink', cbBlink.Checked);
+        Config.WriteBoolean('Alert', 'ShowText', cbText.Checked);
       end  //of begin
       else
         // Do not save anything
-        Config.SetIniValue('Save', False);
+        Config.WriteBoolean('Global', 'Save', False);
+
+      // Save changes to config file
+      Config.Save();
 
     finally
       Config.Free;
     end;  //of try
 
   except
-    FLang.MessageBox(Format(FLang.GetString(76), [FConfigPath]), mtError);
+    FLang.MessageBox(FLang.Format(76, [FConfigPath]), mtError);
   end;  //of try
 end;
 
@@ -635,7 +770,7 @@ begin
     mmOptions.Caption := GetString(34);
     mmTimer.Caption := GetString(35);
     mmCounter.Caption := GetString(36);
-    mmView.Caption := GetString(10);
+    mmView.Caption := GetString(20);
     mmLang.Caption := GetString(25);
     mmHelp.Caption := GetString(14);
     mmUpdate.Caption:= GetString(15);
@@ -731,120 +866,6 @@ begin
 end;
 {$ENDIF}
 
-{ TMain.FormCreate }
-
-procedure TMain.FormCreate(Sender: TObject);
-var
-  Global: TConfigFile;
-  Combine, AutoUpdate: Boolean;
-  Language: string;
-
-begin
-{$IFNDEF MSWINDOWS}
-  // Load other configuration?
-  if ((ParamStr(1) = '--config') and (ParamStr(2) <> '')) then
-    FConfigPath := ParamStr(2)
-  else
-    if ((ParamStr(3) = '--config') and (ParamStr(4) <> '')) then
-      FConfigPath := ParamStr(4)
-    else
-      FConfigPath := '/etc/gamewake/gamewake.conf';
-
-  // Load other language file?
-  if ((ParamStr(1) = '--lang') and (ParamStr(2) <> '')) then
-    FLangPath := ParamStr(2)
-  else
-    if ((ParamStr(3) = '--lang') and (ParamStr(4) <> '')) then
-      FLangPath := ParamStr(4)
-    else
-      FLangPath := '/etc/gamewake/lang';
-{$ELSE}
-  FConfigPath := '';
-  FLangPath := '';
-{$ENDIF}
-
-  // Init config file access
-  Global := TConfigFile.Create('Global', FConfigPath);
-
-  try
-    // Check if anything shall be loaded from config
-    if Global.GetSaveValue('Save') then
-    begin
-      LoadFromIni();
-      mmOptions.Enabled := True;
-    end  //of begin
-    // Do not load anything instead of language
-    else
-    begin
-      mmSave.Checked := False;
-      mmOptions.Enabled := False;
-      LoadLanguageFile(Language);
-    end;  //of if
-
-    // Load last position?
-    if not Global.GetSaveValue('SavePos') then
-      Position := poScreenCenter;
-
-    // Check for Updates?
-    if Global.ValueExists('AutoUpdate') then
-      AutoUpdate := Global.GetSaveValue('AutoUpdate')
-    else
-      AutoUpdate := True;
-
-    // Load hours minutes combining
-    Combine := Global.GetSaveValue('Combine');
-
-  finally
-    Global.Free;
-  end;  //of finally
-
-  // Load last blink color
-  LoadColor();
-
-  // Init update notificator
-  FUpdateCheck := TUpdateCheck.Create(Self, 'GameWake', FLang);
-
-  // Search for updates on startup?
-  if AutoUpdate then
-    FUpdateCheck.CheckForUpdate(False);
-
-  {$IFDEF MSWINDOWS}
-    mmWebsite.Visible := False;
-  {$ELSE}
-    mmDownloadCert.Visible := False;
-  {$ENDIF}
-
-  // Init Clock
-  Clock := TClock.Create(Self, mmTimer.Checked, Combine);
-
-  with Clock do
-  begin
-    Alert.SetTime(StrToInt(eHour.Text), StrToInt(eMin.Text));
-    OnAlertStart := Self.Alert;
-    OnAlert := Blink;
-    OnAlertEnd := BlinkEnd;
-    OnCount := Self.Count;
-  end;  //of with
-end;
-
-{ TMain.FormDestroy }
-
-procedure TMain.FormDestroy(Sender: TObject);
-begin
-  // Save configuration
-  SaveToIni();
-
-  FLang.Free;
-  Clock.Free;
-  FUpdateCheck.Free;
-
-{$IFNDEF MSWINDOWS}
-  // Delete icon from tray
-  if Assigned(FTrayIcon) then
-    FTrayIcon.Free;
-{$ENDIF}
-end;
-
 { TMain.pmCloseClick
 
   PopMenu entry that terminates Game Wake. }
@@ -853,7 +874,7 @@ procedure TMain.pmCloseClick(Sender: TObject);
 begin
   // Show confirmation
   with FLang do
-    if (MessageBox(GetString(69) +^J+ GetString(70), mtQuestion) = IDYes) then
+    if (MessageBox([69, NEW_LINE, 70], mtQuestion) = IDYes) then
     begin
       bStop.Click;
       Close;
@@ -931,7 +952,7 @@ end;
 
 procedure TMain.bPlayClockClick(Sender: TObject);
 begin
-  TOSUtils.PlaySound('bell.wav');
+  TOSUtils.PlaySound(FPath +'bell.wav');
 end;
 
 { TMain.bPlayHornClick
@@ -940,7 +961,7 @@ end;
 
 procedure TMain.bPlayHornClick(Sender: TObject);
 begin
-  TOSUtils.PlaySound('horn.wav');
+  TOSUtils.PlaySound(FPath +'horn.wav');
 end;
 
 { TMain.bPlayBingClick
@@ -949,7 +970,7 @@ end;
 
 procedure TMain.bPlayBingClick(Sender: TObject);
 begin
-  TOSUtils.PlaySound('bing.wav');
+  TOSUtils.PlaySound(FPath +'bing.wav');
 end;
 
 { TMain.bPlayBeepClick
@@ -958,7 +979,7 @@ end;
 
 procedure TMain.bPlayBeepClick(Sender: TObject);
 begin
-  TOSUtils.PlaySound('beep.wav');
+  TOSUtils.PlaySound(FPath +'beep.wav');
 end;
 
 { TMain.eHourKeyPress
@@ -1046,10 +1067,10 @@ begin
     mmTimer.Enabled := False;
     mmCounter.Enabled := False;
 
-    FLang.MessageBox(Format(FLang.GetString(62), [Clock.Alert.GetTime(False)]));
+    FLang.MessageBox(FLang.Format(62, [Clock.Alert.GetTime(False)]));
 
   except
-    FLang.MessageBox(74, mtWarning);
+    FLang.MessageBox(71, mtWarning);
   end;  //of try
 end;
 
@@ -1101,7 +1122,7 @@ begin
   else
     bChange.Enabled := False;
 
-  FLang.MessageBox(64);
+  FLang.MessageBox(64, mtInfo);
 end;
 
 { TMain.bColorClick
@@ -1118,14 +1139,12 @@ var
   i: Byte;
 
 begin
-  Config := TConfigFile.Create('Global', FConfigPath);
+  Config := TConfigFile.Create(FConfigPath);
 
   try
-    Save := Config.GetSaveValue('Save');
-    SaveColor := Config.GetSaveValue('SaveColor');
-
-    Config.ChangeSection('CustomColors');
-    Config.LoadColor(Colors);
+    Save := Config.ReadBoolean('Global', 'Save');
+    SaveColor := Config.ReadBoolean('Global', 'SaveColor');
+    Config.ReadColors(Colors);
 
   except
     Config.Free;
@@ -1153,7 +1172,11 @@ begin
         for i := 0 to Length(Colors) -1 do
           Colors[i] := ColorDialog.CustomColors.Values['Color'+ Chr(Ord('A') + i)];
 
-        Config.SaveColor(Colors);
+        // Write custom colors to config file
+        Config.WriteColors(Colors);
+
+        // Save changes to config file
+        Config.Save();
       end;  //of begin
     end;  //of begin
 
@@ -1172,12 +1195,12 @@ var
   UserInput: string;
 
 begin
-  UserInput := InputBox(FLang.GetString(35), FLang.GetString(36), pText.Caption);
+  UserInput := InputBox(FLang.GetString(65), FLang.GetString(66), pText.Caption);
 
   // Text length maximum 16 characters
   if (Length(UserInput) > 16) then
   begin
-    FLang.MessageBox(FLang.GetString(37) +^J+ FLang.GetString(38), mtWarning);
+    FLang.MessageBox([67, NEW_LINE, 68], mtWarning);
     bChange.Click;
   end  //of begin
   else
@@ -1237,8 +1260,8 @@ procedure TMain.mmTimerClick(Sender: TObject);
 begin
   if not mmTimer.Checked then
   begin
-    mmTimer.Checked := True;
     mmCounter.Checked := False;
+    mmTimer.Checked := True;
     Clock.ChangeMode(True);
     eHour.Text := Clock.Alert.GetHour();
     eMin.Text := Clock.Alert.GetMin();
@@ -1254,8 +1277,8 @@ procedure TMain.mmCounterClick(Sender: TObject);
 begin
   if not mmCounter.Checked then
   begin
-    mmCounter.Checked := True;
     mmTimer.Checked := False;
+    mmCounter.Checked := True;
     Clock.ChangeMode(False);
     lHour.Caption := Clock.Time.GetTime();
     eHour.Text := Clock.Alert.GetHour();
@@ -1282,14 +1305,32 @@ end;
   MainMenu entry that allows to download the PM Code Works certificate. }
 
 procedure TMain.mmDownloadCertClick(Sender: TObject);
-begin
 {$IFDEF MSWINDOWS}
+var
+  Updater: TUpdate;
+
+begin
   // Certificate already installed?
-  if (TOSUtils.PMCertExists() and (FLang.MessageBox(FLang.GetString(27) +^J+
-    FLang.GetString(28), mtQuestion) = IDYES)) then
+  if (TOSUtils.PMCertExists() and (FLang.MessageBox([27, NEW_LINE, 28],
+    mtQuestion) = IDYES)) then
+  begin
+    // Init downloader
+    Updater := TUpdate.Create(Self, FLang);
+
     // Download certificate
-    with TUpdate.Create(Self, FLang, FLang.GetString(8)) do
-      DownloadCertificate();
+    try
+      with Updater do
+      begin
+        Title := FLang.GetString(16);
+        DownloadCertificate();
+      end;  //of begin
+
+    finally
+      Updater.Free;
+    end;  //of try
+  end;  //of begin
+{$ELSE}
+begin
 {$ENDIF}
 end;
 

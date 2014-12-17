@@ -64,7 +64,7 @@ object Info: TInfo
         Top = 72
         Width = 24
         Height = 14
-        Caption = 'v 3.1'
+        Caption = 'v 3.2'
         Color = clBtnFace
         ParentColor = False
       end
@@ -421,7 +421,7 @@ object Info: TInfo
           'Philipp Meisberger (PM Code Works). F'#252'r Sch'#228'den an Hard- '
           'und Software, die durch die Benutzung dieses Programms '
           'entstehen, wird keine Haftung '#252'bernommen.'
-          '09/2014')
+          '12/2014')
         ReadOnly = True
         TabOrder = 0
       end
@@ -471,6 +471,16 @@ object Info: TInfo
           ''
           'History'
           '--------'
+          ''
+          'Version 3.2  [XX.12.14]'
+          ''
+          '- Fehler behoben der im "Counter" Modus auftrat, wenn '
+          '  "Uhrzeit speichern" abgew'#228'hlt war'
+          '- Eigener INI-Datei Parser'
+          '- Speicherfunktion verbessert'
+          '- Update-Funktion v2.2'
+          ''
+          '---------------------------------'
           ''
           'Version 3.1  [18.09.14]'
           ''
@@ -609,7 +619,7 @@ object Info: TInfo
           '(mit Magazin) zuschicken. Meine Adresse erfahren Sie unter '
           '"team@pm-codeworks.de".'
           ''
-          '09/2014')
+          '12/2014')
         ReadOnly = True
         ScrollBars = ssVertical
         TabOrder = 0

@@ -481,6 +481,7 @@ object Info: TInfo
           
             '- "Speichern unter"-Dialog beim Herunterladen des Zertifikats en' +
             'tfernt'
+          '- Sonstige kleinere Verbesserungen'
           ''
           '---------------------------------'
           ''
