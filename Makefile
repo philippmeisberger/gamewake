@@ -1,8 +1,24 @@
+##
+## Game Wake makefile for Unix
+##
+
+ARCH = $(shell uname -m)
+
+ifeq ($(ARCH),i686)
+	ARCH = i386
+endif
+ifeq ($(ARCH),i586)
+	ARCH = i386
+endif
+ifeq ($(ARCH),i486)
+	ARCH = i386
+endif
+
 LIBDIR = $(DESTDIR)/usr/lib/gamewake
-BINDIR = files/bin/$(shell uname)/gamewake_$(shell uname -m)
+BINDIR = files/bin/$(shell uname)/gamewake_$(ARCH)
 ETCDIR = $(DESTDIR)/etc/gamewake
 
-all:	clean	build	install
+all:	clean	build
 
 clean:
 	rm -f $(BINDIR)/usr/lib/gamewake/gamewake
