@@ -461,7 +461,9 @@ object Info: TInfo
           ''
           'Version 3.2  [XX.12.14]'
           ''
-          '- Eigener INI-Datei Parser'
+          '- Fehler behoben der im "Counter" Modus auftrat, wenn '
+          '  "Uhrzeit speichern" abgewählt war'
+          '- Eigener INI-Datei Parser für die Konfigurationsdatei'
           '- Speicherfunktion verbessert'
           '- Update-Funktion v2.2'
           ''
@@ -583,7 +585,7 @@ object Info: TInfo
           'Game Wake wurde unter der BSD-Lizenz veröffentlicht und ist somit Open-Source. Der Quelltext kann auf der Website heruntergeladen werden.'
           'Soll Game Wake auf eine kommerzielle CD-ROM (mit Magazin) gepresst werden, wäre es nett, mir eine Ausgabe dieser CD-ROM (mit Magazin) zuschicken. Meine Adresse erfahren Sie unter "team@pm-codeworks.de".'
           ''
-          '09/2014'
+          '12/2014'
         )
         ReadOnly = True
         ScrollBars = ssVertical

@@ -476,7 +476,7 @@ object Info: TInfo
           ''
           '- Fehler behoben der im "Counter" Modus auftrat, wenn '
           '  "Uhrzeit speichern" abgew'#228'hlt war'
-          '- Eigener INI-Datei Parser'
+          '- Eigener INI-Datei Parser für die Konfigurationsdatei'
           '- Speicherfunktion verbessert'
           '- Update-Funktion v2.2'
           ''

@@ -853,7 +853,7 @@ begin
         else
         begin
           Clock.GetTimeRemaining(Hour, Min, Sec);
-          FTrayIcon.BalloonHint := Format(FLang.GetString(69), [Hour, Min, Sec]);
+          FTrayIcon.BalloonHint := Format(FLang.GetString(72), [Hour, Min, Sec]);
         end;  //of if
 
         FTrayIcon.ShowBalloonHint;
@@ -1418,6 +1418,9 @@ end;
   Event that is called during termination of Game Wake. }
 
 procedure TMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+var
+  TrayIcon: TIcon;
+
 begin
   // Alert is not set?
   if (Clock.AlertEnabled = False) then
@@ -1440,6 +1443,7 @@ begin
         FTrayIcon.OnMouseUp := TrayMouseUp;
         FTrayIcon.Icon.LoadFromFile('/usr/share/pixmaps/gamewake.ico');
         FTrayIcon.PopUpMenu := pmMenu;
+        FTrayIcon.Hint := Application.Title;
         FTrayIcon.Show;
 
       except
