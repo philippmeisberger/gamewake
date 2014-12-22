@@ -110,7 +110,7 @@ type
     procedure lCopyMouseEnter(Sender: TObject);
     procedure lCopyMouseLeave(Sender: TObject);
   private
-    Clock: TClock;
+    FClock: TClock;
     FLang: TLanguageFile;
     FTrayIcon: TTrayIcon;
     FColor: TColor;
@@ -245,9 +245,9 @@ begin
   {$ENDIF}
 
   // Init Clock
-  Clock := TClock.Create(Self, mmTimer.Checked, Combine);
+  FClock := TClock.Create(Self, mmTimer.Checked, Combine);
 
-  with Clock do
+  with FClock do
   begin
     Alert.SetTime(StrToInt(eHour.Text), StrToInt(eMin.Text));
     OnAlertStart := Self.Alert;
@@ -267,7 +267,7 @@ begin
   SaveToIni();
 
   FLang.Free;
-  Clock.Free;
+  FClock.Free;
   FUpdateCheck.Free;
 
 {$IFNDEF MSWINDOWS}
@@ -328,10 +328,10 @@ begin
   cbText.Enabled := False;
 
   // Get alert type
-  Clock.AlertType := TAlertType(rgSounds.ItemIndex);
+  FClock.AlertType := TAlertType(rgSounds.ItemIndex);
 
   // Check for shutdown
-  if (Clock.AlertType = atShutdown) then
+  if (FClock.AlertType = atShutdown) then
   begin
     if TOSUtils.Shutdown() then
     begin
@@ -675,7 +675,7 @@ const
 
 begin
   if (AMsg.WParam = PBT_APMRESUMESUSPEND) then
-    Clock.Time.SetSystemTime();
+    FClock.Time.SetSystemTime();
 end;
 {$ENDIF}
 
@@ -819,10 +819,10 @@ begin
     // Show Balloon hint on left click
     mbLeft:
       if mmTimer.Checked then
-        FTrayIcon.BalloonTip(Format(FLang.GetString(63), [Clock.Alert.GetTime(False)]))
+        FTrayIcon.BalloonTip(Format(FLang.GetString(63), [FClock.Alert.GetTime(False)]))
       else
       begin
-        Clock.GetTimeRemaining(Hour, Min, Sec);
+        FClock.GetTimeRemaining(Hour, Min, Sec);
         FTrayIcon.BalloonTip(Format(FLang.GetString(72), [Hour, Min, Sec]));
       end;  //of if
 
@@ -849,10 +849,10 @@ begin
     mbLeft:
       begin
         if mmTimer.Checked then
-          FTrayIcon.BalloonHint := Format(FLang.GetString(63), [Clock.Alert.GetTime(False)])
+          FTrayIcon.BalloonHint := Format(FLang.GetString(63), [FClock.Alert.GetTime(False)])
         else
         begin
-          Clock.GetTimeRemaining(Hour, Min, Sec);
+          FClock.GetTimeRemaining(Hour, Min, Sec);
           FTrayIcon.BalloonHint := Format(FLang.GetString(72), [Hour, Min, Sec]);
         end;  //of if
 
@@ -904,10 +904,10 @@ end;
 
 procedure TMain.bIncHourClick(Sender: TObject);
 begin
-  eHour.Text := Clock.Alert.IncrementHours();
+  eHour.Text := FClock.Alert.IncrementHours();
 
-  if Clock.Alert.Combine then
-    eMin.Text := Clock.Alert.GetMin();
+  if FClock.Alert.Combine then
+    eMin.Text := FClock.Alert.GetMin();
 end;
 
 { TMain.bDecHourClick
@@ -916,10 +916,10 @@ end;
 
 procedure TMain.bDecHourClick(Sender: TObject);
 begin
-  eHour.Text := Clock.Alert.DecrementHours();
+  eHour.Text := FClock.Alert.DecrementHours();
 
-  if Clock.Alert.Combine then
-    eMin.Text := Clock.Alert.GetMin();
+  if FClock.Alert.Combine then
+    eMin.Text := FClock.Alert.GetMin();
 end;
 
 { TMain.bIncMinClick
@@ -928,10 +928,10 @@ end;
 
 procedure TMain.bIncMinClick(Sender: TObject);
 begin
-  eMin.Text := Clock.Alert.IncrementMinutes();
+  eMin.Text := FClock.Alert.IncrementMinutes();
 
-  if Clock.Alert.Combine then
-    eHour.Text := Clock.Alert.GetHour();
+  if FClock.Alert.Combine then
+    eHour.Text := FClock.Alert.GetHour();
 end;
 
 { TMain.bDecMinClick
@@ -940,10 +940,10 @@ end;
 
 procedure TMain.bDecMinClick(Sender: TObject);
 begin
-  eMin.Text := Clock.Alert.DecrementMinutes();
+  eMin.Text := FClock.Alert.DecrementMinutes();
 
-  if Clock.Alert.Combine then
-    eHour.Text := Clock.Alert.GetHour();
+  if FClock.Alert.Combine then
+    eHour.Text := FClock.Alert.GetHour();
 end;
 
 { TMain.bPlayClockClick
@@ -1005,13 +1005,13 @@ begin
   try
     if ((Length(eHour.Text) = 2) and not (Key in [VK_RIGHT, VK_LEFT])) then
     begin
-      Clock.Alert.SetHour(StrToInt(eHour.Text));
-      eHour.Text := Clock.Alert.GetHour();
+      FClock.Alert.SetHour(StrToInt(eHour.Text));
+      eHour.Text := FClock.Alert.GetHour();
       eMin.SetFocus;
     end;  //of begin
 
   except
-    eHour.Text := Clock.Alert.GetHour();
+    eHour.Text := FClock.Alert.GetHour();
   end;  //of try
 end;
 
@@ -1024,12 +1024,12 @@ begin
   try
     if ((Length(eMin.Text) = 2) and not (Key in [VK_RIGHT, VK_LEFT])) then
     begin
-      Clock.Alert.SetMin(StrToInt(eMin.Text));
-      eMin.Text := Clock.Alert.GetMin();
+      FClock.Alert.SetMin(StrToInt(eMin.Text));
+      eMin.Text := FClock.Alert.GetMin();
     end;  //of begin
 
   except
-    eMin.Text := Clock.Alert.GetMin();
+    eMin.Text := FClock.Alert.GetMin();
   end;  //of try
 end;
 
@@ -1045,13 +1045,13 @@ begin
     if ((Trim(eHour.Text) = '') or (Trim(eMin.Text) = ''))  then
       raise EInvalidTimeException.Create('Hours and minutes must not be empty!');
 
-    Clock.Alert.SetTime(StrToInt(eHour.Text), StrToInt(eMin.Text));
-    eHour.Text := Clock.Alert.GetHour();
-    eMin.Text := Clock.Alert.GetMin();
-    Caption := Caption +' - '+ Clock.Alert.GetTime(False);
+    FClock.Alert.SetTime(StrToInt(eHour.Text), StrToInt(eMin.Text));
+    eHour.Text := FClock.Alert.GetHour();
+    eMin.Text := FClock.Alert.GetMin();
+    Caption := Caption +' - '+ FClock.Alert.GetTime(False);
 
     // Start alert
-    Clock.StartAlert();
+    FClock.StartAlert();
 
     // Disable GUI components
     eHour.Enabled := False;
@@ -1067,7 +1067,7 @@ begin
     mmTimer.Enabled := False;
     mmCounter.Enabled := False;
 
-    FLang.MessageBox(FLang.Format(62, [Clock.Alert.GetTime(False)]));
+    FLang.MessageBox(FLang.Format(62, [FClock.Alert.GetTime(False)]));
 
   except
     FLang.MessageBox(71, mtWarning);
@@ -1081,12 +1081,12 @@ end;
 procedure TMain.bStopClick(Sender: TObject);
 begin
   // Stop alert
-  Clock.StopAlert();
+  FClock.StopAlert();
 
   if mmCounter.Checked then
   begin
-    Clock.Time.Reset();
-    lHour.Caption := Clock.Time.GetTime();
+    FClock.Time.Reset();
+    lHour.Caption := FClock.Time.GetTime();
   end;  //of begin
 
   // Reset GUI
@@ -1247,7 +1247,7 @@ var
   Options: TOptions;
 
 begin
-  Options := TOptions.Create(Self, Clock, FLang, FConfigPath);
+  Options := TOptions.Create(Self, FClock, FLang, FConfigPath);
   Options.ShowModal;
   Options.Free;
 end;
@@ -1262,9 +1262,9 @@ begin
   begin
     mmCounter.Checked := False;
     mmTimer.Checked := True;
-    Clock.ChangeMode(True);
-    eHour.Text := Clock.Alert.GetHour();
-    eMin.Text := Clock.Alert.GetMin();
+    FClock.ChangeMode(True);
+    eHour.Text := FClock.Alert.GetHour();
+    eMin.Text := FClock.Alert.GetMin();
     eHour.SetFocus;
   end;  //of begin
 end;
@@ -1279,10 +1279,10 @@ begin
   begin
     mmTimer.Checked := False;
     mmCounter.Checked := True;
-    Clock.ChangeMode(False);
-    lHour.Caption := Clock.Time.GetTime();
-    eHour.Text := Clock.Alert.GetHour();
-    eMin.Text := Clock.Alert.GetMin();
+    FClock.ChangeMode(False);
+    lHour.Caption := FClock.Time.GetTime();
+    eHour.Text := FClock.Alert.GetHour();
+    eMin.Text := FClock.Alert.GetMin();
     eHour.SetFocus;
   end;  //of begin
 end;
@@ -1423,7 +1423,7 @@ var
 
 begin
   // Alert is not set?
-  if (Clock.AlertEnabled = False) then
+  if (FClock.AlertEnabled = False) then
     CanClose := True
   else
     if rgSounds.Enabled then

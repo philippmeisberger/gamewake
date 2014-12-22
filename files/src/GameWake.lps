@@ -60,7 +60,7 @@
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="16" Y="13"/>
+        <CursorPos X="60" Y="8"/>
         <UsageCount Value="48"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -80,8 +80,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="GameWakeOps"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="153"/>
-        <CursorPos X="1" Y="1"/>
+        <TopLine Value="37"/>
+        <CursorPos X="45" Y="168"/>
         <UsageCount Value="48"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit7>
@@ -426,7 +426,7 @@
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
-    <JumpHistory Count="24" HistoryIndex="23">
+    <JumpHistory Count="28" HistoryIndex="27">
       <Position1>
         <Filename Value="GameWakeMain.pas"/>
         <Caret Line="129" Column="26" TopLine="95"/>
@@ -523,6 +523,22 @@
         <Filename Value="GameWakeMain.pas"/>
         <Caret Line="1431" Column="11" TopLine="1418"/>
       </Position24>
+      <Position25>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="13" Column="16" TopLine="1"/>
+      </Position25>
+      <Position26>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="1250" Column="35" TopLine="1245"/>
+      </Position26>
+      <Position27>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="113" Column="11" TopLine="109"/>
+      </Position27>
+      <Position28>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="1426" Column="13" TopLine="1398"/>
+      </Position28>
     </JumpHistory>
   </ProjectSession>
   <Debugging>

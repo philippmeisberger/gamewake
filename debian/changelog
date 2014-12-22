@@ -4,8 +4,9 @@ gamewake (3.2) stable; urgency=low
   * Fixed bug caused when "SaveClock"=False and "Counter Mode" was set
   * Added usage of own INI file parser
   * Update function v2.2
+  * OSUtils v1.7
 
- -- Philipp Meisberger <team@pm-codeworks.de>  Tue, 18 Dec 2014 19:08:16 +0200
+ -- Philipp Meisberger <team@pm-codeworks.de>  Mon, 22 Dec 2014 13:39:16 +0200
 
 
 gamewake (3.1) stable; urgency=low
