@@ -28,6 +28,7 @@ OutputDir=Setup
 OutputBaseFilename=game_wake_setup
 Compression=lzma
 SolidCompression=yes
+UninstallDisplayIcon={app}\{#MyAppExeName}
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
