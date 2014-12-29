@@ -1418,9 +1418,6 @@ end;
   Event that is called during termination of Game Wake. }
 
 procedure TMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
-var
-  TrayIcon: TIcon;
-
 begin
   // Alert is not set?
   if (FClock.AlertEnabled = False) then

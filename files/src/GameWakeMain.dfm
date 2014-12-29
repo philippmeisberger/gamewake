@@ -2969,7 +2969,7 @@ object Main: TMain
     Width = 112
     Height = 14
     Anchors = [akBottom]
-    Caption = #169' P.Meisberger 2014'
+    Caption = #169' P.Meisberger 2015'
     Color = clBtnFace
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack

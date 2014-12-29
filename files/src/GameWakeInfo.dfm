@@ -384,7 +384,7 @@ object Info: TInfo
         Width = 112
         Height = 14
         Anchors = [akBottom]
-        Caption = #169' P.Meisberger 2014'
+        Caption = #169' P.Meisberger 2015'
         Color = clBtnFace
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
@@ -421,7 +421,7 @@ object Info: TInfo
           'Philipp Meisberger (PM Code Works). F'#252'r Sch'#228'den an Hard- '
           'und Software, die durch die Benutzung dieses Programms '
           'entstehen, wird keine Haftung '#252'bernommen.'
-          '12/2014')
+          '01/2015')
         ReadOnly = True
         TabOrder = 0
       end
@@ -449,7 +449,7 @@ object Info: TInfo
         Width = 112
         Height = 14
         Anchors = [akBottom]
-        Caption = #169' P.Meisberger 2014'
+        Caption = #169' P.Meisberger 2015'
         Color = clBtnFace
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
@@ -472,7 +472,7 @@ object Info: TInfo
           'History'
           '--------'
           ''
-          'Version 3.2  [23.12.14]'
+          'Version 3.2  [02.01.15]'
           ''
           '- Fehler behoben der im "Counter" Modus auftrat, wenn '
           '  "Uhrzeit speichern" abgew'#228'hlt war'
@@ -620,7 +620,7 @@ object Info: TInfo
           '(mit Magazin) zuschicken. Meine Adresse erfahren Sie unter '
           '"team@pm-codeworks.de".'
           ''
-          '12/2014')
+          '01/2015')
         ReadOnly = True
         ScrollBars = ssVertical
         TabOrder = 0

@@ -1,6 +1,6 @@
 { *********************************************************************** }
 {                                                                         }
-{ Game Wake Cross API Interface Unit v3.1                                 }
+{ Game Wake Cross API Interface Unit v3.2                                 }
 {                                                                         }
 { Copyright (c) 2011-2014 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
@@ -8,42 +8,21 @@
 
 unit GameWakeAPI;
 
-{$IFDEF LINUX} {$mode objfpc}{$H+} {$ENDIF}
+{$IFDEF LINUX} {$mode delphi}{$H+} {$ENDIF}
 
 interface
 
 uses
-{$IFDEF MSWINDOWS}
-  Windows,
-{$ENDIF}
-  SysUtils, Classes, IniFiles, ExtCtrls, AlertThread, OSUtils;
-
-const
-  URL_BASE = 'http://www.pm-codeworks.de/';
-  URL_CONTACT = URL_BASE +'kontakt.html';
+  SysUtils, Classes, ExtCtrls, Graphics, AlertThread, IniFileParser, OSUtils;
 
 type
   { TConfigFile }
-  TConfigFile = class(TObject)
-  private
-    FSection: string;
-    FIni: TIniFile;
+  TConfigFile = class(TIniFile)
   public
-    constructor Create(AInitialSection: string; AConfig: string = '');
-    destructor Destroy; override;
-    procedure ChangeSection(ANewSection: string);
-    procedure DeleteValue(const AValueName: string);
-    function GetIniValue(AValueName: string): string; overload;
-    function GetIniValue(ASection, AValueName: string): string; overload;
-    function GetSaveValue(AValueName: string): Boolean; overload;
-    function GetSaveValue(ASection, AValueName: string): Boolean; overload;
-    procedure LoadColor(var AArray: array of string);
-    procedure SaveColor(AArray: array of string);
-    procedure SetIniValue(AValueName, AValue: string); overload;
-    procedure SetIniValue(AValueName: string; AValue: Boolean); overload;
-    procedure SetIniValue(ASection, AValueName, AValue: string); overload;
-    procedure SetIniValue(ASection, AValueName: string; AValue: Boolean); overload;
-    function ValueExists(AValueName: string): Boolean;
+    function ReadColor(ASection, AKey: string): TColor;
+    procedure ReadColors(var AArray: array of string);
+    procedure WriteColor(ASection, AKey: string; AColor: TColor);
+    procedure WriteColors(AArray: array of string);
   end;
 
   { TTime }
@@ -155,162 +134,48 @@ implementation
 
 { TConfigFile }
 
-{ public TConfigFile.Create
+{ public TConfigFile.ReadColor
 
-  Constructor for creating a TConfigFile instance. }
+  Reads a TColor value from config . }
 
-constructor TConfigFile.Create(AInitialSection: string; AConfig: string = '');
+function TConfigFile.ReadColor(ASection, AKey: string): TColor;
 begin
-  inherited Create;
-  FSection := AInitialSection;
-
-{$IFDEF MSWINDOWS}
-  if (AConfig = '') then
-    AConfig := ExtractFilePath(ParamStr(0)) +'gamewake.ini'
-  else
-    if (ExtractFileExt(AConfig) <> '.ini') then
-      raise Exception.Create('Invalid configuration file extension!');
-{$ELSE}
-  if (AConfig = '') then
-    AConfig := ExtractFilePath(ParamStr(0)) +'gamewake.conf';
-{$ENDIF}
-
-  FIni := TIniFile.Create(AConfig);
+  result := StringToColor(ReadString(ASection, AKey));
 end;
 
-{ public TConfigFile.Destroy
-
-  Destructor for destroying a TConfigFile instance. }
-
-destructor TConfigFile.Destroy;
-begin
-  FIni.Free;
-  inherited Destroy;
-end;
-
-{ public TConfigFile.DeleteValue
-
-  Removes a value from config file. }
-
-procedure TConfigFile.DeleteValue(const AValueName: string);
-begin
-  FIni.DeleteKey(FSection, AValueName);
-end;
-
-{ public TConfigFile.ChangeSection
-
-  Changes the current section. }
-
-procedure TConfigFile.ChangeSection(ANewSection: string);
-begin
-  FSection := ANewSection;
-end;
-
-{ public TConfigFile.DeleteValue
-
-  Removes a value from config file. }
-
-function TConfigFile.GetIniValue(AValueName: string): string;
-begin
-  result := GetIniValue(FSection, AValueName);
-end;
-
-{ public TConfigFile.GetIniValue
-
-  Returns a string value from config file. }
-
-function TConfigFile.GetIniValue(ASection, AValueName: string): string;
-begin
-  result := FIni.ReadString(ASection, AValueName, '');
-end;
-
-{ public TConfigFile.GetSaveValue
-
-  Returns a boolean value from config file in current section. }
-
-function TConfigFile.GetSaveValue(AValueName: string): Boolean;
-begin
-  result := GetSaveValue(FSection, AValueName);
-end;
-
-{ public TConfigFile.GetSaveValue
-
-  Returns a boolean value from config file in a given section. }
-
-function TConfigFile.GetSaveValue(ASection, AValueName: string): Boolean;
-begin
-  result := FIni.ReadBool(ASection, AValueName, False);
-end;
-
-{ public TConfigFile.LoadColor
+{ public TConfigFile.ReadColors
 
   Returns an array containing all saved custom colors from config file. }
 
-procedure TConfigFile.LoadColor(var AArray: array of string);
+procedure TConfigFile.ReadColors(var AArray: array of string);
 var
   i: Byte;
 
 begin
   for i := 0 to Length(AArray) -1 do
-    AArray[i] := GetIniValue('Color'+ IntToStr(i));
+    AArray[i] := ReadString('CustomColors', 'Color'+ IntToStr(i));
 end;
 
-{ public TConfigFile.SaveColor
+{ public TConfigFile.WriteColor
 
-  Saves an array containing all saved custom colors into config file. }
+  Writes a TColor value into config file. }
 
-procedure TConfigFile.SaveColor(AArray: array of string);
+procedure TConfigFile.WriteColor(ASection, AKey: string; AColor: TColor);
+begin
+  WriteString(ASection, AKey, ColorToString(AColor));
+end;
+
+{ public TConfigFile.WriteColors
+
+  Writes an array containing all saved custom colors into config file. }
+
+procedure TConfigFile.WriteColors(AArray: array of string);
 var
   i: Byte;
 
 begin
   for i := 0 to Length(AArray) -1 do
-    SetIniValue('Color'+ IntToStr(i), AArray[i]);
-end;
-
-{ public TConfigFile.SetIniValue
-
-  Stores a string value into config file in current section. }
-
-procedure TConfigFile.SetIniValue(AValueName, AValue: string);
-begin
-  SetIniValue(FSection, AValueName, AValue);
-end;
-
-{ public TConfigFile.SetIniValue
-
-  Stores a boolean value into config file in current section. }
-
-procedure TConfigFile.SetIniValue(AValueName: string; AValue: Boolean);
-begin
-  SetIniValue(FSection, AValueName, AValue);
-end;
-
-{ public TConfigFile.SetIniValue
-
-  Stores a string value into config file for a given section. }
-
-procedure TConfigFile.SetIniValue(ASection, AValueName, AValue: string);
-begin
-  FIni.WriteString(ASection, AValueName, AValue);
-end;
-
-{ public TConfigFile.SetIniValue
-
-  Stores a boolean value into config file for a given section. }
-
-procedure TConfigFile.SetIniValue(ASection, AValueName: string; AValue: Boolean);
-begin
-  FIni.WriteBool(ASection, AValueName, AValue);
-end;
-
-{ public TConfigFile.SetIniValue
-
-  Returns if a given value name exists. }
-
-function TConfigFile.ValueExists(AValueName: string): Boolean;
-begin
-  result := FIni.ValueExists(FSection, AValueName);
+    WriteString('CustomColors', 'Color'+ IntToStr(i), AArray[i]);
 end;
 
 
@@ -683,6 +548,10 @@ end;
 
 { TClock }
 
+{ public TClock.Create
+
+  Constructor for creating a TClock instance. }
+
 constructor TClock.Create(AOwner: TComponent; ATimerMode: Boolean;
   ACombine: Boolean = False);
 begin
@@ -707,15 +576,15 @@ begin
 
   with FTimer do
   begin
-  {$IFDEF MSWINDOWS}
     OnTimer := Count;
-  {$ELSE}
-    OnTimer := @Count;
-  {$ENDIF}
     Interval := 1000;
     Enabled := ATimerMode;
   end;  //of with
 end;
+
+{ public TClock.Destroy
+
+  Destructor for destroying a TClock instance. }
 
 destructor TClock.Destroy;
 begin
@@ -776,11 +645,10 @@ begin
         OnAlertEnd := FOnAlertEnd;
         OnAlert := FOnAlert;
         OnAlertStart := FOnAlertStart;
+        OnAlertStop := OnStop;
       {$IFNDEF MSWINDOWS}
-        OnAlertStop := @OnStop;
         Start;
       {$ELSE}
-        OnAlertStop := OnStop;
         Resume;
       {$ENDIF}
       end;  //of with

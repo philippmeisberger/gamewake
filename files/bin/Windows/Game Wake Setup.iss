@@ -29,6 +29,8 @@ OutputBaseFilename=game_wake_setup
 Compression=lzma
 SolidCompression=yes
 UninstallDisplayIcon={app}\{#MyAppExeName}
+VersionInfoVersion=2.2
+SignTool=Sign {srcexe}
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -41,7 +43,7 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 Source: "{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "ReadMe.pdf"; DestDir: "{app}"; Flags: ignoreversion
+Source: "ReadMe.pdf"; DestDir: "{app}"; Flags: isreadme
 Source: "..\bell.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\beep.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\horn.wav"; DestDir: "{app}"; Flags: ignoreversion
@@ -54,7 +56,6 @@ Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\ReadMe.pdf"; Description: "Readme anzeigen"; Flags: postinstall shellexec
 Filename: "{app}\{#MyAppExeName}"; Description: "Game Wake ausführen"; Flags: postinstall shellexec
 
 [Messages]

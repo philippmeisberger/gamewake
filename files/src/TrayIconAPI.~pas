@@ -198,19 +198,17 @@ begin
   with FIconData do
   begin
     cbSize := SizeOf(FIconData);
-    Wnd := Classes.AllocateHWnd(TrayIconMsgHandler);       //Form Handle
+    Wnd := Classes.AllocateHWnd(TrayIconMsgHandler);      //Form Handle
     uID := 0;
-    hIcon := AIconHandle;                          //Icon Handle
-    uCallbackMessage := TRAY_CALLBACK;             //Callback-Message
-    StrPLCopy(szTip, FTrayIconName, SizeOf(szTip) - 1);  //Name of Tray Icon
+    hIcon := AIconHandle;                                 //Icon Handle
+    uCallbackMessage := TRAY_CALLBACK;                    //Callback-Message
+    StrPLCopy(szTip, FTrayIconName, SizeOf(szTip) - 1);   //Name of Tray Icon
     uFlags := NIF_ICON or NIF_MESSAGE or NIF_TIP;
     uNotifyIconDataUnion.uTimeout := FTimeOutInterval;
   end;  //of with
 
-  Shell_NotifyIcon(NIM_ADD, @FIconData);           //Add Tray-Icon
+  Shell_NotifyIcon(NIM_ADD, @FIconData);                  //Add Tray-Icon
 end;
-
-
 
 { public TTrayIcon.Destroy
 
@@ -218,7 +216,7 @@ end;
 
 destructor TTrayIcon.Destroy;
 begin
-  Shell_NotifyIcon(NIM_DELETE, @FIconData);        //Remove Tray-Icon
+  Shell_NotifyIcon(NIM_DELETE, @FIconData);               //Remove Tray-Icon
   Classes.DeallocateHWnd(FIconData.Wnd);
   inherited Destroy;
 end;
@@ -276,7 +274,7 @@ end;
 
 { private TTrayIcon.DoNotifyOnTimeOut
 
-  Event method that is called when balloon tip timed out. }
+  Event method that is called when balloon tip is dismissed because of a timeout. }
 
 procedure TTrayIcon.DoNotifyOnTimeOut;
 begin
@@ -333,24 +331,24 @@ begin
       end;  //of begin
 
     NIN_BALLOONSHOW:
+      // Sent when the balloon is shown
       DoNotifyOnShow;
-      //Sent when the balloon is shown
 
     NIN_BALLOONHIDE:
+      // Sent when the balloon disappears or when the icon is deleted,
+      // for example. This message is not sent if the balloon is dismissed
+      // because of a timeout or mouse click by the user.
       DoNotifyOnHide;
-      //Sent when the balloon disappears?Rwhen the icon is deleted,
-      //for example. This message is not sent if the balloon is dismissed because of
-      //a timeout or mouse click by the user.
 
     NIN_BALLOONTIMEOUT:
+      // Sent when the balloon is dismissed because of a timeout.
       DoNotifyOnTimeOut;
-      //Sent when the balloon is dismissed because of a timeout.
 
     NIN_BALLOONUSERCLICK:
+      // Sent when the balloon is dismissed because the user clicked the mouse.
+      // Note: in XP there's Close button on he balloon tips, when click the
+      // button, send NIN_BALLOONTIMEOUT message actually.
       DoNotifyOnClick;
-      //Sent when the balloon is dismissed because the user clicked the mouse.
-      //Note: in XP there's Close button on he balloon tips, when click the button,
-      //send NIN_BALLOONTIMEOUT message actually.
   end;  //of case
 end;
 

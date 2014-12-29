@@ -1,6 +1,6 @@
 { *********************************************************************** }
 {                                                                         }
-{ PM Code Works Cross Plattform Language Handler Unit v1.2                }
+{ PM Code Works Cross Plattform Language Handler Unit v1.3                }
 {                                                                         }
 { Copyright (c) 2011-2014 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
@@ -8,7 +8,7 @@
 
 unit LanguageFile;
 
-{$IFDEF LINUX} {$mode delphi}{$H+} {$ENDIF}
+{$IFDEF LINUX} {$mode objfpc}{$H+} {$ENDIF}
 
 interface
 
@@ -17,9 +17,14 @@ uses
 {$IFDEF MSWINDOWS}
   Windows;
 {$ELSE}
-  IniFiles, LCLType;
+  IniFileParser, LCLType;
+{$ENDIF}
 
 const
+  { Flag indicating line feed }
+  NEW_LINE = 1023;
+
+{$IFDEF LINUX}
   { Interval for next language }
   LANGUAGE_INTERVAL = 100;
 {$ENDIF}
@@ -58,15 +63,26 @@ type
   {$ENDIF}
     destructor Destroy; override;
     procedure AddListener(AListener: IChangeLanguageListener);
-    procedure ChangeLanguage(ASender: TObject; ALang: {$IFDEF MSWINDOWS}Word{$ELSE}string{$ENDIF});
+    procedure ChangeLanguage(ASender: TObject;
+      {$IFDEF MSWINDOWS}ALangID: Word{$ELSE}ALang: string{$ENDIF});
+    function Format(const AIndex: Word; const AArgs: array of
+      {$IFDEF MSWINDOWS}TVarRec{$ELSE}const{$ENDIF}): string; overload;
+    function Format(const AIndexes: array of Word; const AArgs: array of
+      {$IFDEF MSWINDOWS}TVarRec{$ELSE}const{$ENDIF}): string; overload;
   {$IFDEF LINUX}
     procedure GetLanguages(ASections: TStrings);
   {$ENDIF}
-    function GetString(const AIndex: Word): string;
+    function GetString(const AIndex: Word): string; overload;
+    function GetString(const AIndexes: array of Word): string; overload;
     function MessageBox(AText: string; AType: TMessageType = mtInfo;
       AUpdate: Boolean = False): Integer; overload;
     function MessageBox(TextID: Word; AType: TMessageType = mtInfo;
       AUpdate: Boolean = False): Integer; overload;
+    function MessageBox(const AIndexes: array of Word; AType: TMessageType = mtInfo;
+      AUpdate: Boolean = False): Integer; overload;
+    function MessageBox(const AIndexes: array of Word;
+      const AArgs: array of {$IFDEF MSWINDOWS}TVarRec{$ELSE}const{$ENDIF};
+      AType: TMessageType = mtInfo; AUpdate: Boolean = False): Integer; overload;
     procedure RemoveListener(AListener: IChangeLanguageListener);
     { external }
     property Lang: {$IFDEF LINUX}string{$ELSE}Word{$ENDIF} read FLang write FLang;
@@ -135,7 +151,7 @@ end;
 
 function TLanguageFile.GetString(const AIndex: Word) : string;
 begin
-  result := FIni.ReadString(FLang, IntToStr(AIndex + LANGUAGE_INTERVAL), '');
+  result := FIni.ReadString(FLang, IntToStr(AIndex + LANGUAGE_INTERVAL));
 end;
 
 { public TLanguageFile.GetLanguages
@@ -144,7 +160,7 @@ end;
 
 procedure TLanguageFile.GetLanguages(ASections: TStrings);
 begin
-  FIni.ReadSections(ASections);
+  FIni.GetSections(ASections);
 end;
 {$ENDIF}
 
@@ -152,7 +168,7 @@ end;
 
 { public TLanguageFile.GetString
 
-  Loads a string from a StringTable file based language file. }
+  Loads a single string from a StringTable file based language file. }
 
 function TLanguageFile.GetString(const AIndex: Word): string;
 var
@@ -161,12 +177,31 @@ var
 
 begin
   result := '';
-  ls := LoadString(hInstance, AIndex + FLang, Buffer, SizeOf(buffer));
+  ls := LoadString(hInstance, AIndex + FLang, Buffer, SizeOf(Buffer));
 
   if (ls <> 0) then
     result := Buffer;
 end;
 {$ENDIF}
+
+{ public TLanguageFile.GetString
+
+  Loads multiple strings from a StringTable file based language file. }
+
+function TLanguageFile.GetString(const AIndexes: array of Word): string;
+var
+  i: Word;
+  Text: string;
+
+begin
+  for i := 0 to Length(AIndexes) -1 do
+    if (AIndexes[i] = NEW_LINE) then
+      Text := Text + sLineBreak
+    else
+      Text := Text + GetString(AIndexes[i]);
+
+  result := Text;
+end;
 
 { public TLanguageFile.AddListener
 
@@ -175,7 +210,6 @@ end;
 procedure TLanguageFile.AddListener(AListener: IChangeLanguageListener);
 begin
   FListeners.Add(AListener);
-  AListener.SetLanguage(Self);
 end;
 
 { public TLanguageFile.ChangeLanguage
@@ -183,18 +217,52 @@ end;
   Allows users to change the language. }
 
 procedure TLanguageFile.ChangeLanguage(ASender: TObject;
-  ALang: {$IFDEF MSWINDOWS}Word{$ELSE}string{$ENDIF});
+  {$IFDEF MSWINDOWS}ALangID: Word{$ELSE}ALang: string{$ENDIF});
 var
   i: Word;
   Listener: IChangeLanguageListener;
 
 begin
+{$IFDEF MSWINDOWS}
+  FLang := ALangID;
+{$ELSE}
   FLang := ALang;
+{$ENDIF}
 
   // Notify all listeners
   for i := 0 to FListeners.Count -1 do
     if Supports(FListeners[i], IChangeLanguageListener, Listener) then
       Listener.SetLanguage(Self);
+end;
+
+{ public TLanguageFile.Format
+
+  Embeds data into a single string by replacing a special flag starting with %. }
+
+function TLanguageFile.Format(const AIndex: Word; const AArgs: array of
+  {$IFDEF MSWINDOWS}TVarRec{$ELSE}const{$ENDIF}): string;
+begin
+  result := SysUtils.Format(GetString(AIndex), AArgs);
+end;
+
+{ public TLanguageFile.Format
+
+  Embeds data into a multiple strings by replacing a special flag starting with %. }
+
+function TLanguageFile.Format(const AIndexes: array of Word;
+  const AArgs: array of {$IFDEF MSWINDOWS}TVarRec{$ELSE}const{$ENDIF}): string;
+var
+  i: Word;
+  Text: string;
+
+begin
+  for i := 0 to Length(AIndexes) -1 do
+    if (AIndexes[i] = NEW_LINE) then
+      Text := Text + sLineBreak
+    else
+      Text := Text + Format(AIndexes[i], AArgs);
+
+  result := Text;
 end;
 
 { public TLanguageFile.MessageBox
@@ -264,6 +332,27 @@ begin
   result := MessageBox(GetString(TextID), AType, AUpdate);
 end;
 
+{ public TLanguageFile.MessageBox
+
+  Shows a MessageBox with multiple string text and specific look. }
+
+function TLanguageFile.MessageBox(const AIndexes: array of Word;
+  AType: TMessageType = mtInfo; AUpdate: Boolean = False): Integer;
+begin
+  result := MessageBox(GetString(AIndexes), AType, AUpdate);
+end;
+
+{ public TLanguageFile.MessageBox
+
+  Shows a MessageBox with multiple formatted string text and specific look. }
+
+function TLanguageFile.MessageBox(const AIndexes: array of Word;
+  const AArgs: array of {$IFDEF MSWINDOWS}TVarRec{$ELSE}const{$ENDIF};
+  AType: TMessageType = mtInfo; AUpdate: Boolean = False): Integer;
+begin
+  result := MessageBox(Format(AIndexes, AArgs), AType, AUpdate);
+end;
+
 { public TLanguageFile.RemoveListener
 
   Removes a listener from the notification list. }
@@ -274,4 +363,3 @@ begin
 end;
 
 end.
-
