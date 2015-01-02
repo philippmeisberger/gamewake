@@ -115,7 +115,7 @@ AutoIncBuild=1
 MajorVer=3
 MinorVer=2
 Release=0
-Build=386
+Build=387
 Debug=0
 PreRelease=0
 Special=0
@@ -126,7 +126,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=PM Code Works
 FileDescription=Game Wake
-FileVersion=3.2.0.386
+FileVersion=3.2.0.387
 InternalName=
 LegalCopyright=P. Meisberger 2015
 LegalTrademarks=PM Code Works
