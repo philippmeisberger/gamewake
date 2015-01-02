@@ -289,9 +289,8 @@ begin
     // Install update?
     if (FLang.MessageBox(11, mtQuestion, True) = ID_YES) then
     begin
-      TOSUtils.ExecuteFile(ADownloadedFileName);
+      TOSUtils.ExecuteProgram('"'+ ADownloadedFileName +'"');
       Close;
-      Abort;
     end;  //of if
 
     // Caption "Search for update"
