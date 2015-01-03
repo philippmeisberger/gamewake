@@ -91,7 +91,7 @@ ImageBase=4194304
 ExeDescription=
 [Directories]
 OutputDir=..\bin\Windows
-UnitOutputDir=
+UnitOutputDir=lib\
 PackageDLLOutputDir=
 PackageDCPOutputDir=
 SearchPath=
@@ -115,7 +115,7 @@ AutoIncBuild=1
 MajorVer=3
 MinorVer=2
 Release=0
-Build=390
+Build=392
 Debug=0
 PreRelease=0
 Special=0
@@ -126,7 +126,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=PM Code Works
 FileDescription=Game Wake
-FileVersion=3.2.0.390
+FileVersion=3.2.0.392
 InternalName=
 LegalCopyright=P. Meisberger 2015
 LegalTrademarks=PM Code Works
@@ -136,6 +136,9 @@ ProductVersion=3.2
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
+[HistoryLists\hlUnitOutputDirectory]
+Count=1
+Item0=lib\
 [HistoryLists\hlOutputDirectorry]
 Count=1
 Item0=..\bin\Windows

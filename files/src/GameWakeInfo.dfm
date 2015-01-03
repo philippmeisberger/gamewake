@@ -479,7 +479,7 @@ object Info: TInfo
           '- Eigener INI-Datei Parser f'#252'r die Konfigurationsdatei'
           '- Speicherfunktion verbessert'
           '- Update-Funktion v2.2'
-          '- OSUtils v1.7'
+          '- OSUtils v2.0'
           ''
           '---------------------------------'
           ''
