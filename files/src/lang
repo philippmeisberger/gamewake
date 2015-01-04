@@ -1,5 +1,5 @@
 ﻿
-[&Deutsch]
+[Deutsch]
 100=Information
 101=Warnung
 102=Fehler
@@ -81,7 +81,7 @@
 178=Beenden
 179=Icon konnte nicht unter "/usr/share/pixmaps/gamewake.ico" gefunden werden!
 
-[&English]
+[English]
 100=Information
 101=Warning
 102=Error
@@ -163,7 +163,7 @@
 178=Quit
 179=Icon could not be found in "/usr/share/pixmaps/gamewake.ico"!
 
-[&Francais]
+[Français]
 100=Information
 101=Avertissement
 102=Erreur

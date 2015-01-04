@@ -23,9 +23,9 @@ uses
 {$ENDIF}
 
 const
-  LANG_GERMAN = '&Deutsch';
-  LANG_ENGLISH = '&English';
-  LANG_FRENCH = '&Francais';
+  LANG_GERMAN = 'Deutsch';
+  LANG_ENGLISH = 'English';
+  LANG_FRENCH = 'Français';
 
 type
   { TMain }
@@ -1293,13 +1293,13 @@ end;
 procedure TMain.mmLangClick(Sender: TObject);
 begin
 {$IFDEF MSWINDOWS}
-  FLang.ChangeLanguage(Sender, GetLangId((Sender as TMenuItem).Caption));
+  FLang.ChangeLanguage(Sender, GetLangId(StripHotkey((Sender as TMenuItem).Caption)));
 {$ELSE}
-  FLang.ChangeLanguage(Sender, (Sender as TMenuItem).Caption);
+  FLang.ChangeLanguage(Sender, StripHotkey((Sender as TMenuItem).Caption));
 {$ENDIF}
 end;
 
-{ TMain.mmDwnldCertClick
+{ TMain.mmDownloadCertClick
 
   MainMenu entry that allows to download the PM Code Works certificate. }
 

@@ -2,7 +2,7 @@
 #define MyAppURL "http://www.pm-codeworks.de"
 #define MyAppExeName "Game Wake.exe"
 #define FileVersion GetFileVersion(MyAppExeName)
-#define ProductVersion GetStringFileInfo(MyAppExeName, PRODUCT_VERSION)
+#define ProductVersion GetFileProductVersion(MyAppExeName)
 
 #define VersionFile FileOpen("version.txt")
 #define Build FileRead(VersionFile)
@@ -62,43 +62,18 @@ Filename: "{app}\{#MyAppExeName}"; Description: "Game Wake ausführen"; Flags: po
 BeveledLabel=Inno Setup
 
 [Code]
+procedure CloseWindow(AAppName: string);
 const 
   WM_Close = $0010;
 
-{
-function GetBuildNumber(): string;
-var 
-  FileVersion, BuildNumber: string;
-  i, LastPoint, Index: integer;
-
-begin 
-  FileVersion := '{#FileVersion}';
-
-  for i := 1 to 3 do
-  begin           
-    LastPoint := Pos('.', FileVersion);
-    Index := Index + LastPoint;
-    FileVersion := Copy(FileVersion, LastPoint, Length(FileVersion));
-  end;  //of for 
-
-  Index := Index + LastPoint +1;
-
-  for i := Index to Length(FileVersion) do
-    BuildNumber := BuildNumber + FileVersion[i];
-    
-  result := BuildNumber;
-end;
-}
-
-procedure CloseWindow(AAppName: string);
 var
   WinID: Integer;
 
 begin                                                              
-  WinID := FindWindowByWindowName(AAppName);                               //init Mutex 
+  WinID := FindWindowByWindowName(AAppName);
   
-  if (WinID <> 0) then                                                     //falls Instanz aktiv...
-    SendMessage(WinID, WM_CLOSE, 0, 0);                                    //Instanz beenden
+  if (WinID <> 0) then
+    SendMessage(WinID, WM_CLOSE, 0, 0);
 end;
 
 
