@@ -60,7 +60,7 @@
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="60" Y="8"/>
+        <CursorPos X="1" Y="1"/>
         <UsageCount Value="48"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -426,127 +426,127 @@
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
-    <JumpHistory Count="28" HistoryIndex="27">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="129" Column="26" TopLine="95"/>
+        <Caret Line="246" Column="30" TopLine="224"/>
       </Position1>
       <Position2>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="196" Column="41" TopLine="88"/>
+        <Caret Line="326" Column="33" TopLine="304"/>
       </Position2>
       <Position3>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="246" Column="30" TopLine="224"/>
+        <Caret Line="362" Column="33" TopLine="328"/>
       </Position3>
       <Position4>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="326" Column="33" TopLine="304"/>
+        <Caret Line="469" Column="30" TopLine="435"/>
       </Position4>
       <Position5>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="362" Column="33" TopLine="328"/>
+        <Caret Line="478" Column="34" TopLine="444"/>
       </Position5>
       <Position6>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="469" Column="30" TopLine="435"/>
+        <Caret Line="481" Column="34" TopLine="447"/>
       </Position6>
       <Position7>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="478" Column="34" TopLine="444"/>
+        <Caret Line="745" Column="1" TopLine="736"/>
       </Position7>
       <Position8>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="481" Column="34" TopLine="447"/>
+        <Caret Line="155" Column="25" TopLine="139"/>
       </Position8>
       <Position9>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="745" Column="1" TopLine="736"/>
+        <Caret Line="248" Column="23" TopLine="223"/>
       </Position9>
       <Position10>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="155" Column="25" TopLine="139"/>
+        <Caret Line="253" Column="32" TopLine="223"/>
       </Position10>
       <Position11>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="248" Column="23" TopLine="223"/>
+        <Caret Line="248" Column="21" TopLine="229"/>
       </Position11>
       <Position12>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="253" Column="32" TopLine="223"/>
+        <Caret Line="249" Column="1" TopLine="229"/>
       </Position12>
       <Position13>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="248" Column="21" TopLine="229"/>
+        <Caret Line="203" Column="11" TopLine="195"/>
       </Position13>
       <Position14>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="249" Column="1" TopLine="229"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position14>
       <Position15>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="203" Column="11" TopLine="195"/>
+        <Caret Line="134" Column="24" TopLine="100"/>
       </Position15>
       <Position16>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Caret Line="267" Column="12" TopLine="257"/>
       </Position16>
       <Position17>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="134" Column="24" TopLine="100"/>
+        <Caret Line="519" Column="45" TopLine="496"/>
       </Position17>
       <Position18>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="267" Column="12" TopLine="257"/>
+        <Caret Line="1444" Column="50" TopLine="1418"/>
       </Position18>
       <Position19>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="519" Column="45" TopLine="496"/>
+        <Caret Line="6" Column="37" TopLine="1"/>
       </Position19>
       <Position20>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="1444" Column="50" TopLine="1418"/>
+        <Caret Line="1435" Column="23" TopLine="1418"/>
       </Position20>
       <Position21>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="6" Column="37" TopLine="1"/>
+        <Caret Line="1443" Column="21" TopLine="1418"/>
       </Position21>
       <Position22>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="1435" Column="23" TopLine="1418"/>
+        <Caret Line="1431" Column="11" TopLine="1418"/>
       </Position22>
       <Position23>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="1443" Column="21" TopLine="1418"/>
+        <Caret Line="13" Column="16" TopLine="1"/>
       </Position23>
       <Position24>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="1431" Column="11" TopLine="1418"/>
+        <Caret Line="1250" Column="35" TopLine="1245"/>
       </Position24>
       <Position25>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="13" Column="16" TopLine="1"/>
+        <Caret Line="113" Column="11" TopLine="109"/>
       </Position25>
       <Position26>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="1250" Column="35" TopLine="1245"/>
+        <Caret Line="1426" Column="13" TopLine="1398"/>
       </Position26>
       <Position27>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="113" Column="11" TopLine="109"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position27>
       <Position28>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="1426" Column="13" TopLine="1398"/>
+        <Caret Line="1298" Column="68" TopLine="1277"/>
       </Position28>
+      <Position29>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="1299" Column="62" TopLine="1277"/>
+      </Position29>
+      <Position30>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="1296" Column="71" TopLine="1271"/>
+      </Position30>
     </JumpHistory>
   </ProjectSession>
-  <Debugging>
-    <BreakPoints Count="1">
-      <Item1>
-        <Source Value="GameWakeMain.pas"/>
-        <Line Value="1044"/>
-      </Item1>
-    </BreakPoints>
-  </Debugging>
 </CONFIG>

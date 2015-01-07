@@ -6,7 +6,7 @@ gamewake (3.2) stable; urgency=low
   * Update function v2.2
   * OSUtils v2.0
 
- -- Philipp Meisberger <team@pm-codeworks.de>  Wed, 07 Dec 2015 13:39:16 +0200
+ -- Philipp Meisberger <team@pm-codeworks.de>  Wed, 07 Jan 2015 13:39:16 +0200
 
 
 gamewake (3.1) stable; urgency=low
