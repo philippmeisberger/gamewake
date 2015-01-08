@@ -472,7 +472,7 @@ object Info: TInfo
           'History'
           '--------'
           ''
-          'Version 3.2  [07.01.15]'
+          'Version 3.2  [10.01.15]'
           ''
           '- Fehler behoben der im "Counter" Modus auftrat, wenn '
           '  "Uhrzeit speichern" abgew'#228'hlt war'
