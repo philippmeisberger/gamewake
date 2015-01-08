@@ -382,7 +382,7 @@ object Info: TInfo
         Top = 234
         Width = 106
         Anchors = [akBottom]
-        Caption = '© P.Meisberger 2014'
+        Caption = '© P.Meisberger 2015'
         Font.CharSet = ANSI_CHARSET
         Font.Color = clBlack
         Font.Height = -11
@@ -409,7 +409,7 @@ object Info: TInfo
           '"Game Wake ist ein virtueller Wecker, den man sich stellen kann, um nicht, z.B. während des exzessiven Gamings, die Pizza im Ofen zu vergessen. Aber auch sonst eignet sich Game Wake zum Erinnern an alle möglichen Dinge."'
           ''
           'Game Wake ist durch internationale Copyright-Gesetze geschützt und unterliegt dem Urheberrecht. Das Copyright für alle Programmteile liegt beim Autor von Game Wake Philipp Meisberger (PM Code Works). Für Schäden an Hard- und Software, die durch die Benutzung dieses Programms entstehen, wird keine Haftung übernommen.'
-          '12/2014'
+          '01/2015'
         )
         ReadOnly = True
         TabOrder = 0
@@ -422,7 +422,7 @@ object Info: TInfo
         Anchors = [akRight, akBottom]
         Caption = 'OK'
         Default = True
-        OnClick = bOkClick
+        ModalResult = 1
         TabOrder = 1
       end
     end
@@ -437,7 +437,7 @@ object Info: TInfo
         Top = 234
         Width = 106
         Anchors = [akBottom]
-        Caption = '© P.Meisberger 2014'
+        Caption = '© P.Meisberger 2015'
         Font.CharSet = ANSI_CHARSET
         Font.Color = clBlack
         Font.Height = -11
@@ -449,7 +449,7 @@ object Info: TInfo
       object mHistroy: TMemo
         Left = 16
         Height = 194
-        Top = 25
+        Top = 24
         Width = 366
         Anchors = [akTop, akLeft, akRight, akBottom]
         Lines.Strings = (
@@ -459,14 +459,14 @@ object Info: TInfo
           'History'
           '--------'
           ''
-          'Version 3.2  [23.12.14]'
+          'Version 3.2  [10.01.15]'
           ''
           '- Fehler behoben der im "Counter" Modus auftrat, wenn '
           '  "Uhrzeit speichern" abgewählt war'
           '- Eigener INI-Datei Parser für die Konfigurationsdatei'
           '- Speicherfunktion verbessert'
           '- Update-Funktion v2.2'
-          '- OSUtils v1.7'
+          '- OSUtils v2.0'
           ''
           '---------------------------------'
           ''
@@ -586,7 +586,7 @@ object Info: TInfo
           'Game Wake wurde unter der BSD-Lizenz veröffentlicht und ist somit Open-Source. Der Quelltext kann auf der Website heruntergeladen werden.'
           'Soll Game Wake auf eine kommerzielle CD-ROM (mit Magazin) gepresst werden, wäre es nett, mir eine Ausgabe dieser CD-ROM (mit Magazin) zuschicken. Meine Adresse erfahren Sie unter "team@pm-codeworks.de".'
           ''
-          '12/2014'
+          '01/2015'
         )
         ReadOnly = True
         ScrollBars = ssVertical
@@ -599,7 +599,7 @@ object Info: TInfo
         Width = 73
         Anchors = [akRight, akBottom]
         Caption = 'OK'
-        OnClick = bOkClick
+        ModalResult = 1
         TabOrder = 1
       end
     end

@@ -74,7 +74,7 @@ object Main: TMain
     Top = 252
     Width = 106
     Anchors = [akBottom]
-    Caption = '© P.Meisberger 2014'
+    Caption = '© P.Meisberger 2015'
     Font.CharSet = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -11
