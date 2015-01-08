@@ -62,10 +62,10 @@ Filename: "{app}\{#MyAppExeName}"; Description: "Game Wake ausführen"; Flags: po
 BeveledLabel=Inno Setup
 
 [Code]
-procedure CloseWindow(AAppName: string);
 const 
   WM_Close = $0010;
 
+procedure CloseWindow(AAppName: string);
 var
   WinID: Integer;
 
@@ -140,7 +140,7 @@ begin
       TempDir := ExpandConstant('{localappdata}\Temp\');
 
       // Launch Updater
-      ShellExec('open', ExpandConstant('{tmp}\Updater.exe'), '-l 100 -d GameWake -s '+ TempDir +' -i game_wake_setup.exe -o "Game Wake Setup.exe"', TempDir, SW_SHOW, ewWaitUntilTerminated, ErrorCode);  
+      ShellExec('open', ExpandConstant('{tmp}\Updater.exe'), '-l 100 -d GameWake -s '+ TempDir +' -i game_wake_setup.exe -o "Game Wake Setup.exe"', '', SW_SHOW, ewWaitUntilTerminated, ErrorCode);  
     
       // Update successful?
       if (ErrorCode = 0) then
