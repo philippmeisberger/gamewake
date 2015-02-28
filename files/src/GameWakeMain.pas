@@ -16,6 +16,9 @@ uses
   SysUtils, Classes, Graphics, Controls, Forms, StdCtrls, ExtCtrls, Menus,
   Dialogs, GameWakeAPI, LanguageFile, AlertThread, Updater, OSUtils,
 
+{$IFDEF PORTABLE}
+  MMSystem,
+{$ENDIF}
 {$IFDEF MSWINDOWS}
   Windows, Messages, XPMan, TrayIconAPI;
 {$ELSE}
@@ -150,6 +153,10 @@ implementation
 {$R *.dfm}
 {$ELSE}
 {$R *.lfm}
+{$ENDIF}
+
+{$IFDEF PORTABLE}
+{$R 'sounds.res' 'sounds.res'}
 {$ENDIF}
 
 uses GameWakeInfo, GameWakeOps;
@@ -951,7 +958,11 @@ end;
 
 procedure TMain.bPlayClockClick(Sender: TObject);
 begin
+{$IFDEF PORTABLE}
+  PlaySound(PChar('BELL'), hInstance, SND_ASYNC or SND_MEMORY or SND_RESOURCE);
+{$ELSE}
   TOSUtils.PlaySound(FPath +'bell.wav');
+{$ENDIF}
 end;
 
 { TMain.bPlayHornClick
@@ -960,7 +971,11 @@ end;
 
 procedure TMain.bPlayHornClick(Sender: TObject);
 begin
+{$IFDEF PORTABLE}
+  PlaySound(PChar('HORN'), hInstance, SND_ASYNC or SND_MEMORY or SND_RESOURCE);
+{$ELSE}
   TOSUtils.PlaySound(FPath +'horn.wav');
+{$ENDIF}
 end;
 
 { TMain.bPlayBingClick
@@ -969,7 +984,11 @@ end;
 
 procedure TMain.bPlayBingClick(Sender: TObject);
 begin
+{$IFDEF PORTABLE}
+  SysUtils.Beep();
+{$ELSE}
   TOSUtils.PlaySound(FPath +'bing.wav');
+{$ENDIF}
 end;
 
 { TMain.bPlayBeepClick
@@ -978,7 +997,11 @@ end;
 
 procedure TMain.bPlayBeepClick(Sender: TObject);
 begin
+{$IFDEF PORTABLE}
+  PlaySound(PChar('BEEP'), hInstance, SND_ASYNC or SND_MEMORY or SND_RESOURCE);
+{$ELSE}
   TOSUtils.PlaySound(FPath +'beep.wav');
+{$ENDIF}
 end;
 
 { TMain.eHourKeyPress
