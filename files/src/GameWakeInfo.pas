@@ -45,7 +45,12 @@ implementation
 
 procedure TInfo.FormCreate(Sender: TObject);
 begin
+{$IFDEF PORTABLE}
+  lBuild.WordWrap := True;
+  lBuild.Caption := 'Build: '+ IntToStr(TOSUtils.GetBuildNumber()) +' Portable';
+{$ELSE}
   lBuild.Caption := 'Build: '+ IntToStr(TOSUtils.GetBuildNumber());
+{$ENDIF}
 end;
 
 end.

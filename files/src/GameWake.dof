@@ -116,7 +116,7 @@ MajorVer=3
 MinorVer=2
 Release=0
 Build=392
-Debug=0
+Debug=1
 PreRelease=0
 Special=0
 Private=0
@@ -133,6 +133,9 @@ LegalTrademarks=PM Code Works
 OriginalFilename=
 ProductName=Game Wake
 ProductVersion=3.2
+[HistoryLists\hlConditionals]
+Count=1
+Item0=PORTABLE
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
