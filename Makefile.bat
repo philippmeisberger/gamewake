@@ -1,1 +1,2 @@
-dcc32 files\src\GameWake.dpr
+cd files\src
+dcc32 GameWake.dpr
