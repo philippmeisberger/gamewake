@@ -91,6 +91,7 @@ object Options: TOptions
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
+    Cancel = True
     Caption = 'abbrechen'
     TabOrder = 1
     OnClick = bCancelClick

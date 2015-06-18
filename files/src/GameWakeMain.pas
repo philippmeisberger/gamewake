@@ -182,7 +182,7 @@ begin
     if ((ParamStr(3) = '--config') and (ParamStr(4) <> '')) then
       FConfigPath := ParamStr(4)
     else
-      FConfigPath := '/etc/gamewake/gamewake.conf';
+      FConfigPath := GetUserDir() +'.gamewake.conf';
 
   // Load other language file?
   if ((ParamStr(1) = '--lang') and (ParamStr(2) <> '')) then
@@ -195,7 +195,12 @@ begin
 
   FPath := '/usr/lib/gamewake/';
 {$ELSE}
-  FConfigPath := ExtractFilePath(ParamStr(0)) + 'gamewake.ini';
+  FConfigPath := GetUserDir() +'Game Wake\';
+
+  if not DirectoryExists(FConfigPath) then
+    CreateDir(FConfigPath);
+
+  FConfigPath := FConfigPath +'gamewake.ini';
   FLangPath := '';
   FPath := '';
 {$ENDIF}

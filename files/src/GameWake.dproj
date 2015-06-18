@@ -99,13 +99,13 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
         <DCC_DcuOutput>lib\win32\</DCC_DcuOutput>
-        <VerInfo_Build>397</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=PM Code Works;FileDescription=Game Wake;FileVersion=3.2.0.397;InternalName=;LegalCopyright=Philipp Meisberger 2015;LegalTrademarks=PM Code Works;OriginalFilename=;ProductName=Game Wake;ProductVersion=3.2;Comments=</VerInfo_Keys>
+        <VerInfo_Build>401</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=PM Code Works;FileDescription=Game Wake;FileVersion=3.2.0.401;InternalName=;LegalCopyright=Philipp Meisberger 2015;LegalTrademarks=PM Code Works;OriginalFilename=;ProductName=Game Wake;ProductVersion=3.2;Comments=</VerInfo_Keys>
         <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
-        <VerInfo_Keys>CompanyName=PM Code Works;FileDescription=Game Wake;FileVersion=3.2.0.397;InternalName=;LegalCopyright=Philipp Meisberger 2015;LegalTrademarks=PM Code Works;OriginalFilename=;ProductName=Game Wake;ProductVersion=3.2;Comments=</VerInfo_Keys>
-        <VerInfo_Build>397</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=PM Code Works;FileDescription=Game Wake;FileVersion=3.2.0.401;InternalName=;LegalCopyright=Philipp Meisberger 2015;LegalTrademarks=PM Code Works;OriginalFilename=;ProductName=Game Wake;ProductVersion=3.2;Comments=</VerInfo_Keys>
+        <VerInfo_Build>401</VerInfo_Build>
         <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">

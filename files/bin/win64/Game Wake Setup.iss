@@ -111,7 +111,7 @@ var
   Build, TempDir: string;
 
 begin
-  result := true;
+  Result := True;
   CloseWindow('{#MyAppName}');                                                                // Terminate Game Wake first  
     
   if RegValueExists(HKCU, 'SOFTWARE\PM Code Works\{#MyAppName}', 'Build') then                // Upgrade installation?
@@ -129,7 +129,7 @@ begin
     if ({#Build} < CurBuild) then                                         // Newer build already installed?
     begin
       MsgBox('Es ist bereits eine neuere Version installiert!' +#13+ 'Das Setup wird beendet!', mbINFORMATION, MB_OK);
-      result := False;                                                    // Terminate setup!                                                            
+      Result := False;                                                    // Terminate setup!                                                            
     end  //of begin
     else
     begin
@@ -150,7 +150,7 @@ begin
         ShellExec('open', '"'+ TempDir +'Game Wake Setup.exe"', '', TempDir, SW_SHOW, ewNoWait, ErrorCode);
         
         // Terminate current setup
-        result := False
+        Result := False
       end;  //of begin
     end;  //of if
   end;  //of if         
@@ -163,3 +163,4 @@ Root: HKCU; Subkey: "SOFTWARE\PM Code Works"; Flags: uninsdeletekeyifempty
 
 [UninstallDelete]     
 Type: filesandordirs; Name: "{reg:HKCU\SOFTWARE\PM Code Works\Game Wake, 'InstallDir'}"
+Type: filesandordirs; Name: "{userappdata}\Game Wake"

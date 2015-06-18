@@ -152,7 +152,7 @@ end;
 
 procedure TOptions.bCancelClick(Sender: TObject);
 begin
-  Close;
+  ModalResult := mrCancel;
 end;
 
 { TOptions.bOkClick
@@ -184,11 +184,12 @@ begin
       Config.Free;
     end;  //of finally
 
-  except
-    FLang.MessageBox(76, mtError);
-  end;  //of try
+    ModalResult := mrOk;
 
-  Close;
+  except
+    FLang.MessageBox(FLang.Format(76, [FConfigPath]), mtError);
+    ModalResult := mrAbort;
+  end;  //of try
 end;
 
 end.
