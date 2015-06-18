@@ -18,15 +18,12 @@ LIBDIR = $(DESTDIR)/usr/lib/gamewake
 BINDIR = files/bin/$(shell uname)/gamewake_$(ARCH)
 ETCDIR = $(DESTDIR)/etc/gamewake
 
-all:	clean	build
-
-clean:
-	rm -f $(BINDIR)/usr/lib/gamewake/gamewake
+all:	build
 
 build:
 	lazbuild files/src/GameWake.lpr
 
-install:
+install: $(BINDIR)/gamewake
 	install -D --mode 755 $(BINDIR)/gamewake $(LIBDIR)/gamewake
 	mkdir -p $(DESTDIR)/usr/bin/
 	ln -s /usr/lib/gamewake/gamewake $(DESTDIR)/usr/bin/gamewake
@@ -39,6 +36,8 @@ install:
 	install -D --mode 644 files/src/gamewake.ico $(DESTDIR)/usr/share/pixmaps/gamewake.ico
 	install -D --mode 644 files/src/gamewake.png $(DESTDIR)/usr/share/pixmaps/gamewake.png
 	install -D --mode 644 files/src/gamewake.desktop $(DESTDIR)/usr/share/applications/gamewake.desktop
+
+.PHONY: install
 
 uninstall:
 	rm -rf $(LIBDIR)
