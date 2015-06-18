@@ -13,7 +13,8 @@ unit Updater;
 interface
 
 uses
-  SysUtils, Classes, UpdateCheckThread, DownloadThread, LanguageFile, OSUtils,
+  SysUtils, Classes, PMCW.UpdateCheckThread, PMCW.DownloadThread, LanguageFile,
+  PMCW.OSUtils, PMCW.Dialogs,
 
 {$IFDEF MSWINDOWS}
   Windows, FileCtrl, Forms, StdCtrls, ComCtrls, Controls;
@@ -73,12 +74,13 @@ type
     procedure Reset();
     { TDownloadThread events }
     procedure OnDownloadCancel(Sender: TObject);
-    procedure OnDownloadError(Sender: TThread; AResponseCode: Integer);
+    procedure OnDownloadError(Sender: TThread; AResponseCode: Integer;
+      AResponseMessage: string);
     procedure OnDownloadFinished(Sender: TObject);
-    procedure OnDownloading(Sender: TThread; const ADownloadSize: Integer);
-    procedure OnDownloadStart(Sender: TThread; const AFileSize: Integer);
+    procedure OnDownloading(Sender: TThread; ADownloadSize: Int64);
+    procedure OnDownloadStart(Sender: TThread; AFileSize: Int64);
   public
-    constructor Create(AOwner: TComponent; ALang: TLanguageFile); reintroduce;
+    constructor Create(AOwner: TComponent; ALang: TLanguageFile);
     destructor Destroy; override;
     procedure AddListener(AListener: IUpdateListener);
     procedure Download(ADownloadDirectory: string = ''); overload;
@@ -201,7 +203,7 @@ begin
   end;  //of begin
 
   if (ACurrentBuild = 0) then
-    ACurrentBuild := TOSUtils.GetBuildNumber();
+    ACurrentBuild := GetBuildNumber();
 
   // Search for update
   with TUpdateCheckThread.Create(ACurrentBuild, FRemoteDirName) do
@@ -296,10 +298,11 @@ end;
   Event method that is called by TDownloadThread when an error occurs while
   downloading the update. }
 
-procedure TUpdate.OnDownloadError(Sender: TThread; AResponseCode: Integer);
+procedure TUpdate.OnDownloadError(Sender: TThread; AResponseCode: Integer;
+  AResponseMessage: string);
 begin
   with FLang do
-    MessageBox(Caption + GetString(18) + Format(19, [AResponseCode]), mtError, True);
+    MessageBox(Caption + GetString(18) + sLineBreak + AResponseMessage, mtError, True);
 
   Reset();
 end;
@@ -322,7 +325,7 @@ begin
 {$IFDEF MSWINDOWS}
   // Show dialog to add certificate
   if (ExtractFileExt(FFileName) = '.reg') then
-    TOSUtils.ShowAddRegistryDialog('"'+ FFileName +'"');
+    ShowAddRegistryDialog('"'+ FFileName +'"');
 {$ENDIF}
 
   // Notify all listeners
@@ -335,7 +338,7 @@ end;
 
   Event method that is called by TDownloadThread when download is in progress. }
 
-procedure TUpdate.OnDownloading(Sender: TThread; const ADownloadSize: Integer);
+procedure TUpdate.OnDownloading(Sender: TThread; ADownloadSize: Int64);
 begin
   pbProgress.Position := ADownloadSize;
   lSize.Caption := IntToStr(ADownloadSize) +'/'+ IntToStr(pbProgress.Max) +'KB';
@@ -345,7 +348,7 @@ end;
 
   Event method that is called by TDownloadThread when download starts. }
 
-procedure TUpdate.OnDownloadStart(Sender: TThread; const AFileSize: Integer);
+procedure TUpdate.OnDownloadStart(Sender: TThread; AFileSize: Int64);
 begin
   pbProgress.Max := AFileSize;
 end;
@@ -397,29 +400,24 @@ begin
     Url := URL_DOWNLOAD + FRemoteFileName;
     FFileName := IncludeTrailingPathDelimiter(ADownloadDirectory) + FLocalFileName;
 
-    // Try to init thread
-    try
-      with TDownloadThread.Create(Url, FFileName) do
-      begin
-        // Link download events
-        FOnUserCancel := OnUserCancel;
+    // Init thread
+    with TDownloadThread.Create(Url, FFileName) do
+    begin
+      // Link download events
+      FOnUserCancel := OnUserCancel;
 
-        // Link TProgressBar events and start download thread
-        OnDownloading := Self.OnDownloading;
-        OnCancel := OnDownloadCancel;
-        OnStart := OnDownloadStart;
-        OnFinish := OnDownloadFinished;
-        OnError := OnDownloadError;
-        Resume;
-      end;  //of with
+      // Link TProgressBar events and start download thread
+      OnDownloading := Self.OnDownloading;
+      OnCancel := OnDownloadCancel;
+      OnStart := OnDownloadStart;
+      OnFinish := OnDownloadFinished;
+      OnError := OnDownloadError;
+      Start;
+    end;  //of with
 
-      // Caption "cancel"
-      bFinished.Caption := FLang.GetString(6);
-      FThreadRuns := True;
-
-    except
-      OnDownloadError(nil, 0);
-    end;  //of try
+    // Caption "cancel"
+    bFinished.Caption := FLang.GetString(6);
+    FThreadRuns := True;
   end  //of begin
   else
     // Cancel clicked
@@ -434,7 +432,7 @@ end;
 
 procedure TUpdate.DownloadCertificate();
 begin
-  Download('cert.reg', 'Install_PMCW_Cert.reg', TOSUtils.GetTempDir());
+  Download('cert.reg', 'Install_PMCW_Cert.reg', GetTempDir());
 end;
 
 { public TUpdate.RemoveListener

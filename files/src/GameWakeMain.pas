@@ -14,13 +14,13 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Controls, Forms, StdCtrls, ExtCtrls, Menus,
-  Dialogs, GameWakeAPI, LanguageFile, AlertThread, Updater, OSUtils,
+  Dialogs, GameWakeAPI, LanguageFile, AlertThread, Updater, PMCW.OSUtils,
 
 {$IFDEF PORTABLE}
   MMSystem,
 {$ENDIF}
 {$IFDEF MSWINDOWS}
-  Windows, Messages, XPMan, TrayIconAPI;
+  Windows, Messages, TrayIconAPI;
 {$ELSE}
   LCLType;
 {$ENDIF}
@@ -296,7 +296,7 @@ begin
     // Install update?
     if (FLang.MessageBox(11, mtQuestion, True) = ID_YES) then
     begin
-      TOSUtils.ExecuteProgram('"'+ ADownloadedFileName +'"');
+      ExecuteProgram('"'+ ADownloadedFileName +'"');
       Close;
     end;  //of if
 
@@ -339,7 +339,7 @@ begin
   // Check for shutdown
   if (FClock.AlertType = atShutdown) then
   begin
-    if TOSUtils.Shutdown() then
+    if Shutdown() then
     begin
       bAlert.Enabled := True;
       Close;
@@ -378,7 +378,15 @@ begin
       with Updater do
       begin
         Title := FLang.GetString(24);
-        Download('game_wake_setup.exe', 'Game Wake Setup.exe')
+
+      {$IFDEF WIN64}
+        Download('game_wake_setup64.exe', 'Game Wake Setup.exe');
+      {$ELSE}
+        if IsWindows64() then
+          Download('game_wake_setup64.exe', 'Game Wake Setup.exe')
+        else
+          Download('game_wake_setup.exe', 'Game Wake Setup.exe')
+      {$ENDIF}
       end;  //of begin
 
     finally
@@ -389,8 +397,7 @@ begin
     mmUpdate.Caption := FLang.GetString(24);
 {$ELSE}
 begin
-  with FLang do
-    MessageBox([21, NEW_LINE, 22], [ANewBuild], mtInfo, True);
+  FLang.MessageBox([21, NEW_LINE, 22], [ANewBuild], mtInfo, True);
 {$ENDIF}
 end;
 
@@ -961,7 +968,7 @@ begin
 {$IFDEF PORTABLE}
   PlaySound(PChar('BELL'), hInstance, SND_ASYNC or SND_MEMORY or SND_RESOURCE);
 {$ELSE}
-  TOSUtils.PlaySound(FPath +'bell.wav');
+  PlaySound(FPath +'bell.wav');
 {$ENDIF}
 end;
 
@@ -974,7 +981,7 @@ begin
 {$IFDEF PORTABLE}
   PlaySound(PChar('HORN'), hInstance, SND_ASYNC or SND_MEMORY or SND_RESOURCE);
 {$ELSE}
-  TOSUtils.PlaySound(FPath +'horn.wav');
+  PlaySound(FPath +'horn.wav');
 {$ENDIF}
 end;
 
@@ -987,7 +994,7 @@ begin
 {$IFDEF PORTABLE}
   SysUtils.Beep();
 {$ELSE}
-  TOSUtils.PlaySound(FPath +'bing.wav');
+  PlaySound(FPath +'bing.wav');
 {$ENDIF}
 end;
 
@@ -1000,7 +1007,7 @@ begin
 {$IFDEF PORTABLE}
   PlaySound(PChar('BEEP'), hInstance, SND_ASYNC or SND_MEMORY or SND_RESOURCE);
 {$ELSE}
-  TOSUtils.PlaySound(FPath +'beep.wav');
+  PlaySound(FPath +'beep.wav');
 {$ENDIF}
 end;
 
@@ -1333,7 +1340,7 @@ var
 
 begin
   // Certificate already installed?
-  if (TOSUtils.PMCertExists() and (FLang.MessageBox([27, NEW_LINE, 28],
+  if (PMCertExists() and (FLang.MessageBox([27, NEW_LINE, 28],
     mtQuestion) = IDNO)) then
     Exit;
 
@@ -1371,7 +1378,7 @@ end;
 
 procedure TMain.mmWebsiteClick(Sender: TObject);
 begin
-  TOSUtils.OpenUrl(URL_BASE +'gamewake.html');
+  OpenUrl(URL_BASE +'gamewake.html');
 end;
 
 { TMain.mmReportClick
@@ -1381,7 +1388,7 @@ end;
 
 procedure TMain.mmReportClick(Sender: TObject);
 begin
-  TOSUtils.OpenUrl(URL_CONTACT);
+  OpenUrl(URL_CONTACT);
 end;
 
 { TMain.mmInfoClick
@@ -1404,7 +1411,7 @@ end;
 
 procedure TMain.lCopyClick(Sender: TObject);
 begin
-  TOSUtils.OpenUrl(URL_BASE);
+  OpenUrl(URL_BASE);
 end;
 
 { TMain.lCopyMouseEnter

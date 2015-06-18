@@ -4,7 +4,7 @@
 #define FileVersion GetFileVersion(MyAppExeName)
 #define ProductVersion GetFileProductVersion(MyAppExeName)
 
-#define VersionFile FileOpen("version.txt")
+#define VersionFile FileOpen("..\Windows\version.txt")
 #define Build FileRead(VersionFile)
 #expr FileClose(VersionFile)
 #undef VersionFile
@@ -23,8 +23,8 @@ DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 DisableDirPage=auto
 DisableProgramGroupPage=yes
-LicenseFile=eula.txt
-OutputDir=Setup
+LicenseFile=..\Windows\eula.txt
+OutputDir=.
 OutputBaseFilename=game_wake_setup
 Compression=lzma
 SolidCompression=yes
@@ -43,12 +43,12 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 Source: "{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "ReadMe.pdf"; DestDir: "{app}"; Flags: isreadme
+Source: "..\Windows\ReadMe.pdf"; DestDir: "{app}"; Flags: isreadme
 Source: "..\bell.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\beep.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\horn.wav"; DestDir: "{app}"; Flags: ignoreversion
-Source: "Updater.exe"; DestDir: "{tmp}"; Flags: dontcopy
-Source: "version.txt"; DestDir: "{tmp}"; Flags: dontcopy
+Source: "..\Windows\Updater.exe"; DestDir: "{tmp}"; Flags: dontcopy
+Source: "..\Windows\version.txt"; DestDir: "{tmp}"; Flags: dontcopy
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

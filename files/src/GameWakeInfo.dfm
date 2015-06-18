@@ -5,7 +5,7 @@ object Info: TInfo
   BorderStyle = bsDialog
   Caption = #220'ber Game Wake'
   ClientHeight = 282
-  ClientWidth = 405
+  ClientWidth = 444
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clBlack
@@ -42,22 +42,24 @@ object Info: TInfo
   Position = poScreenCenter
   OnCreate = FormCreate
   DesignSize = (
-    405
+    444
     282)
   PixelsPerInch = 96
   TextHeight = 14
   object PageControl: TPageControl
     Left = 0
     Top = 0
-    Width = 408
+    Width = 447
     Height = 286
     ActivePage = tsInfo
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 0
+    ExplicitWidth = 408
     object tsInfo: TTabSheet
       Caption = 'Infos'
+      ExplicitWidth = 400
       DesignSize = (
-        400
+        439
         257)
       object lVersion: TLabel
         Left = 24
@@ -379,7 +381,7 @@ object Info: TInfo
           FFFF0000}
       end
       object l_copy: TLabel
-        Left = 144
+        Left = 164
         Top = 235
         Width = 112
         Height = 14
@@ -393,6 +395,7 @@ object Info: TInfo
         Font.Style = [fsBold]
         ParentColor = False
         ParentFont = False
+        ExplicitLeft = 144
       end
       object lBuild: TLabel
         Left = 16
@@ -406,7 +409,7 @@ object Info: TInfo
       object mInfo: TMemo
         Left = 80
         Top = 24
-        Width = 302
+        Width = 341
         Height = 193
         Anchors = [akLeft, akTop, akRight, akBottom]
         Lines.Strings = (
@@ -415,36 +418,41 @@ object Info: TInfo
           'Pizza im Ofen zu vergessen. Aber auch sonst eignet sich '
           'Game Wake zum Erinnern an alle m'#246'glichen Dinge."'
           ''
-          'Game Wake ist durch internationale Copyright-Gesetze '
-          'gesch'#252'tzt und unterliegt dem Urheberrecht. Das Copyright '
-          'f'#252'r alle Programmteile liegt beim Autor von Game Wake '
-          'Philipp Meisberger (PM Code Works). F'#252'r Sch'#228'den an Hard- '
-          'und Software, die durch die Benutzung dieses Programms '
-          'entstehen, wird keine Haftung '#252'bernommen.'
-          '01/2015')
+          'Copyright (C) 2011 Philipp Meisberger '
+          ''
+          'Dieses Programm kann durch jedermann gem'#228#223' den '
+          'Bestimmungen der Deutschen Freien Software Lizenz genutzt '
+          'werden. Die Lizenz kann unter http://www.d-fsl.de abgerufen '
+          'werden.'
+          ''
+          '06/2015')
         ReadOnly = True
         TabOrder = 0
+        ExplicitWidth = 302
       end
       object bOk: TButton
-        Left = 309
+        Left = 348
         Top = 223
         Width = 73
         Height = 25
         Anchors = [akRight, akBottom]
+        Cancel = True
         Caption = 'OK'
         Default = True
         ModalResult = 1
         TabOrder = 1
+        ExplicitLeft = 309
       end
     end
     object tsHistory: TTabSheet
       Caption = 'Versions History'
       ImageIndex = 1
+      ExplicitWidth = 400
       DesignSize = (
-        400
+        439
         257)
       object lCopy2: TLabel
-        Left = 144
+        Left = 164
         Top = 235
         Width = 112
         Height = 14
@@ -458,11 +466,12 @@ object Info: TInfo
         Font.Style = [fsBold]
         ParentColor = False
         ParentFont = False
+        ExplicitLeft = 144
       end
       object mHistroy: TMemo
         Left = 16
         Top = 25
-        Width = 366
+        Width = 405
         Height = 193
         Anchors = [akLeft, akTop, akRight, akBottom]
         Lines.Strings = (
@@ -610,8 +619,8 @@ object Info: TInfo
             '-------------------'
           ''
           
-            'Game Wake wurde unter der BSD-Lizenz ver'#246'ffentlicht und ist somi' +
-            't '
+            'Game Wake wurde unter der D-FSL-Lizenz ver'#246'ffentlicht und ist so' +
+            'mit '
           'Open-Source. Der Quelltext kann auf der Website heruntergeladen '
           'werden.'
           ''
@@ -620,13 +629,14 @@ object Info: TInfo
           '(mit Magazin) zuschicken. Meine Adresse erfahren Sie unter '
           '"team@pm-codeworks.de".'
           ''
-          '01/2015')
+          '06/2015')
         ReadOnly = True
         ScrollBars = ssVertical
         TabOrder = 0
+        ExplicitWidth = 366
       end
       object bOk2: TButton
-        Left = 309
+        Left = 348
         Top = 223
         Width = 73
         Height = 25
@@ -635,6 +645,7 @@ object Info: TInfo
         Default = True
         ModalResult = 1
         TabOrder = 1
+        ExplicitLeft = 309
       end
     end
   end

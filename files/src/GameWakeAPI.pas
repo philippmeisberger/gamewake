@@ -13,7 +13,7 @@ unit GameWakeAPI;
 interface
 
 uses
-  SysUtils, Classes, ExtCtrls, Graphics, AlertThread, IniFileParser, OSUtils;
+  SysUtils, Classes, ExtCtrls, Graphics, AlertThread, PMCW.IniFileParser;
 
 type
   { TConfigFile }

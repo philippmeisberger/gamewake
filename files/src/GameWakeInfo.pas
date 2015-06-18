@@ -13,8 +13,8 @@ unit GameWakeInfo;
 interface
 
 uses
-  Graphics, Controls, Forms, StdCtrls, ExtCtrls, ComCtrls, SysUtils, OSUtils,
-  Classes;
+  Graphics, Controls, Forms, StdCtrls, ExtCtrls, ComCtrls, SysUtils, Classes,
+  PMCW.OSUtils;
 
 type
   { TInfo }
@@ -47,9 +47,9 @@ procedure TInfo.FormCreate(Sender: TObject);
 begin
 {$IFDEF PORTABLE}
   lBuild.WordWrap := True;
-  lBuild.Caption := 'Build: '+ IntToStr(TOSUtils.GetBuildNumber()) +' Portable';
+  lBuild.Caption := 'Build: '+ IntToStr(GetBuildNumber()) +' Portable';
 {$ELSE}
-  lBuild.Caption := 'Build: '+ IntToStr(TOSUtils.GetBuildNumber());
+  lBuild.Caption := 'Build: '+ IntToStr(GetBuildNumber());
 {$ENDIF}
 end;
 

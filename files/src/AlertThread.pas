@@ -16,7 +16,7 @@ uses
 {$IFDEF MSWINDOWS}
   Windows,
 {$ENDIF}
-  OSUtils, Classes;
+  PMCW.OSUtils, Classes;
 
 type
   { TAlertType }
@@ -90,8 +90,8 @@ begin
   
     // Play *.wav file
     case FAlertType of
-      atClock: TOSUtils.PlaySound(Path +'bell.wav', True);
-      atHorn:  TOSUtils.PlaySound(Path +'horn.wav', True);
+      atClock: PlaySound(Path +'bell.wav', True);
+      atHorn:  PlaySound(Path +'horn.wav', True);
     {$IFDEF MSWINDOWS}
       atBing:
         begin
@@ -99,9 +99,9 @@ begin
           Sleep(1000);
         end;  //of begin
     {$ELSE}
-      atBing:  TOSUtils.PlaySound(Path +'bing.wav', True);
+      atBing:  PlaySound(Path +'bing.wav', True);
     {$ENDIF}
-      atBeep:  TOSUtils.PlaySound(Path +'beep.wav', True);
+      atBeep:  PlaySound(Path +'beep.wav', True);
       else
         Break;
     end;  //of case
