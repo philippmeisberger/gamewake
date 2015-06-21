@@ -29,7 +29,7 @@ OutputBaseFilename=game_wake_setup
 Compression=lzma
 SolidCompression=yes
 UninstallDisplayIcon={app}\{#MyAppExeName}
-VersionInfoVersion=2.2
+VersionInfoVersion=2.3
 SignTool=Sign {srcexe}
 
 [Languages]
@@ -47,6 +47,8 @@ Source: "..\Windows\ReadMe.pdf"; DestDir: "{app}"; Flags: isreadme
 Source: "..\bell.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\beep.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\horn.wav"; DestDir: "{app}"; Flags: ignoreversion
+Source: "ssleay32.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "libeay32.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Windows\Updater.exe"; DestDir: "{tmp}"; Flags: dontcopy
 Source: "..\Windows\version.txt"; DestDir: "{tmp}"; Flags: dontcopy
 
@@ -135,12 +137,14 @@ begin
       // Copy Updater and version file to tmp directory
       ExtractTemporaryFile('Updater.exe');                                
       ExtractTemporaryFile('version.txt');
+      ExtractTemporaryFile('libeay32.dll');
+      ExtractTemporaryFile('ssleay32.dll');
 
       // Get user temp dir
       TempDir := ExpandConstant('{localappdata}\Temp\');
 
       // Launch Updater
-      ShellExec('open', ExpandConstant('{tmp}\Updater.exe'), '-l 100 -d GameWake -s '+ TempDir +' -i game_wake_setup.exe -o "Game Wake Setup.exe"', '', SW_SHOW, ewWaitUntilTerminated, ErrorCode);  
+      ShellExec('open', ExpandConstant('{tmp}\Updater.exe'), '-d GameWake -s '+ TempDir +' -i game_wake_setup.exe -o "Game Wake Setup.exe"', '', SW_SHOW, ewWaitUntilTerminated, ErrorCode);  
     
       // Update successful?
       if (ErrorCode = 0) then
