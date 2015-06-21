@@ -14,13 +14,13 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Controls, Forms, StdCtrls, ExtCtrls, Menus,
-  Dialogs, GameWakeAPI, LanguageFile, AlertThread, Updater, PMCW.OSUtils,
+  Dialogs, GameWakeAPI, PMCWLanguageFile, AlertThread, PMCWUpdater, PMCWOSUtils,
 
 {$IFDEF PORTABLE}
   MMSystem,
 {$ENDIF}
 {$IFDEF MSWINDOWS}
-  Windows, Messages, TrayIconAPI;
+  Windows, Messages, PMCWTrayIconAPI;
 {$ELSE}
   LCLType;
 {$ENDIF}

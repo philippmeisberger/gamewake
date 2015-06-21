@@ -16,7 +16,7 @@ uses
 {$IFDEF MSWINDOWS}
   Windows,
 {$ENDIF}
-  PMCW.OSUtils, Classes;
+  PMCWOSUtils, Classes;
 
 type
   { TAlertType }

@@ -6,15 +6,15 @@
 {                                                                         }
 { *********************************************************************** }
 
-unit Updater;
+unit PMCWUpdater;
 
 {$IFDEF LINUX} {$mode delphi}{$H+} {$ENDIF}
 
 interface
 
 uses
-  SysUtils, Classes, PMCW.UpdateCheckThread, PMCW.DownloadThread, LanguageFile,
-  PMCW.OSUtils, PMCW.Dialogs,
+  SysUtils, Classes, PMCWUpdateCheckThread, PMCWDownloadThread, PMCWLanguageFile,
+  PMCWOSUtils, PMCWDialogs,
 
 {$IFDEF MSWINDOWS}
   Windows, FileCtrl, Forms, StdCtrls, ComCtrls, Controls;
@@ -41,7 +41,8 @@ type
     FRemoteDirName: string;
     FNewBuild: Cardinal;
     { TUpdateCheckThread events }
-    procedure OnCheckError(Sender: TThread; AResponseCode: Integer);
+    procedure OnCheckError(Sender: TThread; AResponseCode: Integer;
+      AResponseText: string);
     procedure OnNoUpdateAvailable(Sender: TObject);
     procedure OnUpdateAvailable(Sender: TThread; const ANewBuild: Cardinal);
   protected
@@ -141,7 +142,8 @@ end;
   Event method that is called TUpdateCheckThread when error occurs while
   searching for update. }
 
-procedure TUpdateCheck.OnCheckError(Sender: TThread; AResponseCode: Integer);
+procedure TUpdateCheck.OnCheckError(Sender: TThread; AResponseCode: Integer;
+  AResponseText: string);
 begin
   if FUserUpdate then
     with FLang do
@@ -211,11 +213,7 @@ begin
     OnUpdate := OnUpdateAvailable;
     OnNoUpdate := OnNoUpdateAvailable;
     OnError := OnCheckError;
-  {$IFDEF MSWINDOWS}
-    Resume;
-  {$ELSE}
     Start;
-  {$ENDIF}
   end;  //of with
 end;
 

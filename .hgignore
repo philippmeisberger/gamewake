@@ -1,13 +1,15 @@
 ## Uses glob syntax, regex sucks ;)
 syntax: glob
 
+BACKUP/**
+src\__history\**
+files/bin/Linux-*/**
+files/src/lib/**
+**.a
 **.o
 **.or
 **.ppu
 **.dcu
 **.exe
 **.zip
-files/src/lib/**
-files/bin/Linux/**
-BACKUP/**
-src\__history\**
+**.bak

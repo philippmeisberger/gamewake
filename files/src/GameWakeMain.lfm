@@ -6,7 +6,7 @@ object Main: TMain
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Game Wake'
-  ClientHeight = 267
+  ClientHeight = 271
   ClientWidth = 297
   Color = clBtnFace
   Font.CharSet = ANSI_CHARSET
@@ -45,12 +45,12 @@ object Main: TMain
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   Position = poDefault
-  LCLVersion = '0.9.30.4'
+  LCLVersion = '1.2.4.0'
   object lDp: TLabel
     Left = 144
-    Height = 28
+    Height = 27
     Top = 26
-    Width = 9
+    Width = 8
     Caption = ':'
     Font.CharSet = ANSI_CHARSET
     Font.Color = clBlack
@@ -62,17 +62,17 @@ object Main: TMain
   end
   object lHour: TLabel
     Left = 8
-    Height = 13
+    Height = 12
     Top = 8
-    Width = 43
+    Width = 42
     Caption = '00:00:00'
     ParentColor = False
   end
   object lCopy: TLabel
-    Left = 95
-    Height = 13
-    Top = 252
-    Width = 106
+    Left = 96
+    Height = 12
+    Top = 257
+    Width = 105
     Anchors = [akBottom]
     Caption = '© P.Meisberger 2015'
     Font.CharSet = ANSI_CHARSET
@@ -89,10 +89,10 @@ object Main: TMain
     OnMouseLeave = lCopyMouseLeave
   end
   object lVersion: TLabel
-    Left = 263
-    Height = 13
+    Left = 264
+    Height = 12
     Top = 8
-    Width = 25
+    Width = 24
     Anchors = [akTop, akRight]
     Caption = 'v 3.2'
     ParentColor = False
@@ -100,7 +100,7 @@ object Main: TMain
   object bAlert: TButton
     Left = 8
     Height = 33
-    Top = 211
+    Top = 215
     Width = 136
     Anchors = [akLeft, akBottom]
     Caption = 'Alarm !'
@@ -110,28 +110,28 @@ object Main: TMain
   end
   object gpOther: TGroupBox
     Left = 152
-    Height = 124
+    Height = 128
     Top = 80
     Width = 137
     Anchors = [akTop, akLeft, akBottom]
     Caption = 'Bei Alarm'
-    ClientHeight = 110
+    ClientHeight = 114
     ClientWidth = 133
     TabOrder = 10
     object cbBlink: TCheckBox
       Left = 12
-      Height = 22
+      Height = 21
       Top = 18
-      Width = 58
+      Width = 71
       Caption = 'blinken'
       OnClick = cbBlinkClick
       TabOrder = 0
     end
     object cbText: TCheckBox
       Left = 12
-      Height = 22
+      Height = 21
       Top = 38
-      Width = 90
+      Width = 112
       Caption = 'Schrift zeigen'
       OnClick = cbTextClick
       TabOrder = 2
@@ -159,7 +159,7 @@ object Main: TMain
   end
   object rgSounds: TRadioGroup
     Left = 8
-    Height = 124
+    Height = 128
     Top = 80
     Width = 137
     Anchors = [akTop, akLeft, akBottom]
@@ -173,7 +173,7 @@ object Main: TMain
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 110
+    ClientHeight = 114
     ClientWidth = 133
     ItemIndex = 0
     Items.Strings = (
@@ -222,7 +222,7 @@ object Main: TMain
   object bStop: TButton
     Left = 152
     Height = 33
-    Top = 211
+    Top = 215
     Width = 136
     Anchors = [akBottom]
     Caption = 'aus'

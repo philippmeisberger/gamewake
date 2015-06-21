@@ -6,7 +6,7 @@
 {                                                                         }
 { *********************************************************************** }
 
-unit TrayIconAPI;
+unit PMCWTrayIconAPI;
 
 interface
 
@@ -79,7 +79,7 @@ const
 
   // Do not display the balloon notification if the current user is in
   // "quiet time", which is the first hour after a new user logs into his or
-  // her account for the first time. 
+  // her account for the first time.
   NIIF_RESPECT_QUIET_TIME = $00000080;
 
   { Event callback values }
@@ -90,7 +90,7 @@ const
   NIN_SELECT = WM_USER + 0;
   NINF_KEY = $1;
   NIN_KEYSELECT = NIN_SELECT or NINF_KEY;
-  
+
   TRAY_CALLBACK = WM_USER + $7258;
   WM_TASKABAREVENT = WM_USER + 1;
 

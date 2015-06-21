@@ -14,7 +14,7 @@ interface
 
 uses
   Graphics, Controls, Forms, StdCtrls, ExtCtrls, ComCtrls, SysUtils, Classes,
-  PMCW.OSUtils;
+  PMCWOSUtils;
 
 type
   { TInfo }

@@ -42,7 +42,7 @@ object Info: TInfo
   }
   OnCreate = FormCreate
   Position = poScreenCenter
-  LCLVersion = '0.9.30.4'
+  LCLVersion = '1.2.4.0'
   object PageControl: TPageControl
     Left = 0
     Height = 286
@@ -54,13 +54,13 @@ object Info: TInfo
     TabOrder = 0
     object tsInfo: TTabSheet
       Caption = 'Infos'
-      ClientHeight = 253
+      ClientHeight = 255
       ClientWidth = 402
       object lVersion: TLabel
         Left = 24
-        Height = 14
+        Height = 13
         Top = 74
-        Width = 30
+        Width = 29
         Caption = 'v 3.2'
         ParentColor = False
       end
@@ -377,10 +377,10 @@ object Info: TInfo
         }
       end
       object l_copy: TLabel
-        Left = 144
-        Height = 13
-        Top = 234
-        Width = 106
+        Left = 145
+        Height = 12
+        Top = 237
+        Width = 105
         Anchors = [akBottom]
         Caption = '© P.Meisberger 2015'
         Font.CharSet = ANSI_CHARSET
@@ -393,23 +393,25 @@ object Info: TInfo
       end
       object lBuild: TLabel
         Left = 9
-        Height = 14
+        Height = 13
         Top = 90
-        Width = 37
+        Width = 36
         Caption = 'Build: '
         ParentColor = False
       end
       object mInfo: TMemo
         Left = 80
-        Height = 194
+        Height = 196
         Top = 24
         Width = 302
         Anchors = [akTop, akLeft, akRight, akBottom]
         Lines.Strings = (
           '"Game Wake ist ein virtueller Wecker, den man sich stellen kann, um nicht, z.B. während des exzessiven Gamings, die Pizza im Ofen zu vergessen. Aber auch sonst eignet sich Game Wake zum Erinnern an alle möglichen Dinge."'
           ''
-          'Game Wake ist durch internationale Copyright-Gesetze geschützt und unterliegt dem Urheberrecht. Das Copyright für alle Programmteile liegt beim Autor von Game Wake Philipp Meisberger (PM Code Works). Für Schäden an Hard- und Software, die durch die Benutzung dieses Programms entstehen, wird keine Haftung übernommen.'
-          '01/2015'
+          'Copyright (C) 2011 Philipp Meisberger'
+          ''
+          'Dieses Programm kann durch jedermann gemäß den Bestimmungen der Deutschen Freien Software Lizenz genutzt werden. Die Lizenz kann unter http://www.d-fsl.de abgerufen werden.'
+          '06/2015'
         )
         ReadOnly = True
         TabOrder = 0
@@ -417,7 +419,7 @@ object Info: TInfo
       object bOk: TButton
         Left = 309
         Height = 25
-        Top = 222
+        Top = 224
         Width = 73
         Anchors = [akRight, akBottom]
         Caption = 'OK'
@@ -428,14 +430,14 @@ object Info: TInfo
     end
     object tsHistory: TTabSheet
       Caption = 'Versions History'
-      ClientHeight = 253
+      ClientHeight = 255
       ClientWidth = 402
       ImageIndex = 1
       object lCopy2: TLabel
-        Left = 144
-        Height = 13
-        Top = 234
-        Width = 106
+        Left = 145
+        Height = 12
+        Top = 237
+        Width = 105
         Anchors = [akBottom]
         Caption = '© P.Meisberger 2015'
         Font.CharSet = ANSI_CHARSET
@@ -448,7 +450,7 @@ object Info: TInfo
       end
       object mHistroy: TMemo
         Left = 16
-        Height = 194
+        Height = 196
         Top = 24
         Width = 366
         Anchors = [akTop, akLeft, akRight, akBottom]
@@ -583,10 +585,10 @@ object Info: TInfo
           ''
           '-----------------------------------------------------------------------------------'
           ''
-          'Game Wake wurde unter der BSD-Lizenz veröffentlicht und ist somit Open-Source. Der Quelltext kann auf der Website heruntergeladen werden.'
+          'Game Wake wurde unter der D-FSL-Lizenz veröffentlicht und ist somit Open-Source. Der Quelltext kann auf der Website heruntergeladen werden.'
           'Soll Game Wake auf eine kommerzielle CD-ROM (mit Magazin) gepresst werden, wäre es nett, mir eine Ausgabe dieser CD-ROM (mit Magazin) zuschicken. Meine Adresse erfahren Sie unter "team@pm-codeworks.de".'
           ''
-          '01/2015'
+          '06/2015'
         )
         ReadOnly = True
         ScrollBars = ssVertical
@@ -595,7 +597,7 @@ object Info: TInfo
       object bOk2: TButton
         Left = 309
         Height = 25
-        Top = 222
+        Top = 224
         Width = 73
         Anchors = [akRight, akBottom]
         Caption = 'OK'

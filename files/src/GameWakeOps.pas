@@ -13,7 +13,7 @@ unit GameWakeOps;
 interface
 
 uses
-  Forms, StdCtrls, GameWakeAPI, Classes, LanguageFile, Controls, SysUtils;
+  Forms, StdCtrls, Classes, Controls, SysUtils, PMCWLanguageFile, GameWakeAPI;
 
 type
   { TOptions }

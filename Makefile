@@ -15,7 +15,7 @@ ifeq ($(ARCH),i486)
 endif
 
 LIBDIR = $(DESTDIR)/usr/lib/gamewake
-BINDIR = files/bin/$(shell uname)/gamewake_$(ARCH)
+BINDIR = files/bin/$(shell uname)-$(ARCH)
 ETCDIR = $(DESTDIR)/etc/gamewake
 
 all:	build
@@ -31,7 +31,6 @@ install: $(BINDIR)/gamewake
 	install -D --mode 644 files/bin/bing.wav $(LIBDIR)/bing.wav
 	install -D --mode 644 files/bin/bell.wav $(LIBDIR)/bell.wav
 	install -D --mode 644 files/bin/horn.wav $(LIBDIR)/horn.wav
-	install -D --mode 666 files/src/gamewake.conf $(ETCDIR)/gamewake.conf
 	install -D --mode 644 files/src/lang $(ETCDIR)/lang
 	install -D --mode 644 files/src/gamewake.ico $(DESTDIR)/usr/share/pixmaps/gamewake.ico
 	install -D --mode 644 files/src/gamewake.png $(DESTDIR)/usr/share/pixmaps/gamewake.png

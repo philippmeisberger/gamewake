@@ -6,7 +6,7 @@
 {                                                                         }
 { *********************************************************************** }
 
-unit LanguageFile;
+unit PMCWLanguageFile;
 
 {$IFDEF LINUX} {$mode objfpc}{$H+} {$ENDIF}
 
@@ -17,7 +17,7 @@ uses
 {$IFDEF MSWINDOWS}
   Windows;
 {$ELSE}
-  IniFileParser, LCLType;
+  PMCWIniFileParser, LCLType;
 {$ENDIF}
 
 const

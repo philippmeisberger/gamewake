@@ -21,9 +21,9 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <MinorVersionNr Value="2"/>
-      <BuildNr Value="392"/>
+      <BuildNr Value="395"/>
       <Language Value="0407"/>
-      <StringTable CompanyName="PM Code Works" FileDescription="Game Wake" LegalTrademarks="PM Code Works" ProductName="Game Wake" ProductVersion="3.2"/>
+      <StringTable CompanyName="PM Code Works" FileDescription="Game Wake" LegalCopyright="Philipp Meisberger 2015" LegalTrademarks="PM Code Works" ProductName="Game Wake" ProductVersion="3.2"/>
     </VersionInfo>
     <BuildModes Count="1">
       <Item1 Name="Default" Default="True"/>
@@ -111,7 +111,7 @@
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <Target>
-      <Filename Value="..\bin\Linux\gamewake_$(TargetCPU)\gamewake"/>
+      <Filename Value="..\bin\Linux-$(TargetCPU)\gamewake"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
@@ -125,6 +125,7 @@
     </Parsing>
     <CodeGeneration>
       <SmartLinkUnit Value="True"/>
+      <TargetOS Value="linux"/>
     </CodeGeneration>
     <Linking>
       <Debugging>
