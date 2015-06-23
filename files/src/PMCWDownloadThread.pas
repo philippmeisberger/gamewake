@@ -30,6 +30,7 @@ type
     FOnError: TOnDownloadErrorEvent;
     FFileSize, FDownloadSize: Int64;
     FFileName, FUrl: string;
+    FTLSEnabled: Boolean;
     { Synchronized events }
     procedure DoNotifyOnCancel;
     procedure DoNotifyOnDownloading;
@@ -52,6 +53,7 @@ type
     property OnError: TOnDownloadErrorEvent read FOnError write FOnError;
     property OnFinish: TNotifyEvent read FOnFinish write FOnFinish;
     property OnStart: TOnDownloadEvent read FOnStart write FOnStart;
+    property TLSEnabled: Boolean read FTLSEnabled;
   end;
 
 implementation
@@ -82,21 +84,29 @@ begin
   // Setup some HTTP options
   with FHttp do
   begin
-    // OpenSSL libraries exist in current directory?
-    if (FileExists('ssleay32.dll') and FileExists('libeay32.dll')) then
+    // OpenSSL libraries exist?
+    if LoadOpenSSLLibrary() then
     begin
-      // Use TLS v1.2 encrypted connection
+      // Use TLS encrypted connection
       IOHandler := TIdSSLIOHandlerSocketOpenSSL.Create(FHttp);
-      (IOHandler as TIdSSLIOHandlerSocketOpenSSL).SSLOptions.Method := {$IFDEF MSWINDOWS}sslvTLSv1_2{$ELSE}sslvTLSv1{$ENDIF};
+    {$IFDEF MSWINDOWS}
+      (IOHandler as TIdSSLIOHandlerSocketOpenSSL).SSLOptions.Method := sslvTLSv1_2;
+    {$ENDIF}
 
       // Use secure https instead of plain http
       if AnsiStartsStr('http://', AUrl) then
         FUrl := 'https://'+ Copy(AUrl, 8, Length(AUrl) - 7);
+
+      FTLSEnabled := True;
     end  //of begin
     else
+    begin
       // Use plain http instead of secure https
       if AnsiStartsStr('https://', AUrl) then
         FUrl := 'http://'+ Copy(AUrl, 9, Length(AUrl) - 8);
+
+      FTLSEnabled := False;
+    end;  //of if
 
     // Link HTTP events
     OnWorkBegin := DownloadStart;

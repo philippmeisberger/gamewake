@@ -2990,7 +2990,7 @@ object Main: TMain
     Width = 24
     Height = 14
     Anchors = [akTop, akRight]
-    Caption = 'v 3.2'
+    Caption = 'v 3.3'
     Color = clBtnFace
     ParentColor = False
   end

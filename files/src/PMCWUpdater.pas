@@ -1,6 +1,6 @@
 { *********************************************************************** }
 {                                                                         }
-{ PM Code Works Cross Plattform Updater v2.2                              }
+{ PM Code Works Cross Plattform Updater v2.3                              }
 {                                                                         }
 { Copyright (c) 2011-2015 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
@@ -13,11 +13,12 @@ unit PMCWUpdater;
 interface
 
 uses
-  SysUtils, Classes, PMCWUpdateCheckThread, PMCWDownloadThread, PMCWLanguageFile,
-  PMCWOSUtils, PMCWDialogs,
+  SysUtils, Classes, Dialogs, PMCWUpdateCheckThread, PMCWDownloadThread,
+  PMCWOSUtils, PMCWLanguageFile,
 
 {$IFDEF MSWINDOWS}
-  Windows, FileCtrl, Forms, StdCtrls, ComCtrls, Controls;
+  Windows, FileCtrl, Forms, StdCtrls, ComCtrls, Controls, System.Win.TaskbarCore,
+  Vcl.Taskbar, PMCWDialogs;
 {$ELSE}
   LCLType;
 {$ENDIF}
@@ -29,8 +30,7 @@ type
   { IUpdateListener }
   IUpdateListener = interface
   ['{D1CDAE74-717A-4C5E-9152-15FBA4A15552}']
-    procedure AfterUpdate(Sender: TObject; ADownloadedFileName: string);
-    procedure BeforeUpdate(Sender: TObject; const ANewBuild: Cardinal);
+    procedure OnUpdate(Sender: TObject; const ANewBuild: Cardinal);
   end;
 
   { TUpdateCheck }
@@ -72,26 +72,28 @@ type
     FDownloadDirectory, FTitle, FRemoteFileName, FLocalFileName, FFileName: string;
     FLang: TLanguageFile;
     FListeners: TInterfaceList;
-    procedure Reset();
-    { TDownloadThread events }
+    FTaskBar: TTaskbar;
     procedure OnDownloadCancel(Sender: TObject);
     procedure OnDownloadError(Sender: TThread; AResponseCode: Integer;
-      AResponseMessage: string);
+      AResponseText: string);
     procedure OnDownloadFinished(Sender: TObject);
     procedure OnDownloading(Sender: TThread; ADownloadSize: Int64);
     procedure OnDownloadStart(Sender: TThread; AFileSize: Int64);
+    procedure Reset();
+  protected
+    function Download(ARemoteFileName, ALocalFileName: string;
+      ADownloadDirectory: string = ''): Boolean;
   public
     constructor Create(AOwner: TComponent; ALang: TLanguageFile);
     destructor Destroy; override;
     procedure AddListener(AListener: IUpdateListener);
-    procedure Download(ADownloadDirectory: string = ''); overload;
-    procedure Download(ARemoteFileName, ALocalFileName: string;
-      ADownloadDirectory: string = ''); overload;
-    procedure DownloadCertificate();
+    function Execute(): Boolean;
     procedure RemoveListener(AListener: IUpdateListener);
     { external }
-    property LanguageFile: TLanguageFile read FLang write FLang;
     property DownloadDirectory: string read FDownloadDirectory write FDownloadDirectory;
+    property FileNameLocal: string read FLocalFileName write FLocalFileName;
+    property FileNameRemote: string read FRemoteFileName write FRemoteFileName;
+    property LanguageFile: TLanguageFile read FLang write FLang;
     property Title: string read FTitle write FTitle;
   end;
 {$ENDIF}
@@ -124,7 +126,10 @@ constructor TUpdateCheck.Create(AOwner: TComponent; ARemoteDirName: string;
   ALang: TLanguageFile);
 begin
   Create(ARemoteDirName, ALang);
-  FListeners.Add(AOwner);
+
+  // Add owner to list to receive events
+  if Assigned(AOwner) then
+    FListeners.Add(AOwner);
 end;
 
 { public TUpdateCheck.Destroy
@@ -146,8 +151,10 @@ procedure TUpdateCheck.OnCheckError(Sender: TThread; AResponseCode: Integer;
   AResponseText: string);
 begin
   if FUserUpdate then
-    with FLang do
-      MessageBox(Format([12, NEW_LINE, 13, 19], [AResponseCode]), mtError, True);
+    if (AResponseCode <> -1) then
+      FLang.ShowException(FLang.GetString([12, 13]), AResponseText)
+    else
+      FLang.ShowMessage(12, 13, mtError);
 end;
 
 { private TUpdateCheck.OnNoUpdateAvailable
@@ -157,7 +164,7 @@ end;
 procedure TUpdateCheck.OnNoUpdateAvailable(Sender: TObject);
 begin
   if FUserUpdate then
-    FLang.MessageBox(23, mtInfo, True);
+    FLang.ShowMessage(FLang.GetString(23));
 end;
 
 { private TUpdateCheck.OnUpdateAvailable
@@ -175,9 +182,9 @@ begin
     FNewBuild := ANewBuild;
 
   // Notify all listeners
-  for i := 0 to FListeners.Count -1 do
+  for i := 0 to FListeners.Count - 1 do
     if Supports(FListeners[i], IUpdateListener, Listener) then
-      Listener.BeforeUpdate(Self, ANewBuild);
+      Listener.OnUpdate(Self, ANewBuild);
 end;
 
 { public TUpdateCheck.AddListener
@@ -246,6 +253,8 @@ begin
   // Add owner to list to receive events
   if Assigned(AOwner) then
     FListeners.Add(AOwner);
+
+  FTaskBar := TTaskbar.Create(Self);
 end;
 
 { public TUpdate.Destroy
@@ -254,6 +263,8 @@ end;
 
 destructor TUpdate.Destroy;
 begin
+  FTaskBar.ProgressState := TTaskBarProgressState.None;
+  FTaskBar.Free;
   FreeAndNil(FListeners);
   inherited Destroy;
 end;
@@ -265,20 +276,7 @@ end;
 procedure TUpdate.FormShow(Sender: TObject);
 begin
   Caption := FTitle;
-end;
-
-{ private TUpdate.Reset
-
-  Resets Update GUI. }
-
-procedure TUpdate.Reset();
-begin
-  // Reset ProgressBar
-  pbProgress.Position := 0;
-
-  lSize.Caption := FLang.GetString(7);
-  bFinished.Caption := FLang.GetString(8);
-  FThreadRuns := False;
+  bFinished.Caption := FLang.GetString(6);
 end;
 
 { private TUpdate.OnDownloadCancel
@@ -287,8 +285,11 @@ end;
 
 procedure TUpdate.OnDownloadCancel(Sender: TObject);
 begin
+  FTaskBar.ProgressState := TTaskBarProgressState.Error;
+  pbProgress.State := TProgressBarState.pbsError;
   Reset();
-  FLang.MessageBox(30, mtInfo);
+  FLang.ShowMessage(FLang.GetString(30));
+  bFinished.ModalResult := mrCancel;
 end;
 
 { private TUpdate.OnDownloadError
@@ -297,12 +298,13 @@ end;
   downloading the update. }
 
 procedure TUpdate.OnDownloadError(Sender: TThread; AResponseCode: Integer;
-  AResponseMessage: string);
+  AResponseText: string);
 begin
-  with FLang do
-    MessageBox(Caption + GetString(18) + sLineBreak + AResponseMessage, mtError, True);
-
+  FTaskBar.ProgressState := TTaskBarProgressState.Error;
+  pbProgress.State := TProgressBarState.pbsError;
   Reset();
+  FLang.ShowException(Caption + FLang.GetString(18), AResponseText);
+  bFinished.ModalResult := mrAbort;
 end;
 
 { private TUpdate.OnDownloadFinished
@@ -310,26 +312,20 @@ end;
   Event method that is called by TDownloadThread when download is finished. }
 
 procedure TUpdate.OnDownloadFinished(Sender: TObject);
-var
-  i: Word;
-  Listener: IUpdateListener;
-
 begin
   // Caption "finished"
   bFinished.Caption := FLang.GetString(8);
   bFinished.SetFocus;
   FThreadRuns := False;
+  FTaskBar.ProgressState := TTaskBarProgressState.None;
 
 {$IFDEF MSWINDOWS}
   // Show dialog to add certificate
   if (ExtractFileExt(FFileName) = '.reg') then
     ShowAddRegistryDialog('"'+ FFileName +'"');
 {$ENDIF}
-
-  // Notify all listeners
-  for i := 0 to FListeners.Count -1 do
-    if Supports(FListeners[i], IUpdateListener, Listener) then
-      Listener.AfterUpdate(Self, FFileName);
+  FlashWindow(Application.Handle, True);
+  bFinished.ModalResult := mrOk;
 end;
 
 { private TUpdate.OnDownloading
@@ -339,7 +335,8 @@ end;
 procedure TUpdate.OnDownloading(Sender: TThread; ADownloadSize: Int64);
 begin
   pbProgress.Position := ADownloadSize;
-  lSize.Caption := IntToStr(ADownloadSize) +'/'+ IntToStr(pbProgress.Max) +'KB';
+  FTaskBar.ProgressValue := ADownloadSize;
+  lSize.Caption := Format('%d/%d KB', [ADownloadSize, pbProgress.Max]);
 end;
 
 { private TUpdate.OnDownloadStart
@@ -348,36 +345,31 @@ end;
 
 procedure TUpdate.OnDownloadStart(Sender: TThread; AFileSize: Int64);
 begin
+  FTaskBar.ProgressMaxValue := AFileSize;
+  FTaskBar.ProgressState := TTaskBarProgressState.Normal;
   pbProgress.Max := AFileSize;
+
+  if (Sender as TDownloadThread).TLSEnabled then
+    Caption := Caption +' - TLS';
 end;
 
-{ public TUpdate.AddListener
+{ private TUpdate.Reset
 
-  Adds a listener to the notification list. }
+  Resets Update GUI. }
 
-procedure TUpdate.AddListener(AListener: IUpdateListener);
+procedure TUpdate.Reset();
 begin
-  FListeners.Add(AListener);
+  lSize.Caption := FLang.GetString(7);
+  bFinished.Caption := FLang.GetString(8);
+  FThreadRuns := False;
 end;
 
-{ public TUpdate.Download
+{ protected TUpdate.Download
 
   Starts downloading a file. }
 
-procedure TUpdate.Download(ADownloadDirectory: string = '');
-begin
-  if ((FRemoteFileName = '') or (FLocalFileName = '')) then
-    raise Exception.Create('Missing argument: "RemoteFileName" or "LocalFileName"!');
-
-  Download(FRemoteFileName, FLocalFileName, ADownloadDirectory);
-end;
-
-{ public TUpdate.Download
-
-  Starts downloading a file. }
-
-procedure TUpdate.Download(ARemoteFileName, ALocalFileName: string;
-  ADownloadDirectory: string = '');
+function TUpdate.Download(ARemoteFileName, ALocalFileName: string;
+  ADownloadDirectory: string = ''): Boolean;
 var
   Url: string;
   Continue: Boolean;
@@ -390,7 +382,7 @@ begin
   if (ADownloadDirectory <> '') then
     Continue := True
   else
-    // Show SelectDirectory dialog
+    // Show select directory dialog
     Continue := SelectDirectory(FLang.GetString(9), '', ADownloadDirectory);
 
   if Continue then
@@ -398,7 +390,6 @@ begin
     Url := URL_DOWNLOAD + FRemoteFileName;
     FFileName := IncludeTrailingPathDelimiter(ADownloadDirectory) + FLocalFileName;
 
-    // Init thread
     with TDownloadThread.Create(Url, FFileName) do
     begin
       // Link download events
@@ -413,8 +404,6 @@ begin
       Start;
     end;  //of with
 
-    // Caption "cancel"
-    bFinished.Caption := FLang.GetString(6);
     FThreadRuns := True;
   end  //of begin
   else
@@ -422,15 +411,28 @@ begin
     Reset();
 
   ShowModal;
+  Result := (bFinished.ModalResult = mrOk);
 end;
 
-{ TUpdate.DownloadCertificate
+{ public TUpdate.AddListener
 
-  Starts downloading the PMCW certificate. }
+  Adds a listener to the notification list. }
 
-procedure TUpdate.DownloadCertificate();
+procedure TUpdate.AddListener(AListener: IUpdateListener);
 begin
-  Download('cert.reg', 'Install_PMCW_Cert.reg', GetTempDir());
+  FListeners.Add(AListener);
+end;
+
+{ public TUpdate.Execute
+
+  Executes the dialog. }
+
+function TUpdate.Execute(): Boolean;
+begin
+  if ((FRemoteFileName = '') or (FLocalFileName = '')) then
+    raise EInvalidArgument.Create('Missing argument: "RemoteFileName" or "LocalFileName"!');
+
+  Result := Download(FRemoteFileName, FLocalFileName, FDownloadDirectory);
 end;
 
 { public TUpdate.RemoveListener
@@ -465,7 +467,6 @@ begin
     CanClose := False;
   end  //of begin
   else
-    // Close form
     CanClose := True;
 end;
 {$ENDIF}

@@ -94,7 +94,8 @@ begin
     end;  //of finally
 
   except
-    FLang.MessageBox(FLang.Format(74, [FConfigPath]), mtError);
+    on E: Exception do
+      FLang.ShowException(FLang.Format(84, [FConfigPath]), E.Message);
   end;  //of try
 end;
 
@@ -106,17 +107,17 @@ procedure TOptions.SetLanguage();
 begin
   with FLang do
   begin
-    Caption := GetString(34);
-    gbSave.Caption := GetString(51);
-    cbSaveClock.Caption := GetString(52);
-    cbSaveText.Caption := GetString(53);
-    cbSavePos.Caption := GetString(54);
-    cbSaveSound.Caption := GetString(55);
-    cbSaveColor.Caption := GetString(56);
-    gbGeneral.Caption := GetString(57);
-    cbCombine.Caption := GetString(58);
-    cbUpdate.Caption := GetString(59);
-    bReset.Caption := GetString(61);
+    Caption := GetString(44);
+    gbSave.Caption := GetString(61);
+    cbSaveClock.Caption := GetString(62);
+    cbSaveText.Caption := GetString(63);
+    cbSavePos.Caption := GetString(64);
+    cbSaveSound.Caption := GetString(65);
+    cbSaveColor.Caption := GetString(66);
+    gbGeneral.Caption := GetString(67);
+    cbCombine.Caption := GetString(68);
+    cbUpdate.Caption := GetString(69);
+    bReset.Caption := GetString(71);
     bCancel.Caption := GetString(6);
   end;  //of with
 end;
@@ -187,8 +188,11 @@ begin
     ModalResult := mrOk;
 
   except
-    FLang.MessageBox(FLang.Format(76, [FConfigPath]), mtError);
-    ModalResult := mrAbort;
+    on E: Exception do
+    begin
+      FLang.ShowException(FLang.Format(86, [FConfigPath]), E.Message);
+      ModalResult := mrAbort;
+    end;  //of begin
   end;  //of try
 end;
 

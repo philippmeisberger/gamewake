@@ -48,7 +48,7 @@ type
   function GetBuildNumber(): Cardinal;
 {$IFDEF MSWINDOWS}
   function GetTempDir(): string;
-  function GetUserDir(): string;
+  function GetUserAppDataDir(): string;
   function GetWinDir(): string;
   function GetWinVersion(AShowServicePack: Boolean = False): string;
 {$ENDIF}
@@ -266,11 +266,11 @@ begin
   Result := SysUtils.GetEnvironmentVariable('temp');
 end;
 
-{ GetUserDir
+{ GetUserAppDataDir
 
   Returns the path to users application data directory. }
 
-function GetUserDir(): string;
+function GetUserAppDataDir(): string;
 var
   Path: string;
 

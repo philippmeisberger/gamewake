@@ -1,9 +1,23 @@
+gamewake (3.3) stable; urgency=low
+
+  * Minor release
+  * Linux:
+    * Moved configuration file to $HOME/.gamewake.conf
+  * Windows:
+    * Moved configuration file to %APPDATA%\gamewake.ini
+    * 32/64-Bit binaries
+    * Updates are now downloaded encrypted via https
+  * IniFileParser v1.1.1
+  * OSUtils v2.2
+
+ -- Philipp Meisberger <team@pm-codeworks.de>  Sun, 21 Jun 2015 16:59:04 +0200
+
 gamewake (3.2) stable; urgency=low
 
   * Minor release
   * Fixed bug caused when "SaveClock"=False and "Counter Mode" was set
   * Added usage of own INI file parser
-  * Update function v2.2
+  * Updater v2.2
   * OSUtils v2.0
 
  -- Philipp Meisberger <team@pm-codeworks.de>  Sat, 10 Jan 2015 13:39:16 +0200
@@ -14,7 +28,7 @@ gamewake (3.1) stable; urgency=low
   * Minor release
   * New icon
     * Thanks to Rafi: http://www.graphicsfuel.com/2012/08/alarm-clock-icon-psd/
-  * Update function v2.1
+  * Updater v2.1
   * Moved sounds to /usr/lib/gamewake/ instead of /opt/gamewake/
   * Several small improvements
 
@@ -24,7 +38,7 @@ gamewake (3.1) stable; urgency=low
 gamewake (3.0) unstable; urgency=low
 
   * Major release
-  * Improved update function
+  * Improved updater
   * Improved platform independence
 
  -- Philipp Meisberger <team@pm-codeworks.de>  Sun, 16 Mar 2014 15:10:09 +0200
@@ -66,7 +80,7 @@ gamewake (2.0.1) stable; urgency=low
   * Improved update function
   * Added new option: automatically search for update on startup can be changed
   * GUI changes in option form
-  * Bug fix in save progress 
+  * Bug fix in save progress
 
  -- Philipp Meisberger <team@pm-codeworks.de>  Mon, 03 Dec 2012 16:39:30 +0200
 

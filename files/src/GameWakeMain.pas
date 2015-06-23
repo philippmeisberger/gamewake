@@ -25,11 +25,6 @@ uses
   LCLType;
 {$ENDIF}
 
-const
-  LANG_GERMAN = '&Deutsch';
-  LANG_ENGLISH = '&English';
-  LANG_FRENCH = '&Français';
-
 type
   { TMain }
   TMain = class(TForm, IChangeLanguageListener, IUpdateListener)
@@ -38,6 +33,9 @@ type
     bAlert: TButton;
     bStop: TButton;
     lDp: TLabel;
+    mmGer: TMenuItem;
+    mmEng: TMenuItem;
+    mmFre: TMenuItem;
     mmDownloadCert: TMenuItem;
     pmClose: TMenuItem;
     pmOpen: TMenuItem;
@@ -105,7 +103,9 @@ type
     procedure mmOptionsClick(Sender: TObject);
     procedure mmTimerClick(Sender: TObject);
     procedure mmCounterClick(Sender: TObject);
-    procedure mmLangClick(Sender: TObject);
+    procedure mmGerClick(Sender: TObject);
+    procedure mmEngClick(Sender: TObject);
+    procedure mmFreClick(Sender: TObject);
     procedure mmReportClick(Sender: TObject);
     procedure mmInfoClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -119,9 +119,8 @@ type
     FColor: TColor;
     FConfigPath, FLangPath, FPath: string;
     FUpdateCheck: TUpdateCheck;
-    procedure AfterUpdate(Sender: TObject; ADownloadedFileName: string);
     procedure Alert(Sender: TObject);
-    procedure BeforeUpdate(Sender: TObject; const ANewBuild: Cardinal);
+    procedure OnUpdate(Sender: TObject; const ANewBuild: Cardinal);
     procedure Blink(Sender: TThread);
     procedure BlinkEnd(Sender: TThread);
     procedure Count(Sender: TObject; ATime: string);
@@ -130,7 +129,6 @@ type
   {$ENDIF}
     procedure LoadColor();
     procedure LoadFromIni();
-    procedure LoadLanguageFile(var APrefLang: string);
   {$IFDEF MSWINDOWS}
     procedure PowerBroadcast(var AMsg: TMessage); message WM_POWERBROADCAST;
   {$ENDIF}
@@ -171,10 +169,19 @@ procedure TMain.FormCreate(Sender: TObject);
 var
   Config: TConfigFile;
   Combine, AutoUpdate: Boolean;
-  Language: string;
 
 begin
+  FLangPath := '';
 {$IFNDEF MSWINDOWS}
+  FPath := '/usr/lib/gamewake/';
+
+  // Load other language file?
+  if ((ParamStr(1) = '--lang') and (ParamStr(2) <> '')) then
+    FLangPath := ParamStr(2)
+  else
+    if ((ParamStr(3) = '--lang') and (ParamStr(4) <> '')) then
+      FLangPath := ParamStr(4);
+
   // Load other configuration?
   if ((ParamStr(1) = '--config') and (ParamStr(2) <> '')) then
     FConfigPath := ParamStr(2)
@@ -182,28 +189,22 @@ begin
     if ((ParamStr(3) = '--config') and (ParamStr(4) <> '')) then
       FConfigPath := ParamStr(4)
     else
-      FConfigPath := GetUserDir() +'.gamewake.conf';
-
-  // Load other language file?
-  if ((ParamStr(1) = '--lang') and (ParamStr(2) <> '')) then
-    FLangPath := ParamStr(2)
-  else
-    if ((ParamStr(3) = '--lang') and (ParamStr(4) <> '')) then
-      FLangPath := ParamStr(4)
-    else
-      FLangPath := '/etc/gamewake/lang';
-
-  FPath := '/usr/lib/gamewake/';
+      FConfigPath := GetUserDir() +'.gamewake';
 {$ELSE}
-  FConfigPath := GetUserDir() +'Game Wake\';
+  FConfigPath := GetUserAppDataDir() +'Game Wake\';
 
   if not DirectoryExists(FConfigPath) then
     CreateDir(FConfigPath);
 
   FConfigPath := FConfigPath +'gamewake.ini';
-  FLangPath := '';
   FPath := '';
 {$ENDIF}
+
+  // Setup language
+  FLang := TLanguageFile.Create(Self);
+  FLang.AddLanguage(LANG_GERMAN, '&Deutsch');
+  FLang.AddLanguage(LANG_ENGLISH, '&English');
+  FLang.AddLanguage(LANG_FRENCH, '&Français');
 
   // Init config file access
   Config := TConfigFile.Create(FConfigPath);
@@ -215,12 +216,12 @@ begin
       LoadFromIni();
       mmOptions.Enabled := True;
     end  //of begin
-    // Do not load anything instead of language
+    // Do not load anything
     else
     begin
+      FLang.ChangeLanguage(LANG_USER);
       mmSave.Checked := False;
       mmOptions.Enabled := False;
-      LoadLanguageFile(Language);
     end;  //of if
 
     // Load last position?
@@ -289,31 +290,6 @@ begin
 {$ENDIF}
 end;
 
-{ private TMain.AfterUpdate
-
-  Event method that is called by TUpdate when download is finished. }
-
-procedure TMain.AfterUpdate(Sender: TObject; ADownloadedFileName: string);
-begin
-{$IFDEF MSWINDOWS}
-  if (ExtractFileExt(ADownloadedFileName) <> '.reg') then
-  begin
-    // Install update?
-    if (FLang.MessageBox(11, mtQuestion, True) = ID_YES) then
-    begin
-      ExecuteProgram('"'+ ADownloadedFileName +'"');
-      Close;
-    end;  //of if
-
-    // Caption "Search for update"
-    mmUpdate.Caption := FLang.GetString(15);
-    mmUpdate.Enabled := False;
-  end  //of begin
-  else
-    mmDownloadCert.Enabled := False;
-{$ENDIF}
-end;
-
 { private TMain.Alert
 
   Event that is called when alert was started. }
@@ -363,11 +339,11 @@ begin
   end;  //of if
 end;
 
-{ private TMain.BeforeUpdate
+{ private TMain.OnUpdate
 
   Event that is called by TUpdateCheck when TUpdateCheckThread finds an update. }
 
-procedure TMain.BeforeUpdate(Sender: TObject; const ANewBuild: Cardinal);
+procedure TMain.OnUpdate(Sender: TObject; const ANewBuild: Cardinal);
 {$IFDEF MSWINDOWS}
 var
   Updater: TUpdate;
@@ -400,9 +376,25 @@ begin
   end  //of begin
   else
     mmUpdate.Caption := FLang.GetString(24);
+
+  if (ExtractFileExt(ADownloadedFileName) <> '.reg') then
+  begin
+    // Install update?
+    if (FLang.MessageBox(11, mtQuestion, True) = ID_YES) then
+    begin
+      ExecuteProgram('"'+ ADownloadedFileName +'"');
+      Close;
+    end;  //of if
+
+    // Caption "Search for update"
+    mmUpdate.Caption := FLang.GetString(15);
+    mmUpdate.Enabled := False;
+  end  //of begin
+  else
+    mmDownloadCert.Enabled := False;
 {$ELSE}
 begin
-  FLang.MessageBox([21, NEW_LINE, 22], [ANewBuild], mtInfo, True);
+  FLang.ShowMessage(FLang.Format([21], [ANewBuild]), FLang.GetString(22), mtInformation);
 {$ENDIF}
 end;
 
@@ -436,24 +428,6 @@ begin
   lHour.Caption := ATime;
 end;
 
-{$IFDEF MSWINDOWS}
-
-{ private TMain.GetLangId
-
-  Returns the offset index of a language. }
-
-function TMain.GetLangId(ALang: string): Word;
-begin
-  if (ALang = LANG_ENGLISH) then
-    result := 200
-  else
-    if (ALang = LANG_FRENCH) then
-      result := 300
-    else
-      result := 100;
-end;
-{$ENDIF}
-
 { private TMain.LoadColor
 
   Loads current blink color from config file and sets it. }
@@ -485,7 +459,7 @@ begin
     end;  //of try
 
   except
-    FLang.MessageBox(73, mtError);
+    FLang.ShowMessage(FLang.GetString(73), mtError);
   end;  //of try
 end;
 
@@ -496,36 +470,23 @@ end;
 procedure TMain.LoadFromIni();
 var
   Config: TConfigFile;
-  Language: string;
-  LangID, AlertType: Integer;
+  LocaleId: {$IFDEF MSWINDOWS}Word{$ELSE}string{$ENDIF};
+  AlertType: Integer;
 
 begin
   try
     Config := TConfigFile.Create(FConfigPath);
 
     try
-      // Compability to old version
-      LangID := Config.ReadInteger('Global', 'LangID');
-
-      if (LangID <> -1) then
-      begin
-        case LangID of
-          200: Language := LANG_ENGLISH;
-          300: Language := LANG_FRENCH;
-          else
-               Language := LANG_GERMAN;
-        end;  //of case
-
-      {$IFNDEF MSWINDOWS}
-        Config.Remove('Global', 'LangID');
-      {$ENDIF}
-      end  //of begin
-      else
-        // Load language from config
-        Language := Config.ReadString('Global', 'Lang');
+      // Load language from config
+    {$IFDEF MSWINDOWS}
+      LocaleId := Config.ReadInteger('Global', 'LangID');
+    {$ELSE}
+      LocaleId := Config.ReadString('Global', 'Lang');
+    {$ENDIF}
 
       // Load language file
-      LoadLanguageFile(Language);
+      FLang.Id := LocaleId;
 
       // Load last mode
       mmTimer.Checked := Config.ReadBoolean('Global', 'TimerMode');
@@ -588,101 +549,11 @@ begin
     end;  //of try
 
   except
-    FLang.MessageBox(FLang.Format(75, [FConfigPath]), mtError);
-  end;  //of try
-end;
-
-{ private TMain.LoadLanguageFile
-
-  Loads language file and returns current used language. }
-
-procedure TMain.LoadLanguageFile(var APrefLang: string);
-var
-  Langs: TStringList;
-  i: Word;
-  Item: TMenuItem;
-  LangInList: Boolean;
-{$IFDEF MSWINDOWS}
-  LangID: Word;
-{$ENDIF}
-
-begin
-  // "German" for default
-  if (APrefLang = '') then
-    APrefLang := LANG_GERMAN;
-
-  LangInList := False;
-  Langs := TStringList.Create();
-
-  try
-  {$IFDEF MSWINDOWS}
-    Langs.Append(LANG_GERMAN);
-    Langs.Append(LANG_ENGLISH);
-    Langs.Append(LANG_FRENCH);
-
-    LangID := GetLangId(APrefLang);
-    FLang := TLanguageFile.Create(LangID, Application);
-  {$ELSE}
-    // Open language file
-    FLang := TLanguageFile.Create('', FLangPath);
-
-    // Load all available languages
-    FLang.GetLanguages(Langs);
-  {$ENDIF}
-
-    FLang.AddListener(Self);
-
-    try
-      // Add a menu entry for every found language
-      for i := 0 to Langs.Count -1 do
-      begin
-        Item := TMenuItem.Create(Self);
-        Item.Caption := Langs[i];
-        Item.RadioItem := True;
-        Item.AutoCheck := True;
-
-        // Select current used language menu entry
-        if (Langs[i] = APrefLang) then
-        begin
-        {$IFDEF MSWINDOWS}
-          FLang.Lang := LangID;
-        {$ELSE}
-          FLang.Lang := APrefLang;
-        {$ENDIF}
-          LangInList := True;
-          Item.Checked := True;
-          Item.AutoCheck := True;
-        end;  //of begin
-
-        Item.OnClick := mmLangClick;
-        mmLang.Add(Item);
-      end;  //of for
-
-      // Set loaded language as global
-      SetLanguage(Self);
-
-    finally
-      Langs.Free;
-
-      if not LangInList then
-      begin
-        FLang.MessageBox('Language file does not contain language "'+ APrefLang
-                     +'"! Default language has been loaded!', mtWarning);
-      {$IFDEF MSWINDOWS}
-        FLang.Lang := 100;
-      {$ELSE}
-        FLang.Lang := LANG_GERMAN;
-      {$ENDIF}
-      end;  //of begin
-    end;  //of try
-
-  except
-    Application.MessageBox(PChar('Language file could not be found!'), PChar('Error'), MB_ICONERROR);
+    FLang.ShowMessage(FLang.Format(75, [FConfigPath]), mtError);
   end;  //of try
 end;
 
 {$IFDEF MSWINDOWS}
-
 { private TMain.PowerBroadcast
 
   Event that is called after wakeup (after suspending). }
@@ -714,9 +585,9 @@ begin
       if mmSave.Checked then
       begin
       {$IFDEF MSWINDOWS}
-        Config.WriteInteger('Global', 'LangID', FLang.Lang);
+        Config.WriteInteger('Global', 'LangID', FLang.Id);
       {$ELSE}
-        Config.WriteString('Global', 'Lang', FLang.Lang);
+        Config.WriteString('Global', 'Lang', FLang.Id);
       {$ENDIF}
         Config.WriteBoolean('Global', 'Save', True);
         Config.WriteBoolean('Global', 'TimerMode', mmTimer.Checked);
@@ -766,7 +637,8 @@ begin
     end;  //of try
 
   except
-    FLang.MessageBox(FLang.Format(76, [FConfigPath]), mtError);
+    on E: Exception do
+      FLang.ShowException(FLang.Format(76, [FConfigPath]), E.Message);
   end;  //of try
 end;
 
@@ -779,15 +651,21 @@ var
   i: Byte;
 
 begin
+  {case FLang.Id of
+    LANG_GERMAN:  mmGer.Checked := True;
+    LANG_ENGLISH: mmEng.Checked := True;
+    LANG_FRENCH:  mmFre.Checked := True;
+  end;  //of case
+  }
   with FLang do
   begin
     // Set captions for TMenuItems
-    mmFile.Caption := GetString(31);
-    mmSave.Caption := GetString(32);
-    mmEdit.Caption := GetString(33);
-    mmOptions.Caption := GetString(34);
-    mmTimer.Caption := GetString(35);
-    mmCounter.Caption := GetString(36);
+    mmFile.Caption := GetString(41);
+    mmSave.Caption := GetString(42);
+    mmEdit.Caption := GetString(43);
+    mmOptions.Caption := GetString(44);
+    mmTimer.Caption := GetString(45);
+    mmCounter.Caption := GetString(46);
     mmView.Caption := GetString(20);
     mmLang.Caption := GetString(25);
     mmHelp.Caption := GetString(14);
@@ -799,30 +677,29 @@ begin
     mmInfo.Caption := GetString(17);
 
     // Set captions for "alert type" TRadioGroup
-    rgSounds.Caption := GetString(37);
+    rgSounds.Caption := GetString(47);
 
     for i := 0 to 4 do
-      rgSounds.Items[i] := GetString(i + 38);
+      rgSounds.Items[i] := GetString(i + 48);
 
     // Set captions for "at alert" TGroupBox
-    gpOther.Caption := GetString(43);
-    cbBlink.Caption := GetString(44);
-    bColor.Caption := GetString(45);
-    cbText.Caption := GetString(46);
-    bChange.Caption := GetString(47);
+    gpOther.Caption := GetString(53);
+    cbBlink.Caption := GetString(54);
+    bColor.Caption := GetString(55);
+    cbText.Caption := GetString(56);
+    bChange.Caption := GetString(57);
 
     // Set captions for buttons
-    bAlert.Caption := GetString(48);
-    bStop.Caption := GetString(49);
+    bAlert.Caption := GetString(58);
+    bStop.Caption := GetString(59);
 
     // Set captions for TPopupMenu items
-    pmOpen.Caption := GetString(77);
-    pmClose.Caption := GetString(78);
+    pmOpen.Caption := GetString(87);
+    pmClose.Caption := GetString(88);
   end;  //of with
 end;
 
 {$IFDEF MSWINDOWS}
-
 { private TMain.TrayIconMouseUp
 
   Event that is called when detecting mouse activity. }
@@ -837,11 +714,11 @@ begin
     // Show Balloon hint on left click
     mbLeft:
       if mmTimer.Checked then
-        FTrayIcon.BalloonTip(Format(FLang.GetString(63), [FClock.Alert.GetTime(False)]))
+        FTrayIcon.BalloonTip(Format(FLang.GetString(73), [FClock.Alert.GetTime(False)]))
       else
       begin
         FClock.GetTimeRemaining(Hour, Min, Sec);
-        FTrayIcon.BalloonTip(Format(FLang.GetString(72), [Hour, Min, Sec]));
+        FTrayIcon.BalloonTip(Format(FLang.GetString(82), [Hour, Min, Sec]));
       end;  //of if
 
     // Show PopupMenu on right click
@@ -849,9 +726,7 @@ begin
       pmMenu.Popup(X, Y);
   end;  //of case
 end;
-
 {$ELSE}
-
 { private TMain.TrayMouseUp
 
   Event that is called when detecting mouse activity. }
@@ -867,11 +742,11 @@ begin
     mbLeft:
       begin
         if mmTimer.Checked then
-          FTrayIcon.BalloonHint := Format(FLang.GetString(63), [FClock.Alert.GetTime(False)])
+          FTrayIcon.BalloonHint := Format(FLang.GetString(73), [FClock.Alert.GetTime(False)])
         else
         begin
           FClock.GetTimeRemaining(Hour, Min, Sec);
-          FTrayIcon.BalloonHint := Format(FLang.GetString(72), [Hour, Min, Sec]);
+          FTrayIcon.BalloonHint := Format(FLang.GetString(82), [Hour, Min, Sec]);
         end;  //of if
 
         FTrayIcon.ShowBalloonHint;
@@ -892,7 +767,7 @@ procedure TMain.pmCloseClick(Sender: TObject);
 begin
   // Show confirmation
   with FLang do
-    if (MessageBox([69, NEW_LINE, 70], mtQuestion) = IDYes) then
+    if (ShowMessage(79, 80, mtConfirmation) = IDYES) then
     begin
       bStop.Click;
       Close;
@@ -1101,10 +976,10 @@ begin
     mmTimer.Enabled := False;
     mmCounter.Enabled := False;
 
-    FLang.MessageBox(FLang.Format(62, [FClock.Alert.GetTime(False)]));
+    FLang.ShowMessage(FLang.Format(72, [FClock.Alert.GetTime(False)]));
 
   except
-    FLang.MessageBox(71, mtWarning);
+    FLang.ShowMessage(FLang.GetString(81), mtWarning);
   end;  //of try
 end;
 
@@ -1125,7 +1000,7 @@ begin
 
   // Reset GUI
   Caption := Application.Title;
-  bStop.Caption := FLang.GetString(49);
+  bStop.Caption := FLang.GetString(59);
   bStop.Default := False;
   bStop.Enabled := False;
   bAlert.Enabled := True;
@@ -1156,7 +1031,7 @@ begin
   else
     bChange.Enabled := False;
 
-  FLang.MessageBox(64, mtInfo);
+  FLang.ShowMessage(FLang.GetString(74));
 end;
 
 { TMain.bColorClick
@@ -1182,7 +1057,7 @@ begin
 
   except
     Config.Free;
-    FLang.MessageBox(71, mtError);
+    FLang.ShowMessage(FLang.GetString(71), mtError);
     Exit;
   end;  //of try
 
@@ -1229,12 +1104,12 @@ var
   UserInput: string;
 
 begin
-  UserInput := InputBox(FLang.GetString(65), FLang.GetString(66), pText.Caption);
+  UserInput := InputBox(FLang.GetString(75), FLang.GetString(76), pText.Caption);
 
   // Text length maximum 16 characters
   if (Length(UserInput) > 16) then
   begin
-    FLang.MessageBox([67, NEW_LINE, 68], mtWarning);
+    FLang.ShowMessage(77, 78, mtWarning);
     bChange.Click;
   end  //of begin
   else
@@ -1321,17 +1196,31 @@ begin
   end;  //of begin
 end;
 
-{ TMain.mmLangClick
+{ TMain.mmGerClick
 
-  MainMenu entry that allows to change the current language. }
+  MainMenu entry that allows to change the current language to german. }
 
-procedure TMain.mmLangClick(Sender: TObject);
+procedure TMain.mmGerClick(Sender: TObject);
 begin
-{$IFDEF MSWINDOWS}
-  FLang.ChangeLanguage(Sender, GetLangId((Sender as TMenuItem).Caption));
-{$ELSE}
-  FLang.ChangeLanguage(Sender, (Sender as TMenuItem).Caption);
-{$ENDIF}
+  FLang.ChangeLanguage(LANG_GERMAN);
+end;
+
+{ TMain.mmEngClick
+
+  MainMenu entry that allows to change the current language to english. }
+
+procedure TMain.mmEngClick(Sender: TObject);
+begin
+  FLang.ChangeLanguage(LANG_ENGLISH);
+end;
+
+{ TMain.mmFraClick
+
+  MainMenu entry that allows to change the current language to french. }
+
+procedure TMain.mmFreClick(Sender: TObject);
+begin
+  FLang.ChangeLanguage(LANG_FRENCH);
 end;
 
 { TMain.mmDownloadCertClick
@@ -1480,7 +1369,7 @@ begin
       except
         FTrayIcon.Free;
         FTrayIcon := nil;
-        FLang.MessageBox(79, mtError);
+        FLang.ShowMessage(Flang.GetString(89), mtError);
         Show;
       end;  //of try
     {$ENDIF}

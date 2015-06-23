@@ -45,12 +45,12 @@ object Main: TMain
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   Position = poDefault
-  LCLVersion = '1.2.4.0'
+  LCLVersion = '0.9.30.4'
   object lDp: TLabel
     Left = 144
-    Height = 27
+    Height = 28
     Top = 26
-    Width = 8
+    Width = 9
     Caption = ':'
     Font.CharSet = ANSI_CHARSET
     Font.Color = clBlack
@@ -62,17 +62,17 @@ object Main: TMain
   end
   object lHour: TLabel
     Left = 8
-    Height = 12
+    Height = 13
     Top = 8
-    Width = 42
+    Width = 43
     Caption = '00:00:00'
     ParentColor = False
   end
   object lCopy: TLabel
-    Left = 96
-    Height = 12
-    Top = 257
-    Width = 105
+    Left = 95
+    Height = 13
+    Top = 256
+    Width = 106
     Anchors = [akBottom]
     Caption = '© P.Meisberger 2015'
     Font.CharSet = ANSI_CHARSET
@@ -89,12 +89,12 @@ object Main: TMain
     OnMouseLeave = lCopyMouseLeave
   end
   object lVersion: TLabel
-    Left = 264
-    Height = 12
+    Left = 263
+    Height = 13
     Top = 8
-    Width = 24
+    Width = 25
     Anchors = [akTop, akRight]
-    Caption = 'v 3.2'
+    Caption = 'v 3.3'
     ParentColor = False
   end
   object bAlert: TButton
@@ -122,7 +122,7 @@ object Main: TMain
       Left = 12
       Height = 21
       Top = 18
-      Width = 71
+      Width = 57
       Caption = 'blinken'
       OnClick = cbBlinkClick
       TabOrder = 0
@@ -131,7 +131,7 @@ object Main: TMain
       Left = 12
       Height = 21
       Top = 38
-      Width = 112
+      Width = 89
       Caption = 'Schrift zeigen'
       OnClick = cbTextClick
       TabOrder = 2
@@ -355,6 +355,24 @@ object Main: TMain
       Caption = 'Ansicht'
       object mmLang: TMenuItem
         Caption = 'Sprache wählen'
+        object mmGer: TMenuItem
+          AutoCheck = True
+          Caption = 'Deutsch (German)'
+          RadioItem = True
+          OnClick = mmGerClick
+        end
+        object mmEng: TMenuItem
+          AutoCheck = True
+          Caption = 'Englisch (English)'
+          RadioItem = True
+          OnClick = mmEngClick
+        end
+        object mmFre: TMenuItem
+          AutoCheck = True
+          Caption = 'Français (French)'
+          RadioItem = True
+          OnClick = mmFreClick
+        end
       end
     end
     object mmHelp: TMenuItem

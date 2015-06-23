@@ -54,10 +54,8 @@ object Info: TInfo
     ActivePage = tsInfo
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 0
-    ExplicitWidth = 408
     object tsInfo: TTabSheet
       Caption = 'Infos'
-      ExplicitWidth = 400
       DesignSize = (
         439
         257)
@@ -66,7 +64,7 @@ object Info: TInfo
         Top = 72
         Width = 24
         Height = 14
-        Caption = 'v 3.2'
+        Caption = 'v 3.3'
         Color = clBtnFace
         ParentColor = False
       end
@@ -428,7 +426,6 @@ object Info: TInfo
           '06/2015')
         ReadOnly = True
         TabOrder = 0
-        ExplicitWidth = 302
       end
       object bOk: TButton
         Left = 348
@@ -441,13 +438,11 @@ object Info: TInfo
         Default = True
         ModalResult = 1
         TabOrder = 1
-        ExplicitLeft = 309
       end
     end
     object tsHistory: TTabSheet
       Caption = 'Versions History'
       ImageIndex = 1
-      ExplicitWidth = 400
       DesignSize = (
         439
         257)
@@ -480,6 +475,19 @@ object Info: TInfo
           ''
           'History'
           '--------'
+          ''
+          'Version 3.3  [23.06.15]'
+          ''
+          '- Linux:'
+          '  - Konfigurationsdatei nach $HOME/.gamewake.conf verschoben'
+          '- Windows:'
+          '  - Konfigurationsdatei nach %APPDATA%\gamewake.ini verschoben'
+          '  - 32/64-Bit Bin'#228'rdateien'#39
+          '  - Updates werden nun verschl'#252'sselt '#252'ber https heruntergeladen'
+          '  - IniFileParser v1.1.1'
+          '  - OSUtils v2.2'
+          ''
+          '---------------------------------'
           ''
           'Version 3.2  [10.01.15]'
           ''
@@ -633,7 +641,6 @@ object Info: TInfo
         ReadOnly = True
         ScrollBars = ssVertical
         TabOrder = 0
-        ExplicitWidth = 366
       end
       object bOk2: TButton
         Left = 348
@@ -645,7 +652,6 @@ object Info: TInfo
         Default = True
         ModalResult = 1
         TabOrder = 1
-        ExplicitLeft = 309
       end
     end
   end
