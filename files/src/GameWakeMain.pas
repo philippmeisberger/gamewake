@@ -14,7 +14,7 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Controls, Forms, StdCtrls, ExtCtrls, Menus,
-  Dialogs, GameWakeAPI, PMCWLanguageFile, AlertThread, PMCWUpdater, PMCWOSUtils,
+  Dialogs, GameWakeAPI, PMCWLanguageFile, PMCWUpdater, PMCWOSUtils,
 
 {$IFDEF PORTABLE}
   MMSystem,
@@ -22,7 +22,7 @@ uses
 {$IFDEF MSWINDOWS}
   Windows, Messages, PMCWTrayIconAPI;
 {$ELSE}
-  LCLType;
+  LCLType, Process;
 {$ENDIF}
 
 type
@@ -121,8 +121,8 @@ type
     FUpdateCheck: TUpdateCheck;
     procedure Alert(Sender: TObject);
     procedure OnUpdate(Sender: TObject; const ANewBuild: Cardinal);
-    procedure Blink(Sender: TThread);
-    procedure BlinkEnd(Sender: TThread);
+    procedure Blink(Sender: TObject);
+    procedure BlinkEnd(Sender: TObject);
     procedure Count(Sender: TObject; ATime: string);
   {$IFDEF MSWINDOWS}
     function GetLangId(ALang: string): Word;
@@ -134,6 +134,7 @@ type
   {$ENDIF}
     procedure SaveToIni();
     procedure SetLanguage(Sender: TObject);
+    function Shutdown(): Boolean;
   {$IFDEF MSWINDOWS}
     procedure TrayIconMouseUp(Sender: TObject; AButton: TMouseButton; X, Y: Integer);
   {$ELSE}
@@ -402,7 +403,7 @@ end;
 
   Event that is called by TAlertThread while alert is in progress. }
 
-procedure TMain.Blink(Sender: TThread);
+procedure TMain.Blink(Sender: TObject);
 begin
   if (cbBlink.Checked and (Color = clBtnFace)) then
     Color := FColor
@@ -414,7 +415,7 @@ end;
 
   Event that is called by TAlertThread when alert was stopped. }
 
-procedure TMain.BlinkEnd(Sender: TThread);
+procedure TMain.BlinkEnd(Sender: TObject);
 begin
   Color := clBtnFace;
 end;
@@ -699,7 +700,50 @@ begin
   end;  //of with
 end;
 
-{$IFDEF MSWINDOWS}
+{ private TMain.Shutdown
+
+  Tells the OS to shutdown the computer. }
+
+function TMain.Shutdown(): Boolean;
+{$IFNDEF MSWINDOWS}
+var
+  Process: TProcess;
+
+begin
+  if FileExists('/usr/bin/dbus-send') then
+    try
+      Process := TProcess.Create(nil);
+
+      try
+        Process.Executable := '/usr/bin/dbus-send';
+
+        with Process.Parameters do
+        begin
+          Append('--system');
+          Append('--print-reply');
+          Append('--dest=org.freedesktop.ConsoleKit');
+          Append('/org/freedesktop/ConsoleKit/Manager');
+          Append('org.freedesktop.ConsoleKit.Manager.Stop');
+        end;  //of with
+
+        Process.Execute;
+        Result := True;
+
+      finally
+        Process.Free;
+      end;  //of try
+
+    except
+      Result := False;
+    end  //of try
+  else
+    Result := False;
+end;
+{$ELSE}
+begin
+  Result := ExitWindows(EWX_SHUTDOWN or EWX_FORCE);
+end;
+
 { private TMain.TrayIconMouseUp
 
   Event that is called when detecting mouse activity. }
@@ -726,7 +770,8 @@ begin
       pmMenu.Popup(X, Y);
   end;  //of case
 end;
-{$ELSE}
+{$ENDIF}
+{$IFNDEF MSWINDOWS}
 { private TMain.TrayMouseUp
 
   Event that is called when detecting mouse activity. }
@@ -848,7 +893,7 @@ begin
 {$IFDEF PORTABLE}
   PlaySound(PChar('BELL'), hInstance, SND_ASYNC or SND_MEMORY or SND_RESOURCE);
 {$ELSE}
-  PlaySound(FPath +'bell.wav');
+  FClock.PlaySound(FPath +'bell.wav');
 {$ENDIF}
 end;
 
@@ -861,7 +906,7 @@ begin
 {$IFDEF PORTABLE}
   PlaySound(PChar('HORN'), hInstance, SND_ASYNC or SND_MEMORY or SND_RESOURCE);
 {$ELSE}
-  PlaySound(FPath +'horn.wav');
+  FClock.PlaySound(FPath +'horn.wav');
 {$ENDIF}
 end;
 
@@ -874,7 +919,7 @@ begin
 {$IFDEF PORTABLE}
   SysUtils.Beep();
 {$ELSE}
-  PlaySound(FPath +'bing.wav');
+  FClock.PlaySound(FPath +'bing.wav');
 {$ENDIF}
 end;
 
@@ -887,7 +932,7 @@ begin
 {$IFDEF PORTABLE}
   PlaySound(PChar('BEEP'), hInstance, SND_ASYNC or SND_MEMORY or SND_RESOURCE);
 {$ELSE}
-  PlaySound(FPath +'beep.wav');
+  FClock.PlaySound(FPath +'beep.wav');
 {$ENDIF}
 end;
 

@@ -1,6 +1,6 @@
 { *********************************************************************** }
 {                                                                         }
-{ Game Wake Cross API Interface Unit v3.2                                 }
+{ Game Wake API Interface Unit                                            }
 {                                                                         }
 { Copyright (c) 2011-2015 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
@@ -13,9 +13,15 @@ unit GameWakeAPI;
 interface
 
 uses
-  SysUtils, Classes, ExtCtrls, Graphics, AlertThread, PMCWIniFileParser;
+{$IFNDEF MSWINDOWS}
+  Process,
+{$ENDIF}
+  SysUtils, Classes, ExtCtrls, Graphics, PMCWIniFileParser;
 
 type
+  { TAlertType }
+  TAlertType = (atClock, atHorn, atBing, atBeep, atShutdown, atNone);
+
   { TConfigFile }
   TConfigFile = class(TIniFile)
   public
@@ -26,13 +32,13 @@ type
   end;
 
   { TTime }
-  TTime = class(TObject)    
+  TTime = class(TObject)
   protected
     FCombine: Boolean;
-    FHour, FMin, FSec: Word;
-    procedure SetBasicTime(ANewMin, ANewSec: Word);
+    FHour, FMin, FSec: Byte;
+    procedure SetBasicTime(ANewMin, ANewSec: Byte);
   public
-    constructor Create(AHour, AMin, ASec: Word; ACombine: Boolean);
+    constructor Create(AHour, AMin, ASec: Byte; ACombine: Boolean);
     function ChangeMode(): TTime; virtual; abstract;
     function DecrementHours(): string; virtual; abstract;
     function DecrementMinutes(): string; virtual;
@@ -44,16 +50,16 @@ type
     function IncrementHours(): string; virtual; abstract;
     function IncrementMinutes(): string;
     procedure IncrementSeconds();
-    procedure SetHour(ANewHour: Word); virtual; abstract;
-    procedure SetMin(ANewMin: Word); virtual;
+    procedure SetHour(ANewHour: Byte); virtual; abstract;
+    procedure SetMin(ANewMin: Byte); virtual;
     procedure SetSystemTime();
-    procedure SetTime(ANewHours, ANewMin: Word); overload; virtual; abstract;
-    procedure SetTime(ANewHours, ANewMin, ANewSec: Word); overload; virtual; abstract;
+    procedure SetTime(ANewHours, ANewMin: Byte); overload; virtual; abstract;
+    procedure SetTime(ANewHours, ANewMin, ANewSec: Byte); overload; virtual; abstract;
     procedure Reset(); virtual; abstract;
     { external }
-    property Hour: Word read FHour write SetHour;
-    property Min: Word read FMin write SetMin;
-    property Sec: Word read FSec;
+    property Hour: Byte read FHour write SetHour;
+    property Min: Byte read FMin write SetMin;
+    property Sec: Byte read FSec;
     property Combine: Boolean read FCombine write FCombine;
   end;
 
@@ -65,9 +71,9 @@ type
     function DecrementHours(): string; override;
     function IncrementHours(): string; override;
     procedure Reset(); override;
-    procedure SetHour(ANewHour: Word); override;
-    procedure SetTime(ANewHour, ANewMin: Word); override;
-    procedure SetTime(ANewHour, ANewMin, ANewSec: Word); override;
+    procedure SetHour(ANewHour: Byte); override;
+    procedure SetTime(ANewHour, ANewMin: Byte); override;
+    procedure SetTime(ANewHour, ANewMin, ANewSec: Byte); override;
   end;
 
   { TCounterMode }
@@ -79,34 +85,33 @@ type
     function DecrementMinutes(): string; override;
     function IncrementHours(): string; override;
     procedure Reset(); override;
-    procedure SetHour(ANewHour: Word); override;
-    procedure SetMin(ANewMin: Word); override;
-    procedure SetTime(ANewHour, ANewMin: Word); override;
-    procedure SetTime(ANewHour, ANewMin, ANewSec: Word); override;
+    procedure SetHour(ANewHour: Byte); override;
+    procedure SetMin(ANewMin: Byte); override;
+    procedure SetTime(ANewHour, ANewMin: Byte); override;
+    procedure SetTime(ANewHour, ANewMin, ANewSec: Byte); override;
   end;
 
   { Alert events }
-  TOnAlertStartEvent = procedure(Sender: TObject) of object;
   TOnCountEvent = procedure(Sender: TObject; ATime: string) of object;
-  TOnAlertStopEvent = procedure(Sender: TObject) of object;
 
   { Exception class }
   EInvalidTimeException = class(Exception);
-  
+
   { TClock }
   TClock = class(TObject)
   private
     FTimer: TTimer;
     FAlertType: TAlertType;
-    FAlertEnabled, FTimerMode: Boolean;
+    FAlertThread: TThread;
+    FAlertEnabled,
+    FTimerMode: Boolean;
     FTime: TTimerMode;
     FTimeAlert: TTime;
-    FAlertThread: TAlertThread;
-    FOnAlert: TOnAlertEvent;
-    FOnAlertStop: TOnAlertStopEvent;
     FOnCount: TOnCountEvent;
-    FOnAlertEnd: TOnAlertEndEvent;
-    FOnAlertStart: TOnAlertStartEvent;
+    FOnAlert,
+    FOnAlertEnd,
+    FOnAlertStop,
+    FOnAlertStart: TNotifyEvent;
   public
     constructor Create(AOwner: TComponent; ATimerMode: Boolean;
       ACombine: Boolean = False);
@@ -114,16 +119,17 @@ type
     procedure ChangeMode(ATimerMode: Boolean);
     procedure Count(Sender: TObject);
     procedure GetTimeRemaining(var AHour, AMin, ASec: string);
+    function PlaySound(AFileName: string; ASynchronized: Boolean = False): Boolean;
     procedure StartAlert();
     procedure StopAlert();
     { external }
     property Alert: TTime read FTimeAlert write FTimeAlert;
     property AlertEnabled: Boolean read FAlertEnabled;
     property AlertType: TAlertType read FAlertType write FAlertType;
-    property OnAlert: TOnAlertEvent read FOnAlert write FOnAlert;
-    property OnAlertEnd: TOnAlertEndEvent read FOnAlertEnd write FOnAlertEnd;
-    property OnAlertStart: TOnAlertStartEvent read FOnAlertStart write FOnAlertStart;
-    property OnAlertStop: TOnAlertStopEvent read FOnAlertStop write FOnAlertStop;
+    property OnAlert: TNotifyEvent read FOnAlert write FOnAlert;
+    property OnAlertEnd: TNotifyEvent read FOnAlertEnd write FOnAlertEnd;
+    property OnAlertStart: TNotifyEvent read FOnAlertStart write FOnAlertStart;
+    property OnAlertStop: TNotifyEvent read FOnAlertStop write FOnAlertStop;
     property OnCount: TOnCountEvent read FOnCount write FOnCount;
     property Time: TTimerMode read FTime write FTime;
     property Timer: TTimer read FTimer;
@@ -131,6 +137,8 @@ type
   end;
 
 implementation
+
+uses AlertThread;
 
 { TConfigFile }
 
@@ -185,7 +193,7 @@ end;
 
   General constructor for creating a TTime instance. }
 
-constructor TTime.Create(AHour, AMin, ASec: Word; ACombine: Boolean);
+constructor TTime.Create(AHour, AMin, ASec: Byte; ACombine: Boolean);
 begin
   inherited Create;
   FHour := AHour;
@@ -198,7 +206,7 @@ end;
 
   Sets the current minutes and seconds. }
 
-procedure TTime.SetBasicTime(ANewMin, ANewSec: Word);
+procedure TTime.SetBasicTime(ANewMin, ANewSec: Byte);
 begin
   SetMin(ANewMin);
 
@@ -285,7 +293,7 @@ begin
   if (FMin = 59) then
   begin
     FMin := 0;
-     
+
     if FCombine then
       IncrementHours();
   end  //of begin
@@ -316,7 +324,7 @@ end;
 
   Sets minutes to an valid value. }
 
-procedure TTime.SetMin(ANewMin: Word);
+procedure TTime.SetMin(ANewMin: Byte);
 begin
   if (ANewMin > 59) then
     FMin := 59
@@ -399,7 +407,7 @@ end;
 
   Sets hour to an valid value. }
 
-procedure TTimerMode.SetHour(ANewHour: Word);
+procedure TTimerMode.SetHour(ANewHour: Byte);
 begin
   if (ANewHour > 23) then
     FHour := 23
@@ -411,7 +419,7 @@ end;
 
   Sets current hours and minutes. }
 
-procedure TTimerMode.SetTime(ANewHour, ANewMin: Word);
+procedure TTimerMode.SetTime(ANewHour, ANewMin: Byte);
 begin
   SetTime(ANewHour, ANewMin, 0);
 end;
@@ -420,7 +428,7 @@ end;
 
   Sets current hours, minutes and seconds. }
 
-procedure TTimerMode.SetTime(ANewHour, ANewMin, ANewSec: Word);
+procedure TTimerMode.SetTime(ANewHour, ANewMin, ANewSec: Byte);
 begin
   SetHour(ANewHour);
   SetBasicTime(ANewMin, ANewSec);
@@ -492,7 +500,7 @@ begin
     Inc(FHour);
 
   result := GetHour();
-end;    
+end;
 
 { public TCounterMode.Reset
 
@@ -507,7 +515,7 @@ end;
 
   Sets hour to an valid value. }
 
-procedure TCounterMode.SetHour(ANewHour: Word);
+procedure TCounterMode.SetHour(ANewHour: Byte);
 begin
   if not ((ANewHour = 0) and (FMin = 0)) then
     FHour := ANewHour;
@@ -517,7 +525,7 @@ end;
 
   Sets minutes to an valid value. }
 
-procedure TCounterMode.SetMin(ANewMin: Word);
+procedure TCounterMode.SetMin(ANewMin: Byte);
 begin
   if not ((ANewMin = 0) and (FHour = 0)) then
     inherited SetMin(ANewMin);
@@ -527,7 +535,7 @@ end;
 
   Sets current hours and minutes. }
 
-procedure TCounterMode.SetTime(ANewHour, ANewMin: Word);
+procedure TCounterMode.SetTime(ANewHour, ANewMin: Byte);
 begin
   SetTime(ANewHour, ANewMin, 0);
 end;
@@ -536,7 +544,7 @@ end;
 
   Sets current hours, minutes and seconds. }
 
-procedure TCounterMode.SetTime(ANewHour, ANewMin, ANewSec: Word);
+procedure TCounterMode.SetTime(ANewHour, ANewMin, ANewSec: Byte);
 begin
   if ((ANewHour = 0) and (ANewMin = 0)) then
     raise EInvalidTimeException.Create('Hours and Minutes must not be 0!');
@@ -562,7 +570,7 @@ begin
   FAlertThread := nil;
   FTime := TTimerMode.Create(True);
 
-  // TTimerMode as initial mode? 
+  // TTimerMode as initial mode?
   if ATimerMode then
   begin
     FTime.SetSystemTime();
@@ -638,19 +646,15 @@ begin
          Exit;
 
       // Start playing sound
-      FAlertThread := TAlertThread.Create(FAlertType);
+      FAlertThread := TAlertThread.Create(Self, FAlertType);
 
       with FAlertThread do
       begin
         OnAlertEnd := FOnAlertEnd;
         OnAlert := FOnAlert;
         OnAlertStart := FOnAlertStart;
-        OnAlertStop := OnStop;
-      {$IFNDEF MSWINDOWS}
+        OnAlertStop := (FAlertThread as TAlertThread).OnStop;
         Start;
-      {$ELSE}
-        Resume;
-      {$ENDIF}
       end;  //of with
     end;  //of begin
 
@@ -679,6 +683,51 @@ begin
   AHour := Format('%.*d', [2, currentHour]);
   AMin := Format('%.*d', [2, currentMin]);
   ASec := Format('%.*d', [2, currentSec]);
+end;
+
+{ public TClock.PlaySound
+
+  Plays a *.wav file. }
+
+function TClock.PlaySound(AFileName: string; ASynchronized: Boolean = False): Boolean;
+{$IFNDEF MSWINDOWS}
+var
+  Process : TProcess;
+{$ENDIF}
+begin
+  //AFileName := ExtractFilePath(ParamStr(0)) + AFileName;
+
+  if ((ExtractFileExt(AFileName) <> '.wav') or (not FileExists(AFileName))) then
+  begin
+    Result := False;
+    SysUtils.Beep;
+    Exit;
+  end;  //of begin
+
+{$IFDEF MSWINDOWS}
+  if ASynchronized then
+    SndPlaySound(PChar(AFileName), SND_SYNC)
+  else
+    SndPlaySound(PChar(AFileName), SND_ASYNC);
+
+  Result := True;
+{$ELSE}
+  Process := TProcess.Create(nil);
+
+  try
+    Process.Executable := '/usr/bin/aplay';
+    Process.Parameters.Append(AFileName);
+
+    if ASynchronized then
+      Process.Options := Process.Options + [poWaitOnExit];
+
+   Process.Execute;
+   Result := True;
+
+  finally
+    Process.Free;
+  end;  //of try
+{$ENDIF}
 end;
 
 { public TClock.StartAlert

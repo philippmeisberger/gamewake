@@ -14,7 +14,7 @@ interface
 
 uses
   Graphics, Controls, Forms, StdCtrls, ExtCtrls, ComCtrls, SysUtils, Classes,
-  PMCWOSUtils;
+  PMCWUpdater;
 
 type
   { TInfo }
@@ -47,9 +47,9 @@ procedure TInfo.FormCreate(Sender: TObject);
 begin
 {$IFDEF PORTABLE}
   lBuild.WordWrap := True;
-  lBuild.Caption := 'Build: '+ IntToStr(GetBuildNumber()) +' Portable';
+  lBuild.Caption := 'Build: '+ IntToStr(TUpdateCheck.GetBuildNumber()) +' Portable';
 {$ELSE}
-  lBuild.Caption := 'Build: '+ IntToStr(GetBuildNumber());
+  lBuild.Caption := 'Build: '+ IntToStr(TUpdateCheck.GetBuildNumber());
 {$ENDIF}
 end;
 

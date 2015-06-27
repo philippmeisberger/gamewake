@@ -13,53 +13,45 @@ unit AlertThread;
 interface
 
 uses
-{$IFDEF MSWINDOWS}
-  Windows,
-{$ENDIF}
-  PMCWOSUtils, Classes;
+  Classes, GameWakeAPI;
 
 type
-  { TAlertType }
-  TAlertType = (atClock, atHorn, atBing, atBeep, atShutdown, atNone);
-
-  { Events }
-  TOnAlertEvent = procedure(Sender: TThread) of object;
-  TOnAlertEndEvent = procedure(Sender: TThread) of object;
-
   { TAlertThread }
   TAlertThread = class(TThread)
   private
+    FClock: TClock;
     FAlertType: TAlertType;
-    FOnAlert: TOnAlertEvent;
-    FOnAlertEnd: TOnAlertEndEvent;
+    FOnAlert,
+    FOnAlertEnd: TNotifyEvent;
     procedure DoNotifyOnAlert;
     procedure DoNotifyOnAlertEnd;
   protected
     procedure Execute; override;
   public
-    constructor Create(AAlertType: TAlertType);
-    { external }
+    constructor Create(AClock: TClock; AAlertType: TAlertType);
     procedure OnStop(Sender: TObject);
-    property OnAlert: TOnAlertEvent read FOnAlert write FOnAlert;
-    property OnAlertEnd: TOnAlertEndEvent read FOnAlertEnd write FOnAlertEnd;
+    { external }
+    property OnAlert: TNotifyEvent read FOnAlert write FOnAlert;
+    property OnAlertEnd: TNotifyEvent read FOnAlertEnd write FOnAlertEnd;
   end;
 
 implementation
 
 { TAlertThread }
 
-{ TAlertThread.Create
+{ public TAlertThread.Create
 
   Constructor for creating a TAlertThread instance. }
 
-constructor TAlertThread.Create(AAlertType: TAlertType);
+constructor TAlertThread.Create(AClock: TClock; AAlertType: TAlertType);
 begin
   inherited Create(False);
   FreeOnTerminate := True;
+  FClock := AClock;
   FAlertType := AAlertType;
 end;
 
-{ TAlertThread.OnStop
+{ public TAlertThread.OnStop
 
   Event that is called when user stops alert. }
 
@@ -69,7 +61,7 @@ begin
   FAlertType := atNone;
 end;
 
-{ TAlertThread.Execute
+{ protected TAlertThread.Execute
 
   Thread main method that plays a *.wav file. }
 
@@ -87,11 +79,11 @@ begin
   while not Terminated do
   begin
     Synchronize(DoNotifyOnAlert);
-  
+
     // Play *.wav file
     case FAlertType of
-      atClock: PlaySound(Path +'bell.wav', True);
-      atHorn:  PlaySound(Path +'horn.wav', True);
+      atClock: FClock.PlaySound(Path +'bell.wav', True);
+      atHorn:  FClock.PlaySound(Path +'horn.wav', True);
     {$IFDEF MSWINDOWS}
       atBing:
         begin
@@ -99,9 +91,9 @@ begin
           Sleep(1000);
         end;  //of begin
     {$ELSE}
-      atBing:  PlaySound(Path +'bing.wav', True);
+      atBing:  FClock.PlaySound(Path +'bing.wav', True);
     {$ENDIF}
-      atBeep:  PlaySound(Path +'beep.wav', True);
+      atBeep:  FClock.PlaySound(Path +'beep.wav', True);
       else
         Break;
     end;  //of case
@@ -110,7 +102,7 @@ begin
   Synchronize(DoNotifyOnAlertEnd);
 end;
 
-{ TAlertThread.DoNotifyOnAlert
+{ private TAlertThread.DoNotifyOnAlert
 
   Synchronizable event that is called while alert is in progress. }
 
@@ -120,7 +112,7 @@ begin
     OnAlert(Self);
 end;
 
-{ TAlertThread.DoNotifyOnAlert
+{ private TAlertThread.DoNotifyOnAlert
 
   Synchronizable event that is called while alert ends. }
 
