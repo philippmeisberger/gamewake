@@ -353,6 +353,8 @@ begin
     if not FLanguages.ContainsKey(LocaleId) then
       raise ELanguageException.Create('No languages not found in language file!');
   end;  //of begin
+
+  FLangId := FLanguages[LocaleId];
 {$ELSE}
   if (FLanguages.Find(LocaleId) = -1) then
   begin
@@ -362,8 +364,9 @@ begin
     if (FLanguages.Find(LocaleId) = -1) then
       raise ELanguageException.Create('No languages not found in language file!');
   end;  //of begin
-{$ENDIF}
+
   FLangId := WideString(FLanguages[LocaleId]);
+{$ENDIF}
   FLocale := LocaleId;
 
   // Notify all listeners

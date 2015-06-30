@@ -15,6 +15,8 @@ interface
 uses
 {$IFNDEF MSWINDOWS}
   Process,
+{$ELSE}
+  MMSystem,
 {$ENDIF}
   SysUtils, Classes, ExtCtrls, Graphics, PMCWIniFileParser;
 

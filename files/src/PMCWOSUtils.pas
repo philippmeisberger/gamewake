@@ -369,7 +369,7 @@ begin
      // Enable redirection to 32 Bit registry hive
      Result := Result or KEY_WOW64_32KEY;
 {$ELSE}
-  if (A64Bit and (TOSVersion.Architecture = osaIntelx64)) then
+  if (A64Bit and (TOSVersion.Architecture = arIntelX64)) then
     // Enable redirection to 64 Bit registry hive
     Result := Result or KEY_WOW64_64KEY;
 {$ENDIF}

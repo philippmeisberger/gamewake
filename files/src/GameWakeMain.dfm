@@ -3238,6 +3238,24 @@ object Main: TMain
       Caption = 'Ansicht'
       object mmLang: TMenuItem
         Caption = 'Sprache w'#228'hlen'
+        object mmGer: TMenuItem
+          AutoCheck = True
+          Caption = 'Deutsch (German)'
+          RadioItem = True
+          OnClick = mmGerClick
+        end
+        object mmEng: TMenuItem
+          AutoCheck = True
+          Caption = 'English (English)'
+          RadioItem = True
+          OnClick = mmEngClick
+        end
+        object mmFre: TMenuItem
+          AutoCheck = True
+          Caption = 'Fran'#231'ais (French)'
+          RadioItem = True
+          OnClick = mmFreClick
+        end
       end
     end
     object mmHelp: TMenuItem

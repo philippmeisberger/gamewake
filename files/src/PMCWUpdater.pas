@@ -507,7 +507,7 @@ end;
 function TUpdate.Execute(): Boolean;
 begin
   if ((FRemoteFileName = '') or (FLocalFileName = '')) then
-    raise EInvalidArgument.Create('Missing argument: "RemoteFileName" or "LocalFileName"!');
+    raise EArgumentException.Create('Missing argument: "RemoteFileName" or "LocalFileName"!');
 
   Result := Download(FRemoteFileName, FLocalFileName, FDownloadDirectory);
 end;

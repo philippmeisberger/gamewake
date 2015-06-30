@@ -423,7 +423,7 @@ object Info: TInfo
           'werden. Die Lizenz kann unter http://www.d-fsl.de abgerufen '
           'werden.'
           ''
-          '06/2015')
+          '07/2015')
         ReadOnly = True
         TabOrder = 0
       end
@@ -476,7 +476,7 @@ object Info: TInfo
           'History'
           '--------'
           ''
-          'Version 3.3  [23.06.15]'
+          'Version 3.3  [??.07.15]'
           ''
           '- Linux:'
           '  - Konfigurationsdatei nach $HOME/.gamewake.conf verschoben'
@@ -637,7 +637,7 @@ object Info: TInfo
           '(mit Magazin) zuschicken. Meine Adresse erfahren Sie unter '
           '"team@pm-codeworks.de".'
           ''
-          '06/2015')
+          '07/2015')
         ReadOnly = True
         ScrollBars = ssVertical
         TabOrder = 0

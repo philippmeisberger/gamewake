@@ -33,9 +33,6 @@ type
     bAlert: TButton;
     bStop: TButton;
     lDp: TLabel;
-    mmGer: TMenuItem;
-    mmEng: TMenuItem;
-    mmFre: TMenuItem;
     mmDownloadCert: TMenuItem;
     pmClose: TMenuItem;
     pmOpen: TMenuItem;
@@ -75,6 +72,9 @@ type
     mmView: TMenuItem;
     mmLang: TMenuItem;
     mmReport: TMenuItem;
+    mmGer: TMenuItem;
+    mmEng: TMenuItem;
+    mmFre: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure mmDownloadCertClick(Sender: TObject);
@@ -124,9 +124,6 @@ type
     procedure Blink(Sender: TObject);
     procedure BlinkEnd(Sender: TObject);
     procedure Count(Sender: TObject; ATime: string);
-  {$IFDEF MSWINDOWS}
-    function GetLangId(ALang: string): Word;
-  {$ENDIF}
     procedure LoadColor();
     procedure LoadFromIni();
   {$IFDEF MSWINDOWS}
@@ -203,9 +200,15 @@ begin
 
   // Setup language
   FLang := TLanguageFile.Create(Self);
+{$IFDEF MSWINDOWS}
+  FLang.AddLanguage(LANG_GERMAN, 100);
+  FLang.AddLanguage(LANG_ENGLISH, 200);
+  FLang.AddLanguage(LANG_FRENCH, 300);
+{$ELSE}
   FLang.AddLanguage(LANG_GERMAN, '&Deutsch');
   FLang.AddLanguage(LANG_ENGLISH, '&English');
   FLang.AddLanguage(LANG_FRENCH, '&Français');
+{$ENDIF}
 
   // Init config file access
   Config := TConfigFile.Create(FConfigPath);
@@ -224,6 +227,14 @@ begin
       mmSave.Checked := False;
       mmOptions.Enabled := False;
     end;  //of if
+
+    // Set language selection
+    case FLang.Id of
+      200: mmEng.Checked := True;
+      300: mmFre.Checked := True;
+      else
+           mmGer.Checked := True;
+    end;  //of case
 
     // Load last position?
     if not Config.ReadBoolean('Global', 'SavePos') then
@@ -350,25 +361,38 @@ var
   Updater: TUpdate;
 
 begin
-  // Show dialog: Ask for permitting download
-  if (FLang.MessageBox([21, NEW_LINE, 22], [ANewBuild], mtQuestion, True) = IDYES) then
+  // Ask user to permit download
+  if (FLang.ShowMessage(FLang.Format(21, [ANewBuild]), FLang.GetString(22),
+    mtConfirmation) = IDYES) then
   begin
     // init TUpdate instance
     Updater := TUpdate.Create(Self, FLang);
 
     try
+      // Set updater options
       with Updater do
       begin
         Title := FLang.GetString(24);
+        FileNameLocal := 'Game Wake Setup.exe';
 
       {$IFDEF WIN64}
-        Download('game_wake_setup64.exe', 'Game Wake Setup.exe');
+        FileNameRemote := 'game_wake_setup64.exe';
       {$ELSE}
-        if IsWindows64() then
-          Download('game_wake_setup64.exe', 'Game Wake Setup.exe')
+        // Ask user to permit download of 64-Bit version
+        if ((TOSVersion.Architecture = arIntelX64) and (FLang.ShowMessage(
+          FLang.Format([34, 35], ['Game Wake']), mtConfirmation) = IDYES)) then
+          FileNameRemote := 'game_wake_setup64.exe'
         else
-          Download('game_wake_setup.exe', 'Game Wake Setup.exe')
+          FileNameRemote := 'game_wake_setup.exe';
       {$ENDIF}
+      end;  //of begin
+
+      // Successfully downloaded update?
+      if Updater.Execute() then
+      begin
+        // Caption "Search for update"
+        mmUpdate.Caption := FLang.GetString(15);
+        mmUpdate.Enabled := False;
       end;  //of begin
 
     finally
@@ -377,22 +401,6 @@ begin
   end  //of begin
   else
     mmUpdate.Caption := FLang.GetString(24);
-
-  if (ExtractFileExt(ADownloadedFileName) <> '.reg') then
-  begin
-    // Install update?
-    if (FLang.MessageBox(11, mtQuestion, True) = ID_YES) then
-    begin
-      ExecuteProgram('"'+ ADownloadedFileName +'"');
-      Close;
-    end;  //of if
-
-    // Caption "Search for update"
-    mmUpdate.Caption := FLang.GetString(15);
-    mmUpdate.Enabled := False;
-  end  //of begin
-  else
-    mmDownloadCert.Enabled := False;
 {$ELSE}
 begin
   FLang.ShowMessage(FLang.Format([21], [ANewBuild]), FLang.GetString(22), mtInformation);
@@ -560,9 +568,6 @@ end;
   Event that is called after wakeup (after suspending). }
 
 procedure TMain.PowerBroadcast(var AMsg: TMessage);
-const
-  PBT_APMRESUMESUSPEND = $0007;
-
 begin
   if (AMsg.WParam = PBT_APMRESUMESUSPEND) then
     FClock.Time.SetSystemTime();
@@ -652,12 +657,6 @@ var
   i: Byte;
 
 begin
-  {case FLang.Id of
-    LANG_GERMAN:  mmGer.Checked := True;
-    LANG_ENGLISH: mmEng.Checked := True;
-    LANG_FRENCH:  mmFre.Checked := True;
-  end;  //of case
-  }
   with FLang do
   begin
     // Set captions for TMenuItems
@@ -740,8 +739,46 @@ begin
     Result := False;
 end;
 {$ELSE}
+const
+  SE_SHUTDOWN_NAME = 'SeShutdownPrivilege';
+  SHTDN_REASON_MAJOR_APPLICATION = $00040000;
+  SHTDN_REASON_MINOR_MAINTENANCE = 1;
+
+var
+  TokenHandle: THandle;
+  NewState, PreviousState: TTokenPrivileges;
+  BufferLength, ReturnLength: Cardinal;
+  Luid: Int64;
+
 begin
-  Result := ExitWindows(EWX_SHUTDOWN or EWX_FORCE);
+  if ((Win32Platform = VER_PLATFORM_WIN32_NT)) then
+  try
+    if not OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES or
+      TOKEN_QUERY, TokenHandle) then
+      raise Exception.Create(SysErrorMessage(GetLastError()));
+
+    // Get LUID of shutdown privilege
+    if not LookupPrivilegeValue(nil, SE_SHUTDOWN_NAME, Luid) then
+      raise Exception.Create(SysErrorMessage(GetLastError()));
+
+    // Create new shutdown privilege
+    NewState.PrivilegeCount := 1;
+    NewState.Privileges[0].Luid := Luid;
+    NewState.Privileges[0].Attributes := SE_PRIVILEGE_ENABLED;
+    BufferLength := SizeOf(PreviousState);
+    ReturnLength := 0;
+
+    // Set the shutdown privilege
+    if not AdjustTokenPrivileges(TokenHandle, False, NewState, BufferLength,
+      PreviousState, ReturnLength) then
+      raise Exception.Create(SysErrorMessage(GetLastError()));
+
+  finally
+    CloseHandle(TokenHandle);
+  end;  //of try
+
+  Result := ExitWindowsEx(EWX_SHUTDOWN or EWX_FORCE, SHTDN_REASON_MAJOR_APPLICATION or
+    SHTDN_REASON_MINOR_MAINTENANCE);
 end;
 
 { private TMain.TrayIconMouseUp
@@ -1279,8 +1316,8 @@ var
 
 begin
   // Certificate already installed?
-  if (PMCertExists() and (FLang.MessageBox([27, NEW_LINE, 28],
-    mtQuestion) = IDNO)) then
+  if (TUpdate.PMCertificateExists() and (FLang.ShowMessage(27, 28,
+    mtConfirmation) = IDNO)) then
     Exit;
 
   // Init downloader
@@ -1291,8 +1328,14 @@ begin
     with Updater do
     begin
       Title := FLang.GetString(16);
-      DownloadCertificate();
+      FileNameRemote := 'cert.reg';
+      FileNameLocal := 'PMCW-Certificate.reg';
+      DownloadDirectory := GetTempDir();
     end;  //of begin
+
+    // Successfully downloaded certificate?
+    if Updater.Execute() then
+      mmDownloadCert.Enabled := False;
 
   finally
     Updater.Free;

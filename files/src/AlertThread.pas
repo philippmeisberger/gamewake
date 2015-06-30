@@ -13,6 +13,9 @@ unit AlertThread;
 interface
 
 uses
+{$IFDEF MSWINDOWS}
+  SysUtils,
+{$ENDIF}
   Classes, GameWakeAPI;
 
 type
@@ -87,7 +90,7 @@ begin
     {$IFDEF MSWINDOWS}
       atBing:
         begin
-          MessageBeep(0);
+          Beep();
           Sleep(1000);
         end;  //of begin
     {$ELSE}
