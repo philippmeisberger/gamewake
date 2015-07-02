@@ -2,11 +2,10 @@ gamewake (3.3) stable; urgency=low
 
   * Minor release
   * Linux:
-    * Moved configuration file to $HOME/.gamewake.conf
+    * Moved configuration file to $HOME/.gamewake
   * Windows:
-    * Moved configuration file to %APPDATA%\gamewake.ini
+    * Moved configuration file to %APPDATA%\Game Wake\gamewake.ini
     * 32/64-Bit binaries
-    * Updates are now downloaded encrypted via https
   * IniFileParser v1.1.1
   * OSUtils v2.2
 

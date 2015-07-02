@@ -44,14 +44,17 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 Source: "{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\Windows\ReadMe.pdf"; DestDir: "{app}"; Flags: isreadme
+;Source: "..\Windows\ReadMe.pdf"; DestDir: "{app}"; Flags: isreadme
 Source: "..\bell.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\beep.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\horn.wav"; DestDir: "{app}"; Flags: ignoreversion
-Source: "ssleay32.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "libeay32.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "ssleay32.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "libeay32.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Windows\Updater.exe"; DestDir: "{tmp}"; Flags: dontcopy
 Source: "..\Windows\version.txt"; DestDir: "{tmp}"; Flags: dontcopy
+
+[Dirs]
+Name: "{userappdata}\Game Wake"; Flags: uninsalwaysuninstall
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
@@ -60,6 +63,15 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: 
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "Game Wake ausführen"; Flags: postinstall shellexec
+
+[Registry]
+Root: HKCU; Subkey: "SOFTWARE\PM Code Works\{#MyAppName}"; ValueType: string; ValueName: "Architecture"; ValueData: "x64"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "SOFTWARE\PM Code Works\{#MyAppName}"; ValueType: string; ValueName: "Build"; ValueData: "{#Build}"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "SOFTWARE\PM Code Works\{#MyAppName}"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "SOFTWARE\PM Code Works"; Flags: uninsdeletekeyifempty  
+
+[UninstallDelete]
+Type: files; Name: "{userappdata}\Game Wake\gamewake.ini"
 
 [Messages]
 BeveledLabel=Inno Setup
@@ -110,15 +122,18 @@ end;
 function InitializeSetup(): Boolean;
 var 
   CurBuild, ErrorCode: Integer;
-  Build, TempDir: string;
+  Build, Uninstall, TempDir: string;
 
 begin
   Result := True;
-  CloseWindow('{#MyAppName}');                                                                // Terminate Game Wake first  
-    
-  if RegValueExists(HKCU, 'SOFTWARE\PM Code Works\{#MyAppName}', 'Build') then                // Upgrade installation?
+
+  // Terminate running Game Wake first
+  CloseWindow('{#MyAppName}');                                                                  
+  
+  // Upgrade installation?  
+  if RegValueExists(HKCU, 'SOFTWARE\PM Code Works\{#MyAppName}', 'Build') then
   begin    
-    if RegQueryStringValue(HKCU, 'SOFTWARE\PM Code Works\{#MyAppName}', 'Build', Build) then  // Read build number from Registry
+    if RegQueryStringValue(HKCU, 'SOFTWARE\PM Code Works\{#MyAppName}', 'Build', Build) then
     try  
       CurBuild := StrToInt(Build)
     
@@ -128,24 +143,25 @@ begin
     else
       CurBuild := 0;
 
-    if ({#Build} < CurBuild) then                                         // Newer build already installed?
+    // Newer build already installed?
+    if ({#Build} < CurBuild) then                                         
     begin
       MsgBox('Es ist bereits eine neuere Version installiert!' +#13+ 'Das Setup wird beendet!', mbINFORMATION, MB_OK);
-      Result := False;                                                    // Terminate setup!                                                            
+      Result := False;                                                            
     end  //of begin
     else
     begin
       // Copy Updater and version file to tmp directory
       ExtractTemporaryFile('Updater.exe');                                
       ExtractTemporaryFile('version.txt');
-      ExtractTemporaryFile('libeay32.dll');
-      ExtractTemporaryFile('ssleay32.dll');
+      //ExtractTemporaryFile('libeay32.dll');
+      //ExtractTemporaryFile('ssleay32.dll');
 
       // Get user temp dir
       TempDir := ExpandConstant('{localappdata}\Temp\');
 
       // Launch Updater
-      ShellExec('open', ExpandConstant('{tmp}\Updater.exe'), '-d GameWake -s '+ TempDir +' -i game_wake_setup.exe -o "Game Wake Setup.exe"', '', SW_SHOW, ewWaitUntilTerminated, ErrorCode);  
+      ShellExec('open', ExpandConstant('{tmp}\Updater.exe'), '-d GameWake -s '+ TempDir +' -i game_wake_setup64.exe -o "Game Wake Setup.exe"', '', SW_SHOW, ewWaitUntilTerminated, ErrorCode);  
     
       // Update successful?
       if (ErrorCode = 0) then
@@ -158,13 +174,4 @@ begin
       end;  //of begin
     end;  //of if
   end;  //of if         
-end; 
-
-[Registry]
-Root: HKCU; Subkey: "SOFTWARE\PM Code Works\{#MyAppName}"; ValueType: string; ValueName: "Build"; ValueData: "{#Build}"
-Root: HKCU; Subkey: "SOFTWARE\PM Code Works\{#MyAppName}"; ValueType: string; ValueName: "InstallDir"; ValueData: "{app}"; Flags: uninsdeletekey  
-Root: HKCU; Subkey: "SOFTWARE\PM Code Works"; Flags: uninsdeletekeyifempty   
-
-[UninstallDelete]     
-Type: filesandordirs; Name: "{reg:HKCU\SOFTWARE\PM Code Works\Game Wake, 'InstallDir'}"
-Type: filesandordirs; Name: "{userappdata}\Game Wake"
+end;
