@@ -47,7 +47,7 @@ Source: "{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\bell.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\beep.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\horn.wav"; DestDir: "{app}"; Flags: ignoreversion
-; Source: "ssleay32.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "ssleay32.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "libeay32.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Windows\Updater.exe"; DestDir: "{tmp}"; Flags: dontcopy
 Source: "..\Windows\version.txt"; DestDir: "{tmp}"; Flags: dontcopy
@@ -142,34 +142,51 @@ begin
     else
       CurBuild := 0;
 
-    if ({#Build} < CurBuild) then                                         // Newer build already installed?
+    // Newer build already installed?
+    if ({#Build} < CurBuild) then                                         
     begin
       MsgBox('Es ist bereits eine neuere Version installiert!' +#13+ 'Das Setup wird beendet!', mbINFORMATION, MB_OK);
-      Result := False;                                                    // Terminate setup!                                                            
-    end  //of begin
-    else
+      Result := False;                                                            
+    end;  //of begin
+
+    // Copy Updater and version file to tmp directory
+    ExtractTemporaryFile('Updater.exe');                                
+    ExtractTemporaryFile('version.txt');
+    //ExtractTemporaryFile('libeay32.dll');
+    //ExtractTemporaryFile('ssleay32.dll');
+
+    // Get user temp dir
+    TempDir := ExpandConstant('{localappdata}\Temp\');
+
+    // Launch Updater
+    ShellExec('open', ExpandConstant('{tmp}\Updater.exe'), '-d GameWake -s '+ TempDir +' -i game_wake_setup64.exe -o "Game Wake Setup.exe"', '', SW_SHOW, ewWaitUntilTerminated, ErrorCode);  
+  
+    // Update successful?
+    if (ErrorCode = 0) then
     begin
-      // Copy Updater and version file to tmp directory
-      ExtractTemporaryFile('Updater.exe');                                
-      ExtractTemporaryFile('version.txt');
-      //ExtractTemporaryFile('libeay32.dll');
-      //ExtractTemporaryFile('ssleay32.dll');
-
-      // Get user temp dir
-      TempDir := ExpandConstant('{localappdata}\Temp\');
-
-      // Launch Updater
-      ShellExec('open', ExpandConstant('{tmp}\Updater.exe'), '-d GameWake -s '+ TempDir +' -i game_wake_setup.exe -o "Game Wake Setup.exe"', '', SW_SHOW, ewWaitUntilTerminated, ErrorCode);  
-    
-      // Update successful?
-      if (ErrorCode = 0) then
-      begin
-        // Launch downloaded setup
-        ShellExec('open', '"'+ TempDir +'Game Wake Setup.exe"', '', TempDir, SW_SHOW, ewNoWait, ErrorCode);
-        
-        // Terminate current setup
-        Result := False
-      end;  //of begin
-    end;  //of if
+      // Launch downloaded setup
+      ShellExec('open', '"'+ TempDir +'Game Wake Setup.exe"', '', TempDir, SW_SHOW, ewNoWait, ErrorCode);
+      
+      // Terminate current setup
+      Result := False
+    end;  //of begin
   end;  //of if         
+end;
+
+function PrepareToInstall(var NeedsRestart: Boolean): string;
+var
+  Arch, Uninstall: string;
+  ErrorCode: Integer;
+
+begin    
+  // Install 32 Bit version over 64 Bit?
+  if (RegQueryStringValue(HKCU, 'SOFTWARE\PM Code Works\{#MyAppName}', 'Architecture', Arch) and (Arch <> 'x86')) then
+    // Unistall 64 Bit version first
+    if (RegQueryStringValue(HKEY_LOCAL_MACHINE_64, ExpandConstant('SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{#emit SetupSetting("AppId")}_is1'), 'UninstallString', Uninstall)) then
+    begin
+      if (MsgBox('Sie haben die 64-Bit Version installiert und versuchen die 32-Bit Version zu installieren. Die 64-Bit Version wird dabei deinstalliert! Wirklich fortfahren?', mbConfirmation, MB_YESNO) = IDYES) then
+        ShellExec('open', Uninstall, '/SILENT', '', SW_SHOW, ewWaitUntilTerminated, ErrorCode)
+      else
+        Result := 'Die 64-Bit Version bleibt installiert!'
+    end;  //of begin
 end;
