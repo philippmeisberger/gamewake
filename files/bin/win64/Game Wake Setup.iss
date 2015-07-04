@@ -13,7 +13,7 @@
 AppId={{36300BAF-CB39-4551-A54E-53F263EB0595}
 AppName={#MyAppName}
 AppVersion={#FileVersion}
-AppVerName={#MyAppName} {#ProductVersion}
+AppVerName={#MyAppName} {#ProductVersion} (64-Bit)
 AppCopyright=Philipp Meisberger
 AppPublisher=PM Code Works
 AppPublisherURL={#MyAppURL}
@@ -62,7 +62,7 @@ Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "Game Wake ausführen"; Flags: postinstall shellexec
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram, {#MyAppName}}"; Flags: postinstall shellexec
 
 [Registry]
 Root: HKCU; Subkey: "SOFTWARE\PM Code Works\{#MyAppName}"; ValueType: string; ValueName: "Architecture"; ValueData: "x64"; Flags: uninsdeletevalue
@@ -95,6 +95,7 @@ end;
 procedure UrlLabelClick(Sender: TObject);
 var
   ErrorCode : Integer;
+
 begin
   ShellExec('open', ExpandConstant('{#MyAppURL}'), '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
 end;
@@ -125,10 +126,7 @@ var
   Build, TempDir: string;
 
 begin
-  Result := True;
-
-  // Terminate running Game Wake first
-  CloseWindow('{#MyAppName}');                                                                  
+  Result := True;                                                                  
   
   // Upgrade installation?  
   if RegValueExists(HKCU, 'SOFTWARE\PM Code Works\{#MyAppName}', 'Build') then
@@ -179,10 +177,23 @@ var
   Arch, Uninstall: string;
   ErrorCode: Integer;
 
-begin    
+begin
+  // Be sure that no version of Game Wake is running!
+  CloseWindow('{#MyAppName}');
+      
   // Install 64 Bit version over 32 Bit?
   if (RegQueryStringValue(HKCU, 'SOFTWARE\PM Code Works\{#MyAppName}', 'Architecture', Arch) and (Arch <> 'x64')) then
-    // Unistall 32 Bit version first
+    // Uninstall 32 Bit version first
     if (RegQueryStringValue(HKEY_LOCAL_MACHINE_32, ExpandConstant('SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{#emit SetupSetting("AppId")}_is1'), 'UninstallString', Uninstall)) then
+    begin
+      // Save copy of config file
+      FileCopy(ExpandConstant('{userappdata}\Game Wake\gamewake.ini'), ExpandConstant('{tmp}\gamewake.ini'), False);
+      
+      // Uninstall 32 Bit version
       ShellExec('open', Uninstall, '/SILENT', '', SW_SHOW, ewWaitUntilTerminated, ErrorCode);
+      
+      // Restore config file
+      CreateDir(ExpandConstant('{userappdata}\Game Wake'));
+      FileCopy(ExpandConstant('{tmp}\gamewake.ini'), ExpandConstant('{userappdata}\Game Wake\gamewake.ini'), False);
+    end;  //of begin
 end;

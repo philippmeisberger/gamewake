@@ -672,7 +672,7 @@ end;
 
 procedure TClock.GetTimeRemaining(var AHour, AMin, ASec: string);
 var
-  currentHour, currentMin, currentSec, ms: Word;
+  CurrentHour, CurrentMin, CurrentSec, Ms: Word;
   TimeRemain: TDateTime;
 
 begin
@@ -681,10 +681,10 @@ begin
   else
     TimeRemain := FTime.GetDateTime - FTimeAlert.GetDateTime;
 
-  DecodeTime(TimeRemain, currentHour, currentMin, currentSec, ms);
-  AHour := Format('%.*d', [2, currentHour]);
-  AMin := Format('%.*d', [2, currentMin]);
-  ASec := Format('%.*d', [2, currentSec]);
+  DecodeTime(TimeRemain, CurrentHour, CurrentMin, CurrentSec, Ms);
+  AHour := Format('%.*d', [2, CurrentHour]);
+  AMin := Format('%.*d', [2, CurrentMin]);
+  ASec := Format('%.*d', [2, CurrentSec]);
 end;
 
 { public TClock.PlaySound

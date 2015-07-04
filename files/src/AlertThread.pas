@@ -48,7 +48,7 @@ implementation
 
 constructor TAlertThread.Create(AClock: TClock; AAlertType: TAlertType);
 begin
-  inherited Create(False);
+  inherited Create(True);
   FreeOnTerminate := True;
   FClock := AClock;
   FAlertType := AAlertType;

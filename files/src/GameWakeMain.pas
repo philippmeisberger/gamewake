@@ -311,7 +311,6 @@ begin
   Application.Restore;
   Show;
 
-  bStop.Caption := FLang.GetString(50);
   bAlert.Default := False;
   bStop.Default := True;
   rgSounds.Enabled := False;
@@ -1082,7 +1081,6 @@ begin
 
   // Reset GUI
   Caption := Application.Title;
-  bStop.Caption := FLang.GetString(59);
   bStop.Default := False;
   bStop.Enabled := False;
   bAlert.Enabled := True;

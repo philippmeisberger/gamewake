@@ -3000,7 +3000,7 @@ object Main: TMain
     Width = 136
     Height = 33
     Anchors = [akLeft, akBottom]
-    Caption = 'Alarm !'
+    Caption = 'Alarm'
     Default = True
     TabOrder = 12
     OnClick = bAlertClick
@@ -3108,6 +3108,7 @@ object Main: TMain
     Width = 136
     Height = 33
     Anchors = [akBottom]
+    Cancel = True
     Caption = 'aus'
     Enabled = False
     TabOrder = 11
