@@ -229,12 +229,22 @@ begin
     end;  //of if
 
     // Set language selection
+    {$IFDEF MSWINDOWS}
     case FLang.Id of
       200: mmEng.Checked := True;
       300: mmFre.Checked := True;
       else
            mmGer.Checked := True;
     end;  //of case
+    {$ELSE}
+    if (FLang.Id = '&English') then
+      mmEng.Checked := True
+    else
+      if (FLang.Id = '&Français') then
+        mmFre.Checked := True
+      else
+        mmGer.Checked := True;
+    {$ENDIF}
 
     // Load last position?
     if not Config.ReadBoolean('Global', 'SavePos') then

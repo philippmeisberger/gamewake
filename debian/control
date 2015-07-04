@@ -10,4 +10,4 @@ Depends: xdg-utils, alsa-utils, ${misc:Depends}, ${shlibs:Depends}
 Architecture: any
 Homepage: http://www.pm-codeworks.de/gamewake.html
 Description: Alert clock application
- Game Wake is an alert clock application with acoustical and visual notification events. Four different sounds can be played. The sounds can be combined with a text message and a blinking form. A shutdown function can be chosen instead of notifications. The configuration is saved in a *.ini based file. There is a settings form where it is possible to setup what will be saved. Game Wake has multi language support and is ready for new translations. For being up to date a light-weight update notificator is used.
+ Game Wake is an alert clock application with acoustical and visual notification events. Four different sounds can be played. The sounds can be combined with a text message and a blinking form. A shutdown function can be chosen instead of notifications. Game Wake has multi language support. For being up to date a light-weight update notificator is used.
