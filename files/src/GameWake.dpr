@@ -1,7 +1,7 @@
 program GameWake;
 
 uses
-  Forms,
+  Vcl.Forms,
   GameWakeMain in 'GameWakeMain.pas' {Main},
   GameWakeAPI in 'GameWakeAPI.pas',
   GameWakeInfo in 'GameWakeInfo.pas' {Info},
@@ -13,6 +13,7 @@ uses
 begin          
   Application.Initialize;
   Application.Title := 'Game Wake';
+  Application.MainFormOnTaskbar := True;
   Application.CreateForm(TMain, Main);
   Application.Run;
 end.
