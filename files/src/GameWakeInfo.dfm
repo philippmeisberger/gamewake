@@ -4,8 +4,8 @@ object Info: TInfo
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsDialog
   Caption = #220'ber Game Wake'
-  ClientHeight = 282
-  ClientWidth = 444
+  ClientHeight = 274
+  ClientWidth = 433
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clBlack
@@ -42,23 +42,23 @@ object Info: TInfo
   Position = poScreenCenter
   OnCreate = FormCreate
   DesignSize = (
-    444
-    282)
+    433
+    274)
   PixelsPerInch = 96
   TextHeight = 14
   object PageControl: TPageControl
     Left = 0
     Top = 0
-    Width = 447
-    Height = 286
+    Width = 436
+    Height = 278
     ActivePage = tsInfo
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 0
     object tsInfo: TTabSheet
       Caption = 'Infos'
       DesignSize = (
-        439
-        257)
+        428
+        249)
       object lVersion: TLabel
         Left = 24
         Top = 72
@@ -379,8 +379,8 @@ object Info: TInfo
           FFFF0000}
       end
       object l_copy: TLabel
-        Left = 164
-        Top = 235
+        Left = 158
+        Top = 227
         Width = 112
         Height = 14
         Anchors = [akBottom]
@@ -394,6 +394,7 @@ object Info: TInfo
         ParentColor = False
         ParentFont = False
         ExplicitLeft = 144
+        ExplicitTop = 235
       end
       object lBuild: TLabel
         Left = 16
@@ -407,8 +408,8 @@ object Info: TInfo
       object mInfo: TMemo
         Left = 80
         Top = 24
-        Width = 341
-        Height = 193
+        Width = 330
+        Height = 185
         Anchors = [akLeft, akTop, akRight, akBottom]
         Lines.Strings = (
           '"Game Wake ist ein virtueller Wecker, den man sich stellen '
@@ -421,15 +422,13 @@ object Info: TInfo
           'Dieses Programm kann durch jedermann gem'#228#223' den '
           'Bestimmungen der Deutschen Freien Software Lizenz genutzt '
           'werden. Die Lizenz kann unter http://www.d-fsl.de abgerufen '
-          'werden.'
-          ''
-          '07/2015')
+          'werden.')
         ReadOnly = True
         TabOrder = 0
       end
       object bOk: TButton
-        Left = 348
-        Top = 223
+        Left = 337
+        Top = 215
         Width = 73
         Height = 25
         Anchors = [akRight, akBottom]
@@ -444,11 +443,11 @@ object Info: TInfo
       Caption = 'Versions History'
       ImageIndex = 1
       DesignSize = (
-        439
-        257)
+        428
+        249)
       object lCopy2: TLabel
-        Left = 164
-        Top = 235
+        Left = 158
+        Top = 227
         Width = 112
         Height = 14
         Anchors = [akBottom]
@@ -462,12 +461,13 @@ object Info: TInfo
         ParentColor = False
         ParentFont = False
         ExplicitLeft = 144
+        ExplicitTop = 235
       end
       object mHistroy: TMemo
         Left = 16
-        Top = 25
-        Width = 405
-        Height = 193
+        Top = 24
+        Width = 394
+        Height = 185
         Anchors = [akLeft, akTop, akRight, akBottom]
         Lines.Strings = (
           'Game Wake'
@@ -483,9 +483,12 @@ object Info: TInfo
           '- Windows:'
           '  - Konfigurationsdatei nach %APPDATA%\Game Wake\gamewake.ini '
           '    verschoben'
-          '  - 32/64-Bit Bin'#228'rdateien'#39
-          '  - IniFileParser v1.1.1'
-          '  - OSUtils v2.2'
+          '- Sonstige kleine Verbesserungen'
+          '- 32/64-Bit Bin'#228'rdateien'
+          '- IniFileParser v1.1.1'
+          '- OSUtils v2.2'
+          '- Updater v2.3'
+          '  - SSL Unterst'#252'tzung'
           ''
           '---------------------------------'
           ''
@@ -643,8 +646,8 @@ object Info: TInfo
         TabOrder = 0
       end
       object bOk2: TButton
-        Left = 348
-        Top = 223
+        Left = 337
+        Top = 215
         Width = 73
         Height = 25
         Anchors = [akRight, akBottom]

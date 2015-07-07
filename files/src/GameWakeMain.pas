@@ -402,6 +402,9 @@ begin
         // Caption "Search for update"
         mmUpdate.Caption := FLang.GetString(15);
         mmUpdate.Enabled := False;
+
+        // Start with new version installing
+        Updater.LaunchSetup();
       end;  //of begin
 
     finally
