@@ -6,10 +6,13 @@ gamewake (3.3) stable; urgency=low
   * Windows:
     * Moved configuration file to %APPDATA%\Game Wake\gamewake.ini
     * 32/64-Bit binaries
+    * Updater v2.3
+      * SSL support
   * IniFileParser v1.1.1
   * OSUtils v2.2
 
  -- Philipp Meisberger <team@pm-codeworks.de>  Sat, 04 Jul 2015 14:31:04 +0200
+
 
 gamewake (3.2) stable; urgency=low
 

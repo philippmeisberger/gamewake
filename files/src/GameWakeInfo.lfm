@@ -423,7 +423,6 @@ object Info: TInfo
         Width = 73
         Anchors = [akRight, akBottom]
         Caption = 'OK'
-        Default = True
         ModalResult = 1
         TabOrder = 1
       end
@@ -469,6 +468,8 @@ object Info: TInfo
           '  - Konfigurationsdatei nach %APPDATA%\Game Wake\'
           '    gamewake.ini verschoben'
           '  - 32/64-Bit Binärdateien'
+          '  - Updater v2.3'
+          '    - SSL Unterstützung'
           '- IniFileParser v1.1.1'
           '- OSUtils v2.2'
           ''
@@ -614,6 +615,7 @@ object Info: TInfo
         Width = 73
         Anchors = [akRight, akBottom]
         Caption = 'OK'
+        Default = True
         ModalResult = 1
         TabOrder = 1
       end

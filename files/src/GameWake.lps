@@ -3,7 +3,7 @@
   <ProjectSession>
     <Version Value="9"/>
     <BuildModes Active="Default"/>
-    <Units Count="65">
+    <Units Count="67">
       <Unit0>
         <Filename Value="GameWake.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -59,8 +59,8 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="214"/>
-        <CursorPos X="5" Y="248"/>
+        <TopLine Value="196"/>
+        <CursorPos X="16" Y="200"/>
         <UsageCount Value="54"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -495,8 +495,8 @@
         <Filename Value="PMCWDownloadThread.pas"/>
         <UnitName Value="PMCWDownloadThread"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="23"/>
-        <CursorPos X="31" Y="38"/>
+        <TopLine Value="1"/>
+        <CursorPos X="27" Y="246"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit56>
@@ -523,7 +523,7 @@
         <UnitName Value="PMCWUpdater"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="16" Y="20"/>
+        <CursorPos X="27" Y="20"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit59>
@@ -570,6 +570,22 @@
         <CursorPos X="1" Y="187"/>
         <UsageCount Value="10"/>
       </Unit64>
+      <Unit65>
+        <Filename Value="/usr/share/fpcsrc/2.6.4/packages/indy/IdCTypes.pas"/>
+        <UnitName Value="IdCTypes"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="5" Y="3"/>
+        <UsageCount Value="10"/>
+      </Unit65>
+      <Unit66>
+        <Filename Value="/usr/share/fpcsrc/2.6.4/packages/indy/IdSSLOpenSSLHeaders.pas"/>
+        <UnitName Value="IdSSLOpenSSLHeaders"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="40" Y="7"/>
+        <UsageCount Value="10"/>
+      </Unit66>
     </Units>
     <General>
       <ActiveWindowIndexAtStart Value="0"/>

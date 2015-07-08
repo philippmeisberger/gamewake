@@ -18,7 +18,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <MinorVersionNr Value="3"/>
-      <BuildNr Value="419"/>
+      <BuildNr Value="430"/>
       <Language Value="0407"/>
       <StringTable CompanyName="PM Code Works" FileDescription="Game Wake" LegalCopyright="Philipp Meisberger 2015" LegalTrademarks="PM Code Works" ProductName="Game Wake" ProductVersion="3.3"/>
     </VersionInfo>

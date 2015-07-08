@@ -97,7 +97,9 @@ constructor TDownloadThread.Create(const AUrl, AFileName: string;
 begin
   inherited Create(ACreateSuspended);
   FreeOnTerminate := True;
+{$IFDEF MSWINDOWS}
   FUnzip := False;
+{$ENDIF}
   FAllowOverwrite := AAllowOverwrite;
 
   // Rename file if already exists?
