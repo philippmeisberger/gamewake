@@ -20,7 +20,7 @@ uses
   MMSystem,
 {$ENDIF}
 {$IFDEF MSWINDOWS}
-  Windows, Messages, PMCWTrayIconAPI;
+  Windows, Messages;
 {$ELSE}
   LCLType, Process;
 {$ENDIF}
@@ -132,12 +132,8 @@ type
     procedure SaveToIni();
     procedure SetLanguage(Sender: TObject);
     function Shutdown(): Boolean;
-  {$IFDEF MSWINDOWS}
-    procedure TrayIconMouseUp(Sender: TObject; AButton: TMouseButton; X, Y: Integer);
-  {$ELSE}
     procedure TrayMouseUp(Sender: TObject; AButton: TMouseButton;
       AShiftState: TShiftState; X, Y: Integer);
-  {$ENDIF}
   end;
 
 var
@@ -305,11 +301,9 @@ begin
   FClock.Free;
   FUpdateCheck.Free;
 
-{$IFNDEF MSWINDOWS}
   // Delete icon from tray
   if Assigned(FTrayIcon) then
     FTrayIcon.Free;
-{$ENDIF}
 end;
 
 { private TMain.Alert
@@ -792,35 +786,8 @@ begin
   Result := ExitWindowsEx(EWX_SHUTDOWN or EWX_FORCE, SHTDN_REASON_MAJOR_APPLICATION or
     SHTDN_REASON_MINOR_MAINTENANCE);
 end;
-
-{ private TMain.TrayIconMouseUp
-
-  Event that is called when detecting mouse activity. }
-
-procedure TMain.TrayIconMouseUp(Sender: TObject; AButton: TMouseButton;
-  X, Y: Integer);
-var
-  Hour, Min, Sec: string;
-
-begin
-  case AButton of
-    // Show Balloon hint on left click
-    mbLeft:
-      if mmTimer.Checked then
-        FTrayIcon.BalloonTip(Format(FLang.GetString(73), [FClock.Alert.GetTime(False)]))
-      else
-      begin
-        FClock.GetTimeRemaining(Hour, Min, Sec);
-        FTrayIcon.BalloonTip(Format(FLang.GetString(82), [Hour, Min, Sec]));
-      end;  //of if
-
-    // Show PopupMenu on right click
-    mbRight:
-      pmMenu.Popup(X, Y);
-  end;  //of case
-end;
 {$ENDIF}
-{$IFNDEF MSWINDOWS}
+
 { private TMain.TrayMouseUp
 
   Event that is called when detecting mouse activity. }
@@ -845,13 +812,8 @@ begin
 
         FTrayIcon.ShowBalloonHint;
       end;  //of begin
-
-    // Show PopupMenu on right click
-    mbRight:
-      FTrayIcon.PopUpMenu.Popup(X, Y);
   end;  //of case
 end;
-{$ENDIF}
 
 { TMain.pmCloseClick
 
@@ -860,12 +822,11 @@ end;
 procedure TMain.pmCloseClick(Sender: TObject);
 begin
   // Show confirmation
-  with FLang do
-    if (ShowMessage(79, 80, mtConfirmation) = IDYES) then
-    begin
-      bStop.Click;
-      Close;
-    end;  //of begin
+  if (FLang.ShowMessage(79, 80, mtConfirmation) = IDYES) then
+  begin
+    bStop.Click;
+    Close;
+  end;  //of begin
 end;
 
 { TMain.pmOpenClick
@@ -874,15 +835,15 @@ end;
 
 procedure TMain.pmOpenClick(Sender: TObject);
 begin
-  Show;
-  BringToFront;
-
   if Assigned(FTrayIcon) then
   {$IFDEF MSWINDOWS}
-    FTrayIcon.Free;
+    FTrayIcon.Visible := False;
   {$ELSE}
     FTrayIcon.Hide;
   {$ENDIF}
+
+  Show;
+  BringToFront;
 end;
 
 { TMain.bIncHourClick
@@ -1442,40 +1403,41 @@ end;
 procedure TMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
   // Alert is not set?
-  if (FClock.AlertEnabled = False) then
-    CanClose := True
-  else
-    if rgSounds.Enabled then
-    begin
-      Hide;
+  if (not FClock.AlertEnabled) then
+  begin
+    CanClose := True;
+    Exit;
+  end;  //of begin
 
-      // Create TrayIcon
-    {$IFDEF MSWINDOWS}
-      FTrayIcon := TTrayIcon.Create(Application.Title, Self.Icon.Handle);
-      FTrayIcon.OnMouseUp := TrayIconMouseUp;
-    {$ELSE}
-      FTrayIcon := TTrayIcon.Create(Self);
+  // Create tray icon
+  if not Assigned(FTrayIcon) then
+    FTrayIcon := TTrayIcon.Create(Self);
 
-      try
-        FTrayIcon.BalloonTitle := Application.Title;
-        FTrayIcon.BalloonFlags := bfInfo;
-        FTrayIcon.OnMouseUp := TrayMouseUp;
-        FTrayIcon.Icon.LoadFromFile('/usr/share/pixmaps/gamewake.ico');
-        FTrayIcon.PopUpMenu := pmMenu;
-        FTrayIcon.Hint := Application.Title;
-        FTrayIcon.Show;
+  // Set tray icon options
+  try
+    FTrayIcon.BalloonTitle := Application.Title;
+    FTrayIcon.BalloonFlags := bfInfo;
+    FTrayIcon.OnMouseUp := TrayMouseUp;
+    FTrayIcon.PopUpMenu := pmMenu;
+    FTrayIcon.Hint := Application.Title;
+  {$IFDEF MSWINDOWS}
+    FTrayIcon.Icon.Handle := Application.Icon.Handle;
+    FTrayIcon.Visible := True;
+  {$ELSE}
+    FTrayIcon.ShowHint := True;
+    FTrayIcon.Icon.LoadFromFile('/usr/share/pixmaps/gamewake.ico');
+    FTrayIcon.Show;
+  {$ENDIF}
 
-      except
-        FTrayIcon.Free;
-        FTrayIcon := nil;
-        FLang.ShowMessage(Flang.GetString(89), mtError);
-        Show;
-      end;  //of try
-    {$ENDIF}
-      CanClose := False;
-    end  //of begin
-    else
-      CanClose := True;
+    // Hide form
+    Hide;
+
+  except
+    FreeAndNil(FTrayIcon);
+    FLang.ShowMessage(Flang.GetString(89), mtError);
+  end;  //of try
+
+  CanClose := False;
 end;
 
 end.

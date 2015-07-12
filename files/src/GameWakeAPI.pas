@@ -140,7 +140,7 @@ type
 
 implementation
 
-uses AlertThread;
+uses GameWakeAlertThread;
 
 { TConfigFile }
 

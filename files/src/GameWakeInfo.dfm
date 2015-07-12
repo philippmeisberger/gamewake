@@ -476,7 +476,7 @@ object Info: TInfo
           'History'
           '--------'
           ''
-          'Version 3.3  [08.07.15]'
+          'Version 3.3  [??.08.15]'
           ''
           '- Linux:'
           '  - Konfigurationsdatei nach $HOME/.gamewake.conf verschoben'
@@ -487,7 +487,7 @@ object Info: TInfo
           '- 32/64-Bit Bin'#228'rdateien'
           '- IniFileParser v1.1.1'
           '- OSUtils v2.2'
-          '- Updater v2.3'
+          '- Updater v3.0'
           '  - SSL Unterst'#252'tzung'
           ''
           '---------------------------------'
@@ -640,7 +640,7 @@ object Info: TInfo
           '(mit Magazin) zuschicken. Meine Adresse erfahren Sie unter '
           '"team@pm-codeworks.de".'
           ''
-          '07/2015')
+          '08/2015')
         ReadOnly = True
         ScrollBars = ssVertical
         TabOrder = 0
