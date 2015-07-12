@@ -6,7 +6,7 @@
 {                                                                         }
 { *********************************************************************** }
 
-unit AlertThread;
+unit GameWakeAlertThread;
 
 {$IFDEF LINUX} {$mode delphi}{$H+} {$ENDIF}
 

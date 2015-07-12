@@ -411,7 +411,6 @@ object Info: TInfo
           'Copyright (C) 2011 Philipp Meisberger'
           ''
           'Dieses Programm kann durch jedermann gemäß den Bestimmungen der Deutschen Freien Software Lizenz genutzt werden. Die Lizenz kann unter http://www.d-fsl.de abgerufen werden.'
-          '07/2015'
         )
         ReadOnly = True
         TabOrder = 0
@@ -460,7 +459,7 @@ object Info: TInfo
           'History'
           '--------'
           ''
-          'Version 3.3  [08.07.15]'
+          'Version 3.3  [??.08.15]'
           ''
           '- Linux:'
           '  - Konfigurationsdatei nach $HOME/.gamewake verschoben'
@@ -601,8 +600,6 @@ object Info: TInfo
           ''
           'Game Wake wurde unter der D-FSL-Lizenz veröffentlicht und ist somit Open-Source. Der Quelltext kann auf der Website heruntergeladen werden.'
           'Soll Game Wake auf eine kommerzielle CD-ROM (mit Magazin) gepresst werden, wäre es nett, mir eine Ausgabe dieser CD-ROM (mit Magazin) zuschicken. Meine Adresse erfahren Sie unter "team@pm-codeworks.de".'
-          ''
-          '07/2015'
         )
         ReadOnly = True
         ScrollBars = ssVertical

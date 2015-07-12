@@ -836,11 +836,7 @@ end;
 procedure TMain.pmOpenClick(Sender: TObject);
 begin
   if Assigned(FTrayIcon) then
-  {$IFDEF MSWINDOWS}
     FTrayIcon.Visible := False;
-  {$ELSE}
-    FTrayIcon.Hide;
-  {$ENDIF}
 
   Show;
   BringToFront;
@@ -1422,19 +1418,20 @@ begin
     FTrayIcon.Hint := Application.Title;
   {$IFDEF MSWINDOWS}
     FTrayIcon.Icon.Handle := Application.Icon.Handle;
-    FTrayIcon.Visible := True;
   {$ELSE}
-    FTrayIcon.ShowHint := True;
     FTrayIcon.Icon.LoadFromFile('/usr/share/pixmaps/gamewake.ico');
-    FTrayIcon.Show;
   {$ENDIF}
+    FTrayIcon.Visible := True;
 
     // Hide form
     Hide;
 
   except
-    FreeAndNil(FTrayIcon);
-    FLang.ShowMessage(Flang.GetString(89), mtError);
+    on E: Exception do
+    begin
+      FLang.ShowException(FLang.GetString(89), E.Message);
+      FreeAndNil(FTrayIcon);
+    end;
   end;  //of try
 
   CanClose := False;

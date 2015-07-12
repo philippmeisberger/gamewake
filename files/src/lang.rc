@@ -90,6 +90,7 @@ STRINGTABLE
 186, "Fehler beim Schreiben der Einstellungen in die config Datei: \"%s\"!"
 187, "Öffnen"
 188, "Beenden"
+189, "Tray icon konnte nicht erstellt werden!"
 
 //Englisch
 200, "Information"
@@ -181,6 +182,7 @@ STRINGTABLE
 286, "Error while writing settings into config file: \"%s\"!"
 287, "Open"
 288, "Quit"
+289, "Tray icon could not be created!"
 
 //Französisch
 300, "Information"
@@ -272,4 +274,5 @@ STRINGTABLE
 386, "Erreur d'écriture sur les paramètres du fichier de configuration: \"%s\"!"
 387, "Ouvert"
 388, "Quitter"
+389, "Icône de la barre ne peut être créé!"
 }

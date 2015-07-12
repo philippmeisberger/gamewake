@@ -18,7 +18,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <MinorVersionNr Value="3"/>
-      <BuildNr Value="430"/>
+      <BuildNr Value="440"/>
       <Language Value="0407"/>
       <StringTable CompanyName="PM Code Works" FileDescription="Game Wake" LegalCopyright="Philipp Meisberger 2015" LegalTrademarks="PM Code Works" ProductName="Game Wake" ProductVersion="3.3"/>
     </VersionInfo>
@@ -44,7 +44,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="10">
+    <Units Count="8">
       <Unit0>
         <Filename Value="GameWake.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -91,16 +91,6 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="GameWakeOps"/>
       </Unit7>
-      <Unit8>
-        <Filename Value="gamewakeupdate.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="GameWakeUpdate"/>
-      </Unit8>
-      <Unit9>
-        <Filename Value="LanguageFile.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="LanguageFile"/>
-      </Unit9>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
