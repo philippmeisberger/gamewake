@@ -89,7 +89,7 @@
 186=Fehler beim Schreiben der Einstellungen in die config Datei: "%s"!
 187=Öffnen
 188=Beenden
-189=Icon konnte nicht unter "/usr/share/pixmaps/gamewake.ico" gefunden werden!
+189=Tray icon konnte nicht erstellt werden!
 
 [&English]
 100=Information
@@ -181,7 +181,7 @@
 186=Error while writing settings into config file: "%s"!
 187=Open
 188=Quit
-189=Icon could not be found in "/usr/share/pixmaps/gamewake.ico"!
+189=Tray icon could not be created!
 
 [&Français]
 100=Information
@@ -273,4 +273,4 @@
 186=Erreur d'écriture sur les paramètres du fichier de configuration: "%s"!
 187=Ouvert
 188=Quitter
-189=Icône n'a pas pu être trouvée dans "/usr/share/pixmaps/gamewake.ico"!
+189=Icône de la barre ne peut être créé!

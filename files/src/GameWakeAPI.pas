@@ -150,7 +150,7 @@ uses GameWakeAlertThread;
 
 function TConfigFile.ReadColor(ASection, AKey: string): TColor;
 begin
-  result := StringToColor(ReadString(ASection, AKey));
+  Result := StringToColor(ReadString(ASection, AKey));
 end;
 
 { public TConfigFile.ReadColors
