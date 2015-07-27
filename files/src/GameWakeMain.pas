@@ -14,7 +14,7 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Controls, Forms, StdCtrls, ExtCtrls, Menus,
-  Dialogs, GameWakeAPI, PMCWLanguageFile, PMCWUpdater, PMCWOSUtils,
+  Dialogs, GameWakeAPI, PMCWLanguageFile, PMCWUpdater, PMCWOSUtils, PMCWAbout,
 
 {$IFDEF PORTABLE}
   MMSystem,
@@ -33,7 +33,7 @@ type
     bAlert: TButton;
     bStop: TButton;
     lDp: TLabel;
-    mmDownloadCert: TMenuItem;
+    mmInstallCertificate: TMenuItem;
     pmClose: TMenuItem;
     pmOpen: TMenuItem;
     mmWebsite: TMenuItem;
@@ -77,7 +77,7 @@ type
     mmFre: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure mmDownloadCertClick(Sender: TObject);
+    procedure mmInstallCertificateClick(Sender: TObject);
     procedure pmCloseClick(Sender: TObject);
     procedure pmOpenClick(Sender: TObject);
     procedure mmUpdateClick(Sender: TObject);
@@ -151,7 +151,7 @@ implementation
 {$R 'sounds.res' 'sounds.res'}
 {$ENDIF}
 
-uses GameWakeInfo, GameWakeOps;
+uses GameWakeOps;
 
 { TMain }
 
@@ -666,21 +666,21 @@ begin
   with FLang do
   begin
     // Set captions for TMenuItems
-    mmFile.Caption := GetString(41);
+    mmFile.Caption := GetString(33);
     mmSave.Caption := GetString(42);
     mmEdit.Caption := GetString(43);
     mmOptions.Caption := GetString(44);
     mmTimer.Caption := GetString(45);
     mmCounter.Caption := GetString(46);
-    mmView.Caption := GetString(20);
+    mmView.Caption := GetString(10);
     mmLang.Caption := GetString(25);
     mmHelp.Caption := GetString(14);
     mmUpdate.Caption:= GetString(15);
-    mmDownloadCert.Caption := GetString(16);
+    mmInstallCertificate.Caption := GetString(16);
     mmReport.Caption := GetString(26);
     mmWebsite.Caption := GetString(29);
     lCopy.Hint := mmWebsite.Caption;
-    mmInfo.Caption := GetString(17);
+    mmInfo.Caption := Format(17, [Application.Title]);
 
     // Set captions for "alert type" TRadioGroup
     rgSounds.Caption := GetString(47);
@@ -1277,37 +1277,24 @@ begin
   FLang.ChangeLanguage(LANG_FRENCH);
 end;
 
-{ TMain.mmDownloadCertClick
+{ TMain.mmInstallCertificateClick
 
-  MainMenu entry that allows to download the PM Code Works certificate. }
+  MainMenu entry that allows to install the PM Code Works certificate. }
 
-procedure TMain.mmDownloadCertClick(Sender: TObject);
+procedure TMain.mmInstallCertificateClick(Sender: TObject);
 {$IFDEF MSWINDOWS}
 var
   Updater: TUpdate;
 
 begin
-  // Certificate already installed?
-  if (TUpdate.PMCertificateExists() and (FLang.ShowMessage(27, 28,
-    mtConfirmation) = IDNO)) then
-    Exit;
-
-  // Init downloader
   Updater := TUpdate.Create(Self, FLang);
 
-  // Download certificate
   try
-    with Updater do
-    begin
-      Title := FLang.GetString(16);
-      FileNameRemote := 'cert.reg';
-      FileNameLocal := 'PMCW-Certificate.reg';
-      DownloadDirectory := GetTempDir();
-    end;  //of begin
-
-    // Successfully downloaded certificate?
-    if Updater.Execute() then
-      mmDownloadCert.Enabled := False;
+    // Certificate already installed?
+    if not Updater.CertificateExists() then
+      Updater.InstallCertificate()
+    else
+      FLang.ShowMessage(FLang.GetString(27), mtInformation);
 
   finally
     Updater.Free;

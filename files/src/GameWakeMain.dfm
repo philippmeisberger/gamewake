@@ -346,7 +346,7 @@ object Main: TMain
     object mmHelp: TMenuItem
       Caption = 'Hilfe'
       object mmUpdate: TMenuItem
-        Caption = 'nach Update suchen'
+        Caption = 'Nach Update suchen'
         OnClick = mmUpdateClick
       end
       object N2: TMenuItem
@@ -356,9 +356,9 @@ object Main: TMain
         Caption = 'Zur Website'
         OnClick = mmWebsiteClick
       end
-      object mmDownloadCert: TMenuItem
-        Caption = 'Zertifikat herunterladen'
-        OnClick = mmDownloadCertClick
+      object mmInstallCertificate: TMenuItem
+        Caption = 'Zertifikat installieren'
+        OnClick = mmInstallCertificateClick
       end
       object mmReport: TMenuItem
         Caption = 'Fehler melden'
@@ -368,7 +368,7 @@ object Main: TMain
         Caption = '-'
       end
       object mmInfo: TMenuItem
-        Caption = #220'ber'
+        Caption = #220'ber Game Wake'
         OnClick = mmInfoClick
       end
     end

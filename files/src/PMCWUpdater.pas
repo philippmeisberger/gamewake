@@ -1,6 +1,6 @@
 { *********************************************************************** }
 {                                                                         }
-{ PM Code Works Cross Plattform Updater v2.3                              }
+{ PM Code Works Updater v3.0                                              }
 {                                                                         }
 { Copyright (c) 2011-2015 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
@@ -14,7 +14,6 @@ interface
 
 uses
   SysUtils, Classes, Dialogs, PMCWUpdateCheckThread, PMCWLanguageFile,
-
 {$IFDEF MSWINDOWS}
   PMCWDownloadThread, Windows, FileCtrl, Forms, StdCtrls, ComCtrls, Controls,
   System.Win.TaskbarCore, Vcl.Taskbar, Registry, ShellAPI;
@@ -25,7 +24,21 @@ uses
 const
   URL_DOWNLOAD = URL_DIR + 'downloader.php?file=';
 
+  { TFileProductVersion indices }
+  VERSION_MAJOR   = 0;
+  VERSION_MINOR   = 1;
+  VERSION_SERVICE = 2;
+  VERSION_BUILD   = 3;
+
+{$IFDEF MSWINDOWS}
+{$I Certificate.inc}
+{$ENDIF}
+
 type
+{$IFDEF MSWINDOWS}
+  TFileProductVersion = array[0..3] of Cardinal;
+{$ENDIF}
+
   { IUpdateListener }
   IUpdateListener = interface
   ['{D1CDAE74-717A-4C5E-9152-15FBA4A15552}']
@@ -54,6 +67,8 @@ type
     procedure AddListener(AListener: IUpdateListener);
     procedure CheckForUpdate(AUserUpdate: Boolean; ACurrentBuild: Cardinal = 0);
     class function GetBuildNumber(): Cardinal;
+    class function GetFileVersion(const AFileName: string;
+      var AVersionInfo: TFileProductVersion): Boolean;
     procedure RemoveListener(AListener: IUpdateListener);
   end;
 
@@ -79,24 +94,25 @@ type
     FListeners: TInterfaceList;
     FTaskBar: TTaskbar;
     procedure OnDownloadCancel(Sender: TObject);
-    procedure OnDownloadError(Sender: TThread; AResponseCode: Integer;
-      AResponseText: string);
-    procedure OnDownloadFinished(Sender: TObject);
-    procedure OnDownloading(Sender: TThread; ADownloadSize: Int64);
-    procedure OnDownloadStart(Sender: TThread; AFileSize: Int64);
+    procedure OnDownloadError(Sender: TThread; const AResponseCode: Integer;
+      const AResponseText: string);
+    procedure OnDownloadFinished(Sender: TThread; const AFileName: string);
+    procedure OnDownloading(Sender: TThread; AContentLength, AReadCount: Int64);
     procedure OnUnzipArchive(Sender: TObject);
     procedure Reset();
   protected
     function Download(ARemoteFileName, ALocalFileName: string;
-      ADownloadDirectory: string = ''): Boolean;
+      ADownloadDirectory: string = ''; AUseTls: Boolean = True): Boolean;
   public
     constructor Create(AOwner: TComponent; ALang: TLanguageFile);
     destructor Destroy; override;
     procedure AddListener(AListener: IUpdateListener);
+    function CertificateExists(): Boolean;
     function Execute(): Boolean;
+    function InstallCertificate(): Boolean;
     procedure LaunchSetup();
-    class function PMCertificateExists(): Boolean;
     procedure RemoveListener(AListener: IUpdateListener);
+    function ShowInstallCertificateDialog(): Boolean;
     { external }
     property DownloadDirectory: string read FDownloadDirectory write FDownloadDirectory;
     property FileNameLocal: string read FLocalFileName write FLocalFileName;
@@ -111,6 +127,7 @@ implementation
 
 {$IFDEF MSWINDOWS}
 {$R *.dfm}
+{$R CA.res}
 {$ENDIF}
 
 { TUpdateCheck }
@@ -160,7 +177,7 @@ procedure TUpdateCheck.OnCheckError(Sender: TThread; AResponseCode: Integer;
   AResponseText: string);
 begin
   if FUserUpdate then
-    if (AResponseCode <> -1) then
+    if (AResponseCode > 0) then
       FLang.ShowException(FLang.GetString([12, 13]), AResponseText)
     else
       FLang.ShowMessage(12, 13, mtError);
@@ -229,76 +246,98 @@ begin
     OnUpdate := OnUpdateAvailable;
     OnNoUpdate := OnNoUpdateAvailable;
     OnError := OnCheckError;
-    Start;
+    Start();
   end;  //of with
 end;
 
-{ TUpdateCheck.GetBuildNumber
+{ TUpdateCheck.GetFileVersion
 
-  Returns build number of current running program. }
+  Returns complete file version information. }
 
-class function TUpdateCheck.GetBuildNumber(): Cardinal;
+class function TUpdateCheck.GetFileVersion(const AFileName: string;
+  var AVersionInfo: TFileProductVersion): Boolean;
 {$IFDEF MSWINDOWS}
 var
-  VerInfoSize, VerValueSize, Dummy: DWord;
+  VerInfoSize, VerValueSize, Dummy: DWORD;
   VerInfo: Pointer;
   VerValue: PVSFixedFileInfo;
 
 begin
-  VerInfoSize := GetFileVersionInfoSize(PChar(ParamStr(0)), Dummy);
+  Result := False;
+  VerInfoSize := GetFileVersionInfoSize(PChar(AFileName), Dummy);
 
   if (VerInfoSize <> 0) then
   begin
     GetMem(VerInfo, VerInfoSize);
 
     try
-      GetFileVersionInfo(PChar(ParamStr(0)), 0, VerInfoSize, VerInfo);
+      GetFileVersionInfo(PChar(AFileName), 0, VerInfoSize, VerInfo);
 
       if VerQueryValue(VerInfo, '\', Pointer(VerValue), VerValueSize) then
-        with VerValue^ do
-          Result := (dwFileVersionLS and $FFFF)
-      else
-        Result := 0;
+      begin
+        AVersionInfo[VERSION_MAJOR] := LongRec(VerValue.dwFileVersionMS).Hi;
+        AVersionInfo[VERSION_MINOR] := LongRec(VerValue.dwFileVersionMS).Lo;
+        AVersionInfo[VERSION_SERVICE] := LongRec(VerValue.dwFileVersionLS).Hi;
+        AVersionInfo[VERSION_BUILD] := LongRec(VerValue.dwFileVersionLS).Lo;
+        Result := True;
+      end;  //of begin
 
     finally
       FreeMem(VerInfo, VerInfoSize);
-    end;   //of try
-  end  //of begin
-  else
-    Result := 0;
+    end;  //of try
+  end;  //of begin
 end;
 {$ELSE}
 var
-  RS : TResources;
-  E : TElfResourceReader;
-  VR : TVersionResource;
-  i : Cardinal;
+  RS: TResources;
+  E: TElfResourceReader;
+  VerValue: TVersionResource;
+  i: Cardinal;
 
 begin
+  Result := False;
   RS := TResources.Create;
-  VR := nil;
+  VerValue := nil;
   i := 0;
 
   try
     E := TElfResourceReader.Create;
-    Rs.LoadFromFile(ParamStr(0), E);
+    Rs.LoadFromFile(AFileName, E);
     E.Free;
 
-    while (VR = nil) and (i < RS.Count) do
+    while (VerValue = nil) and (i < RS.Count) do
     begin
       if RS.Items[i] is TVersionResource then
-        VR := TVersionResource(RS.Items[i]);
+        VerValue := TVersionResource(RS.Items[i]);
       Inc(i);
     end;  //of while
 
-    if Assigned(VR) then
-      Result := VR.FixedInfo.FileVersion[3];
+    if Assigned(VerValue) then
+    begin
+      AVersionInfo := VerValue.FixedInfo.FileVersion;
+      Result := True;
+    end;  //of begin
 
   finally
     RS.FRee;
   end;  //of try
 end;
 {$ENDIF}
+
+{ TUpdateCheck.GetBuildNumber
+
+  Returns build number of current running program. }
+
+class function TUpdateCheck.GetBuildNumber(): Cardinal;
+var
+  VersionInfo: TFileProductVersion;
+
+begin
+  Result := 0;
+
+  if GetFileVersion(Application.ExeName, VersionInfo) then
+    Result := VersionInfo[VERSION_BUILD];
+end;
 
 { public TUpdateCheck.RemoveListener
 
@@ -351,7 +390,11 @@ end;
 
 procedure TUpdate.FormShow(Sender: TObject);
 begin
-  Caption := FTitle;
+  if (FTitle <> '') then
+    Caption := FTitle
+  else
+    Caption := FLang.GetString(5);
+
   bFinished.Caption := FLang.GetString(6);
 end;
 
@@ -373,13 +416,25 @@ end;
   Event method that is called by TDownloadThread when an error occurs while
   downloading the update. }
 
-procedure TUpdate.OnDownloadError(Sender: TThread; AResponseCode: Integer;
-  AResponseText: string);
+procedure TUpdate.OnDownloadError(Sender: TThread; const AResponseCode: Integer;
+  const AResponseText: string);
+var
+  MessageText: string;
+
 begin
   FTaskBar.ProgressState := TTaskBarProgressState.Error;
   pbProgress.State := TProgressBarState.pbsError;
   Reset();
-  FLang.ShowException(Caption + FLang.GetString(18), AResponseText);
+
+  // Certificate validation error?
+  if (AResponseCode = ERROR_CERTIFICATE_VALIDATION) then
+    MessageText := Format(AResponseText +'! Please visit the %s for more information.',
+    ['<a href="http://www.pm-codeworks.de/neuigkeiten.html">website</a>'])
+  else
+    // HTTP error?
+    MessageText := Format('HTTP/1.1 %d '+ AResponseText, [AResponseCode]);
+
+  FLang.ShowException(FLang.GetString([41, 18]), MessageText);
   bFinished.ModalResult := mrAbort;
 end;
 
@@ -387,21 +442,12 @@ end;
 
   Event method that is called by TDownloadThread when download is finished. }
 
-procedure TUpdate.OnDownloadFinished(Sender: TObject);
+procedure TUpdate.OnDownloadFinished(Sender: TThread; const AFileName: string);
 begin
   FTaskBar.ProgressState := TTaskBarProgressState.Normal;
-  
-  // Caption "finished"
   bFinished.Caption := FLang.GetString(8);
   bFinished.SetFocus;
   FThreadRuns := False;
-
-{$IFDEF MSWINDOWS}
-  // Show dialog to add certificate
-  if (ExtractFileExt(FFileName) = '.reg') then
-    ShellExecute(0, 'open', PChar('regedit.exe'), PChar(FFileName), nil, SW_SHOWNORMAL);
-{$ENDIF}
-  FlashWindow(Application.Handle, True);
   bFinished.ModalResult := mrOk;
 end;
 
@@ -409,25 +455,13 @@ end;
 
   Event method that is called by TDownloadThread when download is in progress. }
 
-procedure TUpdate.OnDownloading(Sender: TThread; ADownloadSize: Int64);
+procedure TUpdate.OnDownloading(Sender: TThread; AContentLength, AReadCount: Int64);
 begin
-  pbProgress.Position := ADownloadSize;
-  FTaskBar.ProgressValue := ADownloadSize;
-  lSize.Caption := Format('%d/%d KB', [ADownloadSize, pbProgress.Max]);
-end;
-
-{ private TUpdate.OnDownloadStart
-
-  Event method that is called by TDownloadThread when download starts. }
-
-procedure TUpdate.OnDownloadStart(Sender: TThread; AFileSize: Int64);
-begin
-  FTaskBar.ProgressMaxValue := AFileSize;
-  FTaskBar.ProgressState := TTaskBarProgressState.Normal;
-  pbProgress.Max := AFileSize;
-
-  if (Sender as TDownloadThread).TLSEnabled then
-    Caption := Caption +' - TLS';
+  pbProgress.Max := AContentLength;
+  pbProgress.Position := AReadCount;
+  FTaskBar.ProgressMaxValue := AContentLength;
+  FTaskBar.ProgressValue := AReadCount;
+  lSize.Caption := Format('%d/%d KB', [AReadCount, AContentLength]);
 end;
 
 { private TUpdate.OnUnzipArchive
@@ -455,19 +489,24 @@ end;
   Starts downloading a file. }
 
 function TUpdate.Download(ARemoteFileName, ALocalFileName: string;
-  ADownloadDirectory: string = ''): Boolean;
+  ADownloadDirectory: string = ''; AUseTls: Boolean = True): Boolean;
 var
   Url: string;
-  Continue: Boolean;
+  UseTls, Continue: Boolean;
 
 begin
   FRemoteFileName := ARemoteFileName;
   FLocalFileName := ALocalFileName;
+  UseTls := AUseTls;
 
-  // Download folder still set?
-  if (ADownloadDirectory <> '') then
-    Continue := True
-  else
+  // Certificate not installed?
+  if not CertificateExists() then
+    UseTls := ShowInstallCertificateDialog();
+
+  Continue := True;
+
+  // Download folder not set yet?
+  if (ADownloadDirectory = '') then
     // Show select directory dialog
     Continue := SelectDirectory(FLang.GetString(9), '', FDownloadDirectory);
 
@@ -479,10 +518,9 @@ begin
     with TDownloadThread.Create(Url, FFileName) do
     begin
       // Link events
-      FOnUserCancel := OnUserCancel;
+      FOnUserCancel := Cancel;
       OnDownloading := Self.OnDownloading;
       OnCancel := OnDownloadCancel;
-      OnStart := OnDownloadStart;
       OnFinish := OnDownloadFinished;
       OnError := OnDownloadError;
 
@@ -490,8 +528,14 @@ begin
       if FUnzip then
         OnUnzip := OnUnzipArchive;
 
-      Unzip := FUnzip;
-      Start;
+      // Use HTTPS?
+      if UseTls then
+      begin
+        TLSEnabled := True;
+        Caption := FLang.GetString([33, 5]);
+      end;  //of begin
+
+      Start();
     end;  //of with
 
     FThreadRuns := True;
@@ -513,6 +557,33 @@ begin
   FListeners.Add(AListener);
 end;
 
+{ public TUpdate.CertificateExists
+
+  Returns if the certificate exists in Windows certificate store. }
+
+function TUpdate.CertificateExists(): Boolean;
+const
+  KEY_CERTIFICATE_STORE = 'Software\Microsoft\SystemCertificates\ROOT\Certificates\';
+
+var
+  Reg: TRegistry;
+
+begin
+  Result := False;
+  Reg := TRegistry.Create(KEY_WOW64_64KEY or KEY_READ);
+
+  try
+    // Check user root certificate store
+    Reg.RootKey := HKEY_CURRENT_USER;
+    Result := (Reg.OpenKeyReadOnly(KEY_CERTIFICATE_STORE) and Reg.KeyExists(
+      CERTIFICATE_FINGERPRINT_SHA1));
+
+  finally
+    Reg.CloseKey;
+    Reg.Free;
+  end;  //of try
+end;
+
 { public TUpdate.Execute
 
   Executes the dialog. }
@@ -525,6 +596,58 @@ begin
   Result := Download(FRemoteFileName, FLocalFileName, FDownloadDirectory);
 end;
 
+{ public TUpdate.InstallCertificate
+
+  Installs the certificate for SSL updates and code signing verification. }
+
+function TUpdate.InstallCertificate(): Boolean;
+var
+  ResourceStream: TResourceStream;
+  FileName: string;
+
+begin
+  Result := False;
+  ResourceStream := TResourceStream.Create(HInstance, 'ca', RT_RCDATA);
+  FileName := IncludeTrailingPathDelimiter(GetEnvironmentVariable('temp')) +'CA.crt';
+
+  try
+    // Extract certificate from resource
+    ResourceStream.SaveToFile(FileName);
+
+    // Install certificate
+    ShellExecute(Handle, 'open', 'certutil.exe', PChar('-user -addstore ROOT "'+
+      FileName +'"'), nil, SW_HIDE);
+    Result := True;
+
+  finally
+    ResourceStream.Free;
+  end;  //of try
+end;
+
+{ public TUpdate.ShowInstallCertificateDialog
+
+  Shows a dialog where user has the choice to install the certificate. }
+
+function TUpdate.ShowInstallCertificateDialog(): Boolean;
+var
+  Answer: Integer;
+
+begin
+  Result := False;
+
+  // Ask user to install the certificate
+  Answer := TaskMessageDlg(FLang.GetString(37), FLang.GetString([38, 39,
+    NEW_LINE, 40]), mtConfirmation, mbYesNoCancel, 0, mbYes);
+
+  case Answer of
+    IDYES:
+      Result := InstallCertificate();
+
+    IDCANCEL:
+      Abort;
+  end;  //of case
+end;
+
 { public TUpdate.LaunchSetup
 
   Launches the downloaded setup. }
@@ -532,31 +655,6 @@ end;
 procedure TUpdate.LaunchSetup();
 begin
   ShellExecute(0, 'open', PChar(FFileName), nil, nil, SW_SHOWNORMAL);
-end;
-
-{ public TUpdate.PMCertificateExists
-
-  Returns if the PM Code Works certificate is already installed. }
-
-class function TUpdate.PMCertificateExists(): Boolean;
-var
-  Reg: TRegistry;
-
-const
-  CERT_KEY = 'SOFTWARE\Microsoft\SystemCertificates\ROOT\Certificates\';
-  PM_CERT_THUMBPRINT = '1350A832ED8A6A8FE8B95D2E674495021EB93A4D';
-
-begin
-  Reg := TRegistry.Create(KEY_WOW64_64KEY or KEY_READ);
-
-  try
-    Reg.RootKey := HKEY_LOCAL_MACHINE;
-    Result := (Reg.OpenKeyReadOnly(CERT_KEY) and Reg.KeyExists(PM_CERT_THUMBPRINT));
-
-  finally
-    Reg.CloseKey;
-    Reg.Free;
-  end;  //of try
 end;
 
 { public TUpdate.RemoveListener
@@ -595,4 +693,4 @@ begin
 end;
 {$ENDIF}
 
-end.
+end.

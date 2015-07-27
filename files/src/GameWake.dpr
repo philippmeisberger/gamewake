@@ -1,12 +1,15 @@
 program GameWake;
 
+{$R 'changelog.res' 'changelog.rc'}
+{$R 'description.res' 'description.rc'}
+
 uses
   Vcl.Forms,
   GameWakeMain in 'GameWakeMain.pas' {Main},
   GameWakeAPI in 'GameWakeAPI.pas',
-  GameWakeInfo in 'GameWakeInfo.pas' {Info},
   GameWakeOps in 'GameWakeOps.pas' {Options},
-  GameWakeAlertThread in 'GameWakeAlertThread.pas';
+  GameWakeAlertThread in 'GameWakeAlertThread.pas',
+  PMCWAbout in 'PMCWAbout.pas' {Info};
 
 {$R *.res}
 
