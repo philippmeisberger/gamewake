@@ -22,7 +22,7 @@ object Info: TInfo
   TextHeight = 14
   object PageControl: TPageControl
     Left = 0
-    Top = -2
+    Top = 0
     Width = 468
     Height = 259
     ActivePage = tsDescription
@@ -92,10 +92,6 @@ object Info: TInfo
     object tsChangelog: TTabSheet
       Caption = 'Changelog'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         460
         230)
@@ -110,7 +106,6 @@ object Info: TInfo
         Default = True
         ModalResult = 1
         TabOrder = 0
-        ExplicitLeft = 367
       end
       object mChangelog: TMemo
         Left = 15
