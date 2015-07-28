@@ -39,7 +39,12 @@ type
 
 implementation
 
+{$IFDEF MSWINDOWS}
 {$R *.dfm}
+{$ELSE}
+{$R *.lfm}
+{$ENDIF}
+
 {$R changelog.res}
 {$R description.res}
 

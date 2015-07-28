@@ -7,7 +7,7 @@ object Main: TMain
   ClientHeight = 270
   ClientWidth = 297
   Color = clBtnFace
-  Font.Charset = ANSI_CHARSET
+  Font.Charset = DEFAULT_CHARSET
   Font.Color = clBlack
   Font.Height = -11
   Font.Name = 'Arial'
@@ -367,9 +367,9 @@ object Main: TMain
       object N3: TMenuItem
         Caption = '-'
       end
-      object mmInfo: TMenuItem
+      object mmAbout: TMenuItem
         Caption = #220'ber Game Wake'
-        OnClick = mmInfoClick
+        OnClick = mmAboutClick
       end
     end
   end
