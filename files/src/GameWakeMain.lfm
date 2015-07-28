@@ -9,7 +9,7 @@ object Main: TMain
   ClientHeight = 271
   ClientWidth = 297
   Color = clBtnFace
-  Font.CharSet = ANSI_CHARSET
+  Font.CharSet = OEM_CHARSET
   Font.Color = clBlack
   Font.Height = -11
   Font.Name = 'Arial'
@@ -122,7 +122,7 @@ object Main: TMain
       Left = 12
       Height = 21
       Top = 18
-      Width = 71
+      Width = 57
       Caption = 'blinken'
       OnClick = cbBlinkClick
       TabOrder = 0
@@ -131,7 +131,7 @@ object Main: TMain
       Left = 12
       Height = 21
       Top = 38
-      Width = 112
+      Width = 89
       Caption = 'Schrift zeigen'
       OnClick = cbTextClick
       TabOrder = 2
@@ -389,9 +389,8 @@ object Main: TMain
         Caption = 'Zur Website'
         OnClick = mmWebsiteClick
       end
-      object mmDownloadCert: TMenuItem
+      object mmInstallCertificate: TMenuItem
         Caption = 'Zertifikat herunterladen'
-        OnClick = mmDownloadCertClick
       end
       object mmReport: TMenuItem
         Caption = 'Fehler melden'
@@ -400,9 +399,9 @@ object Main: TMain
       object N3: TMenuItem
         Caption = '-'
       end
-      object mmInfo: TMenuItem
+      object mmAbout: TMenuItem
         Caption = 'Über'
-        OnClick = mmInfoClick
+        OnClick = mmAboutClick
       end
     end
   end

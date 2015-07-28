@@ -8,8 +8,6 @@
 
 unit GameWakeMain;
 
-{$IFDEF LINUX} {$mode delphi}{$H+} {$ENDIF}
-
 interface
 
 uses
@@ -57,7 +55,7 @@ type
     mmFile: TMenuItem;
     mmSave: TMenuItem;
     mmHelp: TMenuItem;
-    mmInfo: TMenuItem;
+    mmAbout: TMenuItem;
     bColor: TButton;
     mmEdit: TMenuItem;
     mmOptions: TMenuItem;
@@ -107,7 +105,7 @@ type
     procedure mmEngClick(Sender: TObject);
     procedure mmFreClick(Sender: TObject);
     procedure mmReportClick(Sender: TObject);
-    procedure mmInfoClick(Sender: TObject);
+    procedure mmAboutClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure lCopyClick(Sender: TObject);
     procedure lCopyMouseEnter(Sender: TObject);
@@ -272,7 +270,7 @@ begin
   {$IFDEF MSWINDOWS}
     mmWebsite.Visible := False;
   {$ELSE}
-    mmDownloadCert.Visible := False;
+    mmInstallCertificate.Visible := False;
   {$ENDIF}
 
   // Init Clock
@@ -680,7 +678,7 @@ begin
     mmReport.Caption := GetString(26);
     mmWebsite.Caption := GetString(29);
     lCopy.Hint := mmWebsite.Caption;
-    mmInfo.Caption := Format(17, [Application.Title]);
+    mmAbout.Caption := Format(17, [Application.Title]);
 
     // Set captions for "alert type" TRadioGroup
     rgSounds.Caption := GetString(47);
@@ -1332,7 +1330,7 @@ end;
 
   MainMenu entry that shows a info page with build number and version history. }
 
-procedure TMain.mmInfoClick(Sender: TObject);
+procedure TMain.mmAboutClick(Sender: TObject);
 var
   Info: TInfo;
 

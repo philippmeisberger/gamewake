@@ -10,16 +10,16 @@ Version 3.3  [??.08.15]
   - Konfigurationsdatei nach $HOME/.gamewake.conf verschoben
 - Windows:
   - Konfigurationsdatei nach %APPDATA%\Game Wake\gamewake.ini verschoben
-  - 32/64-Bit Binärdateien'
-  - IniFileParser v1.1.1
+  - 32/64-Bit Binärdateien
   - Updater v3.0 mit SSL-Unterstützung
-  - OSUtils v2.2
+- IniFileParser v1.1.1
+- OSUtils v2.2
 
 ---------------------------------
 
 Version 3.2  [10.01.15]
 
-- Fehler behoben der im "Counter" Modus auftrat, wenn 
+- Fehler behoben der im "Counter" Modus auftrat, wenn
   "Uhrzeit speichern" abgewählt war
 - Eigener INI-Datei Parser für die Konfigurationsdatei
 - Speicherfunktion verbessert
@@ -62,7 +62,7 @@ Version 2.1.1  [09.10.13]
 - Zeit wird nach Standby aktualisiert (nur Windows)
 - Bei Klick auf Tray-Icon erscheint ein Balloon Tip mit der Alarmzeit
 - Bug in "Herunterfahren"-Funktion behoben
-- "Abbrechen"-Button ist bei Update von Anfang an verfügbar (nur 
+- "Abbrechen"-Button ist bei Update von Anfang an verfügbar (nur
 Windows)
 
 ---------------------------------
@@ -72,7 +72,7 @@ Version 2.1  [21.06.13]
 - API Version 2.1
 - neue Option: Stunden und Minuten können gekoppelt werden
 - Zeit wird nun im Format "HH:MM:SS" dargestellt
-- Änderungen im Fenstermanagement und GUI 
+- Änderungen im Fenstermanagement und GUI
 
 ---------------------------------
 
@@ -110,10 +110,10 @@ Version 1.3.1  [09.11.11]
 
 Version 1.3  [24.08.11]
 
-- Ein Optionen-Menü wurde unter "Bearbeiten" im Main Menu 
+- Ein Optionen-Menü wurde unter "Bearbeiten" im Main Menu
 hinzugefügt
   - User kann selbst entscheiden, was gespeichert werden soll
-- "Position speichern"-Funktion ist nun unter Reiter "Optionen" zu 
+- "Position speichern"-Funktion ist nun unter Reiter "Optionen" zu
 finden
 - kleinere Bugfixes
 
@@ -121,7 +121,7 @@ finden
 
 Version 1.2  [17.08.11]
 
-- Farbe des Blinkens kann frei gewählt und gespeichert werden 
+- Farbe des Blinkens kann frei gewählt und gespeichert werden
 - Speicherung selbstkreierter Farben möglich
 - Bugfixes
 
@@ -132,7 +132,7 @@ Version 1.1  [14.08.11]
 - Main Menu hinzugefügt
   - Eingaben können gespeichert werden
   - Position speichern möglich
-- Text kann bei Alarm angezeigt und (in userconfig) gespeichert 
+- Text kann bei Alarm angezeigt und (in userconfig) gespeichert
 werden
 - Game Wake kann bei Alarm (rot) blinken
 

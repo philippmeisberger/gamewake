@@ -18,8 +18,9 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <MinorVersionNr Value="3"/>
-      <BuildNr Value="440"/>
+      <BuildNr Value="442"/>
       <Language Value="0407"/>
+      <CharSet Value="04B0"/>
       <StringTable CompanyName="PM Code Works" FileDescription="Game Wake" LegalCopyright="Philipp Meisberger 2015" LegalTrademarks="PM Code Works" ProductName="Game Wake" ProductVersion="3.3"/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -107,6 +108,8 @@
       <SyntaxOptions>
         <SyntaxMode Value="Delphi"/>
         <AllowLabel Value="False"/>
+        <CPPInline Value="False"/>
+        <UseAnsiStrings Value="False"/>
       </SyntaxOptions>
     </Parsing>
     <CodeGeneration>

@@ -17,7 +17,7 @@
 114=Hilfe
 115=Nach Update suchen
 116=Zertifikat installieren
-117=Über ...
+117=Über %s
 118= nicht möglich!
 119=
 120=
@@ -125,7 +125,7 @@
 130=Download has been canceled!
 131=Fatal error
 132=Technical details
-133=
+133=File
 134=Recently %s is offered as a 64-bit version to download allowing your
 135=system to use resources optimally. Do you want to download this?
 136=Registy file *.reg|*.reg
@@ -133,7 +133,7 @@
 138=
 139=
 140=
-141=File
+141=
 142=Save Settings
 143=Edit
 144=Options

@@ -18,7 +18,7 @@ uses
   PMCWDownloadThread, Windows, FileCtrl, Forms, StdCtrls, ComCtrls, Controls,
   System.Win.TaskbarCore, Vcl.Taskbar, Registry, ShellAPI;
 {$ELSE}
-  LCLType, Resource, ElfReader, VersionResource, LResources;
+  LCLType, Resource, ElfReader, VersionResource, VersionTypes, LResources;
 {$ENDIF}
 
 const
@@ -335,7 +335,7 @@ var
 begin
   Result := 0;
 
-  if GetFileVersion(Application.ExeName, VersionInfo) then
+  if GetFileVersion(ParamStr(0), VersionInfo) then
     Result := VersionInfo[VERSION_BUILD];
 end;
 
@@ -693,4 +693,4 @@ begin
 end;
 {$ENDIF}
 
-end.
+end.
