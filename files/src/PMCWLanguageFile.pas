@@ -95,6 +95,7 @@ type
       AMessageType: TMsgDlgType = mtInformation): Integer; overload;
     procedure ShowException(AText, AInformation: string{$IFDEF MSWINDOWS};
       AOptions: TTaskDialogFlags = []{$ENDIF});
+    procedure Update();
     { external }
     property Id: {$IFDEF MSWINDOWS}Word{$ELSE}WideString{$ENDIF} read FLangId;
   {$IFDEF MSWINDOWS}
@@ -279,7 +280,7 @@ begin
     LocaleId := 'en_US';
 
     // Language file contains no default language?
-    if (not FLanguages.Find(LocaleId, i)) then
+    if (FLanguages.Values[LocaleId] = '') then
       raise ELanguageException.Create('No default language found in language file!');
   end;  //of begin
 
@@ -654,6 +655,15 @@ begin
 begin
   ShowMessage(GetString(31) +': '+ AText + sLineBreak + AInformation, mtError);
 {$ENDIF}
+end;
+
+{ public TLanguageFile.Update
+
+  Uses the current selected language to notify all listeners. }
+
+procedure TLanguageFile.Update;
+begin
+  ChangeLanguage(FLocale);
 end;
 
 end.

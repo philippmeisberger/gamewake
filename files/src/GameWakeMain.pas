@@ -176,6 +176,9 @@ begin
       FConfigPath := ParamStr(4)
     else
       FConfigPath := GetUserDir() +'.gamewake';
+
+  // Setup language
+  FLang := TLanguageFile.Create(Self, FLangPath);
 {$ELSE}
   FConfigPath := GetUserAppDataDir() +'Game Wake\';
 
@@ -184,11 +187,9 @@ begin
 
   FConfigPath := FConfigPath +'gamewake.ini';
   FPath := '';
-{$ENDIF}
 
   // Setup language
   FLang := TLanguageFile.Create(Self);
-{$IFDEF MSWINDOWS}
   FLang.Interval := 100;
 {$ENDIF}
   FLang.BuildLanguageMenu(MainMenu, mmLang);
@@ -461,15 +462,18 @@ begin
     Config := TConfigFile.Create(FConfigPath);
 
     try
-      // Load language from config (default: english)
+      // Load language from config
     {$IFDEF MSWINDOWS}
-      Locale := Config.ReadInteger('Global', 'Locale', 1033);
+      TryStrToInt(Config.ReadString('Global', 'Locale'), Locale);
     {$ELSE}
-      Locale := Config.ReadString('Global', 'Locale', 'en_US');
+      Locale := Config.ReadString('Global', 'Locale');
     {$ENDIF}
 
-      // Load language file
-      FLang.Locale := Locale;
+      // Load prefered language
+      if (Locale <> {$IFDEF MSWINDOWS}-1{$ELSE}''{$ENDIF}) then
+        FLang.Locale := Locale
+      else
+        FLang.Update();
 
       // Load last mode
       mmTimer.Checked := Config.ReadBoolean('Global', 'TimerMode');
