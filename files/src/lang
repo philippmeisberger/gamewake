@@ -1,10 +1,10 @@
 ﻿
 [&Deutsch]
-100=Information
+100=de_DE
 101=Warnung
 102=Fehler
 103=Frage
-104=Bestätigung
+104=Information
 105=Update
 106=abbrechen
 107=Abgebrochen!
@@ -92,11 +92,11 @@
 189=Tray icon konnte nicht erstellt werden!
 
 [&English]
-100=Information
+100=en_US
 101=Warning
 102=Error
 103=Question
-104=Confirmation
+104=Information
 105=Update
 106=abort
 107=Canceled!
@@ -184,11 +184,11 @@
 189=Tray icon could not be created!
 
 [&Français]
-100=Information
+100=fr_FR
 101=Avertissement
 102=Erreur
 103=Question
-104=Confirmation
+104=Information
 105=MAJ
 106=abandonner
 107=Annulé!

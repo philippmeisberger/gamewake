@@ -70,9 +70,6 @@ type
     mmView: TMenuItem;
     mmLang: TMenuItem;
     mmReport: TMenuItem;
-    mmGer: TMenuItem;
-    mmEng: TMenuItem;
-    mmFre: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure mmInstallCertificateClick(Sender: TObject);
@@ -101,9 +98,6 @@ type
     procedure mmOptionsClick(Sender: TObject);
     procedure mmTimerClick(Sender: TObject);
     procedure mmCounterClick(Sender: TObject);
-    procedure mmGerClick(Sender: TObject);
-    procedure mmEngClick(Sender: TObject);
-    procedure mmFreClick(Sender: TObject);
     procedure mmReportClick(Sender: TObject);
     procedure mmAboutClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -194,15 +188,8 @@ begin
 
   // Setup language
   FLang := TLanguageFile.Create(Self);
-{$IFDEF MSWINDOWS}
-  FLang.AddLanguage(LANG_GERMAN, 100);
-  FLang.AddLanguage(LANG_ENGLISH, 200);
-  FLang.AddLanguage(LANG_FRENCH, 300);
-{$ELSE}
-  FLang.AddLanguage(LANG_GERMAN, '&Deutsch');
-  FLang.AddLanguage(LANG_ENGLISH, '&English');
-  FLang.AddLanguage(LANG_FRENCH, '&Français');
-{$ENDIF}
+  FLang.Interval := 100;
+  FLang.BuildLanguageMenu(MainMenu, mmLang);
 
   // Init config file access
   Config := TConfigFile.Create(FConfigPath);
@@ -217,28 +204,9 @@ begin
     // Do not load anything
     else
     begin
-      FLang.ChangeLanguage(LANG_USER);
       mmSave.Checked := False;
       mmOptions.Enabled := False;
     end;  //of if
-
-    // Set language selection
-    {$IFDEF MSWINDOWS}
-    case FLang.Id of
-      200: mmEng.Checked := True;
-      300: mmFre.Checked := True;
-      else
-           mmGer.Checked := True;
-    end;  //of case
-    {$ELSE}
-    if (FLang.Id = '&English') then
-      mmEng.Checked := True
-    else
-      if (FLang.Id = '&Français') then
-        mmFre.Checked := True
-      else
-        mmGer.Checked := True;
-    {$ENDIF}
 
     // Load last position?
     if not Config.ReadBoolean('Global', 'SavePos') then
@@ -483,7 +451,7 @@ end;
 procedure TMain.LoadFromIni();
 var
   Config: TConfigFile;
-  LocaleId: {$IFDEF MSWINDOWS}Word{$ELSE}string{$ENDIF};
+  Locale: {$IFDEF MSWINDOWS}Word{$ELSE}string{$ENDIF};
   AlertType: Integer;
 
 begin
@@ -491,15 +459,15 @@ begin
     Config := TConfigFile.Create(FConfigPath);
 
     try
-      // Load language from config
+      // Load language from config (default: english)
     {$IFDEF MSWINDOWS}
-      LocaleId := Config.ReadInteger('Global', 'LangID');
+      Locale := Config.ReadInteger('Global', 'Locale', 1033);
     {$ELSE}
-      LocaleId := Config.ReadString('Global', 'Lang');
+      Locale := Config.ReadString('Global', 'Locale', 'en_US');
     {$ENDIF}
 
       // Load language file
-      FLang.Id := LocaleId;
+      FLang.Locale := Locale;
 
       // Load last mode
       mmTimer.Checked := Config.ReadBoolean('Global', 'TimerMode');
@@ -595,9 +563,9 @@ begin
       if mmSave.Checked then
       begin
       {$IFDEF MSWINDOWS}
-        Config.WriteInteger('Global', 'LangID', FLang.Id);
+        Config.WriteInteger('Global', 'Locale', FLang.Locale);
       {$ELSE}
-        Config.WriteString('Global', 'Lang', FLang.Id);
+        Config.WriteString('Global', 'Locale', FLang.Locale);
       {$ENDIF}
         Config.WriteBoolean('Global', 'Save', True);
         Config.WriteBoolean('Global', 'TimerMode', mmTimer.Checked);
@@ -1242,33 +1210,6 @@ begin
     eMin.Text := FClock.Alert.GetMin();
     eHour.SetFocus;
   end;  //of begin
-end;
-
-{ TMain.mmGerClick
-
-  MainMenu entry that allows to change the current language to german. }
-
-procedure TMain.mmGerClick(Sender: TObject);
-begin
-  FLang.ChangeLanguage(LANG_GERMAN);
-end;
-
-{ TMain.mmEngClick
-
-  MainMenu entry that allows to change the current language to english. }
-
-procedure TMain.mmEngClick(Sender: TObject);
-begin
-  FLang.ChangeLanguage(LANG_ENGLISH);
-end;
-
-{ TMain.mmFraClick
-
-  MainMenu entry that allows to change the current language to french. }
-
-procedure TMain.mmFreClick(Sender: TObject);
-begin
-  FLang.ChangeLanguage(LANG_FRENCH);
 end;
 
 { TMain.mmInstallCertificateClick

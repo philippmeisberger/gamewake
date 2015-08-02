@@ -97,14 +97,14 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
         <VerInfo_MinorVer>3</VerInfo_MinorVer>
-        <VerInfo_Build>442</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=PM Code Works;FileDescription=Game Wake;FileVersion=3.3.0.442;InternalName=;LegalCopyright=Philipp Meisberger 2015;LegalTrademarks=PM Code Works;OriginalFilename=;ProductName=Game Wake;ProductVersion=3.3;Comments=Delphi</VerInfo_Keys>
+        <VerInfo_Build>449</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=PM Code Works;FileDescription=Game Wake;FileVersion=3.3.0.449;InternalName=;LegalCopyright=Philipp Meisberger 2015;LegalTrademarks=PM Code Works;OriginalFilename=;ProductName=Game Wake;ProductVersion=3.3;Comments=Delphi</VerInfo_Keys>
         <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <VerInfo_MinorVer>3</VerInfo_MinorVer>
-        <VerInfo_Keys>CompanyName=PM Code Works;FileDescription=Game Wake;FileVersion=3.3.0.442;InternalName=;LegalCopyright=Philipp Meisberger 2015;LegalTrademarks=PM Code Works;OriginalFilename=;ProductName=Game Wake;ProductVersion=3.3;Comments=Delphi</VerInfo_Keys>
-        <VerInfo_Build>442</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=PM Code Works;FileDescription=Game Wake;FileVersion=3.3.0.449;InternalName=;LegalCopyright=Philipp Meisberger 2015;LegalTrademarks=PM Code Works;OriginalFilename=;ProductName=Game Wake;ProductVersion=3.3;Comments=Delphi</VerInfo_Keys>
+        <VerInfo_Build>449</VerInfo_Build>
         <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
@@ -559,13 +559,13 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <ProjectRoot Platform="iOSDevice32" Name="$(PROJECTNAME).app"/>
+                <ProjectRoot Platform="iOSSimulator" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="Android" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="Win32" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="OSX32" Name="$(PROJECTNAME).app"/>
-                <ProjectRoot Platform="iOSSimulator" Name="$(PROJECTNAME).app"/>
+                <ProjectRoot Platform="iOSDevice32" Name="$(PROJECTNAME).app"/>
             </Deployment>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>
