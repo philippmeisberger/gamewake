@@ -3,7 +3,7 @@
   <ProjectSession>
     <Version Value="9"/>
     <BuildModes Active="Default"/>
-    <Units Count="69">
+    <Units Count="71">
       <Unit0>
         <Filename Value="GameWake.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -11,7 +11,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="15" Y="11"/>
-        <UsageCount Value="56"/>
+        <UsageCount Value="60"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit0>
       <Unit1>
@@ -21,7 +21,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="62"/>
         <CursorPos X="4" Y="153"/>
-        <UsageCount Value="56"/>
+        <UsageCount Value="60"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit1>
       <Unit2>
@@ -30,7 +30,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="56"/>
+        <UsageCount Value="60"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit2>
       <Unit3>
@@ -43,13 +43,13 @@
         <WindowIndex Value="0"/>
         <TopLine Value="14"/>
         <CursorPos X="43" Y="49"/>
-        <UsageCount Value="56"/>
+        <UsageCount Value="60"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
       <Unit4>
         <Filename Value="GameWakeMain.dfm"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="56"/>
+        <UsageCount Value="60"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit4>
       <Unit5>
@@ -59,12 +59,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="GameWakeMain"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="69" Y="1"/>
-        <UsageCount Value="56"/>
+        <TopLine Value="179"/>
+        <CursorPos X="9" Y="193"/>
+        <UsageCount Value="60"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -72,7 +71,7 @@
       <Unit6>
         <Filename Value="GameWakeOps.dfm"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="56"/>
+        <UsageCount Value="60"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit6>
       <Unit7>
@@ -85,7 +84,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="107"/>
         <CursorPos X="34" Y="120"/>
-        <UsageCount Value="56"/>
+        <UsageCount Value="60"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit7>
       <Unit8>
@@ -539,10 +538,13 @@
       <Unit61>
         <Filename Value="PMCWLanguageFile.pas"/>
         <UnitName Value="PMCWLanguageFile"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="366"/>
-        <UsageCount Value="11"/>
+        <TopLine Value="49"/>
+        <CursorPos X="14" Y="629"/>
+        <UsageCount Value="13"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit61>
       <Unit62>
@@ -552,7 +554,6 @@
         <TopLine Value="177"/>
         <CursorPos X="1" Y="203"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit62>
       <Unit63>
         <Filename Value="/usr/share/fpcsrc/2.6.4/rtl/objpas/sysutils/sysstrh.inc"/>
@@ -605,123 +606,142 @@
         <CursorPos X="26" Y="281"/>
         <UsageCount Value="10"/>
       </Unit68>
+      <Unit69>
+        <Filename Value="/usr/lib/lazarus/1.2.4/lcl/menus.pp"/>
+        <UnitName Value="Menus"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="266"/>
+        <CursorPos X="14" Y="286"/>
+        <UsageCount Value="10"/>
+      </Unit69>
+      <Unit70>
+        <Filename Value="/usr/share/fpcsrc/2.6.4/rtl/objpas/classes/classesh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="45"/>
+        <CursorPos X="12" Y="70"/>
+        <UsageCount Value="10"/>
+      </Unit70>
     </Units>
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
-    <JumpHistory Count="28" HistoryIndex="27">
+    <JumpHistory Count="29" HistoryIndex="28">
       <Position1>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="269" Column="24" TopLine="252"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="64" Column="26" TopLine="47"/>
       </Position1>
       <Position2>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="315" Column="10" TopLine="288"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="335" Column="1" TopLine="358"/>
       </Position2>
       <Position3>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="402" Column="22" TopLine="375"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="81" Column="38" TopLine="61"/>
       </Position3>
       <Position4>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="11" Column="46" TopLine="1"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="137" Column="38" TopLine="115"/>
       </Position4>
       <Position5>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="56" Column="12" TopLine="29"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="433" Column="1" TopLine="366"/>
       </Position5>
       <Position6>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="100" Column="22" TopLine="73"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="377" Column="1" TopLine="256"/>
       </Position6>
       <Position7>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="125" Column="39" TopLine="97"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="276" Column="1" TopLine="253"/>
       </Position7>
       <Position8>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="418" Column="41" TopLine="390"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="278" Column="1" TopLine="253"/>
       </Position8>
       <Position9>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="25" Column="19" TopLine="1"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="281" Column="1" TopLine="253"/>
       </Position9>
       <Position10>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="737" Column="29" TopLine="725"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="241" Column="43" TopLine="212"/>
       </Position10>
       <Position11>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="17" Column="67" TopLine="17"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="276" Column="1" TopLine="255"/>
       </Position11>
       <Position12>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="26" Column="29" TopLine="1"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="278" Column="1" TopLine="255"/>
       </Position12>
       <Position13>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="17" Column="78" TopLine="1"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="281" Column="1" TopLine="255"/>
       </Position13>
       <Position14>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="1431" Column="23" TopLine="1400"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="285" Column="41" TopLine="255"/>
       </Position14>
       <Position15>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="1432" Column="60" TopLine="1397"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="276" Column="24" TopLine="255"/>
       </Position15>
       <Position16>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="1434" Column="29" TopLine="1398"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="285" Column="1" TopLine="255"/>
       </Position16>
       <Position17>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="1432" Column="19" TopLine="1399"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="287" Column="1" TopLine="255"/>
       </Position17>
       <Position18>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="1436" Column="15" TopLine="1399"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="282" Column="1" TopLine="255"/>
       </Position18>
       <Position19>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="8" Column="42" TopLine="1"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="241" Column="34" TopLine="217"/>
       </Position19>
       <Position20>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="769" Column="42" TopLine="741"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="276" Column="1" TopLine="255"/>
       </Position20>
       <Position21>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="751" Column="44" TopLine="742"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="285" Column="1" TopLine="255"/>
       </Position21>
       <Position22>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="276" Column="1" TopLine="255"/>
       </Position22>
       <Position23>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="769" Column="42" TopLine="735"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="294" Column="22" TopLine="283"/>
       </Position23>
       <Position24>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="628" Column="14" TopLine="594"/>
       </Position24>
       <Position25>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="17" Column="68" TopLine="1"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="176" Column="44" TopLine="155"/>
       </Position25>
       <Position26>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="692" Column="52" TopLine="678"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="237" Column="14" TopLine="213"/>
       </Position26>
       <Position27>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="28" Column="3" TopLine="16"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="241" Column="35" TopLine="213"/>
       </Position27>
       <Position28>
-        <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="828" Column="56" TopLine="807"/>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="242" Column="14" TopLine="213"/>
       </Position28>
+      <Position29>
+        <Filename Value="PMCWLanguageFile.pas"/>
+        <Caret Line="243" Column="33" TopLine="213"/>
+      </Position29>
     </JumpHistory>
   </ProjectSession>
   <EditorMacros Count="0"/>

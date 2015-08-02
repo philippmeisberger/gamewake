@@ -188,7 +188,9 @@ begin
 
   // Setup language
   FLang := TLanguageFile.Create(Self);
+{$IFDEF MSWINDOWS}
   FLang.Interval := 100;
+{$ENDIF}
   FLang.BuildLanguageMenu(MainMenu, mmLang);
 
   // Init config file access
