@@ -464,7 +464,7 @@ begin
     try
       // Load language from config
     {$IFDEF MSWINDOWS}
-      TryStrToInt(Config.ReadString('Global', 'Locale'), Locale);
+      Locale := Config.ReadInteger('Global', 'Locale');
     {$ELSE}
       Locale := Config.ReadString('Global', 'Locale');
     {$ENDIF}

@@ -237,7 +237,7 @@ object Main: TMain
     Height = 17
     Top = 96
     Width = 17
-    Caption = '>'
+    Caption = '▶'
     OnClick = bPlayClockClick
     TabOrder = 6
   end
@@ -246,7 +246,7 @@ object Main: TMain
     Height = 17
     Top = 136
     Width = 17
-    Caption = '>'
+    Caption = '▶'
     OnClick = bPlayBingClick
     TabOrder = 8
   end
@@ -255,7 +255,7 @@ object Main: TMain
     Height = 17
     Top = 156
     Width = 17
-    Caption = '>'
+    Caption = '▶'
     OnClick = bPlayBeepClick
     TabOrder = 13
   end
@@ -264,7 +264,7 @@ object Main: TMain
     Height = 17
     Top = 116
     Width = 17
-    Caption = '>'
+    Caption = '▶'
     OnClick = bPlayHornClick
     TabOrder = 7
   end
