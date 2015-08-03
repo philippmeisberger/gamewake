@@ -210,7 +210,7 @@ procedure TLanguageFile.BuildLanguageMenu(AMainMenu: TMainMenu; AMenuItem: TMenu
 var
   MenuItem: TMenuItem;
 {$IFDEF MSWINDOWS}
-  Language: Word
+  Language: Word;
 {$ELSE}
   i: Integer;
 {$ENDIF}

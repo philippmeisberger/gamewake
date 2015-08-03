@@ -464,13 +464,13 @@ begin
     try
       // Load language from config
     {$IFDEF MSWINDOWS}
-      Locale := Config.ReadInteger('Global', 'Locale');
+      Locale := Config.ReadInteger('Global', 'Locale', 0);
     {$ELSE}
       Locale := Config.ReadString('Global', 'Locale');
     {$ENDIF}
 
       // Load prefered language
-      if (Locale <> {$IFDEF MSWINDOWS}-1{$ELSE}''{$ENDIF}) then
+      if (Locale <> {$IFDEF MSWINDOWS}0{$ELSE}''{$ENDIF}) then
         FLang.Locale := Locale
       else
         FLang.Update();
