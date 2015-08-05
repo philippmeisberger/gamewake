@@ -5,12 +5,14 @@ gamewake (3.3) stable; urgency=low
     * Moved configuration file to $HOME/.gamewake
   * Windows:
     * Moved configuration file to %APPDATA%\Game Wake\gamewake.ini
+    * Usage of specific Windows UI features (beginning with Vista)
     * 32/64-Bit binaries
     * Updater v3.0 with SSL support
+  * Language is now loaded by "Locale" in configuration file
   * IniFileParser v1.1.1
   * OSUtils v2.2
 
- -- Philipp Meisberger <team@pm-codeworks.de>  Thu, 20 Aug 2015 14:31:04 +0200
+ -- Philipp Meisberger <team@pm-codeworks.de>  Thu, 05 Aug 2015 11:21:04 +0200
 
 
 gamewake (3.2) stable; urgency=low

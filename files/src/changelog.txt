@@ -10,6 +10,7 @@ Version 3.3  [??.08.15]
   - Konfigurationsdatei nach $HOME/.gamewake.conf verschoben
 - Windows:
   - Konfigurationsdatei nach %APPDATA%\Game Wake\gamewake.ini verschoben
+  - Nutzung von Windows spezifischen grafischen Features (ab Vista)
   - 32/64-Bit Binärdateien
   - Updater v3.0 mit SSL-Unterstützung
 - Sprache wird nun vom Schlüssel "Locale" aus der Konfigurationsdatei geladen
