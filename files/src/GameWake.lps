@@ -83,8 +83,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="GameWakeOps"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="107"/>
-        <CursorPos X="34" Y="120"/>
+        <TopLine Value="106"/>
+        <CursorPos X="55" Y="108"/>
         <UsageCount Value="61"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit7>

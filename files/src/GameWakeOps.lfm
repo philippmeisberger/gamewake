@@ -9,13 +9,12 @@ object Options: TOptions
   ClientHeight = 256
   ClientWidth = 426
   Color = clBtnFace
-  Font.CharSet = ANSI_CHARSET
   Font.Color = clBlack
   Font.Height = -11
   Font.Name = 'Arial'
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '0.9.30.4'
+  LCLVersion = '1.2.4.0'
   object gbSave: TGroupBox
     Left = 16
     Height = 113
@@ -28,15 +27,15 @@ object Options: TOptions
     TabOrder = 3
     object cbSaveClock: TCheckBox
       Left = 16
-      Height = 22
+      Height = 21
       Top = 16
-      Width = 110
+      Width = 109
       Caption = 'Uhrzeit speichern'
       TabOrder = 0
     end
     object cbSaveSound: TCheckBox
       Left = 208
-      Height = 22
+      Height = 21
       Top = 16
       Width = 173
       Anchors = [akTop, akLeft, akRight]
@@ -45,7 +44,7 @@ object Options: TOptions
     end
     object cbSaveColor: TCheckBox
       Left = 208
-      Height = 22
+      Height = 21
       Top = 40
       Width = 173
       Anchors = [akTop, akLeft, akRight]
@@ -54,17 +53,17 @@ object Options: TOptions
     end
     object cbSaveText: TCheckBox
       Left = 16
-      Height = 22
+      Height = 21
       Top = 40
-      Width = 96
+      Width = 95
       Caption = 'Text speichern'
       TabOrder = 2
     end
     object cbSavePos: TCheckBox
       Left = 16
-      Height = 22
+      Height = 21
       Top = 64
-      Width = 113
+      Width = 112
       Caption = 'Position speichern'
       TabOrder = 4
     end
@@ -112,17 +111,17 @@ object Options: TOptions
     TabOrder = 4
     object cbCombine: TCheckBox
       Left = 16
-      Height = 22
+      Height = 21
       Top = 8
-      Width = 167
+      Width = 166
       Caption = 'Stunden und Minuten koppeln'
       TabOrder = 0
     end
     object cbUpdate: TCheckBox
       Left = 16
-      Height = 22
+      Height = 21
       Top = 28
-      Width = 240
+      Width = 239
       Caption = 'Beim Start automatisch nach Update suchen'
       TabOrder = 1
     end
