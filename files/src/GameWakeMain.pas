@@ -242,6 +242,7 @@ begin
     mmWebsite.Visible := False;
   {$ELSE}
     mmInstallCertificate.Visible := False;
+    Icon.LoadFromFile('/usr/share/pixmaps/gamewake.ico');
   {$ENDIF}
 
   // Init Clock

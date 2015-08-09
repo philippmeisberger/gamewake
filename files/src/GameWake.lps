@@ -62,8 +62,8 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="426"/>
-        <CursorPos X="66" Y="467"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
         <UsageCount Value="61"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -524,7 +524,7 @@
         <UnitName Value="PMCWUpdater"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="1" Y="33"/>
+        <CursorPos X="78" Y="16"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit59>
@@ -593,7 +593,7 @@
         <UnitName Value="PMCWAbout"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="5" Y="22"/>
+        <CursorPos X="15" Y="17"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit67>
@@ -623,7 +623,7 @@
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
-    <JumpHistory Count="3" HistoryIndex="2">
+    <JumpHistory Count="5" HistoryIndex="4">
       <Position1>
         <Filename Value="GameWakeMain.pas"/>
         <Caret Line="472" Column="40" TopLine="451"/>
@@ -636,6 +636,14 @@
         <Filename Value="GameWakeMain.pas"/>
         <Caret Line="194" Column="9" TopLine="151"/>
       </Position3>
+      <Position4>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="436" Column="36" TopLine="427"/>
+      </Position4>
+      <Position5>
+        <Filename Value="GameWakeMain.pas"/>
+        <Caret Line="224" Column="22" TopLine="222"/>
+      </Position5>
     </JumpHistory>
   </ProjectSession>
   <EditorMacros Count="0"/>
