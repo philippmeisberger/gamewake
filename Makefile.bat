@@ -9,5 +9,5 @@
 @SET PLATFORM=
 @SET PlatformSDK=
 
-cd src\
+cd files\src\
 msbuild GameWake.dproj

@@ -18,7 +18,7 @@ uses
   PMCWDownloadThread, Windows, FileCtrl, Forms, StdCtrls, ComCtrls, Controls,
   System.Win.TaskbarCore, Vcl.Taskbar, Registry, ShellAPI;
 {$ELSE}
-  LCLType, Resource, ElfReader, VersionResource, VersionTypes, LResources;
+  LCLType, Resource, ElfReader, VersionResource, LResources;
 {$ENDIF}
 
 const
@@ -178,7 +178,7 @@ procedure TUpdateCheck.OnCheckError(Sender: TThread; AResponseCode: Integer;
 begin
   if FUserUpdate then
     if (AResponseCode > 0) then
-      FLang.ShowException(FLang.GetString([12, 13]), AResponseText)
+      FLang.ShowException(FLang.GetString([12, 13]), AResponseText + Format(' (%d)', [AResponseCode]))
     else
       FLang.ShowMessage(12, 13, mtError);
 end;
@@ -335,7 +335,7 @@ var
 begin
   Result := 0;
 
-  if GetFileVersion(ParamStr(0), VersionInfo) then
+  if GetFileVersion(Application.ExeName, VersionInfo) then
     Result := VersionInfo[VERSION_BUILD];
 end;
 
@@ -693,4 +693,4 @@ begin
 end;
 {$ENDIF}
 
-end.
+end.
