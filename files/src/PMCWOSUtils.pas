@@ -14,7 +14,7 @@ interface
 
 uses
 {$IFDEF MSWINDOWS}
-  Windows, Classes, Registry, ShellAPI, ShlObj,
+  Windows, Classes, Registry, ShellAPI,
 {$ELSE}
   Process,
 {$ENDIF}
@@ -31,17 +31,16 @@ const
 {$ENDIF}
 
 type
+{$IFDEF LINUX}
   { Exception class }
-  EInvalidArgument = class(Exception);
-
-{$IFDEF MSWINDOWS}
+  EArgumentException = class(Exception);
+{$ELSE}
   { TRootKey }
   TRootKey = string[4];
 
   function CreateTempDir(const AFolderName: string): Boolean;
   function ExecuteProgram(const AProgram: string;
     AArguments: string = ''; ARunAsAdmin: Boolean = False): Boolean;
-  function ExitWindows(AAction: UINT): Boolean;
   function ExpandEnvironmentVar(var AVariable: string): Boolean;
   function GetTempDir(): string;
   function GetUserAppDataDir(): string;
@@ -86,53 +85,6 @@ begin
 
   Result := (ShellExecute(0, Operation, PChar(AProgram), PChar(AArguments), nil,
     SW_SHOWNORMAL) > 32);
-end;
-
-{ ExitWindows
-
-  Tells Windows to shutdown, reboot or log off. }
-
-function ExitWindows(AAction: UINT): Boolean;
-const
-  SE_SHUTDOWN_NAME = 'SeShutdownPrivilege';
-  SHTDN_REASON_MAJOR_APPLICATION = $00040000;
-  SHTDN_REASON_MINOR_MAINTENANCE = 1;
-
-var
-  TokenHandle: THandle;
-  NewState, PreviousState: TTokenPrivileges;
-  BufferLength, ReturnLength: Cardinal;
-  Luid: Int64;
-
-begin
-  if ((AAction <> EWX_LOGOFF) and (Win32Platform = VER_PLATFORM_WIN32_NT)) then
-  try
-    if not OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES or
-      TOKEN_QUERY, TokenHandle) then
-      raise Exception.Create(SysErrorMessage(GetLastError()));
-
-    // Get LUID of shutdown privilege
-    if not LookupPrivilegeValue(nil, SE_SHUTDOWN_NAME, Luid) then
-      raise Exception.Create(SysErrorMessage(GetLastError()));
-
-    // Create new shutdown privilege
-    NewState.PrivilegeCount := 1;
-    NewState.Privileges[0].Luid := Luid;
-    NewState.Privileges[0].Attributes := SE_PRIVILEGE_ENABLED;
-    BufferLength := SizeOf(PreviousState);
-    ReturnLength := 0;
-
-    // Set the shutdown privilege
-    if not AdjustTokenPrivileges(TokenHandle, False, NewState, BufferLength,
-      PreviousState, ReturnLength) then
-      raise Exception.Create(SysErrorMessage(GetLastError()));
-
-  finally
-    CloseHandle(TokenHandle);
-  end;  //of try
-
-  Result := ExitWindowsEx(AAction, SHTDN_REASON_MAJOR_APPLICATION or
-    SHTDN_REASON_MINOR_MAINTENANCE);   //EWX_SHUTDOWN, EWX_POWEROFF, (EWX_FORCE, EWX_FORCEIFHUNG)
 end;
 
 { ExpandEnvironmentVar
@@ -232,7 +184,7 @@ begin
                            else
                              Result := 'HKCC';
 
-    else                   raise EInvalidArgument.Create('Unknown HKEY!');
+    else                   raise EArgumentException.Create('Unknown HKEY!');
   end;  //of case
 end;
 {$ENDIF}
@@ -303,7 +255,7 @@ begin
             if (ARootKey = 'HKCC') then
               Result := HKEY_CURRENT_CONFIG
             else
-              raise EInvalidArgument.Create('Unknown HKEY: "'+ ARootKey +'"!');
+              raise EArgumentException.Create('Unknown HKEY: "'+ ARootKey +'"!');
 end;
 
 { Wow64FsRedirection

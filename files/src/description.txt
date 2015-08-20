@@ -1,4 +1,4 @@
-﻿"Game Wake ist ein virtueller Wecker, den man sich stellen kann, um nicht, z.B. während des exzessiven Gamings, die Pizza im Ofen zu vergessen. Aber auch sonst eignet sich Game Wake zum Erinnern an alle möglichen Dinge."
+﻿Game Wake ist ein virtueller Wecker, den man sich stellen kann, um nicht, z.B. während des exzessiven Gamings, die Pizza im Ofen zu vergessen. Aber auch sonst eignet sich Game Wake zum Erinnern an alle möglichen Dinge.
 
 Copyright (C) 2011 Philipp Meisberger 
 
