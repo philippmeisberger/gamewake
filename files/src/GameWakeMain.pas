@@ -70,6 +70,7 @@ type
     mmView: TMenuItem;
     mmLang: TMenuItem;
     mmReport: TMenuItem;
+    Timer: TTimer;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure mmInstallCertificateClick(Sender: TObject);
@@ -104,6 +105,7 @@ type
     procedure lCopyClick(Sender: TObject);
     procedure lCopyMouseEnter(Sender: TObject);
     procedure lCopyMouseLeave(Sender: TObject);
+    procedure Blink(Sender: TObject);
   private
     FClock: TClock;
     FLang: TLanguageFile;
@@ -113,7 +115,6 @@ type
     FUpdateCheck: TUpdateCheck;
     procedure Alert(Sender: TObject);
     procedure OnUpdate(Sender: TObject; const ANewBuild: Cardinal);
-    procedure Blink(Sender: TObject);
     procedure BlinkEnd(Sender: TObject);
     procedure Count(Sender: TObject; ATime: string);
     procedure LoadColor();
@@ -252,8 +253,7 @@ begin
   with FClock do
   begin
     Alert.SetTime(StrToInt(eHour.Text), StrToInt(eMin.Text));
-    OnAlertStart := Self.Alert;
-    OnAlert := Blink;
+    OnAlert := Self.Alert;
     OnAlertEnd := BlinkEnd;
     OnCount := Self.Count;
   end;  //of with
@@ -285,6 +285,7 @@ procedure TMain.Alert(Sender: TObject);
 begin
   Application.Restore;
   Show;
+  Application.BringToFront;
 
   bAlert.Default := False;
   bStop.Default := True;
@@ -314,6 +315,10 @@ begin
   end  //of begin
   else
   begin
+    // Enable blinking?
+    Timer.Enabled := cbBlink.Checked;
+
+    // Show text?
     if cbText.Checked then
     begin
       pText.Visible := True;
@@ -384,24 +389,13 @@ begin
 {$ENDIF}
 end;
 
-{ private TMain.Blink
-
-  Event that is called by TAlertThread while alert is in progress. }
-
-procedure TMain.Blink(Sender: TObject);
-begin
-  if (cbBlink.Checked and (Color = clBtnFace)) then
-    Color := FColor
-  else
-    Color := clBtnFace;
-end;
-
 { private TMain.BlinkEnd
 
   Event that is called by TAlertThread when alert was stopped. }
 
 procedure TMain.BlinkEnd(Sender: TObject);
 begin
+  Timer.Enabled := False;
   Color := clBtnFace;
 end;
 
@@ -787,6 +781,18 @@ begin
         FTrayIcon.ShowBalloonHint;
       end;  //of begin
   end;  //of case
+end;
+
+{ TMain.Blink
+
+  Event that is called by Timer while alert is in progress. }
+
+procedure TMain.Blink(Sender: TObject);
+begin
+  if (Color = clBtnFace) then
+    Color := FColor
+  else
+    Color := clBtnFace;
 end;
 
 { TMain.pmCloseClick

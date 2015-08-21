@@ -112,8 +112,7 @@ type
     FOnCount: TOnCountEvent;
     FOnAlert,
     FOnAlertEnd,
-    FOnAlertStop,
-    FOnAlertStart: TNotifyEvent;
+    FOnAlertStop: TNotifyEvent;
   public
     constructor Create(AOwner: TComponent; ATimerMode: Boolean;
       ACombine: Boolean = False);
@@ -130,7 +129,6 @@ type
     property AlertType: TAlertType read FAlertType write FAlertType;
     property OnAlert: TNotifyEvent read FOnAlert write FOnAlert;
     property OnAlertEnd: TNotifyEvent read FOnAlertEnd write FOnAlertEnd;
-    property OnAlertStart: TNotifyEvent read FOnAlertStart write FOnAlertStart;
     property OnAlertStop: TNotifyEvent read FOnAlertStop write FOnAlertStop;
     property OnCount: TOnCountEvent read FOnCount write FOnCount;
     property Time: TTimerMode read FTime write FTime;
@@ -642,20 +640,19 @@ begin
       if (FTimerMode = False) then
         FTimer.Enabled := False;
 
-      FOnAlertStart(Self);
-
       if (FAlertType = atShutdown) then
          Exit;
+
+      // Notify start of alert
+      OnAlert(Self);
 
       // Start playing sound
       FAlertThread := TAlertThread.Create(Self, FAlertType);
 
-      with FAlertThread do
+      with (FAlertThread as TAlertThread) do
       begin
         OnAlertEnd := FOnAlertEnd;
-        OnAlert := FOnAlert;
-        OnAlertStart := FOnAlertStart;
-        OnAlertStop := (FAlertThread as TAlertThread).OnStop;
+        OnAlertStop := OnStop;
         Start;
       end;  //of with
     end;  //of begin

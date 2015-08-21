@@ -73,6 +73,7 @@ var
   Path: string;
 
 begin
+  Synchronize(DoNotifyOnAlert);
 {$IFDEF MSWINDOWS}
   Path := '';
 {$ELSE}
@@ -80,9 +81,6 @@ begin
 {$ENDIF}
 
   while not Terminated do
-  begin
-    Synchronize(DoNotifyOnAlert);
-
     // Play *.wav file
     case FAlertType of
       atClock: FClock.PlaySound(Path +'bell.wav', True);
@@ -100,7 +98,6 @@ begin
       else
         Break;
     end;  //of case
-  end;  //of while
 
   Synchronize(DoNotifyOnAlertEnd);
 end;

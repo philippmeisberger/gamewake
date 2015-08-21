@@ -239,7 +239,7 @@ object Main: TMain
     Left = 8
     Top = 81
     Width = 282
-    Height = 124
+    Height = 126
     Caption = 'Game Wake'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
@@ -367,5 +367,11 @@ object Main: TMain
       Caption = 'Beenden'
       OnClick = pmCloseClick
     end
+  end
+  object Timer: TTimer
+    Enabled = False
+    OnTimer = Blink
+    Left = 224
+    Top = 24
   end
 end
