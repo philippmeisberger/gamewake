@@ -9,7 +9,6 @@ object Main: TMain
   ClientHeight = 271
   ClientWidth = 297
   Color = clBtnFace
-  Font.CharSet = OEM_CHARSET
   Font.Color = clBlack
   Font.Height = -11
   Font.Name = 'Arial'
@@ -95,7 +94,7 @@ object Main: TMain
       Left = 12
       Height = 21
       Top = 18
-      Width = 71
+      Width = 57
       Caption = 'blinken'
       OnClick = cbBlinkClick
       TabOrder = 0
@@ -104,7 +103,7 @@ object Main: TMain
       Left = 12
       Height = 21
       Top = 38
-      Width = 112
+      Width = 89
       Caption = 'Schrift zeigen'
       OnClick = cbTextClick
       TabOrder = 2
@@ -243,11 +242,10 @@ object Main: TMain
   end
   object pText: TPanel
     Left = 8
-    Height = 127
-    Top = 81
+    Height = 128
+    Top = 80
     Width = 281
     Caption = 'Game Wake'
-    Font.CharSet = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -37
     Font.Name = 'Arial'
@@ -293,8 +291,8 @@ object Main: TMain
     TabOrder = 5
   end
   object MainMenu: TMainMenu
-    left = 224
-    top = 24
+    left = 248
+    top = 27
     object mmFile: TMenuItem
       Caption = 'Datei'
       object mmSave: TMenuItem
@@ -372,5 +370,11 @@ object Main: TMain
       Caption = 'Beenden'
       OnClick = pmCloseClick
     end
+  end
+  object Timer: TTimer
+    Enabled = False
+    OnTimer = Blink
+    left = 192
+    top = 27
   end
 end
