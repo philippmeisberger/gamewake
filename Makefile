@@ -16,7 +16,6 @@ endif
 
 LIBDIR = $(DESTDIR)/usr/lib/gamewake
 BINDIR = files/bin/$(shell uname)-$(ARCH)
-ETCDIR = $(DESTDIR)/etc/gamewake
 
 all:	build
 
@@ -41,7 +40,6 @@ install: $(BINDIR)/gamewake
 uninstall:
 	rm -rf $(LIBDIR)
 	rm -f $(DESTDIR)/usr/bin/gamewake
-	rm -rf $(ETCDIR)
 	rm -f $(DESTDIR)/usr/share/pixmaps/gamewake.ico
 	rm -f $(DESTDIR)/usr/share/pixmaps/gamewake.png
 	rm -f $(DESTDIR)/usr/share/applications/gamewake.desktop

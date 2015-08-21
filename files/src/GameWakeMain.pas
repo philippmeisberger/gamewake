@@ -204,11 +204,12 @@ begin
       LoadFromIni();
       mmOptions.Enabled := True;
     end  //of begin
-    // Do not load anything
+    // Do not load anything except language
     else
     begin
       mmSave.Checked := False;
       mmOptions.Enabled := False;
+      FLang.Update();
     end;  //of if
 
     // Load last position?
