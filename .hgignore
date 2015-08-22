@@ -14,3 +14,5 @@ files/src/lib/**
 **.zip
 **.bak
 **.dll
+**.stat
+**.rsm
