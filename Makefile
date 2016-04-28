@@ -32,7 +32,7 @@ install: $(BINDIR)/gamewake
 	install -D --mode 644 files/bin/horn.wav $(LIBDIR)/horn.wav
 	install -D --mode 644 files/src/lang $(LIBDIR)/lang
 	install -D --mode 644 files/src/gamewake.ico $(DESTDIR)/usr/share/pixmaps/gamewake.ico
-	install -D --mode 644 files/src/gamewake.png $(DESTDIR)/usr/share/pixmaps/gamewake.png
+	install -D --mode 644 files/gamewake.png $(DESTDIR)/usr/share/pixmaps/gamewake.png
 	install -D --mode 644 files/src/gamewake.desktop $(DESTDIR)/usr/share/applications/gamewake.desktop
 
 .PHONY: install
