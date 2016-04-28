@@ -17,7 +17,7 @@ build: win32 win64
 sign: sign32 sign64
 
 source:
-	$(ZIP) -9 -r $(PROJECTNAME)-src.zip . src -x .hg\* -x debian\* -x setup\* -i MakeFile -i MakeFile.bat -i files\src\lang -i files\src\gamewake.desktop -i *.txt -i *.md -i *.pas -i *.dproj -i *.res -i *.rc -i *.dpr -i *.dfm -i *.inc -i *.dcr -i *.ico
+	$(ZIP) -9 -r $(PROJECTNAME)-src.zip . src -x .hg\* -x debian\* -x setup\* -i MakeFile -i MakeFileWin -i MakeFile.bat -i files\src\lang -i files\src\gamewake.desktop -i *.txt -i *.md -i *.pas -i *.dproj -i *.res -i *.rc -i *.dpr -i *.dfm -i *.inc -i *.dcr -i *.ico
 
 win32: files\src\$(PROJECTNAME).dproj
 	SET BDS=C:\Program Files (x86)\Embarcadero\Studio\16.0
