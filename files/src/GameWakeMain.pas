@@ -354,8 +354,25 @@ begin
       with Updater do
       begin
         Title := FLang.GetString(LID_UPDATE_DOWNLOAD);
+
+      {$IFNDEF PORTABLE}
         FileNameLocal := 'Game Wake Setup.exe';
         FileNameRemote := 'game_wake_setup.exe';
+      {$ELSE}
+        FileNameLocal := 'Game Wake.exe';
+
+      {$IFDEF WIN64}
+        FileNameRemote := 'gamewake64.exe';
+      {$ELSE}
+        // Ask user to permit download of 64-Bit version
+        if ((TOSVersion.Architecture = arIntelX64) and (FLang.ShowMessage(
+          FLang.Format([LID_UPDATE_64BIT, LID_UPDATE_64BIT_CONFIRM], Application.Title),
+            mtConfirmation) = IDYES)) then
+          FileNameRemote := 'gamewake64.exe'
+        else
+          FileNameRemote := 'gamewake.exe';
+      {$ENDIF}
+      {$ENDIF}
       end;  //of begin
 
       // Successfully downloaded update?
@@ -365,8 +382,10 @@ begin
         mmUpdate.Caption := FLang.GetString(LID_UPDATE_SEARCH);
         mmUpdate.Enabled := False;
 
+      {$IFNDEF PORTABLE}
         // Start with new version installing
         Updater.LaunchSetup();
+      {$ENDIF}
       end;  //of begin
 
     finally

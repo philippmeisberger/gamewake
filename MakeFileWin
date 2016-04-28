@@ -1,8 +1,10 @@
 PROJECTNAME=GameWake
 WIN32DIR=files\bin\Win32
 WIN32EXE=$(WIN32DIR)\$(PROJECTNAME).exe
+PORTABLE32EXE=$(WIN32DIR)\Portable\$(PROJECTNAME).exe
 WIN64DIR=files\bin\Win64
 WIN64EXE=$(WIN64DIR)\$(PROJECTNAME).exe
+PORTABLE64EXE=$(WIN64DIR)\Portable\$(PROJECTNAME).exe
 CERTSHA1=A9A273A222A5DD3ED9EC2F46232AAD8E087EA4ED
 MSBUILD=C:\Windows\Microsoft.NET\Framework\v3.5\MSBUILD.exe
 ZIP="C:\Program Files (x86)\GnuWin32\bin\zip.exe"
@@ -23,6 +25,7 @@ win32: files\src\$(PROJECTNAME).dproj
 
 sign32: $(WIN32EXE)
 	$(SIGN) $(WIN32EXE)
+	move $(WIN32EXE) "$(WIN32DIR)\Game Wake.exe"
 
 win64: files\src\$(PROJECTNAME).dproj
 	SET BDS=C:\Program Files (x86)\Embarcadero\Studio\16.0
@@ -30,14 +33,33 @@ win64: files\src\$(PROJECTNAME).dproj
 
 sign64: $(WIN64EXE)
 	$(SIGN) $(WIN64EXE)
+	move $(WIN64EXE) "$(WIN64DIR)\Game Wake.exe"
 
 buildsetup: setup\$(PROJECTNAME).iss
-	move $(WIN32EXE) "$(WIN32DIR)\Game Wake.exe"
-	move $(WIN64EXE) "$(WIN64DIR)\Game Wake.exe"
 	$(INNOSETUP) /cc setup\$(PROJECTNAME).iss
 
-release: win32 sign32 win64 sign64 buildsetup source
+win32portable: files\src\$(PROJECTNAME).dproj
+	SET BDS=C:\Program Files (x86)\Embarcadero\Studio\16.0
+	$(MSBUILD) /p:Config=Portable /property:Platform=Win32 files\src\$(PROJECTNAME).dproj
+
+sign32portable: $(PORTABLE32EXE)
+	$(SIGN) $(PORTABLE32EXE)
+	move $(PORTABLE32EXE) "$(WIN32DIR)\Portable\Game Wake.exe"
+
+win64portable: files\src\$(PROJECTNAME).dproj
+	SET BDS=C:\Program Files (x86)\Embarcadero\Studio\16.0
+	$(MSBUILD) /p:Config=Portable /property:Platform=Win64 files\src\$(PROJECTNAME).dproj
+
+sign64portable: $(PORTABLE64EXE)
+	$(SIGN) $(PORTABLE64EXE)
+	move $(PORTABLE64EXE) "$(WIN64DIR)\Portable\Game Wake.exe"
+
+portable: win32portable sign32portable win64portable sign64portable
+
+release: win32 sign32 win64 sign64 buildsetup portable source
 
 clean:
 	IF EXIST $(WIN32EXE) DEL $(WIN32EXE)
 	IF EXIST $(WIN64EXE) DEL $(WIN64EXE)
+	IF EXIST $(PORTABLE32EXE) DEL $(PORTABLE32EXE)
+	IF EXIST $(PORTABLE64EXE) DEL $(PORTABLE64EXE)
