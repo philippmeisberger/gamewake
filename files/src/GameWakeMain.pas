@@ -140,10 +140,6 @@ implementation
 {$R *.lfm}
 {$ENDIF}
 
-{$IFDEF PORTABLE}
-{$R 'sounds.res' 'sounds.res'}
-{$ENDIF}
-
 uses GameWakeOps;
 
 { TMain }

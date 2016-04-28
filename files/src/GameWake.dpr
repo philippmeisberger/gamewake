@@ -3,6 +3,10 @@ program GameWake;
 {$R 'changelog.res' 'changelog.rc'}
 {$R 'description.res' 'description.rc'}
 
+{$IFDEF PORTABLE}
+{$R 'sounds.res' 'sounds.rc'}
+{$ENDIF}
+
 uses
   Vcl.Forms,
   GameWakeMain in 'GameWakeMain.pas' {Main},
