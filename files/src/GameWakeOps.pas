@@ -2,7 +2,7 @@
 {                                                                         }
 { Game Wake Options Unit                                                  }
 {                                                                         }
-{ Copyright (c) 2011-2015 Philipp Meisberger (PM Code Works)              }
+{ Copyright (c) 2011-2016 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
 { *********************************************************************** }
 
@@ -42,7 +42,7 @@ type
     procedure SetLanguage();
   public
     constructor Create(AOwner: TComponent; AClock: TClock; ALang: TLanguageFile;
-      AConfigPath: string = '');
+      AConfigPath: string = ''); reintroduce;
   end;
 
 implementation

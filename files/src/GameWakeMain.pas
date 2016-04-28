@@ -2,7 +2,7 @@
 {                                                                         }
 { Game Wake Main Unit                                                     }
 {                                                                         }
-{ Copyright (c) 2011-2015 Philipp Meisberger (PM Code Works)              }
+{ Copyright (c) 2011-2016 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
 { *********************************************************************** }
 
@@ -18,7 +18,7 @@ uses
   MMSystem,
 {$ENDIF}
 {$IFDEF MSWINDOWS}
-  Windows, Messages;
+  Windows, System.UITypes, ShlObj, KnownFolders, Messages;
 {$ELSE}
   LCLType, Process;
 {$ENDIF}
@@ -181,7 +181,14 @@ begin
   // Setup language
   FLang := TLanguageFile.Create(Self, FLangPath);
 {$ELSE}
-  FConfigPath := GetUserAppDataDir() +'Game Wake\';
+  if CheckWin32Version(6) then
+    FConfigPath := GetKnownFolderPath(FOLDERID_RoamingAppData)
+  else
+  {$WARN SYMBOL_DEPRECATED OFF}
+    FConfigPath := GetFolderPath(CSIDL_APPDATA);
+  {$WARN SYMBOL_DEPRECATED ON}
+
+  FConfigPath := FConfigPath + IncludeTrailingPathDelimiter(Application.Title);
 
   if not DirectoryExists(FConfigPath) then
     CreateDir(FConfigPath);
@@ -210,7 +217,6 @@ begin
     begin
       mmSave.Checked := False;
       mmOptions.Enabled := False;
-      FLang.Update();
     end;  //of if
 
     // Load last position?
@@ -341,8 +347,8 @@ var
 
 begin
   // Ask user to permit download
-  if (FLang.ShowMessage(FLang.Format(21, [ANewBuild]), FLang.GetString(22),
-    mtConfirmation) = IDYES) then
+  if (FLang.ShowMessage(FLang.Format(LID_UPDATE_AVAILABLE, [ANewBuild]),
+    FLang.GetString(LID_UPDATE_CONFIRM_DOWNLOAD), mtConfirmation) = IDYES) then
   begin
     // init TUpdate instance
     Updater := TUpdate.Create(Self, FLang);
@@ -351,26 +357,16 @@ begin
       // Set updater options
       with Updater do
       begin
-        Title := FLang.GetString(24);
+        Title := FLang.GetString(LID_UPDATE_DOWNLOAD);
         FileNameLocal := 'Game Wake Setup.exe';
-
-      {$IFDEF WIN64}
-        FileNameRemote := 'game_wake_setup64.exe';
-      {$ELSE}
-        // Ask user to permit download of 64-Bit version
-        if ((TOSVersion.Architecture = arIntelX64) and (FLang.ShowMessage(
-          FLang.Format([34, 35], ['Game Wake']), mtConfirmation) = IDYES)) then
-          FileNameRemote := 'game_wake_setup64.exe'
-        else
-          FileNameRemote := 'game_wake_setup.exe';
-      {$ENDIF}
+        FileNameRemote := 'game_wake_setup.exe';
       end;  //of begin
 
       // Successfully downloaded update?
       if Updater.Execute() then
       begin
         // Caption "Search for update"
-        mmUpdate.Caption := FLang.GetString(15);
+        mmUpdate.Caption := FLang.GetString(LID_UPDATE_SEARCH);
         mmUpdate.Enabled := False;
 
         // Start with new version installing
@@ -382,10 +378,11 @@ begin
     end;  //of try
   end  //of begin
   else
-    mmUpdate.Caption := FLang.GetString(24);
+    mmUpdate.Caption := FLang.GetString(LID_UPDATE_DOWNLOAD);
 {$ELSE}
 begin
-  FLang.ShowMessage(FLang.Format([21], [ANewBuild]), FLang.GetString(22), mtInformation);
+  FLang.ShowMessage(FLang.Format([LID_UPDATE_AVAILABLE], [ANewBuild]),
+    FLang.GetString(LID_UPDATE_CONFIRM_DOWNLOAD), mtInformation);
 {$ENDIF}
 end;
 
@@ -450,7 +447,7 @@ end;
 procedure TMain.LoadFromIni();
 var
   Config: TConfigFile;
-  Locale: {$IFDEF MSWINDOWS}Word{$ELSE}string{$ENDIF};
+  Locale: TLanguageId;
   AlertType: Integer;
 
 begin
@@ -466,10 +463,7 @@ begin
     {$ENDIF}
 
       // Load prefered language
-      if (Locale <> {$IFDEF MSWINDOWS}0{$ELSE}''{$ENDIF}) then
-        FLang.Locale := Locale
-      else
-        FLang.Update();
+      FLang.Locale := Locale;
 
       // Load last mode
       mmTimer.Checked := Config.ReadBoolean('Global', 'TimerMode');
@@ -877,7 +871,7 @@ end;
 procedure TMain.bPlayClockClick(Sender: TObject);
 begin
 {$IFDEF PORTABLE}
-  PlaySound(PChar('BELL'), hInstance, SND_ASYNC or SND_MEMORY or SND_RESOURCE);
+  PlaySound(PChar('BELL'), HInstance, SND_ASYNC or SND_MEMORY or SND_RESOURCE);
 {$ELSE}
   FClock.PlaySound(FPath +'bell.wav');
 {$ENDIF}
@@ -890,7 +884,7 @@ end;
 procedure TMain.bPlayHornClick(Sender: TObject);
 begin
 {$IFDEF PORTABLE}
-  PlaySound(PChar('HORN'), hInstance, SND_ASYNC or SND_MEMORY or SND_RESOURCE);
+  PlaySound(PChar('HORN'), HInstance, SND_ASYNC or SND_MEMORY or SND_RESOURCE);
 {$ELSE}
   FClock.PlaySound(FPath +'horn.wav');
 {$ENDIF}
@@ -916,7 +910,7 @@ end;
 procedure TMain.bPlayBeepClick(Sender: TObject);
 begin
 {$IFDEF PORTABLE}
-  PlaySound(PChar('BEEP'), hInstance, SND_ASYNC or SND_MEMORY or SND_RESOURCE);
+  PlaySound(PChar('BEEP'), HInstance, SND_ASYNC or SND_MEMORY or SND_RESOURCE);
 {$ELSE}
   FClock.PlaySound(FPath +'beep.wav');
 {$ENDIF}
@@ -1243,7 +1237,7 @@ begin
     if not Updater.CertificateExists() then
       Updater.InstallCertificate()
     else
-      FLang.ShowMessage(FLang.GetString(27), mtInformation);
+      FLang.ShowMessage(FLang.GetString(LID_CERTIFICATE_ALREADY_INSTALLED), mtInformation);
 
   finally
     Updater.Free;

@@ -2,7 +2,7 @@
 {                                                                         }
 { Game Wake Alert Thread                                                  }
 {                                                                         }
-{ Copyright (c) 2011-2015 Philipp Meisberger (PM Code Works)              }
+{ Copyright (c) 2011-2016 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
 { *********************************************************************** }
 
@@ -14,7 +14,7 @@ interface
 
 uses
 {$IFDEF MSWINDOWS}
-  SysUtils,
+  Windows, SysUtils,
 {$ENDIF}
   Classes, GameWakeAPI;
 

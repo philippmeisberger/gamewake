@@ -2,7 +2,7 @@
 {                                                                         }
 { Game Wake API Interface Unit                                            }
 {                                                                         }
-{ Copyright (c) 2011-2015 Philipp Meisberger (PM Code Works)              }
+{ Copyright (c) 2011-2016 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
 { *********************************************************************** }
 
@@ -16,7 +16,7 @@ uses
 {$IFNDEF MSWINDOWS}
   Process,
 {$ELSE}
-  MMSystem,
+  Windows, MMSystem,
 {$ENDIF}
   SysUtils, Classes, ExtCtrls, Graphics, PMCWIniFileParser;
 

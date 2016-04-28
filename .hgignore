@@ -16,3 +16,4 @@ files/src/lib/**
 **.dll
 **.stat
 **.rsm
+**.identcache
