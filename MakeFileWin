@@ -1,0 +1,43 @@
+PROJECTNAME=GameWake
+WIN32DIR=files\bin\Win32
+WIN32EXE=$(WIN32DIR)\$(PROJECTNAME).exe
+WIN64DIR=files\bin\Win64
+WIN64EXE=$(WIN64DIR)\$(PROJECTNAME).exe
+CERTSHA1=A9A273A222A5DD3ED9EC2F46232AAD8E087EA4ED
+MSBUILD=C:\Windows\Microsoft.NET\Framework\v3.5\MSBUILD.exe
+ZIP="C:\Program Files (x86)\GnuWin32\bin\zip.exe"
+INNOSETUP="C:\Program Files (x86)\Inno Setup 5\Compil32.exe"
+SIGNTOOL="C:\Program Files (x86)\Windows Kits\8.1\bin\x86\signtool.exe"
+SIGN=$(SIGNTOOL) sign /v /sha1 $(CERTSHA1) /tr http://timestamp.globalsign.com/scripts/timstamp.dll /td SHA256 /fd SHA256
+
+build: win32 win64
+
+sign: sign32 sign64
+
+source:
+	$(ZIP) -9 -r $(PROJECTNAME)-src.zip . src -x .hg\* -x debian\* -x setup\* -i MakeFile -i MakeFile.bat -i files\src\lang -i files\src\gamewake.desktop -i *.txt -i *.md -i *.pas -i *.dproj -i *.res -i *.rc -i *.dpr -i *.dfm -i *.inc -i *.dcr -i *.ico
+
+win32: files\src\$(PROJECTNAME).dproj
+	SET BDS=C:\Program Files (x86)\Embarcadero\Studio\16.0
+	$(MSBUILD) /p:Config=Release /property:Platform=Win32 files\src\$(PROJECTNAME).dproj
+
+sign32: $(WIN32EXE)
+	$(SIGN) $(WIN32EXE)
+
+win64: files\src\$(PROJECTNAME).dproj
+	SET BDS=C:\Program Files (x86)\Embarcadero\Studio\16.0
+	$(MSBUILD) /p:Config=Release /property:Platform=Win64 files\src\$(PROJECTNAME).dproj
+
+sign64: $(WIN64EXE)
+	$(SIGN) $(WIN64EXE)
+
+buildsetup: setup\$(PROJECTNAME).iss
+	move $(WIN32EXE) "$(WIN32DIR)\Game Wake.exe"
+	move $(WIN64EXE) "$(WIN64DIR)\Game Wake.exe"
+	$(INNOSETUP) /cc setup\$(PROJECTNAME).iss
+
+release: win32 sign32 win64 sign64 buildsetup source
+
+clean:
+	IF EXIST $(WIN32EXE) DEL $(WIN32EXE)
+	IF EXIST $(WIN64EXE) DEL $(WIN64EXE)

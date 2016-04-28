@@ -1,8 +1,8 @@
 #define MyAppName "Game Wake"
 #define MyAppURL "http://www.pm-codeworks.de"
 #define MyAppExeName "Game Wake.exe"
-#define MyAppExePath32 "..\files\bin\Win32\Release\"
-#define MyAppExePath64 "..\files\bin\Win64\Release\"
+#define MyAppExePath32 "..\files\bin\Win32\"
+#define MyAppExePath64 "..\files\bin\Win64\"
 #define FileVersion GetFileVersion(MyAppExeName)
 #define ProductVersion GetFileProductVersion(MyAppExeName)
 
