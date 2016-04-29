@@ -18,10 +18,10 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <MinorVersionNr Value="3"/>
-      <BuildNr Value="460"/>
+      <BuildNr Value="466"/>
       <Language Value="0407"/>
       <CharSet Value="04B0"/>
-      <StringTable CompanyName="PM Code Works" FileDescription="Game Wake" LegalCopyright="Philipp Meisberger 2015" LegalTrademarks="PM Code Works" ProductName="Game Wake" ProductVersion="3.3"/>
+      <StringTable CompanyName="PM Code Works" FileDescription="Game Wake" LegalCopyright="Philipp Meisberger 2016" LegalTrademarks="PM Code Works" ProductName="Game Wake" ProductVersion="3.3"/>
     </VersionInfo>
     <BuildModes Count="1">
       <Item1 Name="Default" Default="True"/>

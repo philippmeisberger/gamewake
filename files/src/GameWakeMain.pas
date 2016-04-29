@@ -14,10 +14,10 @@ uses
   SysUtils, Classes, Graphics, Controls, Forms, StdCtrls, ExtCtrls, Menus,
   Dialogs, GameWakeAPI, PMCWLanguageFile, PMCWUpdater, PMCWOSUtils, PMCWAbout,
 
+{$IFDEF MSWINDOWS}
 {$IFDEF PORTABLE}
   MMSystem,
 {$ENDIF}
-{$IFDEF MSWINDOWS}
   Windows, System.UITypes, ShlObj, KnownFolders, Messages;
 {$ELSE}
   LCLType, Process;
@@ -462,7 +462,7 @@ end;
 procedure TMain.LoadFromIni();
 var
   Config: TConfigFile;
-  Locale: TLanguageId;
+  Locale: TLocale;
   AlertType: Integer;
 
 begin

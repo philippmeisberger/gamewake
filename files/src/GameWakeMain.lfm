@@ -1,7 +1,7 @@
 object Main: TMain
-  Left = 237
+  Left = 302
   Height = 290
-  Top = 160
+  Top = 164
   Width = 297
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
@@ -46,7 +46,7 @@ object Main: TMain
     Top = 257
     Width = 105
     Anchors = [akBottom]
-    Caption = '© P.Meisberger 2015'
+    Caption = '© P.Meisberger 2016'
     Font.CharSet = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -11
@@ -94,7 +94,7 @@ object Main: TMain
       Left = 12
       Height = 21
       Top = 18
-      Width = 57
+      Width = 71
       Caption = 'blinken'
       OnClick = cbBlinkClick
       TabOrder = 0
@@ -103,7 +103,7 @@ object Main: TMain
       Left = 12
       Height = 21
       Top = 38
-      Width = 89
+      Width = 112
       Caption = 'Schrift zeigen'
       OnClick = cbTextClick
       TabOrder = 2
