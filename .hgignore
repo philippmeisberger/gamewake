@@ -3,8 +3,8 @@ syntax: glob
 
 BACKUP/**
 src\__history\**
-files/bin/Linux-*/**
-files/src/lib/**
+bin/Linux-*/**
+src/lib/**
 **.a
 **.o
 **.or
@@ -13,7 +13,6 @@ files/src/lib/**
 **.exe
 **.zip
 **.bak
-**.dll
 **.stat
 **.rsm
 **.identcache
