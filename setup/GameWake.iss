@@ -3,7 +3,7 @@
 #define MyAppExeName "Game Wake.exe"
 #define MyAppExePath32 "..\bin\Win32\"
 #define MyAppExePath64 "..\bin\Win64\"
-#define FileVersion GetFileVersion(MyAppExeName)
+#define FileVersion GetFileVersion(MyAppExePath32 + MyAppExeName)
 #define ProductVersion GetFileProductVersion(MyAppExeName)
 
 [Setup]
