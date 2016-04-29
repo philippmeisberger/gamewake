@@ -366,7 +366,7 @@ begin
       {$ELSE}
         // Ask user to permit download of 64-Bit version
         if ((TOSVersion.Architecture = arIntelX64) and (FLang.ShowMessage(
-          FLang.Format([LID_UPDATE_64BIT, LID_UPDATE_64BIT_CONFIRM], Application.Title),
+          FLang.Format([LID_UPDATE_64BIT, LID_UPDATE_64BIT_CONFIRM], [Application.Title]),
             mtConfirmation) = IDYES)) then
           FileNameRemote := 'gamewake64.exe'
         else
