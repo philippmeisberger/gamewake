@@ -1,8 +1,8 @@
 #define MyAppName "Game Wake"
 #define MyAppURL "http://www.pm-codeworks.de"
 #define MyAppExeName "Game Wake.exe"
-#define MyAppExePath32 "..\files\bin\Win32\"
-#define MyAppExePath64 "..\files\bin\Win64\"
+#define MyAppExePath32 "..\bin\Win32\"
+#define MyAppExePath64 "..\bin\Win64\"
 #define FileVersion GetFileVersion(MyAppExeName)
 #define ProductVersion GetFileProductVersion(MyAppExeName)
 
@@ -41,9 +41,9 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "{#MyAppExePath32}{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion; Check: not Is64BitInstallMode
 Source: "{#MyAppExePath64}{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion; Check: Is64BitInstallMode
-Source: "..\files\bin\bell.wav"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\files\bin\beep.wav"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\files\bin\horn.wav"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\bin\bell.wav"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\bin\beep.wav"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\bin\horn.wav"; DestDir: "{app}"; Flags: ignoreversion
 
 [Dirs]
 Name: "{userappdata}\Game Wake"; Flags: uninsalwaysuninstall
