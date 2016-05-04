@@ -9,6 +9,7 @@ src/lib/**
 **.o
 **.or
 **.ppu
+**.lps
 **.dcu
 **.exe
 **.zip
