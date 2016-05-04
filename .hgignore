@@ -15,4 +15,5 @@ src/lib/**
 **.bak
 **.stat
 **.rsm
+**.mes
 **.identcache

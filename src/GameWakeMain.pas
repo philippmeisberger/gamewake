@@ -21,6 +21,9 @@ uses
   Windows, System.UITypes, ShlObj, KnownFolders, Messages;
 {$ELSE}
   LCLType, Process;
+
+const
+  MAINICON = '/usr/share/pixmaps/gamewake.ico';
 {$ENDIF}
 
 type
@@ -246,7 +249,7 @@ begin
     mmWebsite.Visible := False;
   {$ELSE}
     mmInstallCertificate.Visible := False;
-    Icon.LoadFromFile('/usr/share/pixmaps/gamewake.ico');
+    Icon.LoadFromFile(MAINICON);
   {$ENDIF}
 
   // Init Clock
@@ -347,13 +350,12 @@ begin
     FLang.GetString(LID_UPDATE_CONFIRM_DOWNLOAD), mtConfirmation) = IDYES) then
   begin
     // init TUpdate instance
-    Updater := TUpdate.Create(Self);
+    Updater := TUpdate.Create(Self, FLang);
 
     try
       // Set updater options
       with Updater do
       begin
-        LanguageFile := FLang;
         Title := FLang.GetString(LID_UPDATE_DOWNLOAD);
 
       {$IFNDEF PORTABLE}
@@ -1246,8 +1248,7 @@ var
   Updater: TUpdate;
 
 begin
-  Updater := TUpdate.Create(Self);
-  Updater.LanguageFile := FLang;
+  Updater := TUpdate.Create(Self, FLang);
 
   try
     // Certificate already installed?
@@ -1292,18 +1293,27 @@ begin
   OpenUrl(URL_CONTACT);
 end;
 
-{ TMain.mmInfoClick
+{ TMain.mmAboutClick
 
   MainMenu entry that shows a info page with build number and version history. }
 
 procedure TMain.mmAboutClick(Sender: TObject);
 var
-  Info: TInfo;
+  AboutDialog: TAboutDialog;
 
 begin
-  Application.CreateForm(TInfo, Info);
-  Info.ShowModal;
-  Info.Free;
+  AboutDialog := TAboutDialog.Create(Self);
+
+  try
+    AboutDialog.Title := mmAbout.Caption;
+  {$IFDEF LINUX}
+    AboutDialog.ImageFile := MAINICON;
+  {$ENDIF}
+    AboutDialog.Execute();
+
+  finally
+    AboutDialog.Free;
+  end;  //of begin
 end;
 
 { TMain.lCopyClick
@@ -1370,7 +1380,7 @@ begin
   {$IFDEF MSWINDOWS}
     FTrayIcon.Icon.Handle := Application.Icon.Handle;
   {$ELSE}
-    FTrayIcon.Icon.LoadFromFile('/usr/share/pixmaps/gamewake.ico');
+    FTrayIcon.Icon.LoadFromFile(MAINICON);
   {$ENDIF}
     FTrayIcon.Visible := True;
 
@@ -1380,8 +1390,8 @@ begin
   except
     on E: Exception do
     begin
-      FLang.ShowException(FLang.GetString(89), E.Message);
       FreeAndNil(FTrayIcon);
+      FLang.ShowException(FLang.GetString(89), E.Message);
     end;
   end;  //of try
 

@@ -3,6 +3,9 @@ program GameWake;
 {$mode objfpc}{$H+}
 {$define UseCThreads}
 
+{$R 'changelog.res' 'changelog.rc'}
+{$R 'description.res' 'description.rc'}
+
 uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,

@@ -18,7 +18,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <MinorVersionNr Value="3"/>
-      <BuildNr Value="466"/>
+      <BuildNr Value="471"/>
       <Language Value="0407"/>
       <CharSet Value="04B0"/>
       <StringTable CompanyName="PM Code Works" FileDescription="Game Wake" LegalCopyright="Philipp Meisberger 2016" LegalTrademarks="PM Code Works" ProductName="Game Wake" ProductVersion="3.3"/>
@@ -45,53 +45,37 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="8">
+    <Units Count="6">
       <Unit0>
         <Filename Value="GameWake.lpr"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GameWake"/>
       </Unit0>
       <Unit1>
         <Filename Value="GameWakeAPI.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GameWakeAPI"/>
       </Unit1>
       <Unit2>
-        <Filename Value="GameWakeInfo.dfm"/>
+        <Filename Value="GameWakeMain.dfm"/>
         <IsPartOfProject Value="True"/>
       </Unit2>
       <Unit3>
-        <Filename Value="GameWakeInfo.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="Info"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="GameWakeInfo"/>
-      </Unit3>
-      <Unit4>
-        <Filename Value="GameWakeMain.dfm"/>
-        <IsPartOfProject Value="True"/>
-      </Unit4>
-      <Unit5>
         <Filename Value="GameWakeMain.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Main"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="GameWakeMain"/>
-      </Unit5>
-      <Unit6>
+      </Unit3>
+      <Unit4>
         <Filename Value="GameWakeOps.dfm"/>
         <IsPartOfProject Value="True"/>
-      </Unit6>
-      <Unit7>
+      </Unit4>
+      <Unit5>
         <Filename Value="GameWakeOps.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Options"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="GameWakeOps"/>
-      </Unit7>
+      </Unit5>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -124,10 +108,6 @@
       <LinkSmart Value="True"/>
     </Linking>
     <Other>
-      <CompilerMessages>
-        <UseMsgFile Value="True"/>
-      </CompilerMessages>
-      <CompilerPath Value="$(CompPath)"/>
       <ExecuteAfter>
         <Command Value="strip ..\bin\Linux\gamewake_$(TargetCPU)\gamewake"/>
         <CompileReasons Compile="False" Build="False" Run="False"/>

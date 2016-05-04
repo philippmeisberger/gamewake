@@ -3,13 +3,10 @@
   <ProjectSession>
     <Version Value="9"/>
     <BuildModes Active="Default"/>
-    <Units Count="71">
+    <Units Count="70">
       <Unit0>
         <Filename Value="GameWake.lpr"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GameWake"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
         <CursorPos X="15" Y="11"/>
         <UsageCount Value="62"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -17,8 +14,6 @@
       <Unit1>
         <Filename Value="GameWakeAPI.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="GameWakeAPI"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="62"/>
         <CursorPos X="4" Y="153"/>
         <UsageCount Value="62"/>
@@ -26,21 +21,14 @@
       </Unit1>
       <Unit2>
         <Filename Value="GameWakeInfo.dfm"/>
-        <IsPartOfProject Value="True"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
         <UsageCount Value="62"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit2>
       <Unit3>
         <Filename Value="GameWakeInfo.pas"/>
-        <IsPartOfProject Value="True"/>
         <ComponentName Value="Info"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="GameWakeInfo"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="14"/>
         <CursorPos X="43" Y="49"/>
         <UsageCount Value="62"/>
@@ -58,12 +46,7 @@
         <ComponentName Value="Main"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="GameWakeMain"/>
         <IsVisibleTab Value="True"/>
-        <EditorIndex Value="0"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
         <UsageCount Value="62"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -81,8 +64,6 @@
         <ComponentName Value="Options"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="GameWakeOps"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="106"/>
         <CursorPos X="55" Y="108"/>
         <UsageCount Value="62"/>
@@ -91,541 +72,400 @@
       <Unit8>
         <Filename Value="gamewakeupdate.pas"/>
         <UnitName Value="GameWakeUpdate"/>
-        <UsageCount Value="54"/>
+        <CursorPos X="44" Y="11"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit8>
       <Unit9>
         <Filename Value="LanguageFile.pas"/>
-        <UnitName Value="LanguageFile"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
         <CursorPos X="7" Y="20"/>
         <UsageCount Value="54"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit9>
       <Unit10>
         <Filename Value="ClockThread.pas"/>
-        <UnitName Value="ClockThread"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="30"/>
         <CursorPos X="9" Y="96"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit10>
       <Unit11>
-        <Filename Value="GameWakeUpdate.pas"/>
-        <UnitName Value="GameWakeUpdate"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="44" Y="11"/>
+        <Filename Value="/usr/lib/lazarus/0.9.30.4/lcl/include/customform.inc"/>
+        <TopLine Value="2077"/>
+        <CursorPos Y="2093"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit11>
       <Unit12>
-        <Filename Value="/usr/lib/lazarus/0.9.30.4/lcl/include/customform.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="2077"/>
-        <CursorPos X="1" Y="2093"/>
+        <Filename Value="/usr/lib/lazarus/0.9.30.4/lcl/include/control.inc"/>
+        <TopLine Value="1668"/>
+        <CursorPos Y="1684"/>
         <UsageCount Value="10"/>
       </Unit12>
       <Unit13>
-        <Filename Value="/usr/lib/lazarus/0.9.30.4/lcl/include/control.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1668"/>
-        <CursorPos X="1" Y="1684"/>
-        <UsageCount Value="10"/>
-      </Unit13>
-      <Unit14>
         <Filename Value="../Windows/DownloadThread.pas"/>
-        <UnitName Value="DownloadThread"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="113"/>
         <CursorPos X="6" Y="143"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit14>
-      <Unit15>
+      </Unit13>
+      <Unit14>
         <Filename Value="../Windows/LanguageFile.pas"/>
-        <UnitName Value="LanguageFile"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="41"/>
         <CursorPos X="62" Y="53"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit15>
-      <Unit16>
+      </Unit14>
+      <Unit15>
         <Filename Value="../Windows/GameWakeAPI.pas"/>
-        <UnitName Value="GameWakeAPI"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="276"/>
         <CursorPos X="45" Y="285"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit16>
-      <Unit17>
+      </Unit15>
+      <Unit16>
         <Filename Value="../Windows/AlertThread.pas"/>
-        <UnitName Value="AlertThread"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="71"/>
-        <CursorPos X="1" Y="1"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit17>
-      <Unit18>
+      </Unit16>
+      <Unit17>
         <Filename Value="../Windows/GameWakeOps.pas"/>
         <ComponentName Value="Options"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="GameWakeOps"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
         <CursorPos X="39" Y="61"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit18>
-      <Unit19>
+      </Unit17>
+      <Unit18>
         <Filename Value="../Windows/GameWakeInfo.pas"/>
         <ComponentName Value="Info"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="GameWakeInfo"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
         <CursorPos X="14" Y="5"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit19>
-      <Unit20>
+      </Unit18>
+      <Unit19>
         <Filename Value="/usr/share/fpcsrc/2.6.0/rtl/objpas/classes/classesh.inc"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="114"/>
         <CursorPos X="3" Y="129"/>
         <UsageCount Value="10"/>
-      </Unit20>
-      <Unit21>
+      </Unit19>
+      <Unit20>
         <Filename Value="AlertThread.pas"/>
-        <UnitName Value="AlertThread"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
         <CursorPos X="25" Y="9"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit21>
-      <Unit22>
+      </Unit20>
+      <Unit21>
         <Filename Value="/usr/share/fpcsrc/2.6.0/rtl/objpas/sysutils/osutilsh.inc"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="15"/>
         <CursorPos X="12" Y="30"/>
         <UsageCount Value="10"/>
-      </Unit22>
-      <Unit23>
+      </Unit21>
+      <Unit22>
         <Filename Value="/usr/share/fpcsrc/2.6.0/packages/fcl-base/src/inifiles.pp"/>
         <UnitName Value="IniFiles"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="462"/>
         <CursorPos X="33" Y="477"/>
         <UsageCount Value="10"/>
-      </Unit23>
-      <Unit24>
+      </Unit22>
+      <Unit23>
         <Filename Value="lang"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="198"/>
         <CursorPos X="74" Y="217"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="None"/>
+      </Unit23>
+      <Unit24>
+        <Filename Value="Updater.pas"/>
+        <CursorPos X="20" Y="17"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit24>
       <Unit25>
-        <Filename Value="Updater.pas"/>
-        <UnitName Value="Updater"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="20" Y="17"/>
+        <Filename Value="OSUtils.pas"/>
+        <CursorPos X="10" Y="20"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit25>
       <Unit26>
-        <Filename Value="OSUtils.pas"/>
-        <UnitName Value="OSUtils"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="10" Y="20"/>
-        <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit26>
-      <Unit27>
         <Filename Value="/GameWakeUpdate.pas"/>
-        <UnitName Value="GameWakeUpdate"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="301"/>
         <CursorPos X="49" Y="319"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit26>
+      <Unit27>
+        <Filename Value="/Informatik/PMCW/Projekte/Game Wake/Game Wake v3.1/Linux/LanguageFile.pas"/>
+        <TopLine Value="174"/>
+        <CursorPos Y="195"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit27>
       <Unit28>
-        <Filename Value="/Informatik/PMCW/Projekte/Game Wake/Game Wake v3.1/Linux/LanguageFile.pas"/>
-        <UnitName Value="LanguageFile"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="174"/>
-        <CursorPos X="1" Y="195"/>
+        <Filename Value="DownloadThread.pas"/>
+        <CursorPos Y="12"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit28>
       <Unit29>
-        <Filename Value="DownloadThread.pas"/>
-        <UnitName Value="DownloadThread"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="12"/>
-        <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit29>
-      <Unit30>
         <Filename Value="Updater.dfm"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit29>
+      <Unit30>
+        <Filename Value="UpdateCheckThread.pas"/>
+        <CursorPos X="35" Y="16"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit30>
       <Unit31>
-        <Filename Value="UpdateCheckThread.pas"/>
-        <UnitName Value="UpdateCheckThread"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="35" Y="16"/>
+        <Filename Value="../../../../../Downloads/LazPackager-master/frmlazpackageroptionsdeb.pas"/>
+        <UnitName Value="frmLazPackagerOptionsDeb"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit31>
       <Unit32>
-        <Filename Value="../../../../../Downloads/LazPackager-master/frmlazpackageroptionsdeb.pas"/>
-        <UnitName Value="frmLazPackagerOptionsDeb"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
+        <Filename Value="../../../../../Downloads/LazPackager-master/lazpackagerbase.pas"/>
+        <UnitName Value="LazPackagerBase"/>
+        <CursorPos X="39" Y="193"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit32>
       <Unit33>
-        <Filename Value="../../../../../Downloads/LazPackager-master/lazpackagerbase.pas"/>
-        <UnitName Value="LazPackagerBase"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="39" Y="193"/>
+        <Filename Value="../../../../../../Arbeitsfläche/phil/Informatik/PMCW/Projekte/GameWake/files/src/LanguageFile.pas"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit33>
       <Unit34>
-        <Filename Value="../../../../../../Arbeitsfläche/phil/Informatik/PMCW/Projekte/GameWake/files/src/LanguageFile.pas"/>
-        <UnitName Value="LanguageFile"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
+        <Filename Value="/usr/share/fpcsrc/2.6.0/rtl/unix/sysutils.pp"/>
+        <TopLine Value="181"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit34>
       <Unit35>
-        <Filename Value="/usr/share/fpcsrc/2.6.0/rtl/unix/sysutils.pp"/>
-        <UnitName Value="sysutils"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="181"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="10"/>
-      </Unit35>
-      <Unit36>
         <Filename Value="/usr/share/fpcsrc/2.6.0/rtl/inc/objpash.inc"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="385"/>
         <CursorPos X="7" Y="394"/>
         <UsageCount Value="10"/>
-      </Unit36>
-      <Unit37>
+      </Unit35>
+      <Unit36>
         <Filename Value="/usr/share/fpcsrc/2.6.0/rtl/objpas/sysutils/sysstrh.inc"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="109"/>
         <CursorPos X="10" Y="130"/>
         <UsageCount Value="10"/>
-      </Unit37>
-      <Unit38>
+      </Unit36>
+      <Unit37>
         <Filename Value="/usr/share/fpcsrc/2.6.0/rtl/objpas/sysutils/sysinth.inc"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="24"/>
         <CursorPos X="18" Y="33"/>
         <UsageCount Value="10"/>
-      </Unit38>
-      <Unit39>
+      </Unit37>
+      <Unit38>
         <Filename Value="IniFileParser.pas"/>
-        <UnitName Value="IniFileParser"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="958"/>
         <CursorPos X="5" Y="999"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit39>
-      <Unit40>
+      </Unit38>
+      <Unit39>
         <Filename Value="/usr/lib/lazarus/0.9.30.4/lcl/graphics.pp"/>
         <UnitName Value="Graphics"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="31"/>
         <CursorPos X="3" Y="52"/>
         <UsageCount Value="10"/>
-      </Unit40>
-      <Unit41>
+      </Unit39>
+      <Unit40>
         <Filename Value="TrayIconAPI.pas"/>
-        <UnitName Value="TrayIconAPI"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="178"/>
         <CursorPos X="64" Y="195"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit41>
-      <Unit42>
+      </Unit40>
+      <Unit41>
         <Filename Value="/usr/lib/lazarus/0.9.30.4/lcl/extctrls.pp"/>
         <UnitName Value="ExtCtrls"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="1385"/>
         <CursorPos X="31" Y="1425"/>
         <UsageCount Value="10"/>
+      </Unit41>
+      <Unit42>
+        <Filename Value="/usr/lib/lazarus/0.9.30.4/lcl/include/custompage.inc"/>
+        <UsageCount Value="10"/>
       </Unit42>
       <Unit43>
-        <Filename Value="/usr/lib/lazarus/0.9.30.4/lcl/include/custompage.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
+        <Filename Value="/usr/lib/lazarus/0.9.30.4/lcl/include/paintbox.inc"/>
         <UsageCount Value="10"/>
       </Unit43>
       <Unit44>
-        <Filename Value="/usr/lib/lazarus/0.9.30.4/lcl/include/paintbox.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="10"/>
-      </Unit44>
-      <Unit45>
         <Filename Value="/usr/lib/lazarus/0.9.30.4/lcl/include/customtrayicon.inc"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="121"/>
         <CursorPos X="28" Y="130"/>
         <UsageCount Value="10"/>
-      </Unit45>
-      <Unit46>
+      </Unit44>
+      <Unit45>
         <Filename Value="/usr/lib/lazarus/0.9.30.4/lcl/widgetset/wsextctrls.pp"/>
         <UnitName Value="WSExtCtrls"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="166"/>
         <CursorPos X="36" Y="187"/>
         <UsageCount Value="10"/>
-      </Unit46>
-      <Unit47>
+      </Unit45>
+      <Unit46>
         <Filename Value="/usr/lib/lazarus/0.9.30.4/lcl/widgetset/wslclclasses.pp"/>
         <UnitName Value="WSLCLClasses"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="161"/>
         <CursorPos X="3" Y="62"/>
         <UsageCount Value="10"/>
-      </Unit47>
-      <Unit48>
+      </Unit46>
+      <Unit47>
         <Filename Value="GameWakeInfo.lfm"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit47>
+      <Unit48>
+        <Filename Value="/usr/share/fpcsrc/2.6.4/rtl/unix/sysutils.pp"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit48>
       <Unit49>
-        <Filename Value="/usr/share/fpcsrc/2.6.4/rtl/unix/sysutils.pp"/>
-        <UnitName Value="sysutils"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
+        <Filename Value="/usr/share/fpcsrc/2.6.4/packages/indy/IdHTTP.pas"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit49>
       <Unit50>
-        <Filename Value="/usr/share/fpcsrc/2.6.4/packages/indy/IdHTTP.pas"/>
-        <UnitName Value="IdHTTP"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
+        <Filename Value="PMCW.Dialogs.pas"/>
+        <CursorPos X="10" Y="9"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit50>
       <Unit51>
-        <Filename Value="PMCW.Dialogs.pas"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="10" Y="9"/>
-        <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit51>
-      <Unit52>
         <Filename Value="PMCW.OSUtils.pas"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
         <CursorPos X="10" Y="9"/>
         <UsageCount Value="20"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit52>
-      <Unit53>
+      </Unit51>
+      <Unit52>
         <Filename Value="PMCWOSUtils.pas"/>
-        <UnitName Value="PMCWOSUtils"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
         <CursorPos X="21" Y="21"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit53>
-      <Unit54>
+      </Unit52>
+      <Unit53>
         <Filename Value="PMCWIniFileParser.pas"/>
-        <UnitName Value="PMCWIniFileParser"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="51"/>
         <CursorPos X="14" Y="71"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit54>
-      <Unit55>
+      </Unit53>
+      <Unit54>
         <Filename Value="PMCWUpdateCheckThread.pas"/>
         <UnitName Value="PMCW.UpdateCheckThread"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
         <CursorPos X="10" Y="9"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit54>
+      <Unit55>
+        <Filename Value="PMCWDownloadThread.pas"/>
+        <CursorPos X="27" Y="246"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit55>
       <Unit56>
-        <Filename Value="PMCWDownloadThread.pas"/>
-        <UnitName Value="PMCWDownloadThread"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="27" Y="246"/>
+        <Filename Value="PMCWDialogs.pas"/>
+        <CursorPos X="3" Y="14"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit56>
       <Unit57>
-        <Filename Value="PMCWDialogs.pas"/>
-        <UnitName Value="PMCWDialogs"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="3" Y="14"/>
-        <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit57>
-      <Unit58>
         <Filename Value="/usr/share/fpcsrc/2.6.4/packages/indy/IdSSLOpenSSL.pas"/>
-        <UnitName Value="IdSSLOpenSSL"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="172"/>
         <CursorPos X="5" Y="193"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit58>
-      <Unit59>
+      </Unit57>
+      <Unit58>
         <Filename Value="PMCWUpdater.pas"/>
-        <UnitName Value="PMCWUpdater"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
         <CursorPos X="78" Y="16"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit59>
-      <Unit60>
+      </Unit58>
+      <Unit59>
         <Filename Value="/usr/share/fpcsrc/2.6.4/packages/indy/IdURI.pas"/>
-        <UnitName Value="IdURI"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="50"/>
         <CursorPos X="27" Y="71"/>
         <UsageCount Value="10"/>
-      </Unit60>
-      <Unit61>
+      </Unit59>
+      <Unit60>
         <Filename Value="PMCWLanguageFile.pas"/>
-        <UnitName Value="PMCWLanguageFile"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="83"/>
         <CursorPos X="10" Y="102"/>
         <UsageCount Value="13"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit61>
-      <Unit62>
+      </Unit60>
+      <Unit61>
         <Filename Value="/usr/lib/lazarus/1.2.4/lcl/stringhashlist.pas"/>
         <UnitName Value="StringHashList"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="177"/>
-        <CursorPos X="1" Y="203"/>
+        <CursorPos Y="203"/>
         <UsageCount Value="10"/>
-      </Unit62>
-      <Unit63>
+      </Unit61>
+      <Unit62>
         <Filename Value="/usr/share/fpcsrc/2.6.4/rtl/objpas/sysutils/sysstrh.inc"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="102"/>
         <CursorPos X="10" Y="125"/>
         <UsageCount Value="10"/>
-      </Unit63>
-      <Unit64>
+      </Unit62>
+      <Unit63>
         <Filename Value="/usr/lib/lazarus/0.9.30.4/lcl/stringhashlist.pas"/>
         <UnitName Value="StringHashList"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="165"/>
-        <CursorPos X="1" Y="187"/>
+        <CursorPos Y="187"/>
+        <UsageCount Value="10"/>
+      </Unit63>
+      <Unit64>
+        <Filename Value="/usr/share/fpcsrc/2.6.4/packages/indy/IdCTypes.pas"/>
+        <CursorPos X="5" Y="3"/>
         <UsageCount Value="10"/>
       </Unit64>
       <Unit65>
-        <Filename Value="/usr/share/fpcsrc/2.6.4/packages/indy/IdCTypes.pas"/>
-        <UnitName Value="IdCTypes"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="5" Y="3"/>
+        <Filename Value="/usr/share/fpcsrc/2.6.4/packages/indy/IdSSLOpenSSLHeaders.pas"/>
+        <CursorPos X="40" Y="7"/>
         <UsageCount Value="10"/>
       </Unit65>
       <Unit66>
-        <Filename Value="/usr/share/fpcsrc/2.6.4/packages/indy/IdSSLOpenSSLHeaders.pas"/>
-        <UnitName Value="IdSSLOpenSSLHeaders"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="40" Y="7"/>
-        <UsageCount Value="10"/>
-      </Unit66>
-      <Unit67>
         <Filename Value="PMCWAbout.pas"/>
         <ComponentName Value="Info"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="PMCWAbout"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
         <CursorPos X="15" Y="17"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit67>
-      <Unit68>
+      </Unit66>
+      <Unit67>
         <Filename Value="/usr/share/fpcsrc/2.6.4/rtl/inc/systemh.inc"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="260"/>
         <CursorPos X="26" Y="281"/>
         <UsageCount Value="10"/>
-      </Unit68>
-      <Unit69>
+      </Unit67>
+      <Unit68>
         <Filename Value="/usr/lib/lazarus/1.2.4/lcl/menus.pp"/>
         <UnitName Value="Menus"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="266"/>
         <CursorPos X="14" Y="286"/>
         <UsageCount Value="10"/>
-      </Unit69>
-      <Unit70>
+      </Unit68>
+      <Unit69>
         <Filename Value="/usr/share/fpcsrc/2.6.4/rtl/objpas/classes/classesh.inc"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="45"/>
         <CursorPos X="12" Y="70"/>
         <UsageCount Value="10"/>
-      </Unit70>
+      </Unit69>
     </Units>
-    <General>
-      <ActiveWindowIndexAtStart Value="0"/>
-    </General>
-    <JumpHistory Count="12" HistoryIndex="11">
+    <JumpHistory Count="11" HistoryIndex="10">
       <Position1>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="26" Column="26" TopLine="1"/>
+        <Caret Line="26" Column="26"/>
       </Position1>
       <Position2>
         <Filename Value="GameWakeMain.pas"/>
@@ -653,7 +493,7 @@
       </Position7>
       <Position8>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="18" Column="15" TopLine="1"/>
+        <Caret Line="18" Column="15"/>
       </Position8>
       <Position9>
         <Filename Value="GameWakeMain.pas"/>
@@ -665,13 +505,8 @@
       </Position10>
       <Position11>
         <Filename Value="GameWakeMain.pas"/>
-        <Caret Line="888" Column="1" TopLine="911"/>
-      </Position11>
-      <Position12>
-        <Filename Value="GameWakeMain.pas"/>
         <Caret Line="79" Column="25" TopLine="70"/>
-      </Position12>
+      </Position11>
     </JumpHistory>
   </ProjectSession>
-  <EditorMacros Count="0"/>
 </CONFIG>
