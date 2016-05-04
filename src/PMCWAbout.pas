@@ -204,7 +204,7 @@ begin
     Width := 75;
     Height := 25;
     Left := FDescriptionTab.Width - Width - Margin;
-    Top := FDescriptionTab.Height - Height - (Margin - 10);
+    Top := FDescriptionTab.Height - Height - (Margin - 5);
   {$IFNDEF FPC}
     Anchors := [akBottom];
   {$ENDIF}
