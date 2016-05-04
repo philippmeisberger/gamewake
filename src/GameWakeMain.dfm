@@ -69,12 +69,13 @@ object Main: TMain
     OnMouseLeave = lCopyMouseLeave
   end
   object lVersion: TLabel
-    Left = 263
+    Left = 268
     Top = 8
-    Width = 24
+    Width = 21
     Height = 14
+    Alignment = taRightJustify
     Anchors = [akTop, akRight]
-    Caption = 'v 3.3'
+    Caption = 'v3.3'
     Color = clBtnFace
     ParentColor = False
   end
