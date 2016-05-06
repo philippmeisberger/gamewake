@@ -274,13 +274,10 @@ begin
   // Save configuration
   SaveToIni();
 
-  FLang.Free;
-  FClock.Free;
-  FUpdateCheck.Free;
-
-  // Delete icon from tray
-  if Assigned(FTrayIcon) then
-    FTrayIcon.Free;
+  FreeAndNil(FLang);
+  FreeAndNil(FClock);
+  FreeAndNil(FUpdateCheck);
+  FreeAndNil(FTrayIcon);
 end;
 
 { private TMain.Alert
@@ -295,6 +292,7 @@ begin
 
   bAlert.Default := False;
   bStop.Default := True;
+  // TODO: Disabling the complete group box will not change the color when blinking
   rgSounds.Enabled := False;
 
   // Disable components in "at alert" TGroupBox

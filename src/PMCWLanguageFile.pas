@@ -13,10 +13,10 @@ unit PMCWLanguageFile;
 interface
 
 uses
-  Classes, SysUtils, Forms, Dialogs, IdURI, Menus,
+  Classes, SysUtils, Forms, Dialogs, Menus,
 {$IFDEF MSWINDOWS}
 {$WARN SYMBOL_PLATFORM OFF}
-  Windows, CommCtrl, System.Generics.Collections, ShellAPI, UITypes;
+  Windows, CommCtrl, System.Generics.Collections, ShellAPI, UITypes, IdURI;
 {$ELSE}
   LCLType, PMCWIniFileParser;
 {$ENDIF}
@@ -461,8 +461,7 @@ end;
 destructor TLanguageFile.Destroy;
 begin
 {$IFDEF LINUX}
-  if Assigned(FIni) then
-    FIni.Free;
+  FreeAndNil(FIni);
 {$ENDIF}
   FreeAndNil(FLanguages);
   FreeAndNil(FListeners);
