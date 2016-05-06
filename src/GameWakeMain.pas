@@ -1305,7 +1305,7 @@ begin
   AboutDialog := TAboutDialog.Create(Self);
 
   try
-    AboutDialog.Title := StripHotkey(mmAbout.Caption);
+    AboutDialog.Title := mmAbout.Caption;
   {$IFDEF LINUX}
     AboutDialog.ImageFile := MAINICON;
   {$ENDIF}

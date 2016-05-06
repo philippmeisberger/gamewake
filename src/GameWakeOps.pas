@@ -47,6 +47,7 @@ type
 
 implementation
 
+{$I LanguageIDs.inc}
 {$IFDEF MSWINDOWS}
 {$R *.dfm}
 {$ELSE}
@@ -95,7 +96,7 @@ begin
 
   except
     on E: Exception do
-      FLang.ShowException(FLang.Format(84, [FConfigPath]), E.Message);
+      FLang.ShowException(FLang.Format(LID_STORING_FAILED, [FConfigPath]), E.Message);
   end;  //of try
 end;
 
@@ -107,18 +108,18 @@ procedure TOptions.SetLanguage();
 begin
   with FLang do
   begin
-    Caption := GetString(44);
-    gbSave.Caption := GetString(61);
-    cbSaveClock.Caption := GetString(62);
-    cbSaveText.Caption := GetString(63);
-    cbSavePos.Caption := GetString(64);
-    cbSaveSound.Caption := GetString(65);
-    cbSaveColor.Caption := GetString(66);
-    gbGeneral.Caption := GetString(67);
-    cbCombine.Caption := GetString(68);
-    cbUpdate.Caption := GetString(69);
-    bReset.Caption := GetString(71);
-    bCancel.Caption := GetString(6);
+    Caption := GetString(LID_SETTINGS);
+    gbSave.Caption := GetString(LID_SETTINGS_STORAGE);
+    cbSaveClock.Caption := GetString(LID_STORE_TIME);
+    cbSaveText.Caption := GetString(LID_STORE_TEXT);
+    cbSavePos.Caption := GetString(LID_STORE_POSITION);
+    cbSaveSound.Caption := GetString(LID_STORE_SOUND);
+    cbSaveColor.Caption := GetString(LID_STORE_COLOR);
+    gbGeneral.Caption := GetString(LID_GENERAL);
+    cbCombine.Caption := GetString(LID_COMBINE_MIN_SEC);
+    cbUpdate.Caption := GetString(LID_AUTO_UPDATE);
+    bReset.Caption := GetString(LID_DEFAULT_VALUES);
+    bCancel.Caption := GetString(LID_CANCEL);
   end;  //of with
 end;
 
@@ -190,7 +191,7 @@ begin
   except
     on E: Exception do
     begin
-      FLang.ShowException(FLang.Format(86, [FConfigPath]), E.Message);
+      FLang.ShowException(FLang.Format(LID_STORING_CONFIG_FAILED, [FConfigPath]), E.Message);
       ModalResult := mrAbort;
     end;  //of begin
   end;  //of try
