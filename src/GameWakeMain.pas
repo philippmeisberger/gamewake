@@ -137,13 +137,14 @@ var
 
 implementation
 
+uses GameWakeOps;
+
+{$I LanguageIDs.inc}
 {$IFDEF MSWINDOWS}
 {$R *.dfm}
 {$ELSE}
 {$R *.lfm}
 {$ENDIF}
-
-uses GameWakeOps;
 
 { TMain }
 
@@ -454,7 +455,8 @@ begin
     end;  //of try
 
   except
-    FLang.ShowMessage(FLang.GetString(73), mtError);
+    on E: Exception do
+      FLang.ShowException(FLang.GetString(LID_COLORS_INVALID), E.Message);
   end;  //of try
 end;
 
@@ -544,7 +546,8 @@ begin
     end;  //of try
 
   except
-    FLang.ShowMessage(FLang.Format(75, [FConfigPath]), mtError);
+    on E: Exception do
+      FLang.ShowException(FLang.Format(LID_LOADING_CONFIG_FAILED, [FConfigPath]), E.Message);
   end;  //of try
 end;
 
@@ -630,7 +633,7 @@ begin
 
   except
     on E: Exception do
-      FLang.ShowException(FLang.Format(76, [FConfigPath]), E.Message);
+      FLang.ShowException(FLang.Format(LID_STORING_CONFIG_FAILED, [FConfigPath]), E.Message);
   end;  //of try
 end;
 
@@ -646,42 +649,42 @@ begin
   with FLang do
   begin
     // Set captions for TMenuItems
-    mmFile.Caption := GetString(33);
-    mmSave.Caption := GetString(42);
-    mmEdit.Caption := GetString(43);
-    mmOptions.Caption := GetString(44);
-    mmTimer.Caption := GetString(45);
-    mmCounter.Caption := GetString(46);
-    mmView.Caption := GetString(10);
-    mmLang.Caption := GetString(25);
-    mmHelp.Caption := GetString(14);
-    mmUpdate.Caption:= GetString(15);
-    mmInstallCertificate.Caption := GetString(16);
-    mmReport.Caption := GetString(26);
-    mmWebsite.Caption := GetString(29);
+    mmFile.Caption := GetString(LID_FILE);
+    mmSave.Caption := GetString(LID_SETTINGS_STORE);
+    mmEdit.Caption := GetString(LID_EDIT);
+    mmOptions.Caption := GetString(LID_SETTINGS);
+    mmTimer.Caption := GetString(LID_MODE_TIMER);
+    mmCounter.Caption := GetString(LID_MODE_COUNTER);
+    mmView.Caption := GetString(LID_VIEW);
+    mmLang.Caption := GetString(LID_SELECT_LANGUAGE);
+    mmHelp.Caption := GetString(LID_HELP);
+    mmUpdate.Caption:= GetString(LID_UPDATE_SEARCH);
+    mmInstallCertificate.Caption := GetString(LID_CERTIFICATE_INSTALL);
+    mmReport.Caption := GetString(LID_REPORT_BUG);
+    mmWebsite.Caption := GetString(LID_TO_WEBSITE);
     lCopy.Hint := mmWebsite.Caption;
-    mmAbout.Caption := Format(17, [Application.Title]);
+    mmAbout.Caption := Format(LID_ABOUT, [Application.Title]);
 
     // Set captions for "alert type" TRadioGroup
-    rgSounds.Caption := GetString(47);
+    rgSounds.Caption := GetString(LID_ALERT_SELECTION);
 
     for i := 0 to 4 do
-      rgSounds.Items[i] := GetString(i + 48);
+      rgSounds.Items[i] := GetString(i + LID_SOUND_CLOCK);
 
     // Set captions for "at alert" TGroupBox
-    gpOther.Caption := GetString(53);
-    cbBlink.Caption := GetString(54);
-    bColor.Caption := GetString(55);
-    cbText.Caption := GetString(56);
-    bChange.Caption := GetString(57);
+    gpOther.Caption := GetString(LID_ALERT_EVENT);
+    cbBlink.Caption := GetString(LID_BLINK);
+    bColor.Caption := GetString(LID_COLOR);
+    cbText.Caption := GetString(LID_SHOW_TEXT);
+    bChange.Caption := GetString(LID_CHANGE_TEXT);
 
     // Set captions for buttons
-    bAlert.Caption := GetString(58);
-    bStop.Caption := GetString(59);
+    bAlert.Caption := GetString(LID_ALERT_ON);
+    bStop.Caption := GetString(LID_ALERT_OFF);
 
     // Set captions for TPopupMenu items
-    pmOpen.Caption := GetString(87);
-    pmClose.Caption := GetString(88);
+    pmOpen.Caption := GetString(LID_OPEN);
+    pmClose.Caption := GetString(LID_CLOSE);
   end;  //of with
 end;
 
@@ -783,11 +786,11 @@ begin
     mbLeft:
       begin
         if mmTimer.Checked then
-          FTrayIcon.BalloonHint := Format(FLang.GetString(73), [FClock.Alert.GetTime(False)])
+          FTrayIcon.BalloonHint := Format(FLang.GetString(LID_ALERT_AT), [FClock.Alert.GetTime(False)])
         else
         begin
           FClock.GetTimeRemaining(Hour, Min, Sec);
-          FTrayIcon.BalloonHint := Format(FLang.GetString(82), [Hour, Min, Sec]);
+          FTrayIcon.BalloonHint := Format(FLang.GetString(LID_ALERT_REMAINING), [Hour, Min, Sec]);
         end;  //of if
 
         FTrayIcon.ShowBalloonHint;
@@ -814,7 +817,8 @@ end;
 procedure TMain.pmCloseClick(Sender: TObject);
 begin
   // Show confirmation
-  if (FLang.ShowMessage(79, 80, mtConfirmation) = IDYES) then
+  if (FLang.ShowMessage(FLang.GetString([LID_CLOSE_CONFIRM1, LID_CLOSE_CONFIRM2]),
+    mtConfirmation) = IDYES) then
   begin
     bStop.Click;
     Close;
@@ -1019,10 +1023,10 @@ begin
     mmTimer.Enabled := False;
     mmCounter.Enabled := False;
 
-    FLang.ShowMessage(FLang.Format(72, [FClock.Alert.GetTime(False)]));
+    FLang.ShowMessage(FLang.Format(LID_ALERT_CONFIRM, [FClock.Alert.GetTime(False)]));
 
   except
-    FLang.ShowMessage(FLang.GetString(81), mtWarning);
+    FLang.ShowMessage(FLang.GetString(LID_ALERT_INVALID), mtWarning);
   end;  //of try
 end;
 
@@ -1073,7 +1077,7 @@ begin
   else
     bChange.Enabled := False;
 
-  FLang.ShowMessage(FLang.GetString(74));
+  FLang.ShowMessage(FLang.GetString(LID_ALERT_CANCELED));
 end;
 
 { TMain.bColorClick
@@ -1093,47 +1097,50 @@ begin
   Config := TConfigFile.Create(FConfigPath);
 
   try
-    Save := Config.ReadBoolean('Global', 'Save');
-    SaveColor := Config.ReadBoolean('Global', 'SaveColor');
-    Config.ReadColors(Colors);
+    try
+      Save := Config.ReadBoolean('Global', 'Save');
+      SaveColor := Config.ReadBoolean('Global', 'SaveColor');
+      Config.ReadColors(Colors);
+
+      // Init TColorDialog
+      ColorDialog := TColorDialog.Create(Self);
+
+      try
+        if (Save and SaveColor) then
+          for i := 0 to Length(Colors) -1 do
+            ColorDialog.CustomColors.Insert(i, 'Color'+ Chr(Ord('A') + i) +'='+ Colors[i]);
+
+        // Action "Ok" was called
+        if ColorDialog.Execute then
+        begin
+          ChosenColor := ColorDialog.Color;
+
+          if (Save and SaveColor) then
+          begin
+            FColor := ChosenColor;
+
+            for i := 0 to Length(Colors) -1 do
+              Colors[i] := ColorDialog.CustomColors.Values['Color'+ Chr(Ord('A') + i)];
+
+            // Write custom colors to config file
+            Config.WriteColors(Colors);
+
+            // Save changes to config file
+            Config.Save();
+          end;  //of begin
+        end;  //of begin
+
+      finally
+        ColorDialog.Free;
+      end;  //of try
+
+    finally
+      Config.Free;
+    end;  //of try
 
   except
-    Config.Free;
-    FLang.ShowMessage(FLang.GetString(71), mtError);
-    Exit;
-  end;  //of try
-
-  // Init TColorDialog
-  ColorDialog := TColorDialog.Create(Self);
-
-  try
-    if (Save and SaveColor) then
-      for i := 0 to Length(Colors) -1 do
-        ColorDialog.CustomColors.Insert(i, 'Color'+ Chr(Ord('A') + i) +'='+ Colors[i]);
-
-    // Action "Ok" was called
-    if ColorDialog.Execute then
-    begin
-      ChosenColor := ColorDialog.Color;
-
-      if (Save and SaveColor) then
-      begin
-        FColor := ChosenColor;
-
-        for i := 0 to Length(Colors) -1 do
-          Colors[i] := ColorDialog.CustomColors.Values['Color'+ Chr(Ord('A') + i)];
-
-        // Write custom colors to config file
-        Config.WriteColors(Colors);
-
-        // Save changes to config file
-        Config.Save();
-      end;  //of begin
-    end;  //of begin
-
-  finally
-    Config.Free;
-    ColorDialog.Free;
+    on E: Exception do
+      FLang.ShowException(FLang.GetString(LID_COLORS_INVALID), E.Message);
   end;  //of try
 end;
 
@@ -1146,12 +1153,12 @@ var
   UserInput: string;
 
 begin
-  UserInput := InputBox(FLang.GetString(75), FLang.GetString(76), pText.Caption);
+  UserInput := InputBox(FLang.GetString(LID_TEXT_CAPTION), FLang.GetString(LID_TEXT_PROMPT), pText.Caption);
 
   // Text length maximum 16 characters
   if (Length(UserInput) > 16) then
   begin
-    FLang.ShowMessage(77, 78, mtWarning);
+    FLang.ShowMessage(LID_TEXT_TOO_LONG1, LID_TEXT_TOO_LONG2, mtWarning);
     bChange.Click;
   end  //of begin
   else
@@ -1305,9 +1312,11 @@ begin
   AboutDialog := TAboutDialog.Create(Self);
 
   try
-    AboutDialog.Title := mmAbout.Caption;
   {$IFDEF LINUX}
+    AboutDialog.Title := mmAbout.Caption;
     AboutDialog.ImageFile := MAINICON;
+  {$ELSE}
+    AboutDialog.Title := StripHotkey(mmAbout.Caption);
   {$ENDIF}
     AboutDialog.Execute();
 
@@ -1391,7 +1400,8 @@ begin
     on E: Exception do
     begin
       FreeAndNil(FTrayIcon);
-      FLang.ShowException(FLang.GetString(89), E.Message);
+      Show();
+      FLang.ShowException(FLang.GetString(LID_TRAY_CREATION_FAILED), E.Message);
     end;
   end;  //of try
 
