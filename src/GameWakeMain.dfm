@@ -48,12 +48,12 @@ object Main: TMain
     ParentColor = False
   end
   object lCopy: TLabel
-    Left = 92
+    Left = 105
     Top = 253
-    Width = 112
+    Width = 88
     Height = 14
     Anchors = [akBottom]
-    Caption = #169' P.Meisberger 2016'
+    Caption = 'PM Code Works'
     Color = clBtnFace
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
@@ -78,6 +78,21 @@ object Main: TMain
     Caption = 'v3.3'
     Color = clBtnFace
     ParentColor = False
+  end
+  object pText: TPanel
+    Left = 8
+    Top = 81
+    Width = 282
+    Height = 126
+    Caption = 'Game Wake'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -37
+    Font.Name = 'Arial'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 14
+    Visible = False
   end
   object bAlert: TButton
     Left = 8
@@ -235,21 +250,6 @@ object Main: TMain
     Caption = #9654
     TabOrder = 7
     OnClick = bPlayHornClick
-  end
-  object pText: TPanel
-    Left = 8
-    Top = 81
-    Width = 282
-    Height = 126
-    Caption = 'Game Wake'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -37
-    Font.Name = 'Arial'
-    Font.Style = [fsBold]
-    ParentFont = False
-    TabOrder = 14
-    Visible = False
   end
   object bIncHour: TButton
     Left = 111

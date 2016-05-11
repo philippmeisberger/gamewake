@@ -46,7 +46,7 @@ object Main: TMain
     Top = 257
     Width = 105
     Anchors = [akBottom]
-    Caption = '© P.Meisberger 2016'
+    Caption = 'PM Code Works'
     Font.CharSet = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -11
@@ -377,4 +377,4 @@ object Main: TMain
     left = 192
     top = 27
   end
-end
+end
