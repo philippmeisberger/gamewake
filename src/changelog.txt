@@ -6,7 +6,9 @@ Changelog
 
 Version 3.4  [??.??.16]
 
-- Kleines Memory-Leak bei Wechsel des Modus geschlossen
+- Lautstärkeregler ab Windows Vista
+- Alarm-Sounds haben gleiche Lautstärke
+- Kleines Memory-Leak beim Wechseln des Modus geschlossen
 
 ---------------------------------
 
