@@ -258,10 +258,6 @@ begin
     Alert.SetTime(StrToInt(eHour.Text), StrToInt(eMin.Text));
   {$IFNDEF MSWINDOWS}
     SoundPath := '/usr/lib/gamewake/';
-  {$ELSE}
-  {$IFDEF DEBUG}
-    SoundPath := 'C:\Users\Phil\PMCW\Projekte\gamewake\bin\';
-  {$ENDIF}
   {$ENDIF}
     OnAlertBegin := Self.Alert;
     OnAlertEnd := BlinkEnd;
