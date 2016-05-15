@@ -137,7 +137,7 @@ var
 
 implementation
 
-uses GameWakeOps, Math;
+uses GameWakeOps;
 
 {$I LanguageIDs.inc}
 {$IFDEF MSWINDOWS}
@@ -1399,4 +1399,4 @@ begin
 end;
 
 end.
-
+

@@ -1,12 +1,12 @@
 object Main: TMain
-  Left = 302
+  Left = 538
   Height = 290
-  Top = 164
+  Top = 176
   Width = 297
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Game Wake'
-  ClientHeight = 271
+  ClientHeight = 270
   ClientWidth = 297
   Color = clBtnFace
   Font.Color = clBlack
@@ -17,12 +17,26 @@ object Main: TMain
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   Position = poDefault
-  LCLVersion = '1.2.4.0'
+  LCLVersion = '1.6.0.4'
+  object pText: TPanel
+    Left = 8
+    Height = 128
+    Top = 80
+    Width = 281
+    Caption = 'Game Wake'
+    Font.Color = clBlack
+    Font.Height = -37
+    Font.Name = 'Arial'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 14
+    Visible = False
+  end
   object lDp: TLabel
     Left = 144
-    Height = 27
+    Height = 29
     Top = 26
-    Width = 8
+    Width = 7
     Caption = ':'
     Font.CharSet = ANSI_CHARSET
     Font.Color = clBlack
@@ -34,17 +48,17 @@ object Main: TMain
   end
   object lHour: TLabel
     Left = 8
-    Height = 12
+    Height = 14
     Top = 8
     Width = 42
     Caption = '00:00:00'
     ParentColor = False
   end
   object lCopy: TLabel
-    Left = 96
-    Height = 12
-    Top = 257
-    Width = 105
+    Left = 104
+    Height = 14
+    Top = 254
+    Width = 88
     Anchors = [akBottom]
     Caption = 'PM Code Works'
     Font.CharSet = ANSI_CHARSET
@@ -62,17 +76,17 @@ object Main: TMain
   end
   object lVersion: TLabel
     Left = 267
-    Height = 12
+    Height = 14
     Top = 8
     Width = 21
     Anchors = [akTop, akRight]
-    Caption = 'v3.3'
+    Caption = 'v3.4'
     ParentColor = False
   end
   object bAlert: TButton
     Left = 8
     Height = 33
-    Top = 215
+    Top = 214
     Width = 136
     Anchors = [akLeft, akBottom]
     Caption = 'Alarm'
@@ -82,28 +96,28 @@ object Main: TMain
   end
   object gpOther: TGroupBox
     Left = 152
-    Height = 128
+    Height = 127
     Top = 80
     Width = 137
     Anchors = [akTop, akLeft, akBottom]
     Caption = 'Bei Alarm'
-    ClientHeight = 114
+    ClientHeight = 108
     ClientWidth = 133
     TabOrder = 10
     object cbBlink: TCheckBox
       Left = 12
-      Height = 21
+      Height = 19
       Top = 18
-      Width = 71
+      Width = 53
       Caption = 'blinken'
       OnClick = cbBlinkClick
       TabOrder = 0
     end
     object cbText: TCheckBox
       Left = 12
-      Height = 21
+      Height = 19
       Top = 38
-      Width = 112
+      Width = 87
       Caption = 'Schrift zeigen'
       OnClick = cbTextClick
       TabOrder = 2
@@ -113,7 +127,7 @@ object Main: TMain
       Height = 33
       Top = 64
       Width = 109
-      Caption = 'Beschriftug ändern'
+      Caption = 'Beschriftung ändern'
       Enabled = False
       OnClick = bChangeClick
       TabOrder = 3
@@ -131,7 +145,7 @@ object Main: TMain
   end
   object rgSounds: TRadioGroup
     Left = 8
-    Height = 128
+    Height = 127
     Top = 80
     Width = 137
     Anchors = [akTop, akLeft, akBottom]
@@ -145,7 +159,7 @@ object Main: TMain
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 114
+    ClientHeight = 108
     ClientWidth = 133
     ItemIndex = 0
     Items.Strings = (
@@ -194,7 +208,7 @@ object Main: TMain
   object bStop: TButton
     Left = 152
     Height = 33
-    Top = 215
+    Top = 214
     Width = 136
     Anchors = [akBottom]
     Cancel = True
@@ -239,20 +253,6 @@ object Main: TMain
     Caption = '▶'
     OnClick = bPlayHornClick
     TabOrder = 7
-  end
-  object pText: TPanel
-    Left = 8
-    Height = 128
-    Top = 80
-    Width = 281
-    Caption = 'Game Wake'
-    Font.Color = clBlack
-    Font.Height = -37
-    Font.Name = 'Arial'
-    Font.Style = [fsBold]
-    ParentFont = False
-    TabOrder = 14
-    Visible = False
   end
   object bIncHour: TButton
     Left = 111
@@ -370,11 +370,5 @@ object Main: TMain
       Caption = 'Beenden'
       OnClick = pmCloseClick
     end
-  end
-  object Timer: TTimer
-    Enabled = False
-    OnTimer = Blink
-    left = 192
-    top = 27
   end
 end
