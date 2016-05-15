@@ -42,7 +42,7 @@ type
     procedure SetLanguage();
   public
     constructor Create(AOwner: TComponent; AClock: TClock; ALang: TLanguageFile;
-      AConfigPath: string = ''); reintroduce;
+      const AConfigPath: string = ''); reintroduce;
   end;
 
 implementation
@@ -61,7 +61,7 @@ implementation
   Constructor for creating a TOptions instance. }
 
 constructor TOptions.Create(AOwner: TComponent; AClock: TClock;
-  ALang: TLanguageFile; AConfigPath: string = '');
+  ALang: TLanguageFile; const AConfigPath: string = '');
 begin
   inherited Create(AOwner);
   FClock := AClock;

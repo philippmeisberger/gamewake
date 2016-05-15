@@ -12,8 +12,7 @@ uses
   GameWakeMain in 'GameWakeMain.pas' {Main},
   GameWakeAPI in 'GameWakeAPI.pas',
   GameWakeOps in 'GameWakeOps.pas' {Options},
-  GameWakeAlertThread in 'GameWakeAlertThread.pas',
-  PMCWAbout in 'PMCWAbout.pas' {Info};
+  PMCWAbout in 'PMCWAbout.pas';
 
 {$R *.res}
 

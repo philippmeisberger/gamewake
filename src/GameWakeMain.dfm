@@ -136,7 +136,7 @@ object Main: TMain
       Top = 64
       Width = 109
       Height = 33
-      Caption = 'Beschriftug '#228'ndern'
+      Caption = 'Beschriftung '#228'ndern'
       Enabled = False
       TabOrder = 3
       OnClick = bChangeClick
@@ -368,11 +368,5 @@ object Main: TMain
       Caption = 'Beenden'
       OnClick = pmCloseClick
     end
-  end
-  object Timer: TTimer
-    Enabled = False
-    OnTimer = Blink
-    Left = 224
-    Top = 24
   end
 end

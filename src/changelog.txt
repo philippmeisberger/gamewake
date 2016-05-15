@@ -4,6 +4,12 @@ Ein Open-Source Projekt von PM Code Works
 Changelog
 =========
 
+Version 3.4  [??.??.16]
+
+- Kleines Memory-Leak bei Wechsel des Modus geschlossen
+
+---------------------------------
+
 Version 3.3  [22.08.15]
 
 - Linux:

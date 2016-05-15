@@ -73,7 +73,6 @@ type
     mmView: TMenuItem;
     mmLang: TMenuItem;
     mmReport: TMenuItem;
-    Timer: TTimer;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure mmInstallCertificateClick(Sender: TObject);
@@ -114,12 +113,13 @@ type
     FLang: TLanguageFile;
     FTrayIcon: TTrayIcon;
     FColor: TColor;
-    FConfigPath, FLangPath, FPath: string;
+    FConfigPath,
+    FLangPath: string;
     FUpdateCheck: TUpdateCheck;
     procedure Alert(Sender: TObject);
     procedure OnUpdate(Sender: TObject; const ANewBuild: Cardinal);
     procedure BlinkEnd(Sender: TObject);
-    procedure Count(Sender: TObject; ATime: string);
+    procedure Counting(Sender: TObject);
     procedure LoadColor();
     procedure LoadFromIni();
   {$IFDEF MSWINDOWS}
@@ -137,7 +137,7 @@ var
 
 implementation
 
-uses GameWakeOps;
+uses GameWakeOps, Math;
 
 {$I LanguageIDs.inc}
 {$IFDEF MSWINDOWS}
@@ -160,8 +160,6 @@ var
 begin
   FLangPath := '';
 {$IFNDEF MSWINDOWS}
-  FPath := '/usr/lib/gamewake/';
-
   // Load other language file?
   if ((ParamStr(1) = '--lang') and (ParamStr(2) <> '')) then
     FLangPath := ParamStr(2)
@@ -194,7 +192,6 @@ begin
     CreateDir(FConfigPath);
 
   FConfigPath := FConfigPath +'gamewake.ini';
-  FPath := '';
 
   // Setup language
   FLang := TLanguageFile.Create(Self);
@@ -259,9 +256,16 @@ begin
   with FClock do
   begin
     Alert.SetTime(StrToInt(eHour.Text), StrToInt(eMin.Text));
-    OnAlert := Self.Alert;
+  {$IFNDEF MSWINDOWS}
+    SoundPath := '/usr/lib/gamewake/';
+  {$ELSE}
+  {$IFDEF DEBUG}
+    SoundPath := 'C:\Users\Phil\PMCW\Projekte\gamewake\bin\';
+  {$ENDIF}
+  {$ENDIF}
+    OnAlertBegin := Self.Alert;
     OnAlertEnd := BlinkEnd;
-    OnCount := Self.Count;
+    OnCounting := Self.Counting;
   end;  //of with
 end;
 
@@ -286,6 +290,10 @@ end;
 
 procedure TMain.Alert(Sender: TObject);
 begin
+  // Enable blinking?
+  if cbBlink.Checked then
+    FClock.OnAlert := Blink;
+
   Application.Restore;
   Show;
   Application.BringToFront;
@@ -319,9 +327,6 @@ begin
   end  //of begin
   else
   begin
-    // Enable blinking?
-    Timer.Enabled := cbBlink.Checked;
-
     // Show text?
     if cbText.Checked then
     begin
@@ -409,17 +414,16 @@ end;
 
 procedure TMain.BlinkEnd(Sender: TObject);
 begin
-  Timer.Enabled := False;
   Color := clBtnFace;
 end;
 
-{ private TMain.Count
+{ private TMain.Counting
 
   Event that is called by TClock when current time is incremented. }
 
-procedure TMain.Count(Sender: TObject; ATime: string);
+procedure TMain.Counting(Sender: TObject);
 begin
-  lHour.Caption := ATime;
+  lHour.Caption := FClock.Time.GetTime();
 end;
 
 { private TMain.LoadColor
@@ -712,7 +716,7 @@ begin
           Append('org.freedesktop.ConsoleKit.Manager.Stop');
         end;  //of with
 
-        Process.Execute;
+        Process.Execute();
         Result := True;
 
       finally
@@ -791,7 +795,7 @@ begin
           FTrayIcon.BalloonHint := Format(FLang.GetString(LID_ALERT_REMAINING), [Hour, Min, Sec]);
         end;  //of if
 
-        FTrayIcon.ShowBalloonHint;
+        FTrayIcon.ShowBalloonHint();
       end;  //of begin
   end;  //of case
 end;
@@ -890,11 +894,7 @@ end;
 
 procedure TMain.bPlayClockClick(Sender: TObject);
 begin
-{$IFDEF PORTABLE}
-  PlaySound(PChar('BELL'), HInstance, SND_ASYNC or SND_MEMORY or SND_RESOURCE);
-{$ELSE}
-  FClock.PlaySound(FPath +'bell.wav');
-{$ENDIF}
+  FClock.PlaySound({$IFDEF PORTABLE}'BELL', False, True{$ELSE}'bell.wav'{$ENDIF});
 end;
 
 { TMain.bPlayHornClick
@@ -903,11 +903,7 @@ end;
 
 procedure TMain.bPlayHornClick(Sender: TObject);
 begin
-{$IFDEF PORTABLE}
-  PlaySound(PChar('HORN'), HInstance, SND_ASYNC or SND_MEMORY or SND_RESOURCE);
-{$ELSE}
-  FClock.PlaySound(FPath +'horn.wav');
-{$ENDIF}
+  FClock.PlaySound({$IFDEF PORTABLE}'HORN', False, True{$ELSE}'horn.wav'{$ENDIF});
 end;
 
 { TMain.bPlayBingClick
@@ -919,7 +915,7 @@ begin
 {$IFDEF PORTABLE}
   SysUtils.Beep();
 {$ELSE}
-  FClock.PlaySound(FPath +'bing.wav');
+  FClock.PlaySound('bing.wav');
 {$ENDIF}
 end;
 
@@ -929,11 +925,7 @@ end;
 
 procedure TMain.bPlayBeepClick(Sender: TObject);
 begin
-{$IFDEF PORTABLE}
-  PlaySound(PChar('BEEP'), HInstance, SND_ASYNC or SND_MEMORY or SND_RESOURCE);
-{$ELSE}
-  FClock.PlaySound(FPath +'beep.wav');
-{$ENDIF}
+  FClock.PlaySound({$IFDEF PORTABLE}'BEEP', False, True{$ELSE}'beep.wav'{$ENDIF});
 end;
 
 { TMain.eHourKeyPress
@@ -945,7 +937,7 @@ begin
   // Only allow digits, arrow-left and arrow-right key and delete key
   if not (Key in [#25, #27, #08, '0'..'9']) then
   begin
-    SysUtils.Beep;
+    SysUtils.Beep();
     Key := #0;
   end;  //of begin
 end;
@@ -1005,7 +997,7 @@ begin
     Caption := Caption +' - '+ FClock.Alert.GetTime(False);
 
     // Start alert
-    FClock.StartAlert();
+    FClock.AlertEnabled := True;
 
     // Disable GUI components
     eHour.Enabled := False;
@@ -1035,7 +1027,7 @@ end;
 procedure TMain.bStopClick(Sender: TObject);
 begin
   // Stop alert
-  FClock.StopAlert();
+  FClock.AlertEnabled := False;
 
   if mmCounter.Checked then
   begin
@@ -1218,7 +1210,7 @@ begin
   begin
     mmCounter.Checked := False;
     mmTimer.Checked := True;
-    FClock.ChangeMode(True);
+    FClock.TimerMode := True;
     eHour.Text := FClock.Alert.GetHour();
     eMin.Text := FClock.Alert.GetMin();
     eHour.SetFocus;
@@ -1235,7 +1227,7 @@ begin
   begin
     mmTimer.Checked := False;
     mmCounter.Checked := True;
-    FClock.ChangeMode(False);
+    FClock.TimerMode := False;
     lHour.Caption := FClock.Time.GetTime();
     eHour.Text := FClock.Alert.GetHour();
     eMin.Text := FClock.Alert.GetMin();
