@@ -212,7 +212,6 @@ object Main: TMain
     Caption = 'aus'
     Enabled = False
     TabOrder = 11
-    TabStop = False
     OnClick = bStopClick
   end
   object bPlayClock: TButton

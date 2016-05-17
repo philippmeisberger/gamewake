@@ -173,7 +173,7 @@ var
   i: Byte;
 
 begin
-  for i := 0 to Length(AArray) -1 do
+  for i := Low(AArray) to High(AArray) do
     AArray[i] := ReadString('CustomColors', 'Color'+ IntToStr(i));
 end;
 
@@ -195,7 +195,7 @@ var
   i: Byte;
 
 begin
-  for i := 0 to Length(AArray) -1 do
+  for i := Low(AArray) to High(AArray) do
     WriteString('CustomColors', 'Color'+ IntToStr(i), AArray[i]);
 end;
 
@@ -323,7 +323,7 @@ begin
   else
     Inc(FMin);
 
-  result := GetMin();
+  Result := GetMin();
 end;
 
 { public TTime.IncrementSeconds
@@ -670,7 +670,7 @@ begin
   ASec := Format('%.*d', [2, CurrentSec]);
 end;
 
-{ private TClock.NotifyOnCounting
+{ private TClock.DoNotifyOnCounting
 
   Notifies about counting. }
 

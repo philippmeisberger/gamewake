@@ -216,7 +216,6 @@ object Main: TMain
     Enabled = False
     OnClick = bStopClick
     TabOrder = 11
-    TabStop = False
   end
   object bPlayClock: TButton
     Left = 120

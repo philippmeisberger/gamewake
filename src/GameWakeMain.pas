@@ -296,7 +296,7 @@ begin
 
   bAlert.Default := False;
   bStop.Default := True;
-  // TODO: Disabling the complete group box will not change the color when blinking
+  // TODO: In Lazarus disabling the complete group box will not change the color when blinking
   rgSounds.Enabled := False;
 
   // Disable components in "at alert" TGroupBox
@@ -1093,7 +1093,7 @@ begin
 
       try
         if (Save and SaveColor) then
-          for i := 0 to Length(Colors) -1 do
+          for i := Low(Colors) to High(Colors) do
             ColorDialog.CustomColors.Insert(i, 'Color'+ Chr(Ord('A') + i) +'='+ Colors[i]);
 
         // Action "Ok" was called
@@ -1105,7 +1105,7 @@ begin
           begin
             FColor := ChosenColor;
 
-            for i := 0 to Length(Colors) -1 do
+            for i := Low(Colors) to High(Colors) do
               Colors[i] := ColorDialog.CustomColors.Values['Color'+ Chr(Ord('A') + i)];
 
             // Write custom colors to config file
