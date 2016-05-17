@@ -75,7 +75,7 @@ object Main: TMain
     Height = 14
     Alignment = taRightJustify
     Anchors = [akTop, akRight]
-    Caption = 'v3.3'
+    Caption = 'v3.4'
     Color = clBtnFace
     ParentColor = False
   end

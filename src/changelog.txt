@@ -4,11 +4,17 @@ Ein Open-Source Projekt von PM Code Works
 Changelog
 =========
 
-Version 3.4  [??.??.16]
+Version 3.4  [??.05.16]
 
-- Lautstärkeregler ab Windows Vista
+- Lautstärkeregler im "Lautstärkemixer" ab Windows Vista hinzugefügt
 - Alarm-Sounds haben gleiche Lautstärke
 - Kleines Memory-Leak beim Wechseln des Modus geschlossen
+- Neues Windows Setup
+- Verwendung des neuen "Über ..."- Dialogs
+- Fehler-Melde-System verbessert:
+  - Übersetzungen für deutsch, englisch, französisch hinzugefügt
+  - Falls kein Mail-Client für Senden des Fehlerberichts installiert ist, wird Website aufgerufen
+- Signierung der Programmdatei mit SHA-256 (nur Windows)
 
 ---------------------------------
 

@@ -41,12 +41,13 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "{#MyAppExePath32}{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion; Check: not Is64BitInstallMode
 Source: "{#MyAppExePath64}{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion; Check: Is64BitInstallMode
+Source: "gamewake.ini"; DestDir: "{userappdata}\{#MyAppName}"; Flags: onlyifdoesntexist
 Source: "..\bin\bell.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\bin\beep.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\bin\horn.wav"; DestDir: "{app}"; Flags: ignoreversion
 
 [Dirs]
-Name: "{userappdata}\Game Wake"; Flags: uninsalwaysuninstall
+Name: "{userappdata}\{#MyAppName}"; Flags: uninsalwaysuninstall
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
