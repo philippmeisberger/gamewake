@@ -140,10 +140,10 @@ implementation
 uses GameWakeOps;
 
 {$I LanguageIDs.inc}
-{$IFDEF MSWINDOWS}
-{$R *.dfm}
-{$ELSE}
+{$IFDEF FPC}
 {$R *.lfm}
+{$ELSE}
+{$R *.dfm}
 {$ENDIF}
 
 { TMain }

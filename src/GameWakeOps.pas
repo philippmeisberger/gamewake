@@ -48,10 +48,10 @@ type
 implementation
 
 {$I LanguageIDs.inc}
-{$IFDEF MSWINDOWS}
-{$R *.dfm}
-{$ELSE}
+{$IFDEF FPC}
 {$R *.lfm}
+{$ELSE}
+{$R *.dfm}
 {$ENDIF}
 
 { TOptions }
@@ -80,7 +80,7 @@ var
 begin
   try
     Config := TConfigFile.Create(FConfigPath);
-            
+
     try
       cbSaveClock.Checked := Config.ReadBoolean('Global', 'SaveClock');
       cbSaveText.Checked := Config.ReadBoolean('Global', 'SaveText');
@@ -197,4 +197,4 @@ begin
   end;  //of try
 end;
 
-end.
+end.
