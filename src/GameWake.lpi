@@ -17,11 +17,11 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
-      <MinorVersionNr Value="3"/>
-      <BuildNr Value="471"/>
+      <MinorVersionNr Value="4"/>
+      <BuildNr Value="482"/>
       <Language Value="0407"/>
       <CharSet Value="04B0"/>
-      <StringTable CompanyName="PM Code Works" FileDescription="Game Wake" LegalCopyright="Philipp Meisberger 2016" LegalTrademarks="PM Code Works" ProductName="Game Wake" ProductVersion="3.3"/>
+      <StringTable CompanyName="PM Code Works" FileDescription="Game Wake" LegalCopyright="Philipp Meisberger 2016" LegalTrademarks="PM Code Works" ProductName="Game Wake" ProductVersion="3.4"/>
     </VersionInfo>
     <BuildModes Count="1">
       <Item1 Name="Default" Default="True"/>
@@ -53,6 +53,7 @@
       <Unit1>
         <Filename Value="GameWakeAPI.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="GameWakeAPI"/>
       </Unit1>
       <Unit2>
         <Filename Value="GameWakeMain.dfm"/>
@@ -93,6 +94,7 @@
     <Parsing>
       <SyntaxOptions>
         <SyntaxMode Value="Delphi"/>
+        <CStyleOperator Value="False"/>
         <AllowLabel Value="False"/>
         <CPPInline Value="False"/>
         <UseAnsiStrings Value="False"/>
@@ -113,7 +115,7 @@
       <CompilerPath Value="$(CompPath)"/>
       <ExecuteAfter>
         <Command Value="strip ..\bin\Linux\gamewake_$(TargetCPU)\gamewake"/>
-        <CompileReasons Compile="False" Build="False" Run="False"/>
+        <CompileReasons Run="False"/>
       </ExecuteAfter>
     </Other>
   </CompilerOptions>

@@ -698,7 +698,7 @@ begin
     else     Sound := '';
   end;  //of case
 
-  if (not AResource and (Sound <> '')) then
+  if ((Sound <> ''){$IFDEF MSWINDOWS}and not AResource{$ENDIF}) then
     Sound := Sound +'.wav';
 
   Result := PlaySound(Sound, ASynchronized{$IFDEF MSWINDOWS}, AResource{$ENDIF});
