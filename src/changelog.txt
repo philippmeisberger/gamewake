@@ -4,17 +4,20 @@ Ein Open-Source Projekt von PM Code Works
 Changelog
 =========
 
-Version 3.4  [??.05.16]
+Version 3.4  [18.05.16]
 
-- Lautstärkeregler im "Lautstärkemixer" ab Windows Vista hinzugefügt
+- Linux:
+  - Herunterfahren funktioniert nun auch unter systemd
+- Windows:
+  - Lautstärkeregler im "Lautstärkemixer" ab Windows Vista hinzugefügt
+  - Neues Setup
+  - Fehler-Melde-System verbessert:
+    - Übersetzungen für deutsch, englisch, französisch hinzugefügt
+    - Falls kein Mail-Client für Senden des Fehlerberichts installiert ist, wird Website aufgerufen
+  - Signierung der Programmdatei mit SHA-256
 - Alarm-Sounds haben gleiche Lautstärke
 - Kleines Memory-Leak beim Wechseln des Modus geschlossen
-- Neues Windows Setup
 - Verwendung des neuen "Über ..."- Dialogs
-- Fehler-Melde-System verbessert:
-  - Übersetzungen für deutsch, englisch, französisch hinzugefügt
-  - Falls kein Mail-Client für Senden des Fehlerberichts installiert ist, wird Website aufgerufen
-- Signierung der Programmdatei mit SHA-256 (nur Windows)
 
 ---------------------------------
 

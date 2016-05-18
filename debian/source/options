@@ -1,6 +1,7 @@
 tar-ignore = "BACKUP"
 tar-ignore = ".hg"
 tar-ignore = "setup"
+tar-ignore = "MakeRelease.bat"
 tar-ignore = "bin/Linux-i386"
 tar-ignore = "bin/Linux-x86_64"
 tar-ignore = "src/backup"

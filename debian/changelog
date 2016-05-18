@@ -1,3 +1,21 @@
+gamewake (3.4) stable; urgency=medium
+
+  * Minor release
+  * Linux:
+    * Shutdown now also works on systemd
+  * Windows:
+    * Added volume slider to "volume mixer" in Windows Vista and later
+    * New setup
+    * Improved report bug system
+      * Added translations for german, english and french
+      * In case no mail client is installed for sending the bug report the website will be shown
+    * Program executable is now signed with SHA-256 under Windows
+  * Alert sounds have the same volume
+  * Closed small memory leak when changing the mode
+  * Usage of the new "About ..." dialog
+
+ -- Philipp Meisberger <team@pm-codeworks.de>  Wed, 18 May 2016 11:09:38 +0200
+
 gamewake (3.3) stable; urgency=low
 
   * Minor release

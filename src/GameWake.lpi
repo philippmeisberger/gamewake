@@ -18,7 +18,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <MinorVersionNr Value="4"/>
-      <BuildNr Value="482"/>
+      <BuildNr Value="484"/>
       <Language Value="0407"/>
       <CharSet Value="04B0"/>
       <StringTable CompanyName="PM Code Works" FileDescription="Game Wake" LegalCopyright="Philipp Meisberger 2016" LegalTrademarks="PM Code Works" ProductName="Game Wake" ProductVersion="3.4"/>
@@ -114,7 +114,7 @@
     <Other>
       <CompilerPath Value="$(CompPath)"/>
       <ExecuteAfter>
-        <Command Value="strip ..\bin\Linux\gamewake_$(TargetCPU)\gamewake"/>
+        <Command Value="strip ..\bin\Linux-$(TargetCPU)\gamewake"/>
         <CompileReasons Run="False"/>
       </ExecuteAfter>
     </Other>

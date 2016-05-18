@@ -696,34 +696,45 @@ var
   Process: TProcess;
 
 begin
-  if FileExists('/usr/bin/dbus-send') then
+  Result := False;
+
+  try
+    Process := TProcess.Create(nil);
+
     try
-      Process := TProcess.Create(nil);
-
-      try
-        Process.Executable := '/usr/bin/dbus-send';
-
-        with Process.Parameters do
+      // systemd Linux?
+      if FileExists('/bin/systemctl') then
+      begin
+        Process.Executable := '/bin/systemctl';
+        Process.Parameters.Append('poweroff');
+      end  //of begin
+      else
+      begin
+        if FileExists('/usr/bin/dbus-send') then
         begin
-          Append('--system');
-          Append('--print-reply');
-          Append('--dest=org.freedesktop.ConsoleKit');
-          Append('/org/freedesktop/ConsoleKit/Manager');
-          Append('org.freedesktop.ConsoleKit.Manager.Stop');
-        end;  //of with
+          Process.Executable := '/usr/bin/dbus-send';
 
-        Process.Execute();
-        Result := True;
+          with Process.Parameters do
+          begin
+            Append('--system');
+            Append('--print-reply');
+            Append('--dest=org.freedesktop.ConsoleKit');
+            Append('/org/freedesktop/ConsoleKit/Manager');
+            Append('org.freedesktop.ConsoleKit.Manager.Stop');
+          end;  //of with
+        end;
+      end;
 
-      finally
-        Process.Free;
-      end;  //of try
+      Process.Execute();
+      Result := True;
 
-    except
-      Result := False;
-    end  //of try
-  else
+    finally
+      Process.Free;
+    end;  //of try
+
+  except
     Result := False;
+  end;  //of try
 end;
 {$ELSE}
 const
@@ -1395,4 +1406,4 @@ begin
 end;
 
 end.
-
+
