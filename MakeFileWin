@@ -14,8 +14,6 @@ SIGN=$(SIGNTOOL) sign /v /sha1 $(CERTSHA1) /tr http://timestamp.globalsign.com/s
 
 build: win32 win64
 
-sign: sign32 sign64
-
 source:
 	$(ZIP) -9 -r $(PROJECTNAME)-src.zip . src -x .hg\* -x debian\* -x setup\* -i MakeFile -i MakeFileWin -i MakeFile.bat -i src\lang -i src\gamewake.desktop -i *.txt -i *.md -i *.pas -i *.dproj -i *.res -i *.rc -i *.dpr -i *.dfm -i *.inc -i *.dcr -i *.ico
 
@@ -23,40 +21,34 @@ win32: src\$(PROJECTNAME).dproj
 	SET BDS=C:\Program Files (x86)\Embarcadero\Studio\16.0
 	$(MSBUILD) /p:Config=Release /property:Platform=Win32 src\$(PROJECTNAME).dproj
 
-sign32: $(WIN32EXE)
-	$(SIGN) $(WIN32EXE)
-	move $(WIN32EXE) "$(WIN32DIR)\Game Wake.exe"
-
 win64: src\$(PROJECTNAME).dproj
 	SET BDS=C:\Program Files (x86)\Embarcadero\Studio\16.0
 	$(MSBUILD) /p:Config=Release /property:Platform=Win64 src\$(PROJECTNAME).dproj
 
-sign64: $(WIN64EXE)
-	$(SIGN) $(WIN64EXE)
+sign: $(WIN32EXE) $(WIN64EXE)
+	$(SIGN) $(WIN32EXE) $(WIN64EXE)
+	move $(WIN32EXE) "$(WIN32DIR)\Game Wake.exe"
 	move $(WIN64EXE) "$(WIN64DIR)\Game Wake.exe"
 
 buildsetup: setup\$(PROJECTNAME).iss
 	$(INNOSETUP) /cc setup\$(PROJECTNAME).iss
 
+release: win32 win64 sign buildsetup portable source
+
 win32portable: src\$(PROJECTNAME).dproj
 	SET BDS=C:\Program Files (x86)\Embarcadero\Studio\16.0
 	$(MSBUILD) /p:Config=Portable /property:Platform=Win32 src\$(PROJECTNAME).dproj
-
-sign32portable: $(PORTABLE32EXE)
-	$(SIGN) $(PORTABLE32EXE)
-	move $(PORTABLE32EXE) "$(WIN32DIR)\Portable\Game Wake.exe"
 
 win64portable: src\$(PROJECTNAME).dproj
 	SET BDS=C:\Program Files (x86)\Embarcadero\Studio\16.0
 	$(MSBUILD) /p:Config=Portable /property:Platform=Win64 src\$(PROJECTNAME).dproj
 
-sign64portable: $(PORTABLE64EXE)
-	$(SIGN) $(PORTABLE64EXE)
+signportable: $(PORTABLE32EXE) $(PORTABLE64EXE)
+	$(SIGN) $(PORTABLE32EXE) $(PORTABLE64EXE)
+	move $(PORTABLE32EXE) "$(WIN32DIR)\Portable\Game Wake.exe"
 	move $(PORTABLE64EXE) "$(WIN64DIR)\Portable\Game Wake.exe"
 
-portable: win32portable sign32portable win64portable sign64portable
-
-release: win32 sign32 win64 sign64 buildsetup portable source
+portable: win32portable win64portable signportable
 
 clean:
 	DEL src\$(PROJECTNAME).res
