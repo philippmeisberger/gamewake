@@ -1,14 +1,16 @@
-Install instructions for Debian 7
-=================================
+Game Wake
+=========
 
-* Add PM Codeworks repository:
-    * `~# wget http://apt.pm-codeworks.de/pm-codeworks.list -P /etc/apt/sources.d/`
+Game Wake is a cross platform alert clock application.
 
-* Add PM Codeworks key:
-    * `~# wget -O - http://apt.pm-codeworks.de/pm-codeworks.de.gpg.key | apt-key add -`
-    * `~# apt-get update`
+Installation
+------------
 
-* Install the package:
-    * `~# apt-get install gamewake`
-    
-[Homepage](http://www.pm-codeworks.de/gamewake.html)
+Visit <http://www.pm-codeworks.de/gamewake.html>.
+
+Questions and suggestions
+-------------------------
+
+If you have any questions to this project just ask me via email:
+
+<team@pm-codeworks.de>
