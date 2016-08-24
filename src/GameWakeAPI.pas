@@ -8,7 +8,7 @@
 
 unit GameWakeAPI;
 
-{$IFDEF LINUX} {$mode delphi}{$H+} {$ENDIF}
+{$IFDEF FPC}{$mode delphi}{$ENDIF}
 
 interface
 

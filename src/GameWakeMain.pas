@@ -8,6 +8,8 @@
 
 unit GameWakeMain;
 
+{$IFDEF FPC}{$mode delphi}{$ENDIF}
+
 interface
 
 uses
@@ -1410,4 +1412,4 @@ begin
 end;
 
 end.
-
+

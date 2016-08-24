@@ -17,7 +17,7 @@ object Main: TMain
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   Position = poDefault
-  LCLVersion = '1.2.4.0'
+  LCLVersion = '1.6.0.4'
   object pText: TPanel
     Left = 8
     Height = 128
@@ -370,4 +370,4 @@ object Main: TMain
       OnClick = pmCloseClick
     end
   end
-end
+end
