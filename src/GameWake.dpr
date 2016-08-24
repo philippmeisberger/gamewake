@@ -11,8 +11,7 @@ uses
   Vcl.Forms,
   GameWakeMain in 'GameWakeMain.pas' {Main},
   GameWakeAPI in 'GameWakeAPI.pas',
-  GameWakeOps in 'GameWakeOps.pas' {Options},
-  PMCWAbout in 'PMCWAbout.pas';
+  GameWakeOps in 'GameWakeOps.pas' {Options};
 
 {$R *.res}
 

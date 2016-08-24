@@ -18,7 +18,7 @@ uses
 {$ELSE}
   Windows, MMSystem,
 {$ENDIF}
-  SysUtils, Classes, ExtCtrls, Graphics, PMCWIniFileParser;
+  SysUtils, Classes, ExtCtrls, Graphics, PMCW.IniFileParser;
 
 type
   { TConfigFile }

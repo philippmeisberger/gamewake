@@ -12,7 +12,8 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Controls, Forms, StdCtrls, ExtCtrls, Menus,
-  Dialogs, GameWakeAPI, PMCWLanguageFile, PMCWUpdater, PMCWOSUtils, PMCWAbout,
+  Dialogs, GameWakeAPI, PMCW.LanguageFile, PMCW.Dialogs.Updater, PMCW.Utils,
+  PMCW.Dialogs.About,
 
 {$IFDEF MSWINDOWS}
 {$IFDEF PORTABLE}
@@ -117,7 +118,6 @@ type
     FLangPath: string;
     FUpdateCheck: TUpdateCheck;
     procedure Alert(Sender: TObject);
-    procedure OnUpdate(Sender: TObject; const ANewBuild: Cardinal);
     procedure BlinkEnd(Sender: TObject);
     procedure Counting(Sender: TObject);
     procedure LoadColor();
@@ -126,10 +126,14 @@ type
     procedure PowerBroadcast(var AMsg: TMessage); message WM_POWERBROADCAST;
   {$ENDIF}
     procedure SaveToIni();
-    procedure SetLanguage(Sender: TObject);
+
     function Shutdown(): Boolean;
     procedure TrayMouseUp(Sender: TObject; AButton: TMouseButton;
       AShiftState: TShiftState; X, Y: Integer);
+    { IChangeLanguageListener }
+    procedure SetLanguage(ANewLanguage: TLocale);
+    { IUpdateListener }
+    procedure OnUpdate(const ANewBuild: Cardinal);
   end;
 
 var
@@ -339,10 +343,10 @@ end;
 
   Event that is called by TUpdateCheck when TUpdateCheckThread finds an update. }
 
-procedure TMain.OnUpdate(Sender: TObject; const ANewBuild: Cardinal);
+procedure TMain.OnUpdate(const ANewBuild: Cardinal);
 {$IFDEF MSWINDOWS}
 var
-  Updater: TUpdate;
+  Updater: TUpdateDialog;
 
 begin
   // Ask user to permit download
@@ -350,7 +354,7 @@ begin
     FLang.GetString(LID_UPDATE_CONFIRM_DOWNLOAD), mtConfirmation) = IDYES) then
   begin
     // init TUpdate instance
-    Updater := TUpdate.Create(Self, FLang);
+    Updater := TUpdateDialog.Create(Self, FLang);
 
     try
       // Set updater options
@@ -639,7 +643,7 @@ end;
 
   Updates all component captions with new language text. }
 
-procedure TMain.SetLanguage(Sender: TObject);
+procedure TMain.SetLanguage(ANewLanguage: TLocale);
 var
   i: Byte;
 
@@ -1249,10 +1253,10 @@ end;
 procedure TMain.mmInstallCertificateClick(Sender: TObject);
 {$IFDEF MSWINDOWS}
 var
-  Updater: TUpdate;
+  Updater: TUpdateDialog;
 
 begin
-  Updater := TUpdate.Create(Self, FLang);
+  Updater := TUpdateDialog.Create(Self, FLang);
 
   try
     // Certificate already installed?

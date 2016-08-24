@@ -61,10 +61,10 @@
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DCC_N>true</DCC_N>
         <VerInfo_Locale>1031</VerInfo_Locale>
-        <VerInfo_Build>484</VerInfo_Build>
+        <VerInfo_Build>486</VerInfo_Build>
         <DCC_F>false</DCC_F>
         <VerInfo_MinorVer>4</VerInfo_MinorVer>
-        <VerInfo_Keys>CompanyName=PM Code Works;FileDescription=Game Wake;FileVersion=3.4.0.484;InternalName=;LegalCopyright=Philipp Meisberger 2016;LegalTrademarks=PM Code Works;OriginalFilename=Game Wake.exe;ProductName=Game Wake;ProductVersion=3.4</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=PM Code Works;FileDescription=Game Wake;FileVersion=3.4.0.486;InternalName=;LegalCopyright=Philipp Meisberger 2016;LegalTrademarks=PM Code Works;OriginalFilename=Game Wake.exe;ProductName=Game Wake;ProductVersion=3.4</VerInfo_Keys>
         <DCC_DebugInformation>1</DCC_DebugInformation>
         <VerInfo_MajorVer>3</VerInfo_MajorVer>
         <DCC_IntegerOverflowCheck>true</DCC_IntegerOverflowCheck>
@@ -117,7 +117,6 @@
         <DCCReference Include="GameWakeOps.pas">
             <Form>Options</Form>
         </DCCReference>
-        <DCCReference Include="PMCWAbout.pas"/>
         <RcCompile Include="sounds.rc">
             <Form>sounds.res</Form>
         </RcCompile>
