@@ -1,13 +1,14 @@
 ## Uses glob syntax, regex sucks ;)
 syntax: glob
-
 BACKUP/**
-src\__history\**
+backup
+__history
 bin/Linux-*/**
 src/lib/**
 **.a
 **.o
 **.or
+**.orig
 **.ppu
 **.lps
 **.dcu
@@ -18,3 +19,10 @@ src/lib/**
 **.rsm
 **.mes
 **.identcache
+
+# Debian files
+**.deb
+**.dsc
+**.build
+**.changes
+**.xz

@@ -1,0 +1,5 @@
+bin/*.wav usr/lib/gamewake/
+src/lang usr/lib/gamewake/
+src/gamewake.ico usr/share/pixmaps/
+debian/gamewake.xpm usr/share/pixmaps/
+debian/gamewake.desktop usr/share/applications/
