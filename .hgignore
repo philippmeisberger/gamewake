@@ -19,6 +19,7 @@ src/lib/**
 **.rsm
 **.mes
 **.identcache
+**.local
 
 # Debian files
 **.deb
