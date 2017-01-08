@@ -5,24 +5,28 @@ PORTABLE32EXE=$(WIN32DIR)\Portable\$(PROJECTNAME).exe
 WIN64DIR=bin\Win64
 WIN64EXE=$(WIN64DIR)\$(PROJECTNAME).exe
 PORTABLE64EXE=$(WIN64DIR)\Portable\$(PROJECTNAME).exe
-CERTSHA1=A9A273A222A5DD3ED9EC2F46232AAD8E087EA4ED
+
+BDSDIR=C:\Program Files (x86)\Embarcadero\Studio\16.0
 MSBUILD=C:\Windows\Microsoft.NET\Framework\v3.5\MSBUILD.exe
-INNOSETUP="C:\Program Files (x86)\Inno Setup 5\Compil32.exe"
+CERTSHA1=A9A273A222A5DD3ED9EC2F46232AAD8E087EA4ED
 SIGNTOOL="C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe"
 SIGN=$(SIGNTOOL) sign /v /sha1 $(CERTSHA1) /tr http://timestamp.globalsign.com/scripts/timstamp.dll /td SHA256 /fd SHA256
+INNOSETUP="C:\Program Files (x86)\Inno Setup 5\Compil32.exe"
 
 build: win32 win64
+
+release: clean build sign buildsetup portable source
 
 source:
 	hg archive -t zip $(PROJECTNAME)-src.zip
 
 win32: src\$(PROJECTNAME).dproj
-	SET BDS=C:\Program Files (x86)\Embarcadero\Studio\16.0
-	$(MSBUILD) /p:Config=Release /property:Platform=Win32 src\$(PROJECTNAME).dproj
+	SET BDS=$(BDSDIR)
+	$(MSBUILD) /p:Config=Release /p:Platform=Win32 "src\$(PROJECTNAME).dproj"
 
 win64: src\$(PROJECTNAME).dproj
-	SET BDS=C:\Program Files (x86)\Embarcadero\Studio\16.0
-	$(MSBUILD) /p:Config=Release /property:Platform=Win64 src\$(PROJECTNAME).dproj
+	SET BDS=$(BDSDIR)
+	$(MSBUILD) /p:Config=Release /p:Platform=Win64 "src\$(PROJECTNAME).dproj"
 
 sign: $(WIN32EXE) $(WIN64EXE)
 	$(SIGN) $(WIN32EXE) $(WIN64EXE)
@@ -32,15 +36,13 @@ sign: $(WIN32EXE) $(WIN64EXE)
 buildsetup: setup\$(PROJECTNAME).iss
 	$(INNOSETUP) /cc setup\$(PROJECTNAME).iss
 
-release: win32 win64 sign buildsetup portable source
-
 win32portable: src\$(PROJECTNAME).dproj
-	SET BDS=C:\Program Files (x86)\Embarcadero\Studio\16.0
-	$(MSBUILD) /p:Config=Portable /property:Platform=Win32 src\$(PROJECTNAME).dproj
+	SET BDS=$(BDSDIR)
+	$(MSBUILD) /p:Config=Portable /p:Platform=Win32 "src\$(PROJECTNAME).dproj"
 
 win64portable: src\$(PROJECTNAME).dproj
-	SET BDS=C:\Program Files (x86)\Embarcadero\Studio\16.0
-	$(MSBUILD) /p:Config=Portable /property:Platform=Win64 src\$(PROJECTNAME).dproj
+	SET BDS=$(BDSDIR)
+	$(MSBUILD) /p:Config=Portable /p:Platform=Win64 "src\$(PROJECTNAME).dproj"
 
 signportable: $(PORTABLE32EXE) $(PORTABLE64EXE)
 	$(SIGN) $(PORTABLE32EXE) $(PORTABLE64EXE)
@@ -50,8 +52,8 @@ signportable: $(PORTABLE32EXE) $(PORTABLE64EXE)
 portable: win32portable win64portable signportable
 
 clean:
-	DEL src\$(PROJECTNAME).res
-	IF EXIST $(WIN32EXE) DEL $(WIN32EXE)
-	IF EXIST $(WIN64EXE) DEL $(WIN64EXE)
-	IF EXIST $(PORTABLE32EXE) DEL $(PORTABLE32EXE)
-	IF EXIST $(PORTABLE64EXE) DEL $(PORTABLE64EXE)
+	SET BDS=$(BDSDIR)
+	$(MSBUILD) /t:clean /p:Config=Release /p:Platform=Win32 "src\$(PROJECTNAME).dproj"
+	$(MSBUILD) /t:clean /p:Config=Portable /p:Platform=Win32 "src\$(PROJECTNAME).dproj"
+	$(MSBUILD) /t:clean /p:Config=Release /p:Platform=Win64 "src\$(PROJECTNAME).dproj"
+	$(MSBUILD) /t:clean /p:Config=Portable /p:Platform=Win64 "src\$(PROJECTNAME).dproj"
