@@ -1,7 +1,7 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: Game Wake
 Upstream-Contact: Philipp Meisberger <team@pm-codeworks.de>
-Source: http://apt.pm-codeworks.de/pool/main/g/gamewake/gamewake_3.3.tar.gz
+Source: http://apt.pm-codeworks.de/pool/main/g/gamewake/gamewake_3.4.tar.xz
 
 Files: *
 Copyright: Copyright (c) 2014 Philipp Meisberger <team@pm-codeworks.de>
