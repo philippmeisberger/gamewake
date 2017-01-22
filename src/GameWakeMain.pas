@@ -207,7 +207,13 @@ begin
   FLang := TLanguageFile.Create(Self);
   FLang.Interval := 100;
 {$ENDIF}
-  FLang.BuildLanguageMenu(MainMenu, mmLang);
+  try
+    FLang.BuildLanguageMenu(MainMenu, mmLang);
+
+  except
+    on E: ELanguageException do
+      ShowMessage(E.Message);
+  end;  //of try
 
   // Init config file access
   Config := TConfigFile.Create(FConfigPath);
