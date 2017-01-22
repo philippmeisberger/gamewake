@@ -2,7 +2,7 @@
 {                                                                         }
 { Game Wake Main Unit                                                     }
 {                                                                         }
-{ Copyright (c) 2011-2016 Philipp Meisberger (PM Code Works)              }
+{ Copyright (c) 2011-2017 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
 { *********************************************************************** }
 
@@ -14,14 +14,15 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Controls, Forms, StdCtrls, ExtCtrls, Menus,
-  Dialogs, GameWakeAPI, PMCW.LanguageFile, PMCW.Dialogs.Updater, PMCW.Utils,
-  PMCW.Dialogs.About,
+  Dialogs, GameWakeAPI, PMCW.LanguageFile, PMCW.Utils, PMCW.Dialogs.About,
+  PMCW.Dialogs.Updater, PMCW.FileSystem,
 
 {$IFDEF MSWINDOWS}
 {$IFDEF PORTABLE}
-  MMSystem,
+  Winapi.MMSystem,
 {$ENDIF}
-  Windows, System.UITypes, ShlObj, KnownFolders, Messages;
+  Winapi.Windows, System.UITypes, Winapi.ShlObj, Winapi.KnownFolders,
+  Winapi.Messages;
 {$ELSE}
   LCLType, Process;
 
@@ -31,7 +32,7 @@ const
 
 type
   { TMain }
-  TMain = class(TForm, IChangeLanguageListener, IUpdateListener)
+  TMain = class(TForm, IChangeLanguageListener{$IFDEF MSWINDOWS}, IUpdateListener{$ENDIF})
     eHour: TEdit;
     eMin: TEdit;
     bAlert: TButton;
@@ -118,7 +119,9 @@ type
     FColor: TColor;
     FConfigPath,
     FLangPath: string;
+  {$IFDEF MSWINDOWS}
     FUpdateCheck: TUpdateCheck;
+  {$ENDIF}
     procedure Alert(Sender: TObject);
     procedure BlinkEnd(Sender: TObject);
     procedure Counting(Sender: TObject);
@@ -128,14 +131,15 @@ type
     procedure PowerBroadcast(var AMsg: TMessage); message WM_POWERBROADCAST;
   {$ENDIF}
     procedure SaveToIni();
-
     function Shutdown(): Boolean;
     procedure TrayMouseUp(Sender: TObject; AButton: TMouseButton;
       AShiftState: TShiftState; X, Y: Integer);
     { IChangeLanguageListener }
     procedure SetLanguage(ANewLanguage: TLocale);
+  {$IFDEF MSWINDOWS}
     { IUpdateListener }
     procedure OnUpdate(const ANewBuild: Cardinal);
+  {$ENDIF}
   end;
 
 var
@@ -242,6 +246,7 @@ begin
   // Load last blink color
   LoadColor();
 
+{$IFDEF MSWINDOWS}
   // Init update notificator
   FUpdateCheck := TUpdateCheck.Create(Self, 'GameWake', FLang);
 
@@ -249,12 +254,13 @@ begin
   if AutoUpdate then
     FUpdateCheck.CheckForUpdate(False);
 
-  {$IFDEF MSWINDOWS}
-    mmWebsite.Visible := False;
-  {$ELSE}
-    mmInstallCertificate.Visible := False;
-    Icon.LoadFromFile(MAINICON);
-  {$ENDIF}
+  mmWebsite.Visible := False;
+{$ELSE}
+  mmUpdate.Visible := False;
+  N2.Visible := False;
+  mmInstallCertificate.Visible := False;
+  Icon.LoadFromFile(MAINICON);
+{$ENDIF}
 
   // Init Clock
   FClock := TClock.Create(Self, mmTimer.Checked, Combine);
@@ -282,7 +288,9 @@ begin
 
   FreeAndNil(FLang);
   FreeAndNil(FClock);
+{$IFDEF MSWINDOWS}
   FreeAndNil(FUpdateCheck);
+{$ENDIF}
   FreeAndNil(FTrayIcon);
 end;
 
@@ -341,12 +349,12 @@ begin
   end;  //of if
 end;
 
+{$IFDEF MSWINDOWS}
 { private TMain.OnUpdate
 
   Event that is called by TUpdateCheck when TUpdateCheckThread finds an update. }
 
 procedure TMain.OnUpdate(const ANewBuild: Cardinal);
-{$IFDEF MSWINDOWS}
 var
   Updater: TUpdateDialog;
 
@@ -403,12 +411,8 @@ begin
   end  //of begin
   else
     mmUpdate.Caption := FLang.GetString(LID_UPDATE_DOWNLOAD);
-{$ELSE}
-begin
-  FLang.ShowMessage(FLang.Format([LID_UPDATE_AVAILABLE], [ANewBuild]),
-    FLang.GetString(LID_UPDATE_CONFIRM_DOWNLOAD), mtInformation);
-{$ENDIF}
 end;
+{$ENDIF}
 
 { private TMain.BlinkEnd
 
@@ -1281,7 +1285,9 @@ end;
 
 procedure TMain.mmUpdateClick(Sender: TObject);
 begin
+{$IFDEF MSWINDOWS}
   FUpdateCheck.CheckForUpdate(True);
+{$ENDIF}
 end;
 
 { TMain.mmWebsiteClick
