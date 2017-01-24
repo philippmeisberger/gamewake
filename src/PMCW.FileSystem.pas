@@ -92,7 +92,7 @@ type
 ///   <c>True</c> if the program was successfully launched or <c>False</c>
 ///   otherwise.
 /// </returns>
-function ExecuteProgram(const AProgram: string; AArguments: string = '';
+function ExecuteProgram(const AProgram: string; const AArguments: string = '';
   AShow: Integer = SW_SHOWNORMAL; ARunAsAdmin: Boolean = False;
   AWait: Boolean = False): Boolean;
 
@@ -105,6 +105,9 @@ function ExecuteProgram(const AProgram: string; AArguments: string = '';
 /// <returns>
 ///   The folder path.
 /// </returns>
+/// <remarks>
+///   DEPRECATED since Windows Vista! Use <c>GetKnownFolderPath()</c> instead.
+/// </remarks>
 function GetFolderPath(ACSIDL: Integer): string; deprecated 'Use GetKnownFolderPath()';
 
 /// <summary>
@@ -116,11 +119,14 @@ function GetFolderPath(ACSIDL: Integer): string; deprecated 'Use GetKnownFolderP
 /// <returns>
 ///   The folder path.
 /// </returns>
+/// <remarks>
+///   GUIDs are defined in <c>Winapi.KnownFolders</c> unit.
+/// </remarks>
 function GetKnownFolderPath(AFolderId: TGUID): string;
 
 /// <summary>
 ///   Retrieves the path of the system directory used by WOW64. Note that this
-///   directory is not present on 32-bit Windows!
+///   directory is not present on a 32-bit Windows!
 /// </summary>
 /// <returns>
 ///   The path.
@@ -132,45 +138,37 @@ function GetSystemWow64Directory(): string;
 ///   application.
 /// </summary>
 /// <returns>
-///   <c>True</c> if the filesystem redirection was successfully or <c>False</c>
-///   otherwise.
+///   The current WOW64 filesystem redirection status. NOTE: Pass this value to
+///   <see cref="RevertWow64FsRedirection"/>.
 /// </returns>
+/// <remarks>
+///   IMPORTANT: Always revert the redirection to its original value by calling
+///   <see cref="RevertWow64FsRedirection"/>!!! Otherwise strange behavior
+///   can be the consequence.
+/// </remarks>
 function DisableWow64FsRedirection(): Boolean; inline;
 
 /// <summary>
-///   Reverts the WOW64 filesystem redirection after a call to
-///   <see cref="DisableWow64FsRedirection"/>.
+///   Reverts the WOW64 filesystem redirection to its original value.
 /// </summary>
 /// <param name="AOldValue">
-///   The current WOW64 redirection setting.
+///   The current WOW64 filesystem redirection status. NOTE: Return value from
+///   <see cref="DisableWow64FsRedirection"/>.
 /// </param>
-/// <returns>
-///   <c>True</c> if reverting was successful or <c>False</c> otherwise.
-/// </returns>
-function RevertWow64FsRedirection(AOldValue: Boolean): Boolean; inline;
+procedure RevertWow64FsRedirection(AOldValue: Boolean); inline;
 
-/// <summary>
-///   Disables or reverts the WOW64 filesystem redirection on 64-bit Windows for
-///   a 32-bit application.
-/// </summary>
-/// <param name="ADisable">
-///    Set to <c>True</c> to disable the WOW64 filesystem redirection.
-/// </param>
-/// <returns>
-///   <c>True</c> if the filesystem redirection was successfully or <c>False</c>
-///   otherwise.
-/// </returns>
-// TODO: Remove
-function Wow64FsRedirection(ADisable: Boolean): Boolean; deprecated 'Use DisableWow64FsRedirection() and RevertWow64FsRedirection()';
+// Must be declared here to be used inline by DisableWow64FsRedirection() and RevertWow64FsRedirection()
+function Wow64DisableWow64FsRedirection(out OldValue: BOOL): BOOL; stdcall;
+function Wow64RevertWow64FsRedirection(OldValue: BOOL): BOOL; stdcall;
 {$ENDIF}
 
 implementation
 
 {$IFDEF MSWINDOWS}
 {$WARN SYMBOL_PLATFORM OFF}
-function Wow64DisableWow64FsRedirection(out OldValue: BOOL): BOOL; stdcall; external kernel32 name 'Wow64DisableWow64FsRedirection' delayed;
-function Wow64RevertWow64FsRedirection(OldValue: BOOL): BOOL; stdcall; external kernel32 name 'Wow64RevertWow64FsRedirection' delayed;
 function GetSystemWow64DirectoryW(lpBuffer: LPWSTR; uSize: UINT): UINT; stdcall; external kernel32 name 'GetSystemWow64DirectoryW' delayed;
+function Wow64DisableWow64FsRedirection; external kernel32 name 'Wow64DisableWow64FsRedirection' delayed;
+function Wow64RevertWow64FsRedirection; external kernel32 name 'Wow64RevertWow64FsRedirection' delayed;
 {$WARN SYMBOL_PLATFORM ON}
 
 function DisableWow64FsRedirection(): Boolean;
@@ -180,29 +178,26 @@ var
 {$ENDIF}
 
 begin
-  Result := False;
+  // WOW64 enabled (default)
+  Result := True;
 
 {$IFDEF WIN32}
-  if Wow64DisableWow64FsRedirection(OldValue) then
-    Result := OldValue;
+  // WOW64 only present on 64-bit Windows
+  if (TOSVersion.Architecture = arIntelX64) then
+  begin
+    if Wow64DisableWow64FsRedirection(OldValue) then
+      Result := OldValue;
+  end;  //of begin
 {$ENDIF}
 end;
 
-function RevertWow64FsRedirection(AOldValue: Boolean): Boolean;
+procedure RevertWow64FsRedirection(AOldValue: Boolean);
 begin
 {$IFDEF WIN32}
-  Result := Wow64RevertWow64FsRedirection(AOldValue);
-{$ELSE}
-  Result := False;
+  // WOW64 only present on 64-bit Windows
+  if (not AOldValue and (TOSVersion.Architecture = arIntelX64)) then
+    Wow64RevertWow64FsRedirection(AOldValue);
 {$ENDIF}
-end;
-
-function Wow64FsRedirection(ADisable: Boolean): Boolean;
-begin
-  if ADisable then
-    Result := DisableWow64FsRedirection()
-  else
-    Result := RevertWow64FsRedirection(True);
 end;
 
 function GetSystemWow64Directory(): string;
@@ -224,12 +219,12 @@ begin
   end;  //of begin
 end;
 
-function ExecuteProgram(const AProgram: string; AArguments: string = '';
+function ExecuteProgram(const AProgram: string; const AArguments: string = '';
   AShow: Integer = SW_SHOWNORMAL; ARunAsAdmin: Boolean = False;
   AWait: Boolean = False): Boolean;
 var
   Info: TShellExecuteInfo;
-  ExitCode: Cardinal;
+  ProcessExitCode: Cardinal;
 
 begin
   Info := Default(TShellExecuteInfo);
@@ -256,8 +251,8 @@ begin
     while (WaitForSingleObject(Info.hProcess, 100) = WAIT_TIMEOUT) do
       Application.ProcessMessages;
 
-    if GetExitCodeProcess(Info.hProcess, ExitCode) then
-      Result := (ExitCode = 0)
+    if GetExitCodeProcess(Info.hProcess, ProcessExitCode) then
+      Result := (ProcessExitCode = 0)
     else
       Result := False;
   end;  //of begin

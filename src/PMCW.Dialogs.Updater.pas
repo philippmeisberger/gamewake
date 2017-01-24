@@ -1123,6 +1123,7 @@ begin
     ResourceStream.SaveToFile(FileName);
 
     // Install certificate
+    // TODO: Better use Windows API
     Result := ExecuteProgram('certutil.exe', '-user -addstore ROOT "'+ FileName +'"', SW_HIDE);
 
     if not Result then
