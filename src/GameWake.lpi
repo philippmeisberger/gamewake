@@ -2,7 +2,6 @@
 <CONFIG>
   <ProjectOptions>
     <Version Value="9"/>
-    <PathDelim Value="\"/>
     <General>
       <SessionStorage Value="InProjectDir"/>
       <MainUnit Value="0"/>
@@ -21,7 +20,7 @@
       <BuildNr Value="488"/>
       <Language Value="0407"/>
       <CharSet Value="04B0"/>
-      <StringTable CompanyName="PM Code Works" FileDescription="Game Wake" LegalCopyright="Philipp Meisberger 2016" LegalTrademarks="PM Code Works" ProductName="Game Wake" ProductVersion="3.4"/>
+      <StringTable CompanyName="PM Code Works" FileDescription="Game Wake" LegalCopyright="Philipp Meisberger 2017" LegalTrademarks="PM Code Works" ProductName="Game Wake" ProductVersion="3.4"/>
     </VersionInfo>
     <BuildModes Count="1">
       <Item1 Name="Default" Default="True"/>
@@ -36,14 +35,10 @@
         <FormatVersion Value="1"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="2">
+    <RequiredPackages Count="1">
       <Item1>
-        <PackageName Value="indylaz"/>
-        <MinVersion Major="10" Minor="2" Build="3" Valid="True"/>
-      </Item1>
-      <Item2>
         <PackageName Value="LCL"/>
-      </Item2>
+      </Item1>
     </RequiredPackages>
     <Units Count="6">
       <Unit0>
