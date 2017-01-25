@@ -165,7 +165,10 @@ uses GameWakeOps;
 procedure TMain.FormCreate(Sender: TObject);
 var
   Config: TConfigFile;
-  Combine, AutoUpdate: Boolean;
+  Combine: Boolean;
+{$IFDEF MSWINDOWS}
+  AutoUpdate: Boolean;
+{$ENDIF}
 
 begin
   FLangPath := '';
@@ -220,7 +223,7 @@ begin
 
   try
     // Check if anything shall be loaded from config
-    if Config.ReadBoolean('Global', 'Save') then
+    if Config.ReadBool(Config.SectionGlobal, Config.IdSave, False) then
     begin
       LoadFromIni();
       mmOptions.Enabled := True;
@@ -233,17 +236,19 @@ begin
     end;  //of if
 
     // Load last position?
-    if not Config.ReadBoolean('Global', 'SavePos') then
+    if not Config.ReadBool(Config.SectionGlobal, Config.IdSavePos, False) then
       Position := poScreenCenter;
 
+  {$IFDEF MSWINDOWS}
     // Check for Updates?
-    if Config.KeyExists('Global', 'AutoUpdate') then
-      AutoUpdate := Config.ReadBoolean('Global', 'AutoUpdate')
+    if Config.ValueExists(Config.SectionGlobal, Config.IdAutoUpdate) then
+      AutoUpdate := Config.ReadBool(Config.SectionGlobal, Config.IdAutoUpdate, True)
     else
       AutoUpdate := True;
+  {$ENDIF}
 
     // Load hours minutes combining
-    Combine := Config.ReadBoolean('Global', 'Combine');
+    Combine := Config.ReadBool(Config.SectionGlobal, Config.IdCombine, False);
 
   finally
     Config.Free;
@@ -455,10 +460,10 @@ begin
       // Color "red" for default
       FColor := clRed;
 
-      if Config.ReadBoolean('Global', 'SaveColor') then
+      if Config.ReadBool(Config.SectionGlobal, Config.IdSaveColor, True) then
       begin
         // Load color from config file
-        BlinkColor := Config.ReadString('Alert', 'Color');
+        BlinkColor := Config.ReadString(Config.SectionAlert, Config.IdColor, 'clRed');
 
         if (BlinkColor <> '') then
           FColor := StringToColor(BlinkColor);
@@ -491,23 +496,23 @@ begin
     try
       // Load language from config
     {$IFDEF MSWINDOWS}
-      Locale := Config.ReadInteger('Global', 'Locale', 0);
+      Locale := Config.ReadInteger(Config.SectionGlobal, Config.IdLocale, 0);
     {$ELSE}
-      Locale := Config.ReadString('Global', 'Locale');
+      Locale := Config.ReadString(Config.SectionGlobal, Config.IdLocale, '');
     {$ENDIF}
 
       // Load prefered language
       FLang.Locale := Locale;
 
       // Load last mode
-      mmTimer.Checked := Config.ReadBoolean('Global', 'TimerMode');
+      mmTimer.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdTimerMode, True);
       mmCounter.Checked := not mmTimer.Checked;
 
       // Load last time?
-      if Config.ReadBoolean('Global', 'SaveClock') then
+      if Config.ReadBool(Config.SectionGlobal, Config.IdSaveClock, False) then
       begin
-        eHour.Text := Config.ReadString('Alert', 'Hour');
-        eMin.Text := Config.ReadString('Alert', 'Min');
+        eHour.Text := Config.ReadString(Config.SectionAlert, Config.IdHour, '00');
+        eMin.Text := Config.ReadString(Config.SectionAlert, Config.IdMinute, '00');
       end  //of if
       else
         // Counter can run at least 1 minute
@@ -515,9 +520,9 @@ begin
           eMin.Text := '01';
 
       // Load last sound?
-      if Config.ReadBoolean('Global', 'SaveSound') then
+      if Config.ReadBool(Config.SectionGlobal, Config.IdSaveSound, False) then
       begin
-        AlertType := Config.ReadInteger('Alert', 'Sound');
+        AlertType := Config.ReadInteger(Config.SectionAlert, Config.IdSound, 0);
 
         if (AlertType in [0..4]) then
           rgSounds.ItemIndex := AlertType
@@ -526,34 +531,33 @@ begin
       end;  //of if
 
       // Load last set alert text?
-      if Config.ReadBoolean('Global', 'SaveText') then
-        pText.Caption := Config.ReadString('Alert', 'Text');
+      if Config.ReadBool(Config.SectionGlobal, Config.IdSaveText, False) then
+        pText.Caption := Config.ReadString(Config.SectionAlert, Config.IdText, 'Game Wake');
 
       // Load last position?
-      if Config.ReadBoolean('Global', 'SavePos') then
+      if Config.ReadBool(Config.SectionGlobal, Config.IdSavePos, False) then
       begin
-        Left := Config.ReadInteger('Global', 'Left');
-        Top := Config.ReadInteger('Global', 'Top');
+        Left := Config.ReadInteger(Config.SectionGlobal, Config.IdLeft, 0);
+        Top := Config.ReadInteger(Config.SectionGlobal, Config.IdTop, 0);
       end  //of begin
       else
         Position := poScreenCenter;
 
       // Load last "show text" state?
-      if Config.ReadBoolean('Alert', 'ShowText') then
+      if Config.ReadBool(Config.SectionAlert, Config.IdShowText, False) then
       begin
         cbText.Checked := True;
         bChange.Enabled := True;
       end;  //of begin
 
       // Load last blink state
-      cbBlink.Checked := Config.ReadBoolean('Alert', 'Blink');
+      cbBlink.Checked := Config.ReadBool(Config.SectionAlert, Config.IdBlink, False);
 
+    {$IFDEF MSWINDOWS}
       // Missing "AutoUpdate"?
-      if not Config.KeyExists('Global', 'AutoUpdate') then
-      begin
-        Config.WriteBoolean('Global', 'AutoUpdate', True);
-        Config.Save();
-      end;  //of begin
+      if not Config.ValueExists(Config.SectionGlobal, Config.IdAutoUpdate) then
+        Config.WriteBool(Config.SectionGlobal, Config.IdAutoUpdate, True);
+    {$ENDIF}
 
     finally
       Config.Free;
@@ -594,52 +598,49 @@ begin
       if mmSave.Checked then
       begin
       {$IFDEF MSWINDOWS}
-        Config.WriteInteger('Global', 'Locale', FLang.Locale);
+        Config.WriteInteger(Config.SectionGlobal, Config.IdLocale, FLang.Locale);
       {$ELSE}
-        Config.WriteString('Global', 'Locale', FLang.Locale);
+        Config.WriteString(Config.SectionGlobal, Config.IdLocale, FLang.Locale);
       {$ENDIF}
-        Config.WriteBoolean('Global', 'Save', True);
-        Config.WriteBoolean('Global', 'TimerMode', mmTimer.Checked);
+        Config.WriteBool(Config.SectionGlobal, Config.IdSave, True);
+        Config.WriteBool(Config.SectionGlobal, Config.IdTimerMode, mmTimer.Checked);
 
         // Save position?
-        if Config.ReadBoolean('Global', 'SavePos') then
+        if Config.ReadBool(Config.SectionGlobal, Config.IdSavePos, False) then
         begin
-          Config.WriteInteger('Global', 'Left', Left);
-          Config.WriteInteger('Global', 'Top', Top);
+          Config.WriteInteger(Config.SectionGlobal, Config.IdLeft, Left);
+          Config.WriteInteger(Config.SectionGlobal, Config.IdTop, Top);
         end;  //of begin
 
         // Save time input?
-        if Config.ReadBoolean('Global', 'SaveClock') then
+        if Config.ReadBool(Config.SectionGlobal, Config.IdSaveClock, True) then
         begin
           if (eHour.Text <> '') then
-            Config.WriteString('Alert', 'Hour', eHour.Text);
+            Config.WriteString(Config.SectionAlert, Config.IdHour, eHour.Text);
 
           if (eMin.Text <> '') then
-            Config.WriteString('Alert', 'Min', eMin.Text);
+            Config.WriteString(Config.SectionAlert, Config.IdMinute, eMin.Text);
         end;  //of if
 
         // Save current text input
-        if Config.ReadBoolean('Global', 'SaveText') then
-          Config.WriteString('Alert', 'Text', pText.Caption);
+        if Config.ReadBool(Config.SectionGlobal, Config.IdSaveText, True) then
+          Config.WriteString(Config.SectionAlert, Config.IdText, pText.Caption);
 
         // Save current selected sound?
-        if Config.ReadBoolean('Global', 'SaveSound') then
-          Config.WriteInteger('Alert', 'Sound', rgSounds.ItemIndex);
+        if Config.ReadBool(Config.SectionGlobal, Config.IdSaveSound, True) then
+          Config.WriteInteger(Config.SectionAlert, Config.IdSound, rgSounds.ItemIndex);
 
         // Save current selected color
-        if Config.ReadBoolean('Global', 'SaveColor') then
-          Config.WriteColor('Alert', 'Color', FColor);
+        if Config.ReadBool(Config.SectionGlobal, Config.IdSaveColor, True) then
+          Config.WriteColor(Config.SectionAlert, Config.IdColor, FColor);
 
         // Save current checks
-        Config.WriteBoolean('Alert', 'Blink', cbBlink.Checked);
-        Config.WriteBoolean('Alert', 'ShowText', cbText.Checked);
+        Config.WriteBool(Config.SectionAlert, Config.IdBlink, cbBlink.Checked);
+        Config.WriteBool(Config.SectionAlert, Config.IdShowText, cbText.Checked);
       end  //of begin
       else
         // Do not save anything
-        Config.WriteBoolean('Global', 'Save', False);
-
-      // Save changes to config file
-      Config.Save();
+        Config.WriteBool(Config.SectionGlobal, Config.IdSave, False);
 
     finally
       Config.Free;
@@ -1111,8 +1112,8 @@ begin
 
   try
     try
-      Save := Config.ReadBoolean('Global', 'Save');
-      SaveColor := Config.ReadBoolean('Global', 'SaveColor');
+      Save := Config.ReadBool(Config.SectionGlobal, Config.IdSave, True);
+      SaveColor := Config.ReadBool(Config.SectionGlobal, Config.IdSaveColor, True);
       Config.ReadColors(Colors);
 
       // Init TColorDialog
@@ -1137,9 +1138,6 @@ begin
 
             // Write custom colors to config file
             Config.WriteColors(Colors);
-
-            // Save changes to config file
-            Config.Save();
           end;  //of begin
         end;  //of begin
 

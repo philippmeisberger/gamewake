@@ -18,12 +18,36 @@ uses
 {$ELSE}
   Windows, MMSystem,
 {$ENDIF}
-  SysUtils, Classes, ExtCtrls, Graphics, PMCW.IniFileParser;
+  SysUtils, Classes, ExtCtrls, Graphics, IniFiles;
 
 type
   { TConfigFile }
   TConfigFile = class(TIniFile)
   public
+    const
+      SectionGlobal = 'Global';
+      SectionAlert  = 'Alert';
+      IdSave        = 'Save';
+      IdSaveClock   = 'SaveClock';
+      IdHour        = 'Hour';
+      IdMinute      = 'Min';
+      IdSaveText    = 'SaveText';
+      IdText        = 'Text';
+      IdShowText    = 'ShowText';
+      IdSaveSound   = 'SaveSound';
+      IdSound       = 'Sound';
+      IdSaveColor   = 'SaveColor';
+      IdColor       = 'Color';
+      IdSavePos     = 'SavePos';
+      IdTop         = 'Top';
+      IdLeft        = 'Left';
+      IdBlink       = 'Blink';
+      IdLocale      = 'Locale';
+      IdCombine     = 'Combine';
+      IdTimerMode   = 'TimerMode';
+    {$IFDEF MSWINDOWS}
+      IdAutoUpdate  = 'AutoUpdate';
+    {$ENDIF}
     function ReadColor(const ASection, AKey: string): TColor;
     procedure ReadColors(var AArray: array of string);
     procedure WriteColor(const ASection, AKey: string; AColor: TColor);
@@ -161,7 +185,7 @@ implementation
 
 function TConfigFile.ReadColor(const ASection, AKey: string): TColor;
 begin
-  Result := StringToColor(ReadString(ASection, AKey));
+  Result := StringToColor(ReadString(ASection, AKey, ''));
 end;
 
 { public TConfigFile.ReadColors
@@ -174,7 +198,7 @@ var
 
 begin
   for i := Low(AArray) to High(AArray) do
-    AArray[i] := ReadString('CustomColors', 'Color'+ IntToStr(i));
+    AArray[i] := ReadString('CustomColors', 'Color'+ IntToStr(i), '');
 end;
 
 { public TConfigFile.WriteColor

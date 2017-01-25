@@ -8,7 +8,7 @@
 
 unit GameWakeOps;
 
-{$IFDEF LINUX} {$mode delphi}{$H+} {$ENDIF}
+{$IFDEF LINUX}{$mode delphi}{$ENDIF}
 
 interface
 
@@ -82,13 +82,17 @@ begin
     Config := TConfigFile.Create(FConfigPath);
 
     try
-      cbSaveClock.Checked := Config.ReadBoolean('Global', 'SaveClock');
-      cbSaveText.Checked := Config.ReadBoolean('Global', 'SaveText');
-      cbSaveSound.Checked := Config.ReadBoolean('Global', 'SaveSound');
-      cbSaveColor.Checked := Config.ReadBoolean('Global', 'SaveColor');
-      cbSavePos.Checked := Config.ReadBoolean('Global', 'SavePos');
-      cbCombine.Checked := Config.ReadBoolean('Global', 'Combine');
-      cbUpdate.Checked := Config.ReadBoolean('Global', 'AutoUpdate');
+      cbSaveClock.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdSaveClock, True);
+      cbSaveText.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdSaveText, True);
+      cbSaveSound.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdSaveSound, True);
+      cbSaveColor.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdSaveColor, True);
+      cbSavePos.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdSavePos, False);
+      cbCombine.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdCombine, False);
+    {$IFDEF MSWINDOWS}
+      cbUpdate.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdAutoUpdate, True);
+    {$ELSE}
+      cbUpdate.Enabled := False;
+    {$ENDIF}
 
     finally
       Config.Free;
@@ -145,7 +149,9 @@ begin
   cbSaveColor.Checked := True;
   cbSavePos.Checked := False;
   cbCombine.Checked := False;
+{$IFDEF MSWINDOWS}
   cbUpdate.Checked := True;
+{$ENDIF}
 end;
 
 { TOptions.bCancelClick
@@ -170,17 +176,16 @@ begin
     Config := TConfigFile.Create(FConfigPath);
 
     try
-      Config.WriteBoolean('Global', 'SaveClock', cbSaveClock.Checked);
-      Config.WriteBoolean('Global', 'SaveText', cbSaveText.Checked);
-      Config.WriteBoolean('Global', 'SaveSound', cbSaveSound.Checked);
-      Config.WriteBoolean('Global', 'SaveColor', cbSaveColor.Checked);
-      Config.WriteBoolean('Global', 'SavePos', cbSavePos.Checked);
-      Config.WriteBoolean('Global', 'Combine', cbCombine.Checked);
-      Config.WriteBoolean('Global', 'AutoUpdate', cbUpdate.Checked);
+      Config.WriteBool(Config.SectionGlobal, Config.IdSaveClock, cbSaveClock.Checked);
+      Config.WriteBool(Config.SectionGlobal, Config.IdSaveText, cbSaveText.Checked);
+      Config.WriteBool(Config.SectionGlobal, Config.IdSaveSound, cbSaveSound.Checked);
+      Config.WriteBool(Config.SectionGlobal, Config.IdSaveColor, cbSaveColor.Checked);
+      Config.WriteBool(Config.SectionGlobal, Config.IdSavePos, cbSavePos.Checked);
+      Config.WriteBool(Config.SectionGlobal, Config.IdCombine, cbCombine.Checked);
+    {$IFDEF MSWINDOWS}
+      Config.WriteBool(Config.SectionGlobal, Config.IdAutoUpdate, cbUpdate.Checked);
+    {$ENDIF}
       FClock.Alert.Combine := cbCombine.Checked;
-
-      // Save changes to config file
-      Config.Save();
 
     finally
       Config.Free;
