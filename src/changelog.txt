@@ -8,9 +8,9 @@ Version 3.4.1  [??.??.17]
 
 - Linux:
   - Fehler behoben, der auftrat, falls keine Sprachendatei gefunden wurde
-- Updater 3.1
+- Updater v3.1
   - Abhängigkeit zur "Indy"-Komponenten Bibliothek entfernt
-  - Programmdatei wird bis zu 1 MB kleiner
+  - Programmdatei bis zu 1 MB kleiner
   - "Suche nach Update" unter Linux entfernt
 - Verwendung der Standard LCL bzw. VCL INI-Datei Klasse
 
