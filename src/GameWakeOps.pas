@@ -2,7 +2,7 @@
 {                                                                         }
 { Game Wake Options Unit                                                  }
 {                                                                         }
-{ Copyright (c) 2011-2016 Philipp Meisberger (PM Code Works)              }
+{ Copyright (c) 2011-2017 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
 { *********************************************************************** }
 
