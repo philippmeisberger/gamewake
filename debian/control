@@ -3,7 +3,7 @@ Maintainer: Philipp Meisberger <team@pm-codeworks.de>
 Section: utils
 Priority: optional
 Standards-Version: 3.9.6
-Build-Depends: lazarus, debhelper (>= 9)
+Build-Depends: lazarus (>=1.6), debhelper (>= 9)
 
 Package: gamewake
 Depends: xdg-utils, alsa-utils, ${misc:Depends}, ${shlibs:Depends}
