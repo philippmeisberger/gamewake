@@ -166,6 +166,7 @@ procedure TMain.FormCreate(Sender: TObject);
 var
   Config: TConfigFile;
   Combine: Boolean;
+  FileVersion: TFileVersion;
 {$IFDEF MSWINDOWS}
   AutoUpdate: Boolean;
 {$ENDIF}
@@ -272,6 +273,10 @@ begin
   mmInstallCertificate.Visible := False;
   Icon.LoadFromFile(MAINICON);
 {$ENDIF}
+
+  // Get version information
+  if FileVersion.FromFile(Application.ExeName) then
+    lVersion.Caption := FileVersion.ToString('v%d.%d');
 
   // Init Clock
   FClock := TClock.Create(Self, mmTimer.Checked, Combine);
