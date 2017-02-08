@@ -1,3 +1,16 @@
+gamewake (3.4.1) UNRELEASED; urgency=low
+
+  * Bugfix release
+  * Linux:
+    * Fixed issue, if no language file was found
+  * Updater v3.1
+    * Removed dependency to "Indy" component suite
+    * Executable up to 1MB smaller
+    * Removed "Search for update" under Linux
+  * Usage of LCL/VCL standard INI file class
+
+ -- Philipp Meisberger <team@pm-codeworks.de>  Wed, 08 Feb 2017 16:29:08 +0100
+
 gamewake (3.4) stable; urgency=medium
 
   * Minor release
