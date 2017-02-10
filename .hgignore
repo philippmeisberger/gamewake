@@ -18,6 +18,8 @@ src/lib/**
 **.stat
 **.rsm
 **.mes
+**.map
+**.drc
 **.identcache
 **.local
 
