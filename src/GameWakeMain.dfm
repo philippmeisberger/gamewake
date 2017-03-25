@@ -323,6 +323,7 @@ object Main: TMain
       Caption = 'Ansicht'
       object mmLang: TMenuItem
         Caption = 'Sprache w'#228'hlen'
+        OnClick = mmLangClick
       end
     end
     object mmHelp: TMenuItem

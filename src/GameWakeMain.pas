@@ -14,15 +14,15 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Controls, Forms, StdCtrls, ExtCtrls, Menus,
-  Dialogs, GameWakeAPI, PMCW.LanguageFile, PMCW.Utils, PMCW.Dialogs.About,
-  PMCW.Dialogs.Updater, PMCW.FileSystem,
+  Dialogs, GameWakeAPI, PMCW.LanguageFile, PMCW.Dialogs.About, PMCW.FileSystem,
+  PMCW.Dialogs.Updater,
 
 {$IFDEF MSWINDOWS}
 {$IFDEF PORTABLE}
   Winapi.MMSystem,
 {$ENDIF}
   Winapi.Windows, System.UITypes, Winapi.ShlObj, Winapi.KnownFolders,
-  Winapi.Messages;
+  Winapi.Messages, PMCW.CA;
 {$ELSE}
   LCLType, Process;
 
@@ -32,7 +32,7 @@ const
 
 type
   { TMain }
-  TMain = class(TForm, IChangeLanguageListener{$IFDEF MSWINDOWS}, IUpdateListener{$ENDIF})
+  TMain = class(TForm, IChangeLanguageListener)
     eHour: TEdit;
     eMin: TEdit;
     bAlert: TButton;
@@ -112,6 +112,7 @@ type
     procedure lCopyMouseEnter(Sender: TObject);
     procedure lCopyMouseLeave(Sender: TObject);
     procedure Blink(Sender: TObject);
+    procedure mmLangClick(Sender: TObject);
   private
     FClock: TClock;
     FLang: TLanguageFile;
@@ -128,18 +129,14 @@ type
     procedure LoadColor();
     procedure LoadFromIni();
   {$IFDEF MSWINDOWS}
+    procedure OnUpdate(Sender: TObject; const ANewBuild: Cardinal);
     procedure PowerBroadcast(var AMsg: TMessage); message WM_POWERBROADCAST;
   {$ENDIF}
     procedure SaveToIni();
     function Shutdown(): Boolean;
     procedure TrayMouseUp(Sender: TObject; AButton: TMouseButton;
       AShiftState: TShiftState; X, Y: Integer);
-    { IChangeLanguageListener }
-    procedure SetLanguage(ANewLanguage: TLocale);
-  {$IFDEF MSWINDOWS}
-    { IUpdateListener }
-    procedure OnUpdate(const ANewBuild: Cardinal);
-  {$ENDIF}
+    procedure LanguageChanged();
   end;
 
 var
@@ -191,7 +188,7 @@ begin
       FConfigPath := GetUserDir() +'.gamewake';
 
   // Setup language
-  FLang := TLanguageFile.Create(Self, FLangPath);
+  FLang := TLanguageFile.Create(FLangPath);
 {$ELSE}
   if CheckWin32Version(6) then
     FConfigPath := GetKnownFolderPath(FOLDERID_RoamingAppData)
@@ -208,16 +205,13 @@ begin
   FConfigPath := FConfigPath +'gamewake.ini';
 
   // Setup language
-  FLang := TLanguageFile.Create(Self);
-  FLang.Interval := 100;
+  FLang := TLanguageFile.Create(100);
 {$ENDIF}
-  try
-    FLang.BuildLanguageMenu(MainMenu, mmLang);
-
-  except
-    on E: ELanguageException do
-      ShowMessage(E.Message);
-  end;  //of try
+  with FLang do
+  begin
+    AddListener(Self);
+    BuildLanguageMenu(mmLang);
+  end;  //of with
 
   // Init config file access
   Config := TConfigFile.Create(FConfigPath);
@@ -260,11 +254,17 @@ begin
 
 {$IFDEF MSWINDOWS}
   // Init update notificator
-  FUpdateCheck := TUpdateCheck.Create(Self, 'GameWake', FLang);
+  FUpdateCheck := TUpdateCheck.Create('GameWake', FLang);
 
-  // Search for updates on startup?
-  if AutoUpdate then
-    FUpdateCheck.CheckForUpdate(False);
+  with FUpdateCheck do
+  begin
+    OnUpdate := Self.OnUpdate;
+  {$IFNDEF DEBUG}
+    // Search for updates on startup?
+    if AutoUpdate then
+      CheckForUpdate();
+  {$ENDIF}
+  end;  //of with
 
   mmWebsite.Visible := False;
 {$ELSE}
@@ -370,43 +370,33 @@ end;
 
   Event that is called by TUpdateCheck when TUpdateCheckThread finds an update. }
 
-procedure TMain.OnUpdate(const ANewBuild: Cardinal);
+procedure TMain.OnUpdate(Sender: TObject; const ANewBuild: Cardinal);
 var
   Updater: TUpdateDialog;
 
 begin
   // Ask user to permit download
-  if (FLang.ShowMessage(FLang.Format(LID_UPDATE_AVAILABLE, [ANewBuild]),
-    FLang.GetString(LID_UPDATE_CONFIRM_DOWNLOAD), mtConfirmation) = IDYES) then
+  if (TaskMessageDlg(FLang.Format(LID_UPDATE_AVAILABLE, [ANewBuild]),
+    FLang.GetString(LID_UPDATE_CONFIRM_DOWNLOAD), mtConfirmation, mbYesNo, 0) = idYes) then
   begin
-    // init TUpdate instance
     Updater := TUpdateDialog.Create(Self, FLang);
 
     try
-      // Set updater options
       with Updater do
       begin
-        Title := FLang.GetString(LID_UPDATE_DOWNLOAD);
-
       {$IFNDEF PORTABLE}
         FileNameLocal := 'Game Wake Setup.exe';
         FileNameRemote := 'game_wake_setup.exe';
       {$ELSE}
         FileNameLocal := 'Game Wake.exe';
 
-      {$IFDEF WIN64}
-        FileNameRemote := 'gamewake64.exe';
-      {$ELSE}
-        // Ask user to permit download of 64-Bit version
-        if ((TOSVersion.Architecture = arIntelX64) and (FLang.ShowMessage(
-          FLang.Format([LID_UPDATE_64BIT, LID_UPDATE_64BIT_CONFIRM], [Application.Title]),
-            mtConfirmation) = IDYES)) then
+        // Download 64-Bit version?
+        if (TOSVersion.Architecture = arIntelX64) then
           FileNameRemote := 'gamewake64.exe'
         else
           FileNameRemote := 'gamewake.exe';
       {$ENDIF}
-      {$ENDIF}
-      end;  //of begin
+      end;  //of with
 
       // Successfully downloaded update?
       if Updater.Execute() then
@@ -414,9 +404,8 @@ begin
         // Caption "Search for update"
         mmUpdate.Caption := FLang.GetString(LID_UPDATE_SEARCH);
         mmUpdate.Enabled := False;
-
       {$IFNDEF PORTABLE}
-        // Start with new version installing
+        // Start with installation of new version
         Updater.LaunchSetup();
       {$ENDIF}
       end;  //of begin
@@ -570,7 +559,10 @@ begin
 
   except
     on E: Exception do
-      FLang.ShowException(FLang.Format(LID_LOADING_CONFIG_FAILED, [FConfigPath]), E.Message);
+    begin
+      FLang.ShowException(FLang.Format(LID_LOADING_CONFIG_FAILED, [FConfigPath]),
+        E.Message);
+    end;
   end;  //of try
 end;
 
@@ -653,7 +645,10 @@ begin
 
   except
     on E: Exception do
-      FLang.ShowException(FLang.Format(LID_STORING_CONFIG_FAILED, [FConfigPath]), E.Message);
+    begin
+      FLang.ShowException(FLang.Format(LID_STORING_CONFIG_FAILED, [FConfigPath]),
+        E.Message);
+    end;
   end;  //of try
 end;
 
@@ -661,7 +656,7 @@ end;
 
   Updates all component captions with new language text. }
 
-procedure TMain.SetLanguage(ANewLanguage: TLocale);
+procedure TMain.LanguageChanged();
 var
   i: Byte;
 
@@ -817,11 +812,11 @@ begin
     mbLeft:
       begin
         if mmTimer.Checked then
-          FTrayIcon.BalloonHint := Format(FLang.GetString(LID_ALERT_AT), [FClock.Alert.GetTime(False)])
+          FTrayIcon.BalloonHint := FLang.Format(LID_ALERT_AT, [FClock.Alert.GetTime(False)])
         else
         begin
           FClock.GetTimeRemaining(Hour, Min, Sec);
-          FTrayIcon.BalloonHint := Format(FLang.GetString(LID_ALERT_REMAINING), [Hour, Min, Sec]);
+          FTrayIcon.BalloonHint := FLang.Format(LID_ALERT_REMAINING, [Hour, Min, Sec]);
         end;  //of if
 
         FTrayIcon.ShowBalloonHint();
@@ -848,8 +843,8 @@ end;
 procedure TMain.pmCloseClick(Sender: TObject);
 begin
   // Show confirmation
-  if (FLang.ShowMessage(FLang.GetString([LID_CLOSE_CONFIRM1, LID_CLOSE_CONFIRM2]),
-    mtConfirmation) = IDYES) then
+  if (MessageDlg(FLang.GetString([LID_CLOSE_CONFIRM1, LID_CLOSE_CONFIRM2]),
+    mtConfirmation, mbYesNo, 0) = IDYES) then
   begin
     bStop.Click;
     Close;
@@ -1042,10 +1037,11 @@ begin
     mmTimer.Enabled := False;
     mmCounter.Enabled := False;
 
-    FLang.ShowMessage(FLang.Format(LID_ALERT_CONFIRM, [FClock.Alert.GetTime(False)]));
+    MessageDlg(FLang.Format(LID_ALERT_CONFIRM, [FClock.Alert.GetTime(False)]),
+      mtInformation, [mbOK], 0);
 
   except
-    FLang.ShowMessage(FLang.GetString(LID_ALERT_INVALID), mtWarning);
+    MessageDlg(FLang.GetString(LID_ALERT_INVALID), mtWarning, [mbOK], 0);
   end;  //of try
 end;
 
@@ -1096,7 +1092,7 @@ begin
   else
     bChange.Enabled := False;
 
-  FLang.ShowMessage(FLang.GetString(LID_ALERT_CANCELED));
+  MessageDlg(FLang.GetString(LID_ALERT_CANCELED), mtInformation, [mbOK], 0);
 end;
 
 { TMain.bColorClick
@@ -1169,12 +1165,14 @@ var
   UserInput: string;
 
 begin
-  UserInput := InputBox(FLang.GetString(LID_TEXT_CAPTION), FLang.GetString(LID_TEXT_PROMPT), pText.Caption);
+  UserInput := InputBox(FLang.GetString(LID_TEXT_CAPTION),
+    FLang.Strings[LID_TEXT_PROMPT], pText.Caption);
 
   // Text length maximum 16 characters
   if (Length(UserInput) > 16) then
   begin
-    FLang.ShowMessage(LID_TEXT_TOO_LONG1, LID_TEXT_TOO_LONG2, mtWarning);
+    MessageDlg(FLang.GetString([LID_TEXT_TOO_LONG1, LID_TEXT_TOO_LONG2]),
+      mtWarning, [mbOK], 0);
     bChange.Click;
   end  //of begin
   else
@@ -1266,26 +1264,36 @@ end;
   MainMenu entry that allows to install the PM Code Works certificate. }
 
 procedure TMain.mmInstallCertificateClick(Sender: TObject);
-{$IFDEF MSWINDOWS}
-var
-  Updater: TUpdateDialog;
-
 begin
-  Updater := TUpdateDialog.Create(Self, FLang);
-
+{$IFDEF MSWINDOWS}
   try
     // Certificate already installed?
-    if not Updater.CertificateExists() then
-      Updater.InstallCertificate()
+    if CertificateExists() then
+    begin
+      MessageDlg(FLang.GetString(LID_CERTIFICATE_ALREADY_INSTALLED),
+        mtInformation, [mbOK], 0);
+    end  //of begin
     else
-      FLang.ShowMessage(FLang.GetString(LID_CERTIFICATE_ALREADY_INSTALLED), mtInformation);
+      InstallCertificate();
 
-  finally
-    Updater.Free;
+  except
+    on E: EOSError do
+      MessageDlg(E.Message, mtError, [mbOK], 0);
   end;  //of try
-{$ELSE}
-begin
 {$ENDIF}
+end;
+
+procedure TMain.mmLangClick(Sender: TObject);
+var
+  i: Integer;
+
+begin
+  for i := 0 to mmLang.Count - 1 do
+  {$IFDEF MSWINDOWS}
+    mmLang.Items[i].Checked := (mmLang.Items[i].Tag = FLang.Locale);
+  {$ELSE}
+    mmLang.Items[i].Checked := (mmLang.Items[i].Hint = FLang.Locale);
+  {$ENDIF}
 end;
 
 { TMain.mmUpdateClick
@@ -1295,7 +1303,8 @@ end;
 procedure TMain.mmUpdateClick(Sender: TObject);
 begin
 {$IFDEF MSWINDOWS}
-  FUpdateCheck.CheckForUpdate(True);
+  FUpdateCheck.NotifyNoUpdate := True;
+  FUpdateCheck.CheckForUpdate();
 {$ENDIF}
 end;
 
@@ -1325,9 +1334,12 @@ end;
 procedure TMain.mmAboutClick(Sender: TObject);
 var
   AboutDialog: TAboutDialog;
+  Description, Changelog: TResourceStream;
 
 begin
   AboutDialog := TAboutDialog.Create(Self);
+  Description := TResourceStream.Create(HInstance, RESOURCE_DESCRIPTION, RT_RCDATA);
+  Changelog := TResourceStream.Create(HInstance, RESOURCE_CHANGELOG, RT_RCDATA);
 
   try
   {$IFDEF LINUX}
@@ -1336,9 +1348,13 @@ begin
   {$ELSE}
     AboutDialog.Title := StripHotkey(mmAbout.Caption);
   {$ENDIF}
+    AboutDialog.Description.LoadFromStream(Description);
+    AboutDialog.Changelog.LoadFromStream(Changelog);
     AboutDialog.Execute();
 
   finally
+    Changelog.Free;
+    Description.Free;
     AboutDialog.Free;
   end;  //of begin
 end;
@@ -1397,22 +1413,24 @@ begin
   if not Assigned(FTrayIcon) then
     FTrayIcon := TTrayIcon.Create(Self);
 
-  // Set tray icon options
   try
-    FTrayIcon.BalloonTitle := Application.Title;
-    FTrayIcon.BalloonFlags := bfInfo;
-    FTrayIcon.OnMouseUp := TrayMouseUp;
-    FTrayIcon.PopUpMenu := pmMenu;
-    FTrayIcon.Hint := Application.Title;
-  {$IFDEF MSWINDOWS}
-    FTrayIcon.Icon.Handle := Application.Icon.Handle;
-  {$ELSE}
-    FTrayIcon.Icon.LoadFromFile(MAINICON);
-  {$ENDIF}
-    FTrayIcon.Visible := True;
+    with FTrayIcon do
+    begin
+      BalloonTitle := Application.Title;
+      BalloonFlags := bfInfo;
+      OnMouseUp := TrayMouseUp;
+      PopUpMenu := pmMenu;
+      Hint := Application.Title;
+    {$IFDEF MSWINDOWS}
+      Icon.Handle := Application.Icon.Handle;
+    {$ELSE}
+      Icon.LoadFromFile(MAINICON);
+    {$ENDIF}
+      Visible := True;
+    end;  //of with
 
     // Hide form
-    Hide;
+    Hide();
 
   except
     on E: Exception do
