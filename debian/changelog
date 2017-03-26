@@ -1,8 +1,6 @@
 gamewake (3.4.1) UNRELEASED; urgency=low
 
   * Bugfix release
-  * Linux:
-    * Fixed issue, if no language file was found
   * Updater v3.1
     * Removed dependency to "Indy" component suite
     * Executable up to 1MB smaller
@@ -81,9 +79,10 @@ gamewake (3.0) unstable; urgency=low
 gamewake (2.1.2) stable; urgency=low
 
   * Service release
-  * Now platform independent
+  * Now platform independent (Windows and Debian)
   * New Beep sound
   * Bug fix in counter mode
+  * Several bug fixes
 
  -- Philipp Meisberger <team@pm-codeworks.de>  Fri, 11 Nov 2013 15:17:01 +0200
 
@@ -91,8 +90,10 @@ gamewake (2.1.2) stable; urgency=low
 gamewake (2.1.1) stable; urgency=low
 
   * Service release
-  * Time will be refreshed after standby
-  * Bug fix in shutdown function
+  * Added balloon tip when clicking on tray icon
+  * Bug fixes
+    * Time will be refreshed after standby
+    * In shutdown function
   * Cancel button in update form will not be disabled
 
  -- Philipp Meisberger <team@pm-codeworks.de>  Wed, 09 Oct 2013 11:01:36 +0200
@@ -111,8 +112,8 @@ gamewake (2.1) stable; urgency=low
 gamewake (2.0.1) stable; urgency=low
 
   * Service release
-  * Improved update function
   * Added new option: automatically search for update on startup can be changed
+  * Improved update function
   * GUI changes in option form
   * Bug fix in save progress
 
@@ -139,8 +140,8 @@ gamewake (2.0) unstable; urgency=low
 gamewake (1.3.1) stable; urgency=low
 
   * Service release
-  * New sound: Horn
-  * Serveral bug fixes
+  * Added new sound: horn
+  * Several bug fixes
 
  -- Philipp Meisberger <team@pm-codeworks.de>  Wed, 09 Nov 2011 13:31:25 +0200
 
@@ -149,7 +150,7 @@ gamewake (1.3) stable; urgency=low
 
   * Minor release
   * Added option form
-  * Few bug fixes
+  * Several bug fixes
 
  -- Philipp Meisberger <team@pm-codeworks.de>  Wed, 24 Aug 2011 15:17:21 +0200
 
@@ -158,6 +159,7 @@ gamewake (1.2) stable; urgency=low
 
   * Minor release
   * Blinking color can be chosen
+  * Several bug fixes
 
  -- Philipp Meisberger <team@pm-codeworks.de>  Wed, 17 Aug 2011 20:17:01 +0200
 
@@ -166,9 +168,9 @@ gamewake (1.1) stable; urgency=low
 
   * Minor release
   * Added main menu
-  * Added save function
+  * Added storing feature
   * Added feature to show a short text during alert
-  * Added blink feature
+  * Added blinking feature
 
  -- Philipp Meisberger <team@pm-codeworks.de>  Sun, 14 Aug 2011 16:44:16 +0200
 
