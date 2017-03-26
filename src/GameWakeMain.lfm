@@ -17,7 +17,7 @@ object Main: TMain
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   Position = poDefault
-  LCLVersion = '1.6.0.4'
+  LCLVersion = '1.6.2.0'
   object pText: TPanel
     Left = 8
     Height = 128
@@ -326,6 +326,7 @@ object Main: TMain
       Caption = 'Ansicht'
       object mmLang: TMenuItem
         Caption = 'Sprache wählen'
+        OnClick = mmLangClick
       end
     end
     object mmHelp: TMenuItem
