@@ -1,6 +1,8 @@
 gamewake (3.4.1) UNRELEASED; urgency=low
 
   * Bugfix release
+  * Linux:
+    * Game Wake is terminated if language file was not found
   * Updater v3.1
     * Removed dependency to "Indy" component suite
     * Executable up to 1MB smaller

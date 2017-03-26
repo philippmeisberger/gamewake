@@ -188,7 +188,18 @@ begin
       FConfigPath := GetUserDir() +'.gamewake';
 
   // Setup language
-  FLang := TLanguageFile.Create(FLangPath);
+  try
+    FLang := TLanguageFile.Create(FLangPath);
+
+  except
+    // Language file could not be found
+    on E: ELanguageException do
+    begin
+      MessageDlg(E.Message, mtError, [mbOK], 0);
+      Application.Terminate;
+      raise;
+    end;
+  end;  //of try
 {$ELSE}
   if CheckWin32Version(6) then
     FConfigPath := GetKnownFolderPath(FOLDERID_RoamingAppData)
@@ -587,6 +598,10 @@ var
   Config: TConfigFile;
 
 begin
+  // Language file could not be found?
+  if not Assigned(FLang) then
+    Exit;
+
   try
     Config := TConfigFile.Create(FConfigPath);
 
