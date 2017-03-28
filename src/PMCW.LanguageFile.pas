@@ -280,7 +280,7 @@ type
 implementation
 
 {$IFDEF MSWINDOWS}
-{$R lang.res}
+{$R languages.res}
 
 { TLocaleHelper }
 
