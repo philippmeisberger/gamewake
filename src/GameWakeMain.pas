@@ -118,8 +118,7 @@ type
     FLang: TLanguageFile;
     FTrayIcon: TTrayIcon;
     FColor: TColor;
-    FConfigPath,
-    FLangPath: string;
+    FConfigPath: string;
   {$IFDEF MSWINDOWS}
     FUpdateCheck: TUpdateCheck;
   {$ENDIF}
@@ -166,30 +165,35 @@ var
   FileVersion: TFileVersion;
 {$IFDEF MSWINDOWS}
   AutoUpdate: Boolean;
+{$ELSE}
+  i: Integer;
+  LanguageFileName: TFileName;
 {$ENDIF}
 
 begin
-  FLangPath := '';
 {$IFNDEF MSWINDOWS}
-  // Load other language file?
-  if ((ParamStr(1) = '--lang') and (ParamStr(2) <> '')) then
-    FLangPath := ParamStr(2)
-  else
-    if ((ParamStr(3) = '--lang') and (ParamStr(4) <> '')) then
-      FLangPath := ParamStr(4);
+  LanguageFileName := ExtractFilePath(Application.ExeName) +'languages';
+  FConfigPath := GetUserDir() +'.gamewake';
 
-  // Load other configuration?
-  if ((ParamStr(1) = '--config') and (ParamStr(2) <> '')) then
-    FConfigPath := ParamStr(2)
-  else
-    if ((ParamStr(3) = '--config') and (ParamStr(4) <> '')) then
-      FConfigPath := ParamStr(4)
+  // Parse arguments
+  for i := 1 to Paramcount() do
+  begin
+    // Load other language file?
+    if ((ParamStr(i) = '--lang') and (ParamStr(i + 1) <> '')) then
+      LanguageFileName := ParamStr(i + 1)
     else
-      FConfigPath := GetUserDir() +'.gamewake';
+      Continue;
+
+    // Load other configuration?
+    if ((ParamStr(i) = '--config') and (ParamStr(i + 1) <> '')) then
+      FConfigPath := ParamStr(i + 1)
+    else
+      Continue;
+  end;  //of for
 
   // Setup language
   try
-    FLang := TLanguageFile.Create(FLangPath);
+    FLang := TLanguageFile.Create(LanguageFileName);
 
   except
     // Language file could not be found

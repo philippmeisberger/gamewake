@@ -166,7 +166,7 @@ type
     ///   Optional: The application defined interval between languages.
     /// </param>
   {$ENDIF}
-    constructor Create({$IFDEF LINUX}const AIniFile: string = ''{$ELSE}
+    constructor Create({$IFDEF LINUX}const AIniFile: TFileName{$ELSE}
       const AInterval: Word = 200{$ENDIF});
 
     /// <summary>
@@ -303,7 +303,7 @@ end;
 
 { TLanguageFile }
 
-constructor TLanguageFile.Create({$IFDEF LINUX}const AIniFile: string = ''{$ELSE}
+constructor TLanguageFile.Create({$IFDEF LINUX}const AIniFile: TFileName{$ELSE}
   const AInterval: Word = 200{$ENDIF});
 begin
   inherited Create;
@@ -313,10 +313,7 @@ begin
 {$IFDEF MSWINDOWS}
   FLangId := 0;
 {$ELSE}
-  if (AIniFile = '') then
-    FIni := TIniFile.Create(ExtractFilePath(ParamStr(0)) +'lang')
-  else
-    FIni := TIniFile.Create(AIniFile);
+  FIni := TIniFile.Create(AIniFile);
 {$ENDIF}
   Load({$IFDEF MSWINDOWS}AInterval{$ENDIF});
 end;
