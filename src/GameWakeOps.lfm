@@ -5,7 +5,7 @@ object Options: TOptions
   Width = 426
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
-  Caption = 'Optionen'
+  Caption = 'Options'
   ClientHeight = 256
   ClientWidth = 426
   Color = clBtnFace
@@ -21,7 +21,7 @@ object Options: TOptions
     Top = 24
     Width = 394
     Anchors = [akTop, akLeft, akRight]
-    Caption = 'Speicher-Optionen'
+    Caption = 'Storage settings'
     ClientHeight = 99
     ClientWidth = 390
     TabOrder = 3
@@ -30,7 +30,7 @@ object Options: TOptions
       Height = 21
       Top = 16
       Width = 109
-      Caption = 'Uhrzeit speichern'
+      Caption = 'Save time'
       TabOrder = 0
     end
     object cbSaveSound: TCheckBox
@@ -39,7 +39,7 @@ object Options: TOptions
       Top = 16
       Width = 173
       Anchors = [akTop, akLeft, akRight]
-      Caption = 'Soundauswahl speichern'
+      Caption = 'Save sound selection'
       TabOrder = 1
     end
     object cbSaveColor: TCheckBox
@@ -48,7 +48,7 @@ object Options: TOptions
       Top = 40
       Width = 173
       Anchors = [akTop, akLeft, akRight]
-      Caption = 'Farbe speichern'
+      Caption = 'Save color'
       TabOrder = 3
     end
     object cbSaveText: TCheckBox
@@ -56,7 +56,7 @@ object Options: TOptions
       Height = 21
       Top = 40
       Width = 95
-      Caption = 'Text speichern'
+      Caption = 'Save text'
       TabOrder = 2
     end
     object cbSavePos: TCheckBox
@@ -64,7 +64,7 @@ object Options: TOptions
       Height = 21
       Top = 64
       Width = 112
-      Caption = 'Position speichern'
+      Caption = 'Save position'
       TabOrder = 4
     end
   end
@@ -85,7 +85,7 @@ object Options: TOptions
     Top = 220
     Width = 75
     Anchors = [akRight, akBottom]
-    Caption = 'abbrechen'
+    Caption = 'cancel'
     OnClick = bCancelClick
     TabOrder = 1
   end
@@ -95,7 +95,7 @@ object Options: TOptions
     Top = 220
     Width = 97
     Anchors = [akLeft, akBottom]
-    Caption = 'Standardwerte'
+    Caption = 'Default'
     OnClick = bResetClick
     TabOrder = 2
   end
@@ -105,7 +105,7 @@ object Options: TOptions
     Top = 144
     Width = 394
     Anchors = [akTop, akLeft, akRight]
-    Caption = 'Allgemein'
+    Caption = 'General'
     ClientHeight = 54
     ClientWidth = 390
     TabOrder = 4
@@ -114,7 +114,7 @@ object Options: TOptions
       Height = 21
       Top = 8
       Width = 166
-      Caption = 'Stunden und Minuten koppeln'
+      Caption = 'Combine hours and minutes'
       TabOrder = 0
     end
     object cbUpdate: TCheckBox
@@ -122,8 +122,8 @@ object Options: TOptions
       Height = 21
       Top = 28
       Width = 239
-      Caption = 'Beim Start automatisch nach Update suchen'
+      Caption = 'Automatically check for update'
       TabOrder = 1
     end
   end
-end
+end

@@ -26,7 +26,7 @@ object Options: TOptions
     Width = 394
     Height = 97
     Anchors = [akLeft, akTop, akRight]
-    Caption = 'Speicher-Optionen'
+    Caption = 'Storage settings'
     TabOrder = 3
     DesignSize = (
       394
@@ -36,7 +36,7 @@ object Options: TOptions
       Top = 20
       Width = 110
       Height = 22
-      Caption = 'Uhrzeit speichern'
+      Caption = 'Save time'
       TabOrder = 0
     end
     object cbSaveSound: TCheckBox
@@ -45,7 +45,7 @@ object Options: TOptions
       Width = 177
       Height = 22
       Anchors = [akLeft, akTop, akRight]
-      Caption = 'Soundauswahl speichern'
+      Caption = 'Save sound selection'
       TabOrder = 1
     end
     object cbSaveColor: TCheckBox
@@ -54,7 +54,7 @@ object Options: TOptions
       Width = 177
       Height = 22
       Anchors = [akLeft, akTop, akRight]
-      Caption = 'Farbe speichern'
+      Caption = 'Save color'
       TabOrder = 3
     end
     object cbSaveText: TCheckBox
@@ -62,7 +62,7 @@ object Options: TOptions
       Top = 44
       Width = 96
       Height = 22
-      Caption = 'Text speichern'
+      Caption = 'Save text'
       TabOrder = 2
     end
     object cbSavePos: TCheckBox
@@ -70,7 +70,7 @@ object Options: TOptions
       Top = 68
       Width = 113
       Height = 22
-      Caption = 'Position speichern'
+      Caption = 'Save position'
       TabOrder = 4
     end
   end
@@ -92,7 +92,7 @@ object Options: TOptions
     Height = 25
     Anchors = [akRight, akBottom]
     Cancel = True
-    Caption = 'abbrechen'
+    Caption = 'cancel'
     TabOrder = 1
     OnClick = bCancelClick
   end
@@ -102,7 +102,7 @@ object Options: TOptions
     Width = 97
     Height = 25
     Anchors = [akLeft, akBottom]
-    Caption = 'Standardwerte'
+    Caption = 'Default'
     TabOrder = 2
     OnClick = bResetClick
   end
@@ -112,14 +112,14 @@ object Options: TOptions
     Width = 394
     Height = 81
     Anchors = [akLeft, akTop, akRight]
-    Caption = 'Allgemein'
+    Caption = 'General'
     TabOrder = 4
     object cbUpdate: TCheckBox
       Left = 16
       Top = 48
       Width = 187
       Height = 22
-      Caption = 'automatisch nach Update suchen'
+      Caption = 'Automatically check for update'
       TabOrder = 0
     end
     object cbCombine: TCheckBox
@@ -127,7 +127,7 @@ object Options: TOptions
       Top = 24
       Width = 167
       Height = 22
-      Caption = 'Stunden und Minuten koppeln'
+      Caption = 'Combine hours and minutes'
       TabOrder = 1
     end
   end

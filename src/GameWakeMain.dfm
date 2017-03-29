@@ -100,7 +100,7 @@ object Main: TMain
     Width = 136
     Height = 33
     Anchors = [akLeft, akBottom]
-    Caption = 'Alarm'
+    Caption = 'Alert'
     Default = True
     TabOrder = 12
     OnClick = bAlertClick
@@ -111,14 +111,14 @@ object Main: TMain
     Width = 137
     Height = 127
     Anchors = [akLeft, akTop, akBottom]
-    Caption = 'Bei Alarm'
+    Caption = 'At alert'
     TabOrder = 10
     object cbBlink: TCheckBox
       Left = 12
       Top = 18
       Width = 53
       Height = 19
-      Caption = 'blinken'
+      Caption = 'Flash'
       TabOrder = 0
       OnClick = cbBlinkClick
     end
@@ -127,7 +127,7 @@ object Main: TMain
       Top = 38
       Width = 87
       Height = 19
-      Caption = 'Schrift zeigen'
+      Caption = 'Show text'
       TabOrder = 2
       OnClick = cbTextClick
     end
@@ -136,7 +136,7 @@ object Main: TMain
       Top = 64
       Width = 109
       Height = 33
-      Caption = 'Beschriftung '#228'ndern'
+      Caption = 'Change text'
       Enabled = False
       TabOrder = 3
       OnClick = bChangeClick
@@ -146,7 +146,7 @@ object Main: TMain
       Top = 18
       Width = 40
       Height = 18
-      Caption = 'Farbe'
+      Caption = 'Color'
       Enabled = False
       TabOrder = 1
       OnClick = bColorClick
@@ -158,14 +158,14 @@ object Main: TMain
     Width = 137
     Height = 127
     Anchors = [akLeft, akTop, akBottom]
-    Caption = 'Alarmauswahl'
+    Caption = 'Alert selection'
     ItemIndex = 0
     Items.Strings = (
-      'Wecker'
+      'Bell'
       'Horn'
       'Beep'
       'Bing'
-      'Herunterfahren')
+      'Shut down')
     TabOrder = 9
   end
   object eHour: TEdit
@@ -209,7 +209,7 @@ object Main: TMain
     Height = 33
     Anchors = [akBottom]
     Cancel = True
-    Caption = 'aus'
+    Caption = 'off'
     Enabled = False
     TabOrder = 11
     OnClick = bStopClick
@@ -290,68 +290,68 @@ object Main: TMain
     Left = 64
     Top = 24
     object mmFile: TMenuItem
-      Caption = 'Datei'
+      Caption = 'File'
       object mmSave: TMenuItem
         AutoCheck = True
-        Caption = 'Einstellungen speichern'
+        Caption = 'Store settings'
         Checked = True
         OnClick = mmSaveClick
       end
     end
     object mmEdit: TMenuItem
-      Caption = 'Bearbeiten'
+      Caption = 'Edit'
       object mmOptions: TMenuItem
-        Caption = 'Optionen'
+        Caption = 'Options'
         OnClick = mmOptionsClick
       end
       object N4: TMenuItem
         Caption = '-'
       end
       object mmTimer: TMenuItem
-        Caption = 'Timer Modus'
+        Caption = 'Timer mode'
         Checked = True
         RadioItem = True
         OnClick = mmTimerClick
       end
       object mmCounter: TMenuItem
-        Caption = 'Counter Modus'
+        Caption = 'Counter mode'
         RadioItem = True
         OnClick = mmCounterClick
       end
     end
     object mmView: TMenuItem
-      Caption = 'Ansicht'
+      Caption = 'View'
       object mmLang: TMenuItem
-        Caption = 'Sprache w'#228'hlen'
+        Caption = 'Choose language'
         OnClick = mmLangClick
       end
     end
     object mmHelp: TMenuItem
-      Caption = 'Hilfe'
+      Caption = 'Help'
       object mmUpdate: TMenuItem
-        Caption = 'Nach Update suchen'
+        Caption = 'Search for update'
         OnClick = mmUpdateClick
       end
       object N2: TMenuItem
         Caption = '-'
       end
       object mmWebsite: TMenuItem
-        Caption = 'Zur Website'
+        Caption = 'Go to website'
         OnClick = mmWebsiteClick
       end
       object mmInstallCertificate: TMenuItem
-        Caption = 'Zertifikat installieren'
+        Caption = 'Install certificate'
         OnClick = mmInstallCertificateClick
       end
       object mmReport: TMenuItem
-        Caption = 'Fehler melden'
+        Caption = 'Report bug'
         OnClick = mmReportClick
       end
       object N3: TMenuItem
         Caption = '-'
       end
       object mmAbout: TMenuItem
-        Caption = #220'ber Game Wake'
+        Caption = 'About'
         OnClick = mmAboutClick
       end
     end
@@ -360,12 +360,12 @@ object Main: TMain
     Left = 16
     Top = 24
     object pmOpen: TMenuItem
-      Caption = 'offnen'
+      Caption = 'Open'
       Default = True
       OnClick = pmOpenClick
     end
     object pmClose: TMenuItem
-      Caption = 'Beenden'
+      Caption = 'Close'
       OnClick = pmCloseClick
     end
   end
