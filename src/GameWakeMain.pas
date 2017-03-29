@@ -196,14 +196,17 @@ begin
     FLang := TLanguageFile.Create(LanguageFileName);
 
   except
-    // Language file could not be found
-    on E: ELanguageException do
+    // File could not be found or file contains no languages -> Terminate anyway!
+    on E: Exception do
     begin
       MessageDlg(E.Message, mtError, [mbOK], 0);
       Application.Terminate;
-      raise;
     end;
   end;  //of try
+
+  // Do not continue if language file could not be loaded
+  if not Assigned(FLang) then
+    Exit;
 {$ELSE}
   if CheckWin32Version(6) then
     FConfigPath := GetKnownFolderPath(FOLDERID_RoamingAppData)
