@@ -14,7 +14,7 @@ object Main: TMain
   Font.Style = []
   Menu = MainMenu
   OldCreateOrder = True
-  Position = poDefault
+  Position = poScreenCenter
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy

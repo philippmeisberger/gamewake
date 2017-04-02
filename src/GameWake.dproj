@@ -59,8 +59,8 @@
         <VerInfo_MajorVer>3</VerInfo_MajorVer>
         <VerInfo_MinorVer>4</VerInfo_MinorVer>
         <VerInfo_Release>1</VerInfo_Release>
-        <VerInfo_Build>503</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=PM Code Works;FileDescription=Game Wake;FileVersion=3.4.1.503;InternalName=;LegalCopyright=Philipp Meisberger 2017;LegalTrademarks=PM Code Works;OriginalFilename=Game Wake.exe;ProductName=Game Wake;ProductVersion=3.4</VerInfo_Keys>
+        <VerInfo_Build>504</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=PM Code Works;FileDescription=Game Wake;FileVersion=3.4.1.504;InternalName=;LegalCopyright=Philipp Meisberger 2017;LegalTrademarks=PM Code Works;OriginalFilename=Game Wake.exe;ProductName=Game Wake;ProductVersion=3.4</VerInfo_Keys>
         <DCC_DebugInformation>1</DCC_DebugInformation>
         <DCC_IntegerOverflowCheck>true</DCC_IntegerOverflowCheck>
     </PropertyGroup>

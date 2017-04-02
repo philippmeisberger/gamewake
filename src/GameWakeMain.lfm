@@ -1,7 +1,7 @@
 object Main: TMain
-  Left = 538
+  Left = 250
   Height = 290
-  Top = 176
+  Top = 134
   Width = 297
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
@@ -16,7 +16,7 @@ object Main: TMain
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  Position = poDefault
+  Position = poScreenCenter
   LCLVersion = '1.6.2.0'
   object pText: TPanel
     Left = 8

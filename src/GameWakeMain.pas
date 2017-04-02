@@ -125,7 +125,6 @@ type
     procedure Alert(Sender: TObject);
     procedure BlinkEnd(Sender: TObject);
     procedure Counting(Sender: TObject);
-    procedure LoadColor();
     procedure LoadFromIni();
   {$IFDEF MSWINDOWS}
     procedure OnUpdate(Sender: TObject; const ANewBuild: Cardinal);
@@ -174,6 +173,8 @@ begin
 {$IFNDEF MSWINDOWS}
   LanguageFileName := ExtractFilePath(Application.ExeName) +'languages';
   FConfigPath := GetUserDir() +'.gamewake';
+  FColor := clRed;
+  Combine := False;
 
   // Parse arguments
   for i := 1 to Paramcount() do
@@ -241,16 +242,13 @@ begin
       LoadFromIni();
       mmOptions.Enabled := True;
     end  //of begin
-    // Do not load anything except language
     else
     begin
       mmSave.Checked := False;
       mmOptions.Enabled := False;
     end;  //of if
 
-    // Load last position?
-    if not Config.ReadBool(Config.SectionGlobal, Config.IdSavePos, False) then
-      Position := poScreenCenter;
+    Combine := Config.ReadBool(Config.SectionGlobal, Config.IdCombine, False);
 
   {$IFDEF MSWINDOWS}
     // Check for Updates?
@@ -260,15 +258,9 @@ begin
       AutoUpdate := True;
   {$ENDIF}
 
-    // Load hours minutes combining
-    Combine := Config.ReadBool(Config.SectionGlobal, Config.IdCombine, False);
-
   finally
     Config.Free;
   end;  //of finally
-
-  // Load last blink color
-  LoadColor();
 
 {$IFDEF MSWINDOWS}
   // Init update notificator
@@ -455,42 +447,6 @@ begin
   lHour.Caption := FClock.Time.GetTime();
 end;
 
-{ private TMain.LoadColor
-
-  Loads current blink color from config file and sets it. }
-
-procedure TMain.LoadColor();
-var
-  Config: TConfigFile;
-  BlinkColor: string;
-
-begin
-  try
-    Config := TConfigFile.Create(FConfigPath);
-
-    try
-      // Color "red" for default
-      FColor := clRed;
-
-      if Config.ReadBool(Config.SectionGlobal, Config.IdSaveColor, True) then
-      begin
-        // Load color from config file
-        BlinkColor := Config.ReadString(Config.SectionAlert, Config.IdColor, 'clRed');
-
-        if (BlinkColor <> '') then
-          FColor := StringToColor(BlinkColor);
-      end;  //of begin
-
-    finally
-      Config.Free;
-    end;  //of try
-
-  except
-    on E: Exception do
-      FLang.ShowException(FLang.GetString(LID_COLORS_INVALID), E.Message);
-  end;  //of try
-end;
-
 { private TMain.LoadFromIni
 
   Loads user specific configuration from file. }
@@ -500,6 +456,7 @@ var
   Config: TConfigFile;
   Locale: TLocale;
   AlertType: Integer;
+  FlashColor: string;
 
 begin
   try
@@ -549,11 +506,10 @@ begin
       // Load last position?
       if Config.ReadBool(Config.SectionGlobal, Config.IdSavePos, False) then
       begin
+        Position := poDefault;
         Left := Config.ReadInteger(Config.SectionGlobal, Config.IdLeft, 0);
         Top := Config.ReadInteger(Config.SectionGlobal, Config.IdTop, 0);
-      end  //of begin
-      else
-        Position := poScreenCenter;
+      end;  //of begin
 
       // Load last "show text" state?
       if Config.ReadBool(Config.SectionAlert, Config.IdShowText, False) then
@@ -562,8 +518,20 @@ begin
         bChange.Enabled := True;
       end;  //of begin
 
-      // Load last blink state
+      // Load last flash state
       cbBlink.Checked := Config.ReadBool(Config.SectionAlert, Config.IdBlink, False);
+
+      // Load flash color
+      if Config.ReadBool(Config.SectionGlobal, Config.IdSaveColor, True) then
+      begin
+        // Load color from config file
+        FlashColor := Config.ReadString(Config.SectionAlert, Config.IdColor, 'clRed');
+
+        if (FlashColor <> '') then
+          FColor := StringToColor(FlashColor);
+      end  //of begin
+      else
+        FColor := clRed;
 
     {$IFDEF MSWINDOWS}
       // Missing "AutoUpdate"?
