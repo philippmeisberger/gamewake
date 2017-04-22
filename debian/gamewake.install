@@ -1,3 +1,4 @@
+bin/*/gamewake usr/lib/gamewake/
 bin/*.wav usr/lib/gamewake/
 src/languages usr/lib/gamewake/
 src/gamewake.ico usr/share/pixmaps/

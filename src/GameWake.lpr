@@ -1,6 +1,6 @@
 program GameWake;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 {$define UseCThreads}
 
 {$R 'changelog.res' 'changelog.rc'}
