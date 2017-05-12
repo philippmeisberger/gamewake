@@ -1,9 +1,8 @@
-## Uses glob syntax, regex sucks ;)
 syntax: glob
 BACKUP/**
 backup
 __history
-bin/Linux-*/**
+bin/*-linux/**
 src/lib/**
 **.a
 **.o

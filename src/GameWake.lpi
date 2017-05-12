@@ -78,7 +78,7 @@
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <Target>
-      <Filename Value="..\bin\Linux-$(TargetCPU)\gamewake"/>
+      <Filename Value="..\bin\$(TargetCPU)-$(TargetOS)\gamewake"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
@@ -102,11 +102,5 @@
       </Debugging>
       <LinkSmart Value="True"/>
     </Linking>
-    <Other>
-      <ExecuteAfter>
-        <Command Value="strip ..\bin\Linux-$(TargetCPU)\gamewake"/>
-        <CompileReasons Run="False"/>
-      </ExecuteAfter>
-    </Other>
   </CompilerOptions>
 </CONFIG>
