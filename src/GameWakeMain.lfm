@@ -74,15 +74,6 @@ object Main: TMain
     OnMouseEnter = lCopyMouseEnter
     OnMouseLeave = lCopyMouseLeave
   end
-  object lVersion: TLabel
-    Left = 267
-    Height = 12
-    Top = 8
-    Width = 21
-    Anchors = [akTop, akRight]
-    Caption = 'v3.4'
-    ParentColor = False
-  end
   object bAlert: TButton
     Left = 8
     Height = 33

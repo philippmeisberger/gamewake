@@ -47,16 +47,14 @@ Version 3.3  [*22.08.15*]
 Version 3.2  [*10.01.15*]
 -----------
 
-* Minor release
 * Fixed bug caused when "SaveClock"=False and "Counter Mode" was set
-* Added usage of own INI file parser
+* Using custom INI-file parser for registry file export and import
 * Updater v2.2
 * OSUtils v2.0
 
 Version 3.1  [*18.09.14*]
 -----------
 
-* Minor release
 * New icon
   * Thanks to Rafi: http://www.graphicsfuel.com/2012/08/alarm-clock-icon-psd/
 * Updater v2.1
