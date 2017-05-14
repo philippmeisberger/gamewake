@@ -1,7 +1,7 @@
 Game Wake
 =========
 
-Game Wake is a cross platform alert clock application.
+Game Wake is a simple to configure virtual alarm clock application. It provides multiple types of alerts and features both a timer and counter mode.
 
 Installation for Linux
 ----------------------

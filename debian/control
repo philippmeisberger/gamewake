@@ -10,11 +10,5 @@ Homepage: http://www.pm-codeworks.de/gamewake.html
 Package: gamewake
 Depends: xdg-utils, alsa-utils, ${misc:Depends}, ${shlibs:Depends}
 Architecture: any
-Description: Wecker Anwendung
- Game Wake ist ein virtueller Wecker, den man sich stellen kann, um nicht, z.B.
- während des exzessiven Gamings, die Pizza im Ofen zu vergessen. Aber auch sonst
- eignet sich Game Wake zum Erinnern an alle möglichen Dinge. Es gibt 4
- verschiedene Alarm-Sounds zur Auswahl und eine "Herunterfahren"-Funktion.
- Neben den Audiosignalen kann Game Wake visuell in einer festgelegten Farbe
- blinken und zusätzlich eine textbasierte Erinnerung angezeigen. Game Wake
- verfügt über zwei verschiedene Betriebs-Modi: Timer- und Counter-Modus.
+Description: Alarm clock application
+ Game Wake is a simple to configure virtual alarm clock application. It provides multiple types of alerts and features both a timer and counter mode.
