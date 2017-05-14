@@ -150,7 +150,6 @@ Version 1.0  [*10.08.11*]
 Initial release
 
 --------------------------------------------------------------------------------
-
-Game Wake was released under the D-FSL license and is open-source. The source code can be downloaded from the website.
+Game Wake was released under the D-FSL license and is open-source. The source code can be downloaded from GitHub or from the website.
 
 If Game Wake is going to be pressed onto a commercial CD-ROM (with magazine), it would be nice to send me an issue of this CD-ROM (with magazine). You can contact me under team@pm-codeworks.de and I will give you my address.
