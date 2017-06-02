@@ -109,8 +109,8 @@ Version 2.0  [*18.11.12*]
 * Improved GUI
   * Added buttons for easy setting up alert
   * Added "search for update" button
-* Added language support for english and french
-* Added certificate downloaded routine
+* Added translations for english and french
+* Added "Install certificate"
 * Added shutdown feature
 * Several bug fixes
 
