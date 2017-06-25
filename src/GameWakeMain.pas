@@ -14,7 +14,7 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Controls, Forms, StdCtrls, ExtCtrls, Menus,
-  Dialogs, GameWakeAPI, PMCW.LanguageFile, PMCW.Dialogs.About, PMCW.FileSystem,
+  Dialogs, GameWakeAPI, PMCW.LanguageFile, PMCW.Dialogs.About, PMCW.SysUtils,
   PMCW.Dialogs.Updater,
 
 {$IFDEF MSWINDOWS}
