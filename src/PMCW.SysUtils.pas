@@ -17,8 +17,19 @@ uses
 {$IFDEF MSWINDOWS}
   Winapi.Windows, Winapi.ShellAPI, Winapi.ShlObj, Winapi.ActiveX, Vcl.Forms;
 {$ELSE}
-  Resource, ElfReader, VersionResource;
+  Process, StrUtils, Resource, ElfReader, VersionResource;
 {$ENDIF}
+
+const
+  /// <summary>
+  ///   URL to the website.
+  /// </summary>
+  URL_BASE    = 'http://www.pm-codeworks.de/';
+
+  /// <summary>
+  ///   URL to the report bug formular on the website.
+  /// </summary>
+  URL_CONTACT = URL_BASE +'kontakt.html';
 
 type
   /// <summary>
@@ -149,6 +160,17 @@ function GetKnownFolderPath(AFolderId: TGUID): string;
 function GetSystemWow64Directory(): string;
 
 /// <summary>
+///   Opens a given HTTP URL in the default web browser.
+/// </summary>
+/// <param name="AUrl">
+///    The HTTP URL that should be opened.
+/// </param>
+/// <returns>
+///   <c>True</c> if the HTTP URL was successfully opened or <c>False</c> otherwise.
+/// </returns>
+function OpenUrl(const AUrl: string): Boolean;
+
+/// <summary>
 ///   Disables the WOW64 filesystem redirection on 64-bit Windows for a 32-bit
 ///   application.
 /// </summary>
@@ -215,25 +237,6 @@ begin
 {$ENDIF}
 end;
 
-function GetSystemWow64Directory(): string;
-var
-  Length: UINT;
-
-begin
-  // Not present on 32-bit Windows
-  if (TOSVersion.Architecture <> arIntelX64) then
-    Exit;
-
-  SetLength(Result, MAX_PATH);
-  Length := GetSystemWow64DirectoryW(PWideChar(Result), MAX_PATH);
-
-  if (Length > 0) then
-  begin
-    SetLength(Result, Length);
-    Result := IncludeTrailingPathDelimiter(Result);
-  end;  //of begin
-end;
-
 function ExecuteProgram(const AProgram: string; const AArguments: string = '';
   AShow: Integer = SW_SHOWNORMAL; ARunAsAdmin: Boolean = False;
   AWait: Boolean = False): Boolean;
@@ -296,6 +299,25 @@ begin
   end;  //of begin
 end;
 
+function GetSystemWow64Directory(): string;
+var
+  Length: UINT;
+
+begin
+  // Not present on 32-bit Windows
+  if (TOSVersion.Architecture <> arIntelX64) then
+    Exit;
+
+  SetLength(Result, MAX_PATH);
+  Length := GetSystemWow64DirectoryW(PWideChar(Result), MAX_PATH);
+
+  if (Length > 0) then
+  begin
+    SetLength(Result, Length);
+    Result := IncludeTrailingPathDelimiter(Result);
+  end;  //of begin
+end;
+
 function GetFolderPath(ACSIDL: Integer): string;
 var
   Path: array[0..MAX_PATH] of Char;
@@ -319,6 +341,37 @@ begin
     Result := IncludeTrailingPathDelimiter(string(Path));
     CoTaskMemFree(Path);
   end;  //of begin
+end;
+{$ENDIF}
+
+function OpenUrl(const AUrl: string): Boolean;
+{$IFNDEF MSWINDOWS}
+var
+  Process: TProcess;
+
+begin
+  if (not AnsiStartsText('http://', AUrl) and not AnsiStartsText('https://', AUrl)) then
+    Exit(False);
+
+  Process := TProcess.Create(nil);
+
+  try
+    Process.Executable := '/usr/bin/xdg-open';
+    Process.Parameters.Append(AUrl);
+    Process.Options := Process.Options + [poWaitOnExit];
+    Process.Execute();
+    Result := (Process.ExitStatus = 0);
+
+  finally
+    Process.Free;
+  end;  //of try
+end;
+{$ELSE}
+begin
+  if (AUrl.StartsWith('http://') or AUrl.StartsWith('https://')) then
+    Result := ExecuteProgram(AUrl)
+  else
+    Result := False;
 end;
 {$ENDIF}
 
