@@ -787,6 +787,9 @@ var
 {$ENDIF}
 
 begin
+  if (ASound = '') then
+    Exit(False);
+
 {$IFDEF MSWINDOWS}
   if ASynchronized then
     Flags := SND_SYNC
