@@ -15,14 +15,12 @@ interface
 uses
   SysUtils, Classes, Graphics, Controls, Forms, StdCtrls, ExtCtrls, Menus,
   Dialogs, GameWakeAPI, PMCW.LanguageFile, PMCW.Dialogs.About, PMCW.SysUtils,
-  PMCW.Dialogs.Updater,
-
 {$IFDEF MSWINDOWS}
 {$IFDEF PORTABLE}
   Winapi.MMSystem,
 {$ENDIF}
   Winapi.Windows, System.UITypes, Winapi.ShlObj, Winapi.KnownFolders,
-  Winapi.Messages, PMCW.CA;
+  Winapi.Messages, PMCW.Dialogs.Updater, PMCW.CA;
 {$ELSE}
   LCLType, Process;
 
