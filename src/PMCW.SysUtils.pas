@@ -79,6 +79,17 @@ type
     function ToString(const AFormat: string = '%d.%d.%d.%d'): string;
   end;
 
+/// <summary>
+///   Opens a given HTTP URL in the default web browser.
+/// </summary>
+/// <param name="AUrl">
+///    The HTTP URL that should be opened.
+/// </param>
+/// <returns>
+///   <c>True</c> if the HTTP URL was successfully opened or <c>False</c> otherwise.
+/// </returns>
+function OpenUrl(const AUrl: string): Boolean;
+
 {$IFDEF MSWINDOWS}
 /// <summary>
 ///   Executes a program using ShellExecuteEx.
@@ -158,17 +169,6 @@ function GetKnownFolderPath(AFolderId: TGUID): string;
 ///   The path.
 /// </returns>
 function GetSystemWow64Directory(): string;
-
-/// <summary>
-///   Opens a given HTTP URL in the default web browser.
-/// </summary>
-/// <param name="AUrl">
-///    The HTTP URL that should be opened.
-/// </param>
-/// <returns>
-///   <c>True</c> if the HTTP URL was successfully opened or <c>False</c> otherwise.
-/// </returns>
-function OpenUrl(const AUrl: string): Boolean;
 
 /// <summary>
 ///   Disables the WOW64 filesystem redirection on 64-bit Windows for a 32-bit
