@@ -6,6 +6,8 @@ An open-source project of PM Code Works
 Version 3.4.1  [*??.??.17*]
 -------------
 
+* Bug fix:
+  * Disable alert after initiating a shutdown otherwise Game Wake is minimized and stays active
 * Linux:
   * Bug fix: AV if language file was not found
 * Updater v3.1

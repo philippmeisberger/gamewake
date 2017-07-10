@@ -349,7 +349,7 @@ begin
   begin
     if Shutdown() then
     begin
-      bAlert.Enabled := True;
+      FClock.AlertEnabled := False;
       Close;
     end;  //of begin
   end  //of begin
