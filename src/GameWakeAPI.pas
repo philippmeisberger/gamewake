@@ -649,11 +649,12 @@ begin
       if not FTimerMode then
         FTimer.Enabled := False;
 
-      if (FAlertType = atShutdown) then
-        Exit;
-
       if Assigned(FOnAlertBegin) then
         FOnAlertBegin(Self);
+
+      // Shutdown does not need a thread
+      if (FAlertType = atShutdown) then
+        Exit;
 
       // Start playing sound
       FAlertThread := TAlertThread.Create(Self, FAlertType);
