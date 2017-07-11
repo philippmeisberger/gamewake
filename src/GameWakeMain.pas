@@ -128,7 +128,7 @@ type
     procedure PowerBroadcast(var AMsg: TMessage); message WM_POWERBROADCAST;
   {$ENDIF}
     procedure SaveToIni();
-    function Shutdown(): Boolean;
+    procedure Shutdown();
     procedure TrayMouseUp(Sender: TObject; AButton: TMouseButton;
       AShiftState: TShiftState; X, Y: Integer);
     procedure LanguageChanged();
@@ -347,11 +347,18 @@ begin
   // Check for shutdown
   if (FClock.AlertType = atShutdown) then
   begin
-    if Shutdown() then
-    begin
+    try
+      Shutdown();
       FClock.AlertEnabled := False;
       Close;
-    end;  //of begin
+
+    except
+      on E: EOSError do
+      begin
+        FLang.ShowException(FLang.GetString([LID_SHUTDOWN, LID_IMPOSSIBLE]), E.Message);
+        bStop.Click;
+      end;
+    end;  //of try
   end  //of begin
   else
   begin
@@ -689,93 +696,89 @@ end;
 
   Tells the OS to shutdown the computer. }
 
-function TMain.Shutdown(): Boolean;
+procedure TMain.Shutdown();
 {$IFNDEF MSWINDOWS}
+const
+  SHUTDOWN_INITD_BIN   = '/usr/bin/dbus-send';
+  SHUTDOWN_SYSTEMD_BIN = '/bin/systemctl';
+
 var
   Process: TProcess;
 
 begin
-  Result := False;
+  Process := TProcess.Create(nil);
 
   try
-    Process := TProcess.Create(nil);
-
-    try
-      // systemd Linux?
-      if FileExists('/bin/systemctl') then
+    // systemd Linux?
+    if FileExists(SHUTDOWN_SYSTEMD_BIN) then
+    begin
+      Process.Executable := SHUTDOWN_SYSTEMD_BIN;
+      Process.Parameters.Append('poweroff');
+    end  //of begin
+    else
+      if FileExists(SHUTDOWN_INITD_BIN) then
       begin
-        Process.Executable := '/bin/systemctl';
-        Process.Parameters.Append('poweroff');
+        Process.Executable := SHUTDOWN_INITD_BIN;
+
+        with Process.Parameters do
+        begin
+          Append('--system');
+          Append('--print-reply');
+          Append('--dest=org.freedesktop.ConsoleKit');
+          Append('/org/freedesktop/ConsoleKit/Manager');
+          Append('org.freedesktop.ConsoleKit.Manager.Stop');
+        end;  //of with
       end  //of begin
       else
-      begin
-        if FileExists('/usr/bin/dbus-send') then
-        begin
-          Process.Executable := '/usr/bin/dbus-send';
+        raise EOSError.Create('No program found to shutdown');
 
-          with Process.Parameters do
-          begin
-            Append('--system');
-            Append('--print-reply');
-            Append('--dest=org.freedesktop.ConsoleKit');
-            Append('/org/freedesktop/ConsoleKit/Manager');
-            Append('org.freedesktop.ConsoleKit.Manager.Stop');
-          end;  //of with
-        end;
-      end;
+    Process.Execute();
 
-      Process.Execute();
-      Result := True;
-
-    finally
-      Process.Free;
-    end;  //of try
-
-  except
-    Result := False;
+  finally
+    Process.Free;
   end;  //of try
 end;
 {$ELSE}
 const
-  SE_SHUTDOWN_NAME = 'SeShutdownPrivilege';
+  SE_SHUTDOWN_NAME               = 'SeShutdownPrivilege';
   SHTDN_REASON_MAJOR_APPLICATION = $00040000;
   SHTDN_REASON_MINOR_MAINTENANCE = 1;
 
 var
   TokenHandle: THandle;
-  NewState, PreviousState: TTokenPrivileges;
-  BufferLength, ReturnLength: Cardinal;
-  Luid: Int64;
+  NewState: TTokenPrivileges;
+  ReturnLength: DWORD;
+  Luid: TLargeInteger;
 
 begin
-  if ((Win32Platform = VER_PLATFORM_WIN32_NT)) then
-  try
-    if not OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES or
-      TOKEN_QUERY, TokenHandle) then
-      raise Exception.Create(SysErrorMessage(GetLastError()));
+  if not OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES or
+    TOKEN_QUERY, TokenHandle) then
+    raise EOSError.Create(SysErrorMessage(GetLastError()));
 
+  try
     // Get LUID of shutdown privilege
     if not LookupPrivilegeValue(nil, SE_SHUTDOWN_NAME, Luid) then
-      raise Exception.Create(SysErrorMessage(GetLastError()));
+      raise EOSError.Create(SysErrorMessage(GetLastError()));
 
-    // Create new shutdown privilege
-    NewState.PrivilegeCount := 1;
-    NewState.Privileges[0].Luid := Luid;
-    NewState.Privileges[0].Attributes := SE_PRIVILEGE_ENABLED;
-    BufferLength := SizeOf(PreviousState);
-    ReturnLength := 0;
+    // Enable shutdown privilege
+    with NewState do
+    begin
+      PrivilegeCount := 1;
+      Privileges[0].Luid := Luid;
+      Privileges[0].Attributes := SE_PRIVILEGE_ENABLED;
+    end;  //of with
 
-    // Set the shutdown privilege
-    if not AdjustTokenPrivileges(TokenHandle, False, NewState, BufferLength,
-      PreviousState, ReturnLength) then
-      raise Exception.Create(SysErrorMessage(GetLastError()));
+    if not AdjustTokenPrivileges(TokenHandle, False, NewState, 0, nil, ReturnLength) then
+      raise EOSError.Create(SysErrorMessage(GetLastError()));
+
+    // Shutdown
+    if not ExitWindowsEx(EWX_SHUTDOWN or EWX_FORCE, SHTDN_REASON_MAJOR_APPLICATION or
+      SHTDN_REASON_MINOR_MAINTENANCE) then
+      raise EOSError.Create(SysErrorMessage(GetLastError()));
 
   finally
     CloseHandle(TokenHandle);
   end;  //of try
-
-  Result := ExitWindowsEx(EWX_SHUTDOWN or EWX_FORCE, SHTDN_REASON_MAJOR_APPLICATION or
-    SHTDN_REASON_MINOR_MAINTENANCE);
 end;
 {$ENDIF}
 
