@@ -1,6 +1,8 @@
 gamewake (3.4.1) UNRELEASED; urgency=low
 
   * Bugfix release
+  * Bug fix:
+    * Disable alert after initiating a shutdown otherwise Game Wake is minimized and stays active
   * Linux:
     * Game Wake is terminated if language file was not found
   * Updater v3.1
