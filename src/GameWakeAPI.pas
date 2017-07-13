@@ -62,7 +62,6 @@ type
     FHour,
     FMin,
     FSec: Byte;
-    procedure SetBasicTime(ANewMin, ANewSec: Byte);
     procedure SetHour(ANewHour: Byte); virtual; abstract;
     procedure SetMin(ANewMin: Byte); virtual;
   public
@@ -79,8 +78,7 @@ type
     function IncrementMinutes(): string;
     procedure IncrementSeconds();
     procedure SetSystemTime();
-    procedure SetTime(ANewHours, ANewMin: Byte); overload; virtual; abstract;
-    procedure SetTime(ANewHours, ANewMin, ANewSec: Byte); overload; virtual; abstract;
+    procedure SetTime(ANewHour, ANewMin: Byte; ANewSec: Byte = 0); virtual;
     procedure Reset(); virtual; abstract;
     { external }
     property Hour: Byte read FHour write SetHour;
@@ -98,8 +96,6 @@ type
     function DecrementHours(): string; override;
     function IncrementHours(): string; override;
     procedure Reset(); override;
-    procedure SetTime(ANewHour, ANewMin: Byte); override;
-    procedure SetTime(ANewHour, ANewMin, ANewSec: Byte); override;
   end;
 
   { TCounterMode }
@@ -113,8 +109,7 @@ type
     function DecrementMinutes(): string; override;
     function IncrementHours(): string; override;
     procedure Reset(); override;
-    procedure SetTime(ANewHour, ANewMin: Byte); override;
-    procedure SetTime(ANewHour, ANewMin, ANewSec: Byte); override;
+    procedure SetTime(ANewHour, ANewMin: Byte; ANewSec: Byte = 0); override;
   end;
 
   { Exception class }
@@ -240,20 +235,6 @@ begin
   FMin := AMin;
   FSec := ASec;
   FCombine := ACombine;
-end;
-
-{ private TTime.SetTime
-
-  Sets the current minutes and seconds. }
-
-procedure TTime.SetBasicTime(ANewMin, ANewSec: Byte);
-begin
-  SetMin(ANewMin);
-
-  if (ANewSec > 59) then
-    FMin := 59
-  else
-    FSec := ANewSec;
 end;
 
 { public TTime.DecrementMinutes
@@ -395,6 +376,21 @@ begin
   SetTime(currentHour, currentMin, currentSec);
 end;
 
+{ public TTime.SetTime
+
+  Sets current hours, minutes and seconds. }
+
+procedure TTime.SetTime(ANewHour, ANewMin: Byte; ANewSec: Byte = 0);
+begin
+  SetHour(ANewHour);
+  SetMin(ANewMin);
+
+  if (ANewSec > 59) then
+    FMin := 59
+  else
+    FSec := ANewSec;
+end;
+
 
 { TTimerMode }
 
@@ -454,25 +450,6 @@ begin
     FHour := 23
   else
     FHour := ANewHour;
-end;
-
-{ public TTimerMode.SetTime
-
-  Sets current hours and minutes. }
-
-procedure TTimerMode.SetTime(ANewHour, ANewMin: Byte);
-begin
-  SetTime(ANewHour, ANewMin, 0);
-end;
-
-{ public TTimerMode.SetTime
-
-  Sets current hours, minutes and seconds. }
-
-procedure TTimerMode.SetTime(ANewHour, ANewMin, ANewSec: Byte);
-begin
-  SetHour(ANewHour);
-  SetBasicTime(ANewMin, ANewSec);
 end;
 
 
@@ -565,24 +542,14 @@ end;
 
 { public TCounterMode.SetTime
 
-  Sets current hours and minutes. }
-
-procedure TCounterMode.SetTime(ANewHour, ANewMin: Byte);
-begin
-  SetTime(ANewHour, ANewMin, 0);
-end;
-
-{ public TCounterMode.SetTime
-
   Sets current hours, minutes and seconds. }
 
-procedure TCounterMode.SetTime(ANewHour, ANewMin, ANewSec: Byte);
+procedure TCounterMode.SetTime(ANewHour, ANewMin: Byte; ANewSec: Byte = 0);
 begin
   if ((ANewHour = 0) and (ANewMin = 0)) then
     raise EInvalidTimeException.Create('Hours and Minutes must not be 0!');
 
-  SetHour(ANewHour);
-  SetBasicTime(ANewMin, ANewSec);
+  inherited SetTime(ANewHour, ANewMin, ANewSec);
 end;
 
 
