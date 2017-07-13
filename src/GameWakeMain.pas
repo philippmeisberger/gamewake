@@ -960,7 +960,7 @@ begin
   try
     if ((Length(eHour.Text) = 2) and not (Key in [VK_RIGHT, VK_LEFT])) then
     begin
-      FClock.Alert.SetHour(StrToInt(eHour.Text));
+      FClock.Alert.Hour := StrToInt(eHour.Text);
       eHour.Text := FClock.Alert.GetHour();
       eMin.SetFocus;
     end;  //of begin
@@ -979,7 +979,7 @@ begin
   try
     if ((Length(eMin.Text) = 2) and not (Key in [VK_RIGHT, VK_LEFT])) then
     begin
-      FClock.Alert.SetMin(StrToInt(eMin.Text));
+      FClock.Alert.Min := StrToInt(eMin.Text);
       eMin.Text := FClock.Alert.GetMin();
     end;  //of begin
 

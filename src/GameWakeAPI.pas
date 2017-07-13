@@ -62,6 +62,8 @@ type
     FMin,
     FSec: Byte;
     procedure SetBasicTime(ANewMin, ANewSec: Byte);
+    procedure SetHour(ANewHour: Byte); virtual; abstract;
+    procedure SetMin(ANewMin: Byte); virtual;
   public
     constructor Create(AHour, AMin, ASec: Byte; ACombine: Boolean);
     function DecrementHours(): string; virtual; abstract;
@@ -75,8 +77,6 @@ type
     function IncrementHours(): string; virtual; abstract;
     function IncrementMinutes(): string;
     procedure IncrementSeconds();
-    procedure SetHour(ANewHour: Byte); virtual; abstract;
-    procedure SetMin(ANewMin: Byte); virtual;
     procedure SetSystemTime();
     procedure SetTime(ANewHours, ANewMin: Byte); overload; virtual; abstract;
     procedure SetTime(ANewHours, ANewMin, ANewSec: Byte); overload; virtual; abstract;
@@ -90,26 +90,28 @@ type
 
   { TTimerMode }
   TTimerMode = class(TTime)
+  protected
+    procedure SetHour(ANewHour: Byte); override;
   public
     constructor Create(ACombine: Boolean = True); overload;
     function DecrementHours(): string; override;
     function IncrementHours(): string; override;
     procedure Reset(); override;
-    procedure SetHour(ANewHour: Byte); override;
     procedure SetTime(ANewHour, ANewMin: Byte); override;
     procedure SetTime(ANewHour, ANewMin, ANewSec: Byte); override;
   end;
 
   { TCounterMode }
   TCounterMode = class(TTime)
+  protected
+    procedure SetHour(ANewHour: Byte); override;
+    procedure SetMin(ANewMin: Byte); override;
   public
     constructor Create(ACombine: Boolean = True); overload;
     function DecrementHours(): string; override;
     function DecrementMinutes(): string; override;
     function IncrementHours(): string; override;
     procedure Reset(); override;
-    procedure SetHour(ANewHour: Byte); override;
-    procedure SetMin(ANewMin: Byte); override;
     procedure SetTime(ANewHour, ANewMin: Byte); override;
     procedure SetTime(ANewHour, ANewMin, ANewSec: Byte); override;
   end;
@@ -757,6 +759,9 @@ var
   Combine: Boolean;
 
 begin
+  if (FTimerMode = ATimerMode) then
+    Exit;
+
   FTimerMode := ATimerMode;
   FTimer.Enabled := ATimerMode;
   Combine := FTimeAlert.Combine;
