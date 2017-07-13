@@ -57,16 +57,18 @@ type
 
   { TTime }
   TTime = class(TObject)
-  protected
+  private
     FCombine: Boolean;
     FHour,
     FMin,
     FSec: Byte;
-    procedure SetHour(ANewHour: Byte); virtual; abstract;
+  protected
+    procedure SetHour(ANewHour: Byte); virtual;
     procedure SetMin(ANewMin: Byte); virtual;
   public
-    constructor Create(AHour, AMin, ASec: Byte; ACombine: Boolean);
-    function DecrementHours(): string; virtual; abstract;
+    constructor Create(ACombine: Boolean = True); overload;
+    constructor Create(AHour, AMin, ASec: Byte; ACombine: Boolean); overload;
+    function DecrementHours(): string; virtual;
     function DecrementMinutes(): string; virtual;
     function Equals(const ATime: TTime): Boolean; reintroduce;
     function GetDateTime(): TDateTime;
@@ -74,12 +76,12 @@ type
     function GetMin(): string;
     function GetTime(ALongFormat: Boolean = True): string; overload;
     procedure GetTime(var AHour, AMin: string); overload;
-    function IncrementHours(): string; virtual; abstract;
+    function IncrementHours(): string; virtual;
     function IncrementMinutes(): string;
     procedure IncrementSeconds();
     procedure SetSystemTime();
     procedure SetTime(ANewHour, ANewMin: Byte; ANewSec: Byte = 0); virtual;
-    procedure Reset(); virtual; abstract;
+    procedure Reset(); virtual;
     { external }
     property Hour: Byte read FHour write SetHour;
     property Min: Byte read FMin write SetMin;
@@ -92,10 +94,8 @@ type
   protected
     procedure SetHour(ANewHour: Byte); override;
   public
-    constructor Create(ACombine: Boolean = True); overload;
     function DecrementHours(): string; override;
     function IncrementHours(): string; override;
-    procedure Reset(); override;
   end;
 
   { TCounterMode }
@@ -104,7 +104,6 @@ type
     procedure SetHour(ANewHour: Byte); override;
     procedure SetMin(ANewMin: Byte); override;
   public
-    constructor Create(ACombine: Boolean = True); overload;
     function DecrementHours(): string; override;
     function DecrementMinutes(): string; override;
     function IncrementHours(): string; override;
@@ -138,8 +137,7 @@ type
     procedure SetTimerMode(const ATimerMode: Boolean);
     procedure DoNotifyOnCounting();
   public
-    constructor Create(AOwner: TComponent; ATimerMode: Boolean;
-      ACombine: Boolean = False);
+    constructor Create(ATimerMode: Boolean; ACombine: Boolean = False);
     destructor Destroy; override;
     procedure GetTimeRemaining(var AHour, AMin, ASec: string);
     function PlaySound(const ASound: string; ASynchronized: Boolean = False{$IFDEF MSWINDOWS};
@@ -228,13 +226,34 @@ end;
 
   General constructor for creating a TTime instance. }
 
+constructor TTime.Create(ACombine: Boolean = True);
+begin
+  inherited Create;
+  Reset();
+  FCombine := ACombine;
+end;
+
+{ public TTime.Create
+
+  General constructor for creating a TTime instance. }
+
 constructor TTime.Create(AHour, AMin, ASec: Byte; ACombine: Boolean);
 begin
   inherited Create;
-  FHour := AHour;
-  FMin := AMin;
-  FSec := ASec;
+  SetTime(AHour, AMin, ASec);
   FCombine := ACombine;
+end;
+
+{ public TTime.DecrementHours
+
+  Decrements hours by 1 and returns them as formatted string. }
+
+function TTime.DecrementHours(): string;
+begin
+  if (FHour > 0) then
+    Dec(FHour);
+
+  Result := GetHour();
 end;
 
 { public TTime.DecrementMinutes
@@ -315,6 +334,16 @@ begin
     Result := FormatDateTime('t', GetDateTime());
 end;
 
+{ public TTime.IncrementHours
+
+  Increments hours by 1 and returns them as formatted string. }
+
+function TTime.IncrementHours(): string;
+begin
+  Inc(FHour);
+  Result := GetHour();
+end;
+
 { public TTime.IncrementMinutes
 
   Increments minutes by 1 and returns them as formatted string. }
@@ -349,6 +378,24 @@ begin
   end  //of begin
   else
     Inc(FSec);
+end;
+
+{ public TTime.Reset
+
+  Resets hours and minutes to minimal values. }
+
+procedure TTime.Reset();
+begin
+  SetTime(0, 0);
+end;
+
+{ public TTime.SetHour
+
+  Sets hours to an valid value. }
+
+procedure TTime.SetHour(ANewHour: Byte);
+begin
+  FHour := ANewHour;
 end;
 
 { public TTime.SetMin
@@ -394,25 +441,16 @@ end;
 
 { TTimerMode }
 
-{ public TTimerMode.Create
-
-  Standard constructor for creating a TTimerMode instance. }
-
-constructor TTimerMode.Create(ACombine: Boolean = True);
-begin
-  inherited Create(0, 0, 0, ACombine);
-end;
-
 { public TTimerMode.DecrementHours
 
   Decrements hours by 1 and returns them as formatted string. }
 
 function TTimerMode.DecrementHours(): string;
 begin
-  if (FHour = 0) then
-    FHour := 23
+  if (Hour = 0) then
+    Hour := 23
   else
-    Dec(FHour);
+    Exit(inherited DecrementHours());
 
   Result := GetHour();
 end;
@@ -423,21 +461,12 @@ end;
 
 function TTimerMode.IncrementHours(): string;
 begin
-  if (FHour = 23) then
-    FHour := 0
+  if (Hour = 23) then
+    Hour := 0
   else
-    Inc(FHour);
+    Exit(inherited IncrementHours());
 
   Result := GetHour();
-end;
-
-{ public TTimerMode.Reset
-
-  Resets hours and minutes to minimal values. }
-
-procedure TTimerMode.Reset();
-begin
-  SetTime(0, 0);
 end;
 
 { public TTimerMode.SetHour
@@ -447,22 +476,13 @@ end;
 procedure TTimerMode.SetHour(ANewHour: Byte);
 begin
   if (ANewHour > 23) then
-    FHour := 23
+    inherited SetHour(23)
   else
-    FHour := ANewHour;
+    inherited SetHour(ANewHour);
 end;
 
 
 { TCounterMode }
-
-{ public TCounterMode.Create
-
-  Standard constructor for creating a TCounterMode instance. }
-
-constructor TCounterMode.Create(ACombine: Boolean = True);
-begin
-  inherited Create(0, 1, 0, ACombine);
-end;
 
 { public TCounterMode.DecrementHours
 
@@ -470,11 +490,11 @@ end;
 
 function TCounterMode.DecrementHours(): string;
 begin
-  if (FHour = 0) then
-    FHour := 99
+  if (Hour = 0) then
+    Hour := 99
   else
-    if not ((FHour = 1) and (FMin = 0)) then
-      Dec(FHour);
+    if not ((Hour = 1) and (Min = 0)) then
+      Exit(inherited DecrementHours());
 
   Result := GetHour();
 end;
@@ -485,11 +505,8 @@ end;
 
 function TCounterMode.DecrementMinutes(): string;
 begin
-  if ((FMin = 1) and (FHour = 0)) then
-  begin
-    Result := GetMin();
-    Exit;
-  end  //of begin
+  if ((Hour = 0) and (Min = 1)) then
+    Exit(GetMin())
   else
     Result := inherited DecrementMinutes();
 end;
@@ -500,13 +517,13 @@ end;
 
 function TCounterMode.IncrementHours(): string;
 begin
-  if (FHour = 99) then
+  if (Hour = 99) then
   begin
-    if (FMin <> 0) then
-      FHour := 0;
+    if (Min <> 0) then
+      Hour := 0;
   end  //of begin
   else
-    Inc(FHour);
+    Exit(inherited IncrementHours());
 
   Result := GetHour();
 end;
@@ -526,8 +543,8 @@ end;
 
 procedure TCounterMode.SetHour(ANewHour: Byte);
 begin
-  if not ((ANewHour = 0) and (FMin = 0)) then
-    FHour := ANewHour;
+  if not ((ANewHour = 0) and (Min = 0)) then
+    inherited SetHour(ANewHour);
 end;
 
 { public TCounterMode.SetMin
@@ -536,7 +553,7 @@ end;
 
 procedure TCounterMode.SetMin(ANewMin: Byte);
 begin
-  if not ((ANewMin = 0) and (FHour = 0)) then
+  if not ((Hour = 0) and (ANewMin = 0)) then
     inherited SetMin(ANewMin);
 end;
 
@@ -559,8 +576,7 @@ end;
 
   Constructor for creating a TClock instance. }
 
-constructor TClock.Create(AOwner: TComponent; ATimerMode: Boolean;
-  ACombine: Boolean = False);
+constructor TClock.Create(ATimerMode: Boolean; ACombine: Boolean = False);
 begin
   inherited Create;
   FTimerMode := ATimerMode;
@@ -579,7 +595,7 @@ begin
     FTimeAlert := TCounterMode.Create(ACombine);
 
   // Init TTimer
-  FTimer := TTimer.Create(AOwner);
+  FTimer := TTimer.Create(nil);
 
   with FTimer do
   begin

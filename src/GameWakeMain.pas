@@ -281,7 +281,7 @@ begin
 {$ENDIF}
 
   // Init Clock
-  FClock := TClock.Create(Self, mmTimer.Checked, Combine);
+  FClock := TClock.Create(mmTimer.Checked, Combine);
 
   with FClock do
   begin
