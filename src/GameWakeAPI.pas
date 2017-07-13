@@ -27,6 +27,7 @@ type
     const
       SectionGlobal = 'Global';
       SectionAlert  = 'Alert';
+      SectionColors = 'CustomColors';
       IdSave        = 'Save';
       IdSaveClock   = 'SaveClock';
       IdHour        = 'Hour';
@@ -200,7 +201,7 @@ var
 
 begin
   for i := Low(AArray) to High(AArray) do
-    AArray[i] := ReadString('CustomColors', 'Color'+ IntToStr(i), '');
+    AArray[i] := ReadString(SectionColors, IdColor + IntToStr(i), '');
 end;
 
 { public TConfigFile.WriteColor
@@ -222,7 +223,7 @@ var
 
 begin
   for i := Low(AArray) to High(AArray) do
-    WriteString('CustomColors', 'Color'+ IntToStr(i), AArray[i]);
+    WriteString(SectionColors, IdColor + IntToStr(i), AArray[i]);
 end;
 
 
