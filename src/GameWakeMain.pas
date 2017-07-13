@@ -15,6 +15,7 @@ interface
 uses
   SysUtils, Classes, Graphics, Controls, Forms, StdCtrls, ExtCtrls, Menus,
   Dialogs, GameWakeAPI, PMCW.LanguageFile, PMCW.Dialogs.About, PMCW.SysUtils,
+  DateUtils,
 {$IFDEF MSWINDOWS}
 {$IFDEF PORTABLE}
   Winapi.MMSystem,
@@ -157,7 +158,6 @@ uses GameWakeOps;
 procedure TMain.FormCreate(Sender: TObject);
 var
   Config: TConfigFile;
-  Combine: Boolean;
 {$IFDEF MSWINDOWS}
   AutoUpdate: Boolean;
 {$ELSE}
@@ -170,7 +170,6 @@ begin
   LanguageFileName := ExtractFilePath(Application.ExeName) +'languages';
   FConfigPath := GetUserDir() +'.gamewake';
   FColor := clRed;
-  Combine := False;
 
   // Parse arguments
   for i := 1 to Paramcount() do
@@ -244,8 +243,6 @@ begin
       mmOptions.Enabled := False;
     end;  //of if
 
-    Combine := Config.ReadBool(Config.SectionGlobal, Config.IdCombine, False);
-
   {$IFDEF MSWINDOWS}
     // Check for Updates?
     if Config.ValueExists(Config.SectionGlobal, Config.IdAutoUpdate) then
@@ -281,11 +278,10 @@ begin
 {$ENDIF}
 
   // Init Clock
-  FClock := TClock.Create(mmTimer.Checked, Combine);
+  FClock := TClock.Create(mmTimer.Checked);
 
   with FClock do
   begin
-    Alert.SetTime(StrToInt(eHour.Text), StrToInt(eMin.Text));
   {$IFNDEF MSWINDOWS}
     SoundPath := '/usr/lib/gamewake/';
   {$ENDIF}
@@ -443,7 +439,7 @@ end;
 
 procedure TMain.Counting(Sender: TObject);
 begin
-  lHour.Caption := FClock.Time.GetTime();
+  lHour.Caption := FClock.Time.ToString();
 end;
 
 { private TMain.LoadFromIni
@@ -559,7 +555,7 @@ end;
 procedure TMain.PowerBroadcast(var AMsg: TMessage);
 begin
   if (AMsg.WParam = PBT_APMRESUMESUSPEND) then
-    FClock.Time.SetSystemTime();
+    FClock.Time := Time();
 end;
 {$ENDIF}
 
@@ -788,21 +784,15 @@ end;
 
 procedure TMain.TrayMouseUp(Sender: TObject; AButton: TMouseButton;
   AShiftState: TShiftState; X, Y: Integer);
-var
-  Hour, Min, Sec: string;
-
 begin
   case AButton of
     // Show Balloon hint on left click
     mbLeft:
       begin
         if mmTimer.Checked then
-          FTrayIcon.BalloonHint := FLang.Format(LID_ALERT_AT, [FClock.Alert.GetTime(False)])
+          FTrayIcon.BalloonHint := FLang.Format(LID_ALERT_AT, [FClock.Alert.ToString(False)])
         else
-        begin
-          FClock.GetTimeRemaining(Hour, Min, Sec);
-          FTrayIcon.BalloonHint := FLang.Format(LID_ALERT_REMAINING, [Hour, Min, Sec]);
-        end;  //of if
+          FTrayIcon.BalloonHint := FLang.Format(LID_ALERT_REMAINING, [TTime(FClock.Alert - FClock.Time).ToString()]);
 
         FTrayIcon.ShowBalloonHint();
       end;  //of begin
@@ -855,10 +845,9 @@ end;
 
 procedure TMain.bIncHourClick(Sender: TObject);
 begin
-  eHour.Text := FClock.Alert.IncrementHours();
-
-  if FClock.Alert.Combine then
-    eMin.Text := FClock.Alert.GetMin();
+  FClock.Alert := IncHour(FClock.Alert);
+  eHour.Text := FClock.Alert.HourToString();
+  eMin.Text := FClock.Alert.MinuteToString();
 end;
 
 { TMain.bDecHourClick
@@ -867,10 +856,9 @@ end;
 
 procedure TMain.bDecHourClick(Sender: TObject);
 begin
-  eHour.Text := FClock.Alert.DecrementHours();
-
-  if FClock.Alert.Combine then
-    eMin.Text := FClock.Alert.GetMin();
+  FClock.Alert := IncHour(FClock.Alert, -1);
+  eHour.Text := FClock.Alert.HourToString();
+  eMin.Text := FClock.Alert.MinuteToString();
 end;
 
 { TMain.bIncMinClick
@@ -879,10 +867,9 @@ end;
 
 procedure TMain.bIncMinClick(Sender: TObject);
 begin
-  eMin.Text := FClock.Alert.IncrementMinutes();
-
-  if FClock.Alert.Combine then
-    eHour.Text := FClock.Alert.GetHour();
+  FClock.Alert := IncMinute(FClock.Alert);
+  eHour.Text := FClock.Alert.HourToString();
+  eMin.Text := FClock.Alert.MinuteToString();
 end;
 
 { TMain.bDecMinClick
@@ -891,10 +878,9 @@ end;
 
 procedure TMain.bDecMinClick(Sender: TObject);
 begin
-  eMin.Text := FClock.Alert.DecrementMinutes();
-
-  if FClock.Alert.Combine then
-    eHour.Text := FClock.Alert.GetHour();
+  FClock.Alert := IncMinute(FClock.Alert, -1);
+  eHour.Text := FClock.Alert.HourToString();
+  eMin.Text := FClock.Alert.MinuteToString();
 end;
 
 { TMain.bPlayClockClick
@@ -960,13 +946,14 @@ begin
   try
     if ((Length(eHour.Text) = 2) and not (Key in [VK_RIGHT, VK_LEFT])) then
     begin
-      FClock.Alert.Hour := StrToInt(eHour.Text);
-      eHour.Text := FClock.Alert.GetHour();
+      FClock.Alert.SetHour(StrToInt(eHour.Text));
+      eHour.Text := FClock.Alert.HourToString();
       eMin.SetFocus;
     end;  //of begin
 
   except
-    eHour.Text := FClock.Alert.GetHour();
+    on E: EConvertError do
+      eHour.Text := FClock.Alert.HourToString();
   end;  //of try
 end;
 
@@ -979,12 +966,13 @@ begin
   try
     if ((Length(eMin.Text) = 2) and not (Key in [VK_RIGHT, VK_LEFT])) then
     begin
-      FClock.Alert.Min := StrToInt(eMin.Text);
-      eMin.Text := FClock.Alert.GetMin();
+      FClock.Alert.SetMinute(StrToInt(eMin.Text));
+      eMin.Text := FClock.Alert.MinuteToString();
     end;  //of begin
 
   except
-    eMin.Text := FClock.Alert.GetMin();
+    on E: EConvertError do
+      eMin.Text := FClock.Alert.MinuteToString();
   end;  //of try
 end;
 
@@ -996,14 +984,10 @@ procedure TMain.bAlertClick(Sender: TObject);
 begin
   // Try to set alert time
   try
-    // Check for invalid input
-    if ((Trim(eHour.Text) = '') or (Trim(eMin.Text) = ''))  then
-      raise EInvalidTimeException.Create('Hours and minutes must not be empty!');
-
     FClock.Alert.SetTime(StrToInt(eHour.Text), StrToInt(eMin.Text));
-    eHour.Text := FClock.Alert.GetHour();
-    eMin.Text := FClock.Alert.GetMin();
-    Caption := Caption +' - '+ FClock.Alert.GetTime(False);
+    eHour.Text := FClock.Alert.HourToString();
+    eMin.Text := FClock.Alert.MinuteToString();
+    Caption := Caption +' - '+ FClock.Alert.ToString(False);
 
     // Start alert
     FClock.AlertEnabled := True;
@@ -1022,11 +1006,12 @@ begin
     mmTimer.Enabled := False;
     mmCounter.Enabled := False;
 
-    MessageDlg(FLang.Format(LID_ALERT_CONFIRM, [FClock.Alert.GetTime(False)]),
+    MessageDlg(FLang.Format(LID_ALERT_CONFIRM, [FClock.Alert.ToString(False)]),
       mtInformation, [mbOK], 0);
 
   except
-    MessageDlg(FLang.GetString(LID_ALERT_INVALID), mtWarning, [mbOK], 0);
+    on E: EConvertError do
+      MessageDlg(FLang.GetString(LID_ALERT_INVALID), mtWarning, [mbOK], 0);
   end;  //of try
 end;
 
@@ -1041,8 +1026,8 @@ begin
 
   if mmCounter.Checked then
   begin
-    FClock.Time.Reset();
-    lHour.Caption := FClock.Time.GetTime();
+    FClock.Time := 0;
+    lHour.Caption := FClock.Time.ToString();
   end;  //of begin
 
   // Reset GUI
@@ -1108,7 +1093,7 @@ begin
       try
         if (Save and SaveColor) then
           for i := Low(Colors) to High(Colors) do
-            ColorDialog.CustomColors.Insert(i, 'Color'+ Chr(Ord('A') + i) +'='+ Colors[i]);
+            ColorDialog.CustomColors.Insert(i, Config.IdColor + Chr(Ord('A') + i) +'='+ Colors[i]);
 
         // Action "Ok" was called
         if ColorDialog.Execute then
@@ -1120,7 +1105,7 @@ begin
             FColor := ChosenColor;
 
             for i := Low(Colors) to High(Colors) do
-              Colors[i] := ColorDialog.CustomColors.Values['Color'+ Chr(Ord('A') + i)];
+              Colors[i] := ColorDialog.CustomColors.Values[Config.IdColor + Chr(Ord('A') + i)];
 
             // Write custom colors to config file
             Config.WriteColors(Colors);
@@ -1220,8 +1205,8 @@ begin
     mmCounter.Checked := False;
     mmTimer.Checked := True;
     FClock.TimerMode := True;
-    eHour.Text := FClock.Alert.GetHour();
-    eMin.Text := FClock.Alert.GetMin();
+    eHour.Text := FClock.Alert.HourToString();
+    eMin.Text := FClock.Alert.MinuteToString();
     eHour.SetFocus;
   end;  //of begin
 end;
@@ -1237,9 +1222,9 @@ begin
     mmTimer.Checked := False;
     mmCounter.Checked := True;
     FClock.TimerMode := False;
-    lHour.Caption := FClock.Time.GetTime();
-    eHour.Text := FClock.Alert.GetHour();
-    eMin.Text := FClock.Alert.GetMin();
+    lHour.Caption := FClock.Time.ToString();
+    eHour.Text := FClock.Alert.HourToString();
+    eMin.Text := FClock.Alert.MinuteToString();
     eHour.SetFocus;
   end;  //of begin
 end;

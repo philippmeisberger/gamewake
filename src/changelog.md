@@ -3,8 +3,8 @@
 
 An open-source project of PM Code Works
 
-Version 3.4.1  [*??.??.17*]
--------------
+Version 3.5  [*??.??.17*]
+-----------
 
 * Bug fix:
   * Disable alert after initiating a shutdown otherwise Game Wake is minimized and stays active
