@@ -9,6 +9,7 @@ Version 3.5  [*??.??.17*]
 * Bug fixes:
   * Disable alert after initiating a shutdown otherwise Game Wake is minimized and stays active
   * Blinking stays enabled (even if deselected) after alarm has occured and is set again
+  * Exception when loading default time (00:00) at startup in counter mode
   * Linux:
     * AV if language file was not found
 * Updater v3.1

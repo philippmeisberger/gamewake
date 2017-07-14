@@ -158,6 +158,7 @@ uses GameWakeOps;
 procedure TMain.FormCreate(Sender: TObject);
 var
   Config: TConfigFile;
+  ParsedAlertTime: TDateTime;
 {$IFDEF MSWINDOWS}
   AutoUpdate: Boolean;
 {$ELSE}
@@ -282,6 +283,15 @@ begin
 
   with FClock do
   begin
+    // Config file is already loaded: Edit fields contain last alarm time
+    if TryStrToTime(eHour.Text +':'+ eMin.Text, ParsedAlertTime) then
+      Alert := ParsedAlertTime
+    else
+      Alert := 0;
+
+    eHour.Text := Alert.HourToString();
+    eMin.Text := Alert.MinuteToString();
+
   {$IFNDEF MSWINDOWS}
     SoundPath := '/usr/lib/gamewake/';
   {$ENDIF}
@@ -473,11 +483,7 @@ begin
       begin
         eHour.Text := Config.ReadString(Config.SectionAlert, Config.IdHour, '00');
         eMin.Text := Config.ReadString(Config.SectionAlert, Config.IdMinute, '00');
-      end  //of if
-      else
-        // Counter can run at least 1 minute
-        if mmCounter.Checked then
-          eMin.Text := '01';
+      end;  //of begin
 
       // Load last sound?
       if Config.ReadBool(Config.SectionGlobal, Config.IdSaveSound, False) then
@@ -488,7 +494,7 @@ begin
           rgSounds.ItemIndex := AlertType
         else
           rgSounds.ItemIndex := 0;
-      end;  //of if
+      end;  //of begin
 
       // Load last set alert text?
       if Config.ReadBool(Config.SectionGlobal, Config.IdSaveText, False) then
@@ -980,10 +986,10 @@ begin
     FClock.Alert.SetTime(StrToInt(eHour.Text), StrToInt(eMin.Text));
     eHour.Text := FClock.Alert.HourToString();
     eMin.Text := FClock.Alert.MinuteToString();
-    Caption := Caption +' - '+ FClock.Alert.ToString(False);
 
     // Start alert
     FClock.AlertEnabled := True;
+    Caption := Caption +' - '+ FClock.Alert.ToString(False);
 
     // Disable GUI components
     eHour.Enabled := False;
