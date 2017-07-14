@@ -48,7 +48,7 @@ type
     {$IFDEF MSWINDOWS}
       IdAutoUpdate  = 'AutoUpdate';
     {$ENDIF}
-    function ReadColor(const ASection, AKey: string): TColor;
+    function ReadColor(const ASection, AKey: string; ADefault: TColor): TColor;
     procedure ReadColors(var AArray: array of string);
     procedure WriteColor(const ASection, AKey: string; AColor: TColor);
     procedure WriteColors(const AArray: array of string);
@@ -133,9 +133,9 @@ implementation
 
   Reads a TColor value from config . }
 
-function TConfigFile.ReadColor(const ASection, AKey: string): TColor;
+function TConfigFile.ReadColor(const ASection, AKey: string; ADefault: TColor): TColor;
 begin
-  Result := StringToColor(ReadString(ASection, AKey, ''));
+  Result := StringToColor(ReadString(ASection, AKey, ColorToString(ADefault)));
 end;
 
 { public TConfigFile.ReadColors

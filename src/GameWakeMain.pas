@@ -451,7 +451,6 @@ var
   Config: TConfigFile;
   Locale: TLocale;
   AlertType: Integer;
-  FlashColor: string;
 
 begin
   try
@@ -517,14 +516,8 @@ begin
       cbBlink.Checked := Config.ReadBool(Config.SectionAlert, Config.IdBlink, False);
 
       // Load flash color
-      if Config.ReadBool(Config.SectionGlobal, Config.IdSaveColor, True) then
-      begin
-        // Load color from config file
-        FlashColor := Config.ReadString(Config.SectionAlert, Config.IdColor, 'clRed');
-
-        if (FlashColor <> '') then
-          FColor := StringToColor(FlashColor);
-      end  //of begin
+      if Config.ReadBool(Config.SectionGlobal, Config.IdSaveColor, False) then
+        FColor := Config.ReadColor(Config.SectionAlert, Config.IdColor, clRed)
       else
         FColor := clRed;
 
