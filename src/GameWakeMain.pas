@@ -285,6 +285,7 @@ begin
   {$IFNDEF MSWINDOWS}
     SoundPath := '/usr/lib/gamewake/';
   {$ENDIF}
+    OnAlert := Blink;
     OnAlertBegin := Self.Alert;
     OnAlertEnd := BlinkEnd;
     OnCounting := Self.Counting;
@@ -314,10 +315,6 @@ end;
 
 procedure TMain.Alert(Sender: TObject);
 begin
-  // Enable blinking?
-  if cbBlink.Checked then
-    FClock.OnAlert := Blink;
-
   Application.Restore;
   Show;
   Application.BringToFront;
@@ -798,6 +795,9 @@ end;
 
 procedure TMain.Blink(Sender: TObject);
 begin
+  if not cbBlink.Checked then
+    Exit;
+
   if (Color = clBtnFace) then
     Color := FColor
   else

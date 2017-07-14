@@ -6,10 +6,11 @@ An open-source project of PM Code Works
 Version 3.5  [*??.??.17*]
 -----------
 
-* Bug fix:
+* Bug fixes:
   * Disable alert after initiating a shutdown otherwise Game Wake is minimized and stays active
-* Linux:
-  * Bug fix: AV if language file was not found
+  * Blinking stays enabled (even if deselected) after alarm has occured and is set again
+  * Linux:
+    * AV if language file was not found
 * Updater v3.1
   * Removed dependency to "Indy" component suite
   * Executable up to 1MB smaller
