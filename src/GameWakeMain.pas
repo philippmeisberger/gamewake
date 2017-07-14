@@ -1011,6 +1011,10 @@ begin
   except
     on E: EConvertError do
       MessageDlg(FLang.GetString(LID_ALERT_INVALID), mtWarning, [mbOK], 0);
+
+    on E: EAssertionFailed do
+      // TODO: Improve message
+      MessageDlg(FLang.GetString(LID_ALERT_INVALID), mtWarning, [mbOK], 0);
   end;  //of try
 end;
 
