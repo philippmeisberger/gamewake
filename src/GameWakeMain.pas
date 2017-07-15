@@ -17,9 +17,6 @@ uses
   Dialogs, GameWakeAPI, PMCW.LanguageFile, PMCW.Dialogs.About, PMCW.SysUtils,
   DateUtils,
 {$IFDEF MSWINDOWS}
-{$IFDEF PORTABLE}
-  Winapi.MMSystem,
-{$ENDIF}
   Winapi.Windows, System.UITypes, Winapi.ShlObj, Winapi.KnownFolders,
   Winapi.Messages, PMCW.Dialogs.Updater, PMCW.CA;
 {$ELSE}
