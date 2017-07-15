@@ -75,14 +75,6 @@ type
     mmView: TMenuItem;
     mmLang: TMenuItem;
     mmReport: TMenuItem;
-    procedure eHourMouseWheelDown(Sender: TObject; Shift: TShiftState;
-      MousePos: TPoint; var Handled: Boolean);
-    procedure eHourMouseWheelUp(Sender: TObject; Shift: TShiftState;
-      MousePos: TPoint; var Handled: Boolean);
-    procedure eMinMouseWheelDown(Sender: TObject; Shift: TShiftState;
-      MousePos: TPoint; var Handled: Boolean);
-    procedure eMinMouseWheelUp(Sender: TObject; Shift: TShiftState;
-      MousePos: TPoint; var Handled: Boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure mmInstallCertificateClick(Sender: TObject);
@@ -308,34 +300,6 @@ begin
     OnAlertEnd := BlinkEnd;
     OnCounting := Self.Counting;
   end;  //of with
-end;
-
-procedure TMain.eHourMouseWheelDown(Sender: TObject; Shift: TShiftState;
-  MousePos: TPoint; var Handled: Boolean);
-begin
-  bDecHour.Click;
-  Handled := True;
-end;
-
-procedure TMain.eHourMouseWheelUp(Sender: TObject; Shift: TShiftState;
-  MousePos: TPoint; var Handled: Boolean);
-begin
-  bIncHour.Click;
-  Handled := True;
-end;
-
-procedure TMain.eMinMouseWheelDown(Sender: TObject; Shift: TShiftState;
-  MousePos: TPoint; var Handled: Boolean);
-begin
-  bDecMin.Click;
-  Handled := True;
-end;
-
-procedure TMain.eMinMouseWheelUp(Sender: TObject; Shift: TShiftState;
-  MousePos: TPoint; var Handled: Boolean);
-begin
-  bIncMin.Click;
-  Handled := True;
 end;
 
 { TMain.FormDestroy

@@ -6,7 +6,6 @@ An open-source project of PM Code Works
 Version 3.5  [*??.??.17*]
 -----------
 
-* Alarm time can be changed by using mouse wheel
 * Bug fixes:
   * Disable alert after initiating a shutdown otherwise Game Wake is minimized and stays active
   * Blinking stays enabled (even if deselected) after alarm has occured and is set again

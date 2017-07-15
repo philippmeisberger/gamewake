@@ -173,8 +173,6 @@ object Main: TMain
     Text = '00'
     OnKeyPress = eHourKeyPress
     OnKeyUp = eHourKeyUp
-    OnMouseWheelDown = eHourMouseWheelDown
-    OnMouseWheelUp = eHourMouseWheelUp
   end
   object eMin: TEdit
     Left = 152
@@ -192,8 +190,6 @@ object Main: TMain
     Text = '00'
     OnKeyPress = eHourKeyPress
     OnKeyUp = eMinKeyUp
-    OnMouseWheelDown = eMinMouseWheelDown
-    OnMouseWheelUp = eMinMouseWheelUp
   end
   object bStop: TButton
     Left = 153
