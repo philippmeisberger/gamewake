@@ -56,6 +56,9 @@ type
 
   { TTimeHelper }
   TTimeHelper = record helper for TTime
+    const
+      TwoDigitFormat = '%.2d';
+
     function Hour(): Word; inline;
     function HourToString(): string; inline;
     function Minute(): Word; inline;
@@ -188,7 +191,7 @@ end;
 
 function TTimeHelper.HourToString(): string;
 begin
-  Result := Format('%.*d', [2, Hour()]);
+  Result := Format(TwoDigitFormat, [Hour()]);
 end;
 
 function TTimeHelper.Minute(): Word;
@@ -201,7 +204,7 @@ end;
 
 function TTimeHelper.MinuteToString(): string;
 begin
-  Result := Format('%.*d', [2, Minute()]);
+  Result := Format(TwoDigitFormat, [Minute()]);
 end;
 
 function TTimeHelper.Second(): Word;
@@ -214,7 +217,7 @@ end;
 
 function TTimeHelper.SecondToString(): string;
 begin
-  Result := Format('%.*d', [2, Second()]);
+  Result := Format(TwoDigitFormat, [Second()]);
 end;
 
 procedure TTimeHelper.SetHour(const AHour: Word);
