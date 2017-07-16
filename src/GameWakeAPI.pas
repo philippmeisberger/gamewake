@@ -75,6 +75,8 @@ type
   { TAlertType }
   TAlertType = (atClock, atHorn, atBing, atBeep, atShutdown, atNone);
 
+  TAlertSound = atClock..atBeep;
+
   { TClock }
   TClock = class(TObject)
   private
@@ -99,10 +101,8 @@ type
   public
     constructor Create(ATimerMode: Boolean);
     destructor Destroy; override;
-    function PlaySound(const ASound: string; ASynchronized: Boolean = False{$IFDEF MSWINDOWS};
-      AResource: Boolean = False{$ENDIF}): Boolean; overload;
-    function PlaySound(ASound: TAlertType; ASynchronized: Boolean = False{$IFDEF MSWINDOWS};
-      AResource: Boolean = False{$ENDIF}): Boolean; overload;
+    function PlaySound(const AFileName: string; ASynchronized: Boolean = False): Boolean; overload;
+    function PlaySound(AAlertSound: TAlertSound; ASynchronized: Boolean = False): Boolean; overload;
     { external }
     property Alert: TTime read FAlertTime write SetAlertTime;
     property AlertEnabled: Boolean read FAlertEnabled write SetAlertEnabled;
@@ -120,13 +120,13 @@ type
   TAlertThread = class(TThread)
   private
     FClock: TClock;
-    FAlertType: TAlertType;
+    FAlertSound: TAlertSound;
     FOnAlert: TNotifyEvent;
     procedure DoNotifyOnAlert();
   protected
     procedure Execute(); override;
   public
-    constructor Create(AClock: TClock; AAlertType: TAlertType);
+    constructor Create(AClock: TClock; AAlertSound: TAlertSound);
     property OnAlert: TNotifyEvent read FOnAlert write FOnAlert;
   end;
 
@@ -343,28 +343,84 @@ begin
   Result := ((Hour1 = Hour2) and (Min1 = Min2) and (Sec1 = Sec2));
 end;
 
-{ public TClock.PlaySound
+function TClock.PlaySound(const AFileName: string; ASynchronized: Boolean = False): Boolean;
+var
+{$IFNDEF MSWINDOWS}
+  Process: TProcess;
+{$ELSE}
+  Flags: DWORD;
+{$ENDIF}
 
-  Plays a predefined sound. }
+begin
+  if (AFileName = '') then
+    Exit(False);
 
-function TClock.PlaySound(ASound: TAlertType; ASynchronized: Boolean = False
-  {$IFDEF MSWINDOWS}; AResource: Boolean = False{$ENDIF}): Boolean;
+{$IFDEF MSWINDOWS}
+  if ASynchronized then
+    Flags := SND_SYNC
+  else
+    Flags := SND_ASYNC;
+
+  // Add volume slider in system tray
+  if CheckWin32Version(6) then
+    Inc(Flags, SND_SENTRY);
+
+  Result := MMSystem.PlaySound(PChar(AFileName), 0, Flags or SND_FILENAME);
+{$ELSE}
+  Process := TProcess.Create(nil);
+
+  try
+    Process.Executable := '/usr/bin/aplay';
+    Process.Parameters.Append(AFileName);
+
+    if ASynchronized then
+      Process.Options := Process.Options + [poWaitOnExit];
+
+   Process.Execute();
+   Result := True;
+
+  finally
+    Process.Free;
+  end;  //of try
+{$ENDIF}
+end;
+
+function TClock.PlaySound(AAlertSound: TAlertSound; ASynchronized: Boolean = False): Boolean;
+{$IFDEF MSWINDOWS}
+const
+  Synchronous: array[Boolean] of DWORD = (SND_ASYNC, SND_SYNC);
+{$ENDIF}
+
 var
   Sound: string;
 
 begin
-  case ASound of
+{$IFDEF MSWINDOWS}
+  if (AAlertSound = atBing) then
+  begin
+    // Play default Windows sound
+    Exit(MMSystem.PlaySound(PChar(SND_ALIAS_SYSTEMDEFAULT), 0,
+      Synchronous[ASynchronized] or SND_ALIAS_ID or SND_SENTRY));
+  end;  //of begin
+{$ENDIF}
+
+  case AAlertSound of
     atClock: Sound := 'bell';
     atHorn:  Sound := 'horn';
     atBing:  Sound := 'bing';
     atBeep:  Sound := 'beep';
-    else     Sound := '';
+    else     Exit(False);
   end;  //of case
 
-  if ((Sound <> ''){$IFDEF MSWINDOWS}and not AResource{$ENDIF}) then
-    Sound := Sound +'.wav';
+{$IFDEF PORTABLE}
+  Result := MMSystem.PlaySound(PChar(Sound), HInstance, Synchronous[ASynchronized] or
+    SND_RESOURCE or SND_SENTRY);
+{$ELSE}
+  if (FSoundPath <> '') then
+    Sound := IncludeTrailingPathDelimiter(FSoundPath) + Sound;
 
-  Result := PlaySound(Sound, ASynchronized{$IFDEF MSWINDOWS}, AResource{$ENDIF});
+  Result := PlaySound(ChangeFileExt(Sound, '.wav'), ASynchronized);
+{$ENDIF}
 end;
 
 { private TClock.SetAlertEnabled
@@ -420,58 +476,6 @@ begin
     FTime := 0;
 end;
 
-{ public TClock.PlaySound
-
-  Plays a *.wav file. }
-
-function TClock.PlaySound(const ASound: string; ASynchronized: Boolean = False
-  {$IFDEF MSWINDOWS}; AResource: Boolean = False{$ENDIF}): Boolean;
-var
-{$IFNDEF MSWINDOWS}
-  Process: TProcess;
-{$ELSE}
-  Flags: DWORD;
-{$ENDIF}
-
-begin
-  if (ASound = '') then
-    Exit(False);
-
-{$IFDEF MSWINDOWS}
-  if ASynchronized then
-    Flags := SND_SYNC
-  else
-    Flags := SND_ASYNC;
-
-  if AResource then
-    Inc(Flags, SND_MEMORY or SND_RESOURCE)
-  else
-    Inc(Flags, SND_FILENAME);
-
-  // Add volume slider in system tray
-  if CheckWin32Version(6) then
-    Inc(Flags, SND_SENTRY);
-
-  Result := MMSystem.PlaySound(PChar(FSoundPath + ASound), HInstance, Flags);
-{$ELSE}
-  Process := TProcess.Create(nil);
-
-  try
-    Process.Executable := '/usr/bin/aplay';
-    Process.Parameters.Append(FSoundPath + ASound);
-
-    if ASynchronized then
-      Process.Options := Process.Options + [poWaitOnExit];
-
-   Process.Execute();
-   Result := True;
-
-  finally
-    Process.Free;
-  end;  //of try
-{$ENDIF}
-end;
-
 
 { TAlertThread }
 
@@ -479,12 +483,12 @@ end;
 
   Constructor for creating a TAlertThread instance. }
 
-constructor TAlertThread.Create(AClock: TClock; AAlertType: TAlertType);
+constructor TAlertThread.Create(AClock: TClock; AAlertSound: TAlertSound);
 begin
   inherited Create(True);
   FreeOnTerminate := True;
   FClock := AClock;
-  FAlertType := AAlertType;
+  FAlertSound := AAlertSound;
 end;
 
 { private TAlertThread.DoNotifyOnAlert
@@ -506,7 +510,7 @@ begin
   while not Terminated do
   begin
     Synchronize(DoNotifyOnAlert);
-    FClock.PlaySound(FAlertType, True{$IFDEF PORTABLE}, True{$ENDIF});
+    FClock.PlaySound(FAlertSound, True);
   end;  //of begin
 end;
 

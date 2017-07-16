@@ -885,7 +885,7 @@ end;
 
 procedure TMain.bPlayClockClick(Sender: TObject);
 begin
-  FClock.PlaySound({$IFDEF PORTABLE}'BELL', False, True{$ELSE}'bell.wav'{$ENDIF});
+  FClock.PlaySound(atClock);
 end;
 
 { TMain.bPlayHornClick
@@ -894,7 +894,7 @@ end;
 
 procedure TMain.bPlayHornClick(Sender: TObject);
 begin
-  FClock.PlaySound({$IFDEF PORTABLE}'HORN', False, True{$ELSE}'horn.wav'{$ENDIF});
+  FClock.PlaySound(atHorn);
 end;
 
 { TMain.bPlayBingClick
@@ -903,11 +903,7 @@ end;
 
 procedure TMain.bPlayBingClick(Sender: TObject);
 begin
-{$IFDEF PORTABLE}
-  SysUtils.Beep();
-{$ELSE}
-  FClock.PlaySound('bing.wav');
-{$ENDIF}
+  FClock.PlaySound(atBing);
 end;
 
 { TMain.bPlayBeepClick
@@ -916,7 +912,7 @@ end;
 
 procedure TMain.bPlayBeepClick(Sender: TObject);
 begin
-  FClock.PlaySound({$IFDEF PORTABLE}'BEEP', False, True{$ELSE}'beep.wav'{$ENDIF});
+  FClock.PlaySound(atBeep);
 end;
 
 { TMain.eHourKeyPress
