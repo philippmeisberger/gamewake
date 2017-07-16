@@ -59,6 +59,7 @@ type
     const
       TwoDigitFormat = '%.2d';
 
+    function EqualsInSeconds(const ATime: TTime): Boolean; inline;
     function Hour(): Word; inline;
     function HourToString(): string; inline;
     function Minute(): Word; inline;
@@ -93,7 +94,6 @@ type
     FOnAlertEnd: TNotifyEvent;
     FSoundPath: string;
     procedure Count(Sender: TObject);
-    function IsSameTime(const ATime1, ATime2: TTime): Boolean; inline;
     procedure SetAlertEnabled(const AAlertEnabled: Boolean);
     procedure SetTimerMode(const ATimerMode: Boolean);
     procedure SetAlertTime(const AAlertTime: TTime);
@@ -180,6 +180,16 @@ end;
 
 
 { TTimeHelper }
+
+function TTimeHelper.EqualsInSeconds(const ATime: TTime): Boolean;
+var
+  Hour1, Hour2, Min1, Min2, Sec1, Sec2, Msec: Word;
+
+begin
+  DecodeTime(Self, Hour1, Min1, Sec1, Msec);
+  DecodeTime(ATime, Hour2, Min2, Sec2, Msec);
+  Result := ((Hour1 = Hour2) and (Min1 = Min2) and (Sec1 = Sec2));
+end;
 
 function TTimeHelper.Hour(): Word;
 var
@@ -299,7 +309,7 @@ begin
   if FAlertEnabled then
   begin
     // Current time matches alert time: Call alert!
-    if IsSameTime(FTime, FAlertTime) then
+    if FTime.EqualsInSeconds(FAlertTime) then
     begin
       // Stop TTimer in counter mode
       if not FTimerMode then
@@ -327,20 +337,6 @@ begin
     if IsSameTime(IncMinute(FAlertTime), FTime) then
       SetAlertEnabled(False);
   end; //of begin
-end;
-
-{ private TClock.IsSameTime
-
-  Checks if two times are the same except milliseconds. }
-
-function TClock.IsSameTime(const ATime1, ATime2: TTime): Boolean;
-var
-  Hour1, Hour2, Min1, Min2, Sec1, Sec2, Msec: Word;
-
-begin
-  DecodeTime(ATime1, Hour1, Min1, Sec1, Msec);
-  DecodeTime(ATime2, Hour2, Min2, Sec2, Msec);
-  Result := ((Hour1 = Hour2) and (Min1 = Min2) and (Sec1 = Sec2));
 end;
 
 function TClock.PlaySound(const AFileName: string; ASynchronized: Boolean = False): Boolean;
@@ -429,7 +425,7 @@ end;
 
 procedure TClock.SetAlertEnabled(const AAlertEnabled: Boolean);
 begin
-  if (AAlertEnabled and not FTimerMode and IsSameTime(FTime, FAlertTime)) then
+  if (AAlertEnabled and not FTimerMode and FTime.EqualsInSeconds(FAlertTime)) then
     raise EAssertionFailed.Create('Alert time and current time cannot be equal!');
 
   FAlertEnabled := AAlertEnabled;
@@ -447,7 +443,7 @@ end;
 
 procedure TClock.SetAlertTime(const AAlertTime: TTime);
 begin
-  if (FAlertEnabled and not FTimerMode and IsSameTime(FTime, AAlertTime)) then
+  if (FAlertEnabled and not FTimerMode and FTime.EqualsInSeconds(AAlertTime)) then
     raise EAssertionFailed.Create('Alert time and current time cannot be equal!');
 
   FAlertTime := AAlertTime;
@@ -455,7 +451,7 @@ end;
 
 procedure TClock.SetTime(const ATime: TTime);
 begin
-  if (FAlertEnabled and not FTimerMode and IsSameTime(ATime, FAlertTime)) then
+  if (FAlertEnabled and not FTimerMode and ATime.EqualsInSeconds(FAlertTime)) then
     raise EAssertionFailed.Create('Alert time and current time cannot be equal!');
 
   FTime := ATime;
