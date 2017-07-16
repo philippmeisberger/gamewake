@@ -11,6 +11,7 @@ Version 3.5  [*??.??.17*]
   * Blinking stays enabled (even if deselected) after alarm has occured and is set again
   * Exception when loading default time (00:00) at startup in counter mode
   * Automatically alarm termination after 1 minute does not work in counter mode
+  * Portable Edition does not play bing sound
   * Linux:
     * AV if language file was not found
 * Updater v3.1

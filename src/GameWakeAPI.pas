@@ -21,7 +21,9 @@ uses
   DateUtils, SysUtils, Classes, ExtCtrls, Graphics, IniFiles;
 
 type
-  { TConfigFile }
+  /// <summary>
+  ///   Manages the configuration file.
+  /// </summary>
   TConfigFile = class(TIniFile)
   public
     const
@@ -48,37 +50,185 @@ type
     {$IFDEF MSWINDOWS}
       IdAutoUpdate  = 'AutoUpdate';
     {$ENDIF}
+    /// <summary>
+    ///   Reads a color from the configuration file.
+    /// </summary>
+    /// <param name="ASection">
+    ///   The section to load the color from.
+    /// </param>
+    /// <param name="AKey">
+    ///   The key to load the color from.
+    /// </param>
+    /// <param name="ADefault">
+    ///   The color to use if reading failed.
+    /// </param>
+    /// <returns>
+    ///   The color.
+    /// </returns>
     function ReadColor(const ASection, AKey: string; ADefault: TColor): TColor;
+
+    /// <summary>
+    ///   Reads an array of custom colors from the configuration file.
+    /// </summary>
+    /// <param name="AArray">
+    ///   The array containing the colors.
+    /// </param>
     procedure ReadColors(var AArray: array of string);
+
+    /// <summary>
+    ///   Writes a color to the configuration file.
+    /// </summary>
+    /// <param name="ASection">
+    ///   The section to store the value.
+    /// </param>
+    /// <param name="AKey">
+    ///   The key to store the value.
+    /// </param>
+    /// <param name="AColor">
+    ///   The color.
+    /// </param>
     procedure WriteColor(const ASection, AKey: string; AColor: TColor);
+
+    /// <summary>
+    ///   Writes an array of custom colors to the configuration file.
+    /// </summary>
+    /// <param name="AArray">
+    ///   The array containing the colors.
+    /// </param>
     procedure WriteColors(const AArray: array of string);
   end;
 
-  { TTimeHelper }
   TTimeHelper = record helper for TTime
     const
+      /// <summary>
+      ///   Two digit format to add a leading zero to values between 0 and 9.
+      /// </summary>
       TwoDigitFormat = '%.2d';
 
-    function EqualsInSeconds(const ATime: TTime): Boolean; inline;
+    /// <summary>
+    ///   Checks if a given time is equal to current time ignoring milliseconds.
+    /// </summary>
+    /// <param name="ATime">
+    ///   The time to check.
+    /// </param>
+    /// <returns>
+    ///   <c>True</c> if both times are equal except milliseconds or <c>False</c>
+    ///   otherwise.
+    /// </returns>
+    function EqualsInSeconds(const ATime: TTime): Boolean;
+
+    /// <summary>
+    ///   Decodes the hour.
+    /// </summary>
+    /// <returns>
+    ///   The hour.
+    /// </returns>
     function Hour(): Word; inline;
+
+    /// <summary>
+    ///   Decodes the hour and converts it to a string.
+    /// </summary>
+    /// <returns>
+    ///   The hour as string.
+    /// </returns>
     function HourToString(): string; inline;
+
+    /// <summary>
+    ///   Decodes the minute.
+    /// </summary>
+    /// <returns>
+    ///   The minute.
+    /// </returns>
     function Minute(): Word; inline;
+
+    /// <summary>
+    ///   Decodes the minute and converts it to a string.
+    /// </summary>
+    /// <returns>
+    ///   The minute as string.
+    /// </returns>
     function MinuteToString(): string; inline;
+
+    /// <summary>
+    ///   Decodes the second.
+    /// </summary>
+    /// <returns>
+    ///   The second.
+    /// </returns>
     function Second(): Word; inline;
+
+    /// <summary>
+    ///   Decodes the second and converts it to a string.
+    /// </summary>
+    /// <returns>
+    ///   The second as string.
+    /// </returns>
     function SecondToString(): string; inline;
+
+    /// <summary>
+    ///   Changes the time.
+    /// </summary>
+    /// <param name="AHour">
+    ///   The hour.
+    /// </param>
+    /// <param name="AMinute">
+    ///   The minute.
+    /// </param>
+    /// <param name="ASecond">
+    ///   Optional: The second.
+    /// </param>
     procedure SetTime(const AHour, AMinute: Word; const ASecond: Word = 0); inline;
+
+    /// <summary>
+    ///   Changes the hour.
+    /// </summary>
+    /// <param name="AHour">
+    ///   The hour.
+    /// </param>
     procedure SetHour(const AHour: Word); inline;
+
+    /// <summary>
+    ///   Changes the minute.
+    /// </summary>
+    /// <param name="AMinute">
+    ///   The minute.
+    /// </param>
     procedure SetMinute(const AMinute: Word); inline;
+
+    /// <summary>
+    ///   Changes the second.
+    /// </summary>
+    /// <param name="ASecond">
+    ///   The second.
+    /// </param>
     procedure SetSecond(const ASecond: Word); inline;
+
+    /// <summary>
+    ///   Converts the time to a string.
+    /// </summary>
+    /// <param name="ALongFormat">
+    ///   Optional: Set to <c>True</c> to use a HH:MM:SS format or set to
+    ///   <c>False</c> to use a HH:MM format.
+    /// </param>
+    /// <returns>
+    ///   The time as string.
+    /// </returns>
     function ToString(const ALongFormat: Boolean = True): string; inline;
   end;
 
-  { TAlertType }
+  /// <summary>
+  ///   Possible types of alert.
+  /// </summary>
   TAlertType = (atClock, atHorn, atBing, atBeep, atShutdown, atNone);
 
+  /// <summary>
+  ///   Possible alert sounds.
+  /// </summary>
   TAlertSound = atClock..atBeep;
 
-  { TClock }
+  /// <summary>
+  ///   An alarm clock which supports a timer and counter mode.
+  /// </summary>
   TClock = class(TObject)
   private
     FTimer: TTimer;
@@ -100,24 +250,108 @@ type
     procedure SetAlertTime(const AAlertTime: TTime);
     procedure SetTime(const ATime: TTime);
   public
+    /// <summary>
+    ///   Contructor for creating a <c>TClock</c> instance.
+    /// </summary>
+    /// <param name="ATimerMode">
+    ///   Set to <c>True</c> to use a default clock or set to <c>False</c> to
+    ///   use a counter.
+    /// </param>
     constructor Create(ATimerMode: Boolean);
+
+    /// <summary>
+    ///   Destructor for destroying a <c>TClock</c> instance.
+    /// </summary>
     destructor Destroy; override;
+
+    /// <summary>
+    ///   Plays a .wav file.
+    /// </summary>
+    /// <param name="AFileName">
+    ///   The .wav file to play.
+    /// </param>
+    /// <param name="ASynchronized">
+    ///   Set to <c>True</c> to wait until the sound is finished or <c>False</c>
+    ///   to immediately return.
+    /// </param>
+    /// <returns>
+    ///   <c>True</c> if sound was successfully played or <c>False</c> otherwise.
+    /// </returns>
     function PlaySound(const AFileName: string; ASynchronized: Boolean = False): Boolean; overload;
+
+    /// <summary>
+    ///   Plays an alarm sound.
+    /// </summary>
+    /// <param name="AAlertSound">
+    ///   The alarm sound.
+    /// </param>
+    /// <param name="ASynchronized">
+    ///   Set to <c>True</c> to wait until the sound is finished or <c>False</c>
+    ///   to immediately return.
+    /// </param>
+    /// <returns>
+    ///   <c>True</c> if sound was successfully played or <c>False</c> otherwise.
+    /// </returns>
     function PlaySound(AAlertSound: TAlertSound; ASynchronized: Boolean = False): Boolean; overload;
-    { external }
+
+    /// <summary>
+    ///   Gets or sets the alarm time.
+    /// </summary>
     property Alert: TTime read FAlertTime write SetAlertTime;
+
+    /// <summary>
+    ///   Enables or disables the alarm clock.
+    /// </summary>
     property AlertEnabled: Boolean read FAlertEnabled write SetAlertEnabled;
+
+    /// <summary>
+    ///   Gets or sets the alert type.
+    /// </summary>
     property AlertType: TAlertType read FAlertType write FAlertType;
+
+    /// <summary>
+    ///   Occurs while alert sound is played.
+    /// </summary>
     property OnAlert: TNotifyEvent read FOnAlert write FOnAlert;
+
+    /// <summary>
+    ///   Occurs when alert starts playing.
+    /// </summary>
     property OnAlertBegin: TNotifyEvent read FOnAlertBegin write FOnAlertBegin;
+
+    /// <summary>
+    ///   Occurs when alert stops playing.
+    /// </summary>
     property OnAlertEnd: TNotifyEvent read FOnAlertEnd write FOnAlertEnd;
+
+    /// <summary>
+    ///   Occurs when current time is incremented.
+    /// </summary>
     property OnCounting: TNotifyEvent read FOnCounting write FOnCounting;
+
+    /// <summary>
+    ///   Gets or sets the path to the directory containing the sounds.
+    /// </summary>
     property SoundPath: string read FSoundPath write FSoundPath;
+
+    /// <summary>
+    ///   Gets or sets the current time.
+    /// </summary>
     property Time: TTime read FTime write SetTime;
+
+    /// <summary>
+    ///   Use a timer or a counter.
+    /// </summary>
+    /// <remarks>
+    ///   Set to <c>True</c> to use a default clock or set to <c>False</c> to
+    ///   use a counter.
+    /// </remarks>
     property TimerMode: Boolean read FTimerMode write SetTimerMode;
   end;
 
-  { TAlertThread }
+  /// <summary>
+  ///   Plays an alarm sound.
+  /// </summary>
   TAlertThread = class(TThread)
   private
     FClock: TClock;
@@ -127,7 +361,20 @@ type
   protected
     procedure Execute(); override;
   public
+    /// <summary>
+    ///   Constructor for creating a <c>TAlertThread</c> instance.
+    /// </summary>
+    /// <param name="AClock">
+    ///   A <see cref="TClock"/> instance.
+    /// </param>
+    /// <param name="AAlertSound">
+    ///   The alarm sound to play.
+    /// </param>
     constructor Create(AClock: TClock; AAlertSound: TAlertSound);
+
+    /// <summary>
+    ///   Occurs while sound is played.
+    /// </summary>
     property OnAlert: TNotifyEvent read FOnAlert write FOnAlert;
   end;
 
@@ -135,18 +382,10 @@ implementation
 
 { TConfigFile }
 
-{ public TConfigFile.ReadColor
-
-  Reads a TColor value from config . }
-
 function TConfigFile.ReadColor(const ASection, AKey: string; ADefault: TColor): TColor;
 begin
   Result := StringToColor(ReadString(ASection, AKey, ColorToString(ADefault)));
 end;
-
-{ public TConfigFile.ReadColors
-
-  Returns an array containing all saved custom colors from config file. }
 
 procedure TConfigFile.ReadColors(var AArray: array of string);
 var
@@ -157,18 +396,10 @@ begin
     AArray[i] := ReadString(SectionColors, IdColor + IntToStr(i), '');
 end;
 
-{ public TConfigFile.WriteColor
-
-  Writes a TColor value into config file. }
-
 procedure TConfigFile.WriteColor(const ASection, AKey: string; AColor: TColor);
 begin
   WriteString(ASection, AKey, ColorToString(AColor));
 end;
-
-{ public TConfigFile.WriteColors
-
-  Writes an array containing all saved custom colors into config file. }
 
 procedure TConfigFile.WriteColors(const AArray: array of string);
 var
@@ -262,10 +493,6 @@ end;
 
 { TClock }
 
-{ public TClock.Create
-
-  Constructor for creating a TClock instance. }
-
 constructor TClock.Create(ATimerMode: Boolean);
 begin
   inherited Create;
@@ -286,10 +513,6 @@ begin
   SetTimerMode(ATimerMode);
 end;
 
-{ public TClock.Destroy
-
-  Destructor for destroying a TClock instance. }
-
 destructor TClock.Destroy;
 begin
   FreeAndNil(FTimer);
@@ -303,10 +526,6 @@ begin
   if Assigned(FOnAlertEnd) then
     FOnAlertEnd(Self);
 end;
-
-{ public TClock.Count
-
-  Increments time a calls alert. }
 
 procedure TClock.Count(Sender: TObject);
 begin
@@ -424,10 +643,6 @@ begin
 {$ENDIF}
 end;
 
-{ private TClock.SetAlertEnabled
-
-  Enables or disables the current alert. }
-
 procedure TClock.SetAlertEnabled(const AAlertEnabled: Boolean);
 begin
   if (AAlertEnabled and not FTimerMode and FTime.EqualsInSeconds(FAlertTime)) then
@@ -462,10 +677,6 @@ begin
   FTime := ATime;
 end;
 
-{ private TClock.SetTimerMode
-
-  Changes between the modes. }
-
 procedure TClock.SetTimerMode(const ATimerMode: Boolean);
 begin
   FTimerMode := ATimerMode;
@@ -480,10 +691,6 @@ end;
 
 { TAlertThread }
 
-{ public TAlertThread.Create
-
-  Constructor for creating a TAlertThread instance. }
-
 constructor TAlertThread.Create(AClock: TClock; AAlertSound: TAlertSound);
 begin
   inherited Create(True);
@@ -492,19 +699,11 @@ begin
   FAlertSound := AAlertSound;
 end;
 
-{ private TAlertThread.DoNotifyOnAlert
-
-  Notifies the alert. }
-
 procedure TAlertThread.DoNotifyOnAlert;
 begin
   if Assigned(FOnAlert) then
     FOnAlert(Self);
 end;
-
-{ protected TAlertThread.Execute
-
-  Thread main method that plays a *.wav file. }
 
 procedure TAlertThread.Execute();
 var
