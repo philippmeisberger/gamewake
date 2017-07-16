@@ -93,6 +93,7 @@ type
     FOnAlert,
     FOnAlertEnd: TNotifyEvent;
     FSoundPath: string;
+    procedure AlertEnd(Sender: TObject);
     procedure Count(Sender: TObject);
     procedure SetAlertEnabled(const AAlertEnabled: Boolean);
     procedure SetTimerMode(const ATimerMode: Boolean);
@@ -295,6 +296,14 @@ begin
   inherited Destroy;
 end;
 
+procedure TClock.AlertEnd(Sender: TObject);
+begin
+  FAlertThread := nil;
+
+  if Assigned(FOnAlertEnd) then
+    FOnAlertEnd(Self);
+end;
+
 { public TClock.Count
 
   Increments time a calls alert. }
@@ -328,14 +337,10 @@ begin
       with (FAlertThread as TAlertThread) do
       begin
         OnAlert := Self.OnAlert;
-        OnTerminate := FOnAlertEnd;
+        OnTerminate := AlertEnd;
         Start();
       end;  //of begin
     end;  //of begin
-
-    // Automatically abort alert after 1 minute
-    if IsSameTime(IncMinute(FAlertTime), FTime) then
-      SetAlertEnabled(False);
   end; //of begin
 end;
 
@@ -502,11 +507,20 @@ end;
   Thread main method that plays a *.wav file. }
 
 procedure TAlertThread.Execute();
+var
+  AlertEndTime: TTime;
+
 begin
+  // Stop alarm after 1 minute
+  AlertEndTime := IncMinute(Time());
+
   while not Terminated do
   begin
     Synchronize(DoNotifyOnAlert);
     FClock.PlaySound(FAlertSound, True);
+
+    if (Time() >= AlertEndTime) then
+      Break;
   end;  //of begin
 end;
 
