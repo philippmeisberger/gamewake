@@ -1,26 +1,32 @@
 syntax: glob
-BACKUP/**
+BACKUP
 backup
 __history
+__recovery
+desktop.ini
 bin/*-linux/**
-src/lib/**
+**.orig
+**.zip
+
+# Generated files
 **.a
 **.o
 **.or
-**.orig
 **.ppu
-**.lps
-**.dcu
+**.compiled
 **.exe
-**.zip
-**.bak
-**.stat
+**.dcu
 **.rsm
 **.mes
 **.map
 **.drc
+
+# IDE files
+**.stat
 **.identcache
+**.lps
 **.local
+**.bak
 
 # Debian files
 **.deb
