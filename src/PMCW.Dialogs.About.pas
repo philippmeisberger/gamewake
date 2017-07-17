@@ -298,7 +298,7 @@ begin
   FImage.Picture.Icon.Handle := LoadImage(HInstance, 'MAINICON', IMAGE_ICON,
     FImage.Width, FImage.Height, LR_DEFAULTCOLOR);
 {$ELSE}
-  FImage.Picture.Icon.LoadFromFile(FImageFile);
+  FImage.Picture.LoadFromFile(FImageFile);
 {$ENDIF}
   FForm.ShowModal();
   Result := True;

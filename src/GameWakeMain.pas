@@ -72,6 +72,7 @@ type
     mmView: TMenuItem;
     mmLang: TMenuItem;
     mmReport: TMenuItem;
+    TrayIcon: TTrayIcon;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure mmInstallCertificateClick(Sender: TObject);
@@ -108,10 +109,11 @@ type
     procedure lCopyMouseLeave(Sender: TObject);
     procedure Blink(Sender: TObject);
     procedure mmLangClick(Sender: TObject);
+    procedure TrayIconMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     FClock: TClock;
     FLang: TLanguageFile;
-    FTrayIcon: TTrayIcon;
     FColor: TColor;
     FConfigPath: string;
   {$IFDEF MSWINDOWS}
@@ -127,8 +129,6 @@ type
   {$ENDIF}
     procedure SaveToIni();
     procedure Shutdown();
-    procedure TrayMouseUp(Sender: TObject; AButton: TMouseButton;
-      AShiftState: TShiftState; X, Y: Integer);
     procedure LanguageChanged();
   end;
 
@@ -313,7 +313,6 @@ begin
 {$IFDEF MSWINDOWS}
   FreeAndNil(FUpdateCheck);
 {$ENDIF}
-  FreeAndNil(FTrayIcon);
 end;
 
 { private TMain.Alert
@@ -771,23 +770,19 @@ begin
 end;
 {$ENDIF}
 
-{ private TMain.TrayMouseUp
-
-  Event that is called when detecting mouse activity. }
-
-procedure TMain.TrayMouseUp(Sender: TObject; AButton: TMouseButton;
-  AShiftState: TShiftState; X, Y: Integer);
+procedure TMain.TrayIconMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
 begin
-  case AButton of
+  case Button of
     // Show Balloon hint on left click
     mbLeft:
       begin
         if mmTimer.Checked then
-          FTrayIcon.BalloonHint := FLang.Format(LID_ALERT_AT, [FClock.Alert.ToString(False)])
+          TrayIcon.BalloonHint := FLang.Format(LID_ALERT_AT, [FClock.Alert.ToString(False)])
         else
-          FTrayIcon.BalloonHint := FLang.Format(LID_ALERT_REMAINING, [TTime(FClock.Alert - FClock.Time).ToString()]);
+          TrayIcon.BalloonHint := FLang.Format(LID_ALERT_REMAINING, [TTime(FClock.Alert - FClock.Time).ToString()]);
 
-        FTrayIcon.ShowBalloonHint();
+        TrayIcon.ShowBalloonHint();
       end;  //of begin
   end;  //of case
 end;
@@ -828,11 +823,9 @@ end;
 
 procedure TMain.pmOpenClick(Sender: TObject);
 begin
-  if Assigned(FTrayIcon) then
-    FTrayIcon.Visible := False;
-
-  Show;
-  BringToFront;
+  TrayIcon.Visible := False;
+  Show();
+  BringToFront();
 end;
 
 { TMain.bIncHourClick
@@ -1375,17 +1368,10 @@ begin
     Exit;
   end;  //of begin
 
-  // Create tray icon
-  if not Assigned(FTrayIcon) then
-    FTrayIcon := TTrayIcon.Create(Self);
-
   try
-    with FTrayIcon do
+    with TrayIcon do
     begin
       BalloonTitle := Application.Title;
-      BalloonFlags := bfInfo;
-      OnMouseUp := TrayMouseUp;
-      PopUpMenu := pmMenu;
       Hint := Application.Title;
     {$IFDEF MSWINDOWS}
       Icon.Handle := Application.Icon.Handle;
@@ -1401,7 +1387,6 @@ begin
   except
     on E: Exception do
     begin
-      FreeAndNil(FTrayIcon);
       Show();
       FLang.ShowException(FLang.GetString(LID_TRAY_CREATION_FAILED), E.Message);
     end;
