@@ -8,6 +8,7 @@
       <Title Value="Game Wake"/>
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
+      <Icon Value="0"/>
     </General>
     <i18n>
       <EnableI18N LFM="False"/>
@@ -76,7 +77,6 @@
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
-    <PathDelim Value="/"/>
     <Target>
       <Filename Value="../bin/$(TargetCPU)-$(TargetOS)/gamewake"/>
     </Target>

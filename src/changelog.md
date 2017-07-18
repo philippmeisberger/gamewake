@@ -6,19 +6,19 @@ An open-source project of PM Code Works
 Version 3.5  [*??.??.17*]
 -----------
 
+* Usage of Delphi/FPC TTime
+* Game Wake is terminated if language file cannot be found on Linux
 * Bug fixes:
   * Disable alert after initiating a shutdown otherwise Game Wake is minimized and stays active
   * Blinking stays enabled (even if deselected) after alarm has occured and is set again
   * Exception when loading default time (00:00) at startup in counter mode
-  * Automatically alarm termination after 1 minute does not work in counter mode
+  * Automatic alarm termination after 1 minute does not work in counter mode
   * Portable Edition does not play bing sound
-  * Linux:
-    * AV if language file was not found
 * Updater v3.1
   * Removed dependency to "Indy" component suite
   * Executable up to 1MB smaller
   * Removed "Search for update" under Linux
-* Usage of LCL/VCL standard INI file class
+* Usage of Delphi/FPC TIniFile class
 
 Version 3.4  [*18.05.16*]
 -----------
