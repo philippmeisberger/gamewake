@@ -30,11 +30,9 @@ win64: src\$(PROJECTNAME).dproj
 
 sign: $(WIN32EXE) $(WIN64EXE)
 	$(SIGN) $(WIN32EXE) $(WIN64EXE)
-	move $(WIN32EXE) "$(WIN32DIR)\Game Wake.exe"
-	move $(WIN64EXE) "$(WIN64DIR)\Game Wake.exe"
 
 buildsetup: setup\$(PROJECTNAME).iss
-	$(INNOSETUP) /cc setup\$(PROJECTNAME).iss
+	$(INNOSETUP) /cc "setup\$(PROJECTNAME).iss"
 
 win32portable: src\$(PROJECTNAME).dproj
 	SET BDS=$(BDSDIR)

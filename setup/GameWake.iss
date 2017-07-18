@@ -1,6 +1,6 @@
 #define MyAppName "Game Wake"
 #define MyAppURL "http://www.pm-codeworks.de"
-#define MyAppExeName "Game Wake.exe"
+#define MyAppExeName "GameWake.exe"
 #define MyAppExePath32 "..\bin\Win32\Release\"
 #define MyAppExePath64 "..\bin\Win64\Release\"
 #define FileVersion GetFileVersion(MyAppExePath32 + MyAppExeName)
@@ -60,6 +60,10 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram, {#MyAppName}
 [Registry]
 Root: HKCU; Subkey: "SOFTWARE\PM Code Works\{#MyAppName}"; Flags: deletekey
 Root: HKCU; Subkey: "SOFTWARE\PM Code Works"; Flags: uninsdeletekeyifempty  
+
+[InstallDelete]
+; Replace "Game Wake.exe" by "GameWake.exe"
+Type: files; Name: "{app}\Game Wake.exe"
 
 [UninstallDelete]
 Type: files; Name: "{userappdata}\{#MyAppName}\gamewake.ini"
