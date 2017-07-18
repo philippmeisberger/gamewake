@@ -772,15 +772,21 @@ end;
 
 procedure TMain.TrayIconMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
+var
+  TimeRemaining: TTime;
+
 begin
   case Button of
     // Show Balloon hint on left click
     mbLeft:
       begin
-        if mmTimer.Checked then
-          TrayIcon.BalloonHint := FLang.Format(LID_ALERT_AT, [FClock.Alert.ToString(False)])
+        if not FClock.TimerMode then
+        begin
+          TimeRemaining := FClock.Alert - FClock.Time;
+          TrayIcon.BalloonHint := FLang.Format(LID_ALERT_REMAINING, [TimeRemaining.ToString()]);
+        end  //of begin
         else
-          TrayIcon.BalloonHint := FLang.Format(LID_ALERT_REMAINING, [TTime(FClock.Alert - FClock.Time).ToString()]);
+          TrayIcon.BalloonHint := FLang.Format(LID_ALERT_AT, [FClock.Alert.ToString(False)]);
 
         TrayIcon.ShowBalloonHint();
       end;  //of begin
