@@ -1,9 +1,9 @@
 PROJECTNAME=GameWake
 WIN32DIR=bin\Win32
-WIN32EXE=$(WIN32DIR)\$(PROJECTNAME).exe
+WIN32EXE=$(WIN32DIR)\Release\$(PROJECTNAME).exe
 PORTABLE32EXE=$(WIN32DIR)\Portable\$(PROJECTNAME).exe
 WIN64DIR=bin\Win64
-WIN64EXE=$(WIN64DIR)\$(PROJECTNAME).exe
+WIN64EXE=$(WIN64DIR)\Release\$(PROJECTNAME).exe
 PORTABLE64EXE=$(WIN64DIR)\Portable\$(PROJECTNAME).exe
 
 BDSDIR=C:\Program Files (x86)\Embarcadero\Studio\16.0
@@ -46,8 +46,6 @@ win64portable: src\$(PROJECTNAME).dproj
 
 signportable: $(PORTABLE32EXE) $(PORTABLE64EXE)
 	$(SIGN) $(PORTABLE32EXE) $(PORTABLE64EXE)
-	move $(PORTABLE32EXE) "$(WIN32DIR)\Portable\Game Wake.exe"
-	move $(PORTABLE64EXE) "$(WIN64DIR)\Portable\Game Wake.exe"
 
 portable: win32portable win64portable signportable
 

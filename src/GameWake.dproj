@@ -69,7 +69,6 @@
         <Icon_MainIcon>gamewake.ico</Icon_MainIcon>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
-        <DCC_ExeOutput>..\bin\$(Platform)</DCC_ExeOutput>
         <VerInfo_AutoIncVersion>false</VerInfo_AutoIncVersion>
         <DCC_DebugInformation>0</DCC_DebugInformation>
         <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
@@ -150,7 +149,7 @@
                 <Platform value="Win64">True</Platform>
             </Platforms>
             <Deployment Version="2">
-                <DeployFile LocalName="..\bin\Win64\GameWake.exe" Configuration="Release" Class="ProjectOutput">
+                <DeployFile LocalName="..\bin\Win64\Release\GameWake.exe" Configuration="Release" Class="ProjectOutput">
                     <Platform Name="Win64">
                         <RemoteName>GameWake.exe</RemoteName>
                         <Overwrite>true</Overwrite>
