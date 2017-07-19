@@ -4,7 +4,7 @@
 #define MyAppExePath32 "..\bin\Win32\Release\"
 #define MyAppExePath64 "..\bin\Win64\Release\"
 #define FileVersion GetFileVersion(MyAppExePath32 + MyAppExeName)
-#define ProductVersion GetFileProductVersion(MyAppExeName)
+#define ProductVersion GetFileProductVersion(MyAppExePath32 + MyAppExeName)
 
 [Setup]
 AppId={{36300BAF-CB39-4551-A54E-53F263EB0595}
