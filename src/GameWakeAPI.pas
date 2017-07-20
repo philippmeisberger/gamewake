@@ -18,10 +18,12 @@ uses
 {$ELSE}
   Windows, MMSystem,
 {$ENDIF}
-  SysUtils, Classes, ExtCtrls, Graphics, IniFiles;
+  DateUtils, SysUtils, Classes, ExtCtrls, Graphics, IniFiles;
 
 type
-  { TConfigFile }
+  /// <summary>
+  ///   Manages the configuration file.
+  /// </summary>
   TConfigFile = class(TIniFile)
   public
     const
@@ -44,80 +46,189 @@ type
       IdLeft        = 'Left';
       IdBlink       = 'Blink';
       IdLocale      = 'Locale';
-      IdCombine     = 'Combine';
       IdTimerMode   = 'TimerMode';
     {$IFDEF MSWINDOWS}
       IdAutoUpdate  = 'AutoUpdate';
     {$ENDIF}
-    function ReadColor(const ASection, AKey: string): TColor;
+    /// <summary>
+    ///   Reads a color from the configuration file.
+    /// </summary>
+    /// <param name="ASection">
+    ///   The section to load the color from.
+    /// </param>
+    /// <param name="AKey">
+    ///   The key to load the color from.
+    /// </param>
+    /// <param name="ADefault">
+    ///   The color to use if reading failed.
+    /// </param>
+    /// <returns>
+    ///   The color.
+    /// </returns>
+    function ReadColor(const ASection, AKey: string; ADefault: TColor): TColor;
+
+    /// <summary>
+    ///   Reads an array of custom colors from the configuration file.
+    /// </summary>
+    /// <param name="AArray">
+    ///   The array containing the colors.
+    /// </param>
     procedure ReadColors(var AArray: array of string);
+
+    /// <summary>
+    ///   Writes a color to the configuration file.
+    /// </summary>
+    /// <param name="ASection">
+    ///   The section to store the value.
+    /// </param>
+    /// <param name="AKey">
+    ///   The key to store the value.
+    /// </param>
+    /// <param name="AColor">
+    ///   The color.
+    /// </param>
     procedure WriteColor(const ASection, AKey: string; AColor: TColor);
+
+    /// <summary>
+    ///   Writes an array of custom colors to the configuration file.
+    /// </summary>
+    /// <param name="AArray">
+    ///   The array containing the colors.
+    /// </param>
     procedure WriteColors(const AArray: array of string);
   end;
 
-  { TTime }
-  TTime = class(TObject)
-  private
-    FCombine: Boolean;
-    FHour,
-    FMin,
-    FSec: Byte;
-  protected
-    procedure SetHour(ANewHour: Byte); virtual;
-    procedure SetMin(ANewMin: Byte); virtual;
-  public
-    constructor Create(ACombine: Boolean = True); overload;
-    constructor Create(AHour, AMin, ASec: Byte; ACombine: Boolean); overload;
-    function DecrementHours(): string; virtual;
-    function DecrementMinutes(): string; virtual;
-    function Equals(const ATime: TTime): Boolean; reintroduce;
-    function GetDateTime(): TDateTime;
-    function GetHour(): string;
-    function GetMin(): string;
-    function GetTime(ALongFormat: Boolean = True): string; overload;
-    procedure GetTime(var AHour, AMin: string); overload;
-    function IncrementHours(): string; virtual;
-    function IncrementMinutes(): string;
-    procedure IncrementSeconds();
-    procedure SetSystemTime();
-    procedure SetTime(ANewHour, ANewMin: Byte; ANewSec: Byte = 0); virtual;
-    procedure Reset(); virtual;
-    { external }
-    property Hour: Byte read FHour write SetHour;
-    property Min: Byte read FMin write SetMin;
-    property Sec: Byte read FSec;
-    property Combine: Boolean read FCombine write FCombine;
+  TTimeHelper = record helper for TTime
+    const
+      /// <summary>
+      ///   Two digit format to add a leading zero to values between 0 and 9.
+      /// </summary>
+      TwoDigitFormat = '%.2d';
+
+    /// <summary>
+    ///   Checks if a given time is equal to current time ignoring milliseconds.
+    /// </summary>
+    /// <param name="ATime">
+    ///   The time to check.
+    /// </param>
+    /// <returns>
+    ///   <c>True</c> if both times are equal except milliseconds or <c>False</c>
+    ///   otherwise.
+    /// </returns>
+    function EqualsInSeconds(const ATime: TTime): Boolean;
+
+    /// <summary>
+    ///   Decodes the hour.
+    /// </summary>
+    /// <returns>
+    ///   The hour.
+    /// </returns>
+    function Hour(): Word; inline;
+
+    /// <summary>
+    ///   Decodes the hour and converts it to a string.
+    /// </summary>
+    /// <returns>
+    ///   The hour as string.
+    /// </returns>
+    function HourToString(): string; inline;
+
+    /// <summary>
+    ///   Decodes the minute.
+    /// </summary>
+    /// <returns>
+    ///   The minute.
+    /// </returns>
+    function Minute(): Word; inline;
+
+    /// <summary>
+    ///   Decodes the minute and converts it to a string.
+    /// </summary>
+    /// <returns>
+    ///   The minute as string.
+    /// </returns>
+    function MinuteToString(): string; inline;
+
+    /// <summary>
+    ///   Decodes the second.
+    /// </summary>
+    /// <returns>
+    ///   The second.
+    /// </returns>
+    function Second(): Word; inline;
+
+    /// <summary>
+    ///   Decodes the second and converts it to a string.
+    /// </summary>
+    /// <returns>
+    ///   The second as string.
+    /// </returns>
+    function SecondToString(): string; inline;
+
+    /// <summary>
+    ///   Changes the time.
+    /// </summary>
+    /// <param name="AHour">
+    ///   The hour.
+    /// </param>
+    /// <param name="AMinute">
+    ///   The minute.
+    /// </param>
+    /// <param name="ASecond">
+    ///   Optional: The second.
+    /// </param>
+    procedure SetTime(const AHour, AMinute: Word; const ASecond: Word = 0); inline;
+
+    /// <summary>
+    ///   Changes the hour.
+    /// </summary>
+    /// <param name="AHour">
+    ///   The hour.
+    /// </param>
+    procedure SetHour(const AHour: Word); inline;
+
+    /// <summary>
+    ///   Changes the minute.
+    /// </summary>
+    /// <param name="AMinute">
+    ///   The minute.
+    /// </param>
+    procedure SetMinute(const AMinute: Word); inline;
+
+    /// <summary>
+    ///   Changes the second.
+    /// </summary>
+    /// <param name="ASecond">
+    ///   The second.
+    /// </param>
+    procedure SetSecond(const ASecond: Word); inline;
+
+    /// <summary>
+    ///   Converts the time to a string.
+    /// </summary>
+    /// <param name="ALongFormat">
+    ///   Optional: Set to <c>True</c> to use a HH:MM:SS format or set to
+    ///   <c>False</c> to use a HH:MM format.
+    /// </param>
+    /// <returns>
+    ///   The time as string.
+    /// </returns>
+    function ToString(const ALongFormat: Boolean = True): string; inline;
   end;
 
-  { TTimerMode }
-  TTimerMode = class(TTime)
-  protected
-    procedure SetHour(ANewHour: Byte); override;
-  public
-    function DecrementHours(): string; override;
-    function IncrementHours(): string; override;
-  end;
-
-  { TCounterMode }
-  TCounterMode = class(TTime)
-  protected
-    procedure SetHour(ANewHour: Byte); override;
-    procedure SetMin(ANewMin: Byte); override;
-  public
-    function DecrementHours(): string; override;
-    function DecrementMinutes(): string; override;
-    function IncrementHours(): string; override;
-    procedure Reset(); override;
-    procedure SetTime(ANewHour, ANewMin: Byte; ANewSec: Byte = 0); override;
-  end;
-
-  { Exception class }
-  EInvalidTimeException = class(Exception);
-
-  { TAlertType }
+  /// <summary>
+  ///   Possible types of alert.
+  /// </summary>
   TAlertType = (atClock, atHorn, atBing, atBeep, atShutdown, atNone);
 
-  { TClock }
+  /// <summary>
+  ///   Possible alert sounds.
+  /// </summary>
+  TAlertSound = atClock..atBeep;
+
+  /// <summary>
+  ///   An alarm clock which supports a timer and counter mode.
+  /// </summary>
   TClock = class(TObject)
   private
     FTimer: TTimer;
@@ -125,49 +236,145 @@ type
     FAlertThread: TThread;
     FAlertEnabled,
     FTimerMode: Boolean;
-    FTime: TTimerMode;
-    FTimeAlert: TTime;
+    FTime,
+    FAlertTime: TTime;
     FOnCounting,
     FOnAlertBegin,
     FOnAlert,
     FOnAlertEnd: TNotifyEvent;
     FSoundPath: string;
+    procedure AlertEnd(Sender: TObject);
     procedure Count(Sender: TObject);
     procedure SetAlertEnabled(const AAlertEnabled: Boolean);
     procedure SetTimerMode(const ATimerMode: Boolean);
-    procedure DoNotifyOnCounting();
+    procedure SetAlertTime(const AAlertTime: TTime);
+    procedure SetTime(const ATime: TTime);
   public
-    constructor Create(ATimerMode: Boolean; ACombine: Boolean = False);
+    /// <summary>
+    ///   Contructor for creating a <c>TClock</c> instance.
+    /// </summary>
+    /// <param name="ATimerMode">
+    ///   Set to <c>True</c> to use a default clock or set to <c>False</c> to
+    ///   use a counter.
+    /// </param>
+    constructor Create(ATimerMode: Boolean);
+
+    /// <summary>
+    ///   Destructor for destroying a <c>TClock</c> instance.
+    /// </summary>
     destructor Destroy; override;
-    procedure GetTimeRemaining(var AHour, AMin, ASec: string);
-    function PlaySound(const ASound: string; ASynchronized: Boolean = False{$IFDEF MSWINDOWS};
-      AResource: Boolean = False{$ENDIF}): Boolean; overload;
-    function PlaySound(ASound: TAlertType; ASynchronized: Boolean = False{$IFDEF MSWINDOWS};
-      AResource: Boolean = False{$ENDIF}): Boolean; overload;
-    { external }
-    property Alert: TTime read FTimeAlert write FTimeAlert;
+
+    /// <summary>
+    ///   Plays a .wav file.
+    /// </summary>
+    /// <param name="AFileName">
+    ///   The .wav file to play.
+    /// </param>
+    /// <param name="ASynchronized">
+    ///   Set to <c>True</c> to wait until the sound is finished or <c>False</c>
+    ///   to immediately return.
+    /// </param>
+    /// <returns>
+    ///   <c>True</c> if sound was successfully played or <c>False</c> otherwise.
+    /// </returns>
+    function PlaySound(const AFileName: string; ASynchronized: Boolean = False): Boolean; overload;
+
+    /// <summary>
+    ///   Plays an alarm sound.
+    /// </summary>
+    /// <param name="AAlertSound">
+    ///   The alarm sound.
+    /// </param>
+    /// <param name="ASynchronized">
+    ///   Set to <c>True</c> to wait until the sound is finished or <c>False</c>
+    ///   to immediately return.
+    /// </param>
+    /// <returns>
+    ///   <c>True</c> if sound was successfully played or <c>False</c> otherwise.
+    /// </returns>
+    function PlaySound(AAlertSound: TAlertSound; ASynchronized: Boolean = False): Boolean; overload;
+
+    /// <summary>
+    ///   Gets or sets the alarm time.
+    /// </summary>
+    property Alert: TTime read FAlertTime write SetAlertTime;
+
+    /// <summary>
+    ///   Enables or disables the alarm clock.
+    /// </summary>
     property AlertEnabled: Boolean read FAlertEnabled write SetAlertEnabled;
+
+    /// <summary>
+    ///   Gets or sets the alert type.
+    /// </summary>
     property AlertType: TAlertType read FAlertType write FAlertType;
+
+    /// <summary>
+    ///   Occurs while alert sound is played.
+    /// </summary>
     property OnAlert: TNotifyEvent read FOnAlert write FOnAlert;
+
+    /// <summary>
+    ///   Occurs when alert starts playing.
+    /// </summary>
     property OnAlertBegin: TNotifyEvent read FOnAlertBegin write FOnAlertBegin;
+
+    /// <summary>
+    ///   Occurs when alert stops playing.
+    /// </summary>
     property OnAlertEnd: TNotifyEvent read FOnAlertEnd write FOnAlertEnd;
+
+    /// <summary>
+    ///   Occurs when current time is incremented.
+    /// </summary>
     property OnCounting: TNotifyEvent read FOnCounting write FOnCounting;
+
+    /// <summary>
+    ///   Gets or sets the path to the directory containing the sounds.
+    /// </summary>
     property SoundPath: string read FSoundPath write FSoundPath;
-    property Time: TTimerMode read FTime write FTime;
+
+    /// <summary>
+    ///   Gets or sets the current time.
+    /// </summary>
+    property Time: TTime read FTime write SetTime;
+
+    /// <summary>
+    ///   Use a timer or a counter.
+    /// </summary>
+    /// <remarks>
+    ///   Set to <c>True</c> to use a default clock or set to <c>False</c> to
+    ///   use a counter.
+    /// </remarks>
     property TimerMode: Boolean read FTimerMode write SetTimerMode;
   end;
 
-  { TAlertThread }
+  /// <summary>
+  ///   Plays an alarm sound.
+  /// </summary>
   TAlertThread = class(TThread)
   private
     FClock: TClock;
-    FAlertType: TAlertType;
+    FAlertSound: TAlertSound;
     FOnAlert: TNotifyEvent;
     procedure DoNotifyOnAlert();
   protected
     procedure Execute(); override;
   public
-    constructor Create(AClock: TClock; AAlertType: TAlertType);
+    /// <summary>
+    ///   Constructor for creating a <c>TAlertThread</c> instance.
+    /// </summary>
+    /// <param name="AClock">
+    ///   A <see cref="TClock"/> instance.
+    /// </param>
+    /// <param name="AAlertSound">
+    ///   The alarm sound to play.
+    /// </param>
+    constructor Create(AClock: TClock; AAlertSound: TAlertSound);
+
+    /// <summary>
+    ///   Occurs while sound is played.
+    /// </summary>
     property OnAlert: TNotifyEvent read FOnAlert write FOnAlert;
   end;
 
@@ -175,18 +382,10 @@ implementation
 
 { TConfigFile }
 
-{ public TConfigFile.ReadColor
-
-  Reads a TColor value from config . }
-
-function TConfigFile.ReadColor(const ASection, AKey: string): TColor;
+function TConfigFile.ReadColor(const ASection, AKey: string; ADefault: TColor): TColor;
 begin
-  Result := StringToColor(ReadString(ASection, AKey, ''));
+  Result := StringToColor(ReadString(ASection, AKey, ColorToString(ADefault)));
 end;
-
-{ public TConfigFile.ReadColors
-
-  Returns an array containing all saved custom colors from config file. }
 
 procedure TConfigFile.ReadColors(var AArray: array of string);
 var
@@ -197,18 +396,10 @@ begin
     AArray[i] := ReadString(SectionColors, IdColor + IntToStr(i), '');
 end;
 
-{ public TConfigFile.WriteColor
-
-  Writes a TColor value into config file. }
-
 procedure TConfigFile.WriteColor(const ASection, AKey: string; AColor: TColor);
 begin
   WriteString(ASection, AKey, ColorToString(AColor));
 end;
-
-{ public TConfigFile.WriteColors
-
-  Writes an array containing all saved custom colors into config file. }
 
 procedure TConfigFile.WriteColors(const AArray: array of string);
 var
@@ -220,379 +411,94 @@ begin
 end;
 
 
-{ TTime }
+{ TTimeHelper }
 
-{ public TTime.Create
+function TTimeHelper.EqualsInSeconds(const ATime: TTime): Boolean;
+var
+  Hour1, Hour2, Min1, Min2, Sec1, Sec2, Msec: Word;
 
-  General constructor for creating a TTime instance. }
-
-constructor TTime.Create(ACombine: Boolean = True);
 begin
-  inherited Create;
-  Reset();
-  FCombine := ACombine;
+  DecodeTime(Self, Hour1, Min1, Sec1, Msec);
+  DecodeTime(ATime, Hour2, Min2, Sec2, Msec);
+  Result := ((Hour1 = Hour2) and (Min1 = Min2) and (Sec1 = Sec2));
 end;
 
-{ public TTime.Create
+function TTimeHelper.Hour(): Word;
+var
+  Min, Sec, Msec: Word;
 
-  General constructor for creating a TTime instance. }
-
-constructor TTime.Create(AHour, AMin, ASec: Byte; ACombine: Boolean);
 begin
-  inherited Create;
-  SetTime(AHour, AMin, ASec);
-  FCombine := ACombine;
+  DecodeTime(Self, Result, Min, Sec, Msec);
 end;
 
-{ public TTime.DecrementHours
-
-  Decrements hours by 1 and returns them as formatted string. }
-
-function TTime.DecrementHours(): string;
+function TTimeHelper.HourToString(): string;
 begin
-  if (FHour > 0) then
-    Dec(FHour);
-
-  Result := GetHour();
+  Result := Format(TwoDigitFormat, [Hour()]);
 end;
 
-{ public TTime.DecrementMinutes
+function TTimeHelper.Minute(): Word;
+var
+  Hour, Sec, Msec: Word;
 
-  Decrements minutes by 1 and returns them as formatted string. }
-
-function TTime.DecrementMinutes(): string;
 begin
-  if (FMin = 0) then
-  begin
-    FMin := 59;
-
-    if FCombine then
-      DecrementHours();
-  end  //of begin
-  else
-    Dec(FMin);
-
-  Result := GetMin();
+  DecodeTime(Self, Hour, Result, Sec, Msec);
 end;
 
-{ public TTime.Equals
-
-  Checks if time matches another time. }
-
-function TTime.Equals(const ATime: TTime): Boolean;
+function TTimeHelper.MinuteToString(): string;
 begin
-  Assert(Assigned(ATime), 'Argument ''ATime'' not assigned!');
-  Result := (Hour = ATime.Hour) and (Min = ATime.Min) and (Sec = ATime.Sec);
+  Result := Format(TwoDigitFormat, [Minute()]);
 end;
 
-{ public TTime.GetDateTime
+function TTimeHelper.Second(): Word;
+var
+  Hour, Min, Msec: Word;
 
-  Returns the current time as TDateTime. }
-
-function TTime.GetDateTime(): TDateTime;
 begin
-  Result := EncodeTime(FHour, FMin, FSec, 0);
+  DecodeTime(Self, Hour, Min, Result, Msec);
 end;
 
-{ public TTime.GetHour
-
-  Returns the current hour as 2 digit formatted string. }
-
-function TTime.GetHour(): string;
+function TTimeHelper.SecondToString(): string;
 begin
-  Result := Format('%.*d', [2, FHour]);
+  Result := Format(TwoDigitFormat, [Second()]);
 end;
 
-{ public TTime.GetMin
-
-  Returns the current minute as 2 digit formatted string. }
-
-function TTime.GetMin(): string;
+procedure TTimeHelper.SetHour(const AHour: Word);
 begin
-  Result := Format('%.*d', [2, FMin]);
+  Self := EncodeTime(AHour, Minute(), 0 , 0);
 end;
 
-{ public TTime.GetTime
-
-  Returns hours and minutes of current time as string. }
-
-procedure TTime.GetTime(var AHour, AMin: string);
+procedure TTimeHelper.SetMinute(const AMinute: Word);
 begin
-  AHour := GetHour();
-  AMin := GetMin();
+  Self := EncodeTime(Hour(), AMinute, 0 , 0);
 end;
 
-{ public TTime.GetTime
+procedure TTimeHelper.SetSecond(const ASecond: Word);
+begin
+  Self := EncodeTime(Hour(), Minute(), ASecond , 0);
+end;
 
-  Returns the current time as formatted string. }
+procedure TTimeHelper.SetTime(const AHour, AMinute: Word; const ASecond: Word = 0);
+begin
+  Self := EncodeTime(AHour, AMinute, ASecond, 0);
+end;
 
-function TTime.GetTime(ALongFormat: Boolean = True): string;
+function TTimeHelper.ToString(const ALongFormat: Boolean = True): string;
 begin
   if ALongFormat then
-    Result := FormatDateTime('tt', GetDateTime())
+    Result := FormatDateTime('tt', Self)
   else
-    Result := FormatDateTime('t', GetDateTime());
-end;
-
-{ public TTime.IncrementHours
-
-  Increments hours by 1 and returns them as formatted string. }
-
-function TTime.IncrementHours(): string;
-begin
-  Inc(FHour);
-  Result := GetHour();
-end;
-
-{ public TTime.IncrementMinutes
-
-  Increments minutes by 1 and returns them as formatted string. }
-
-function TTime.IncrementMinutes(): string;
-begin
-  if (FMin = 59) then
-  begin
-    FMin := 0;
-
-    if FCombine then
-      IncrementHours();
-  end  //of begin
-  else
-    Inc(FMin);
-
-  Result := GetMin();
-end;
-
-{ public TTime.IncrementSeconds
-
-  Increments seconds by 1. }
-
-procedure TTime.IncrementSeconds();
-begin
-  if (FSec = 59) then
-  begin
-    FSec := 0;
-
-    if FCombine then
-      IncrementMinutes();
-  end  //of begin
-  else
-    Inc(FSec);
-end;
-
-{ public TTime.Reset
-
-  Resets hours and minutes to minimal values. }
-
-procedure TTime.Reset();
-begin
-  SetTime(0, 0);
-end;
-
-{ public TTime.SetHour
-
-  Sets hours to an valid value. }
-
-procedure TTime.SetHour(ANewHour: Byte);
-begin
-  FHour := ANewHour;
-end;
-
-{ public TTime.SetMin
-
-  Sets minutes to an valid value. }
-
-procedure TTime.SetMin(ANewMin: Byte);
-begin
-  if (ANewMin > 59) then
-    FMin := 59
-  else
-    FMin := ANewMin;
-end;
-
-{ public TTime.SetSystemTime
-
-  Gets current system time and stores them in current time object. }
-
-procedure TTime.SetSystemTime();
-var
-  currentHour, currentMin, currentSec, ms: Word;
-
-begin
-  DecodeTime(Now(), currentHour, currentMin, currentSec, ms);
-  SetTime(currentHour, currentMin, currentSec);
-end;
-
-{ public TTime.SetTime
-
-  Sets current hours, minutes and seconds. }
-
-procedure TTime.SetTime(ANewHour, ANewMin: Byte; ANewSec: Byte = 0);
-begin
-  SetHour(ANewHour);
-  SetMin(ANewMin);
-
-  if (ANewSec > 59) then
-    FMin := 59
-  else
-    FSec := ANewSec;
-end;
-
-
-{ TTimerMode }
-
-{ public TTimerMode.DecrementHours
-
-  Decrements hours by 1 and returns them as formatted string. }
-
-function TTimerMode.DecrementHours(): string;
-begin
-  if (Hour = 0) then
-    Hour := 23
-  else
-    Exit(inherited DecrementHours());
-
-  Result := GetHour();
-end;
-
-{ public TTimerMode.IncrementHours
-
-  Increments hours by 1 and returns them as formatted string. }
-
-function TTimerMode.IncrementHours(): string;
-begin
-  if (Hour = 23) then
-    Hour := 0
-  else
-    Exit(inherited IncrementHours());
-
-  Result := GetHour();
-end;
-
-{ public TTimerMode.SetHour
-
-  Sets hour to an valid value. }
-
-procedure TTimerMode.SetHour(ANewHour: Byte);
-begin
-  if (ANewHour > 23) then
-    inherited SetHour(23)
-  else
-    inherited SetHour(ANewHour);
-end;
-
-
-{ TCounterMode }
-
-{ public TCounterMode.DecrementHours
-
-  Decrements hours by 1 and returns them as formatted string. }
-
-function TCounterMode.DecrementHours(): string;
-begin
-  if (Hour = 0) then
-    Hour := 99
-  else
-    if not ((Hour = 1) and (Min = 0)) then
-      Exit(inherited DecrementHours());
-
-  Result := GetHour();
-end;
-
-{ public TCounterMode.DecrementMinutes
-
-  Decrements minutes by 1 and returns them as formatted string. }
-
-function TCounterMode.DecrementMinutes(): string;
-begin
-  if ((Hour = 0) and (Min = 1)) then
-    Exit(GetMin())
-  else
-    Result := inherited DecrementMinutes();
-end;
-
-{ public TCounterMode.IncrementHours
-
-  Increments hours by 1 and returns them as formatted string. }
-
-function TCounterMode.IncrementHours(): string;
-begin
-  if (Hour = 99) then
-  begin
-    if (Min <> 0) then
-      Hour := 0;
-  end  //of begin
-  else
-    Exit(inherited IncrementHours());
-
-  Result := GetHour();
-end;
-
-{ public TCounterMode.Reset
-
-  Resets hours and minutes to minimal values. }
-
-procedure TCounterMode.Reset();
-begin
-  SetTime(0, 1);
-end;
-
-{ public TCounterMode.SetHour
-
-  Sets hour to an valid value. }
-
-procedure TCounterMode.SetHour(ANewHour: Byte);
-begin
-  if not ((ANewHour = 0) and (Min = 0)) then
-    inherited SetHour(ANewHour);
-end;
-
-{ public TCounterMode.SetMin
-
-  Sets minutes to an valid value. }
-
-procedure TCounterMode.SetMin(ANewMin: Byte);
-begin
-  if not ((Hour = 0) and (ANewMin = 0)) then
-    inherited SetMin(ANewMin);
-end;
-
-{ public TCounterMode.SetTime
-
-  Sets current hours, minutes and seconds. }
-
-procedure TCounterMode.SetTime(ANewHour, ANewMin: Byte; ANewSec: Byte = 0);
-begin
-  if ((ANewHour = 0) and (ANewMin = 0)) then
-    raise EInvalidTimeException.Create('Hours and Minutes must not be 0!');
-
-  inherited SetTime(ANewHour, ANewMin, ANewSec);
+    Result := FormatDateTime('t', Self);
 end;
 
 
 { TClock }
 
-{ public TClock.Create
-
-  Constructor for creating a TClock instance. }
-
-constructor TClock.Create(ATimerMode: Boolean; ACombine: Boolean = False);
+constructor TClock.Create(ATimerMode: Boolean);
 begin
   inherited Create;
-  FTimerMode := ATimerMode;
   FAlertEnabled := False;
   FAlertType := atClock;
   FAlertThread := nil;
-  FTime := TTimerMode.Create(True);
-
-  // TTimerMode as initial mode?
-  if ATimerMode then
-  begin
-    FTime.SetSystemTime();
-    FTimeAlert := TTimerMode.Create(ACombine);
-  end  //of begin
-  else
-    FTimeAlert := TCounterMode.Create(ACombine);
 
   // Init TTimer
   FTimer := TTimer.Create(nil);
@@ -603,33 +509,35 @@ begin
     Interval := 1000;
     Enabled := ATimerMode;
   end;  //of with
+
+  SetTimerMode(ATimerMode);
 end;
-
-{ public TClock.Destroy
-
-  Destructor for destroying a TClock instance. }
 
 destructor TClock.Destroy;
 begin
-  FreeAndNil(FTimeAlert);
-  FreeAndNil(FTime);
   FreeAndNil(FTimer);
   inherited Destroy;
 end;
 
-{ public TClock.Count
+procedure TClock.AlertEnd(Sender: TObject);
+begin
+  FAlertThread := nil;
 
-  Increments time a calls alert. }
+  if Assigned(FOnAlertEnd) then
+    FOnAlertEnd(Self);
+end;
 
 procedure TClock.Count(Sender: TObject);
 begin
-  FTime.IncrementSeconds();
-  DoNotifyOnCounting();
+  FTime := IncSecond(FTime);
+
+  if Assigned(FOnCounting) then
+    FOnCounting(Self);
 
   if FAlertEnabled then
   begin
     // Current time matches alert time: Call alert!
-    if FTime.Equals(FTimeAlert) then
+    if FTime.EqualsInSeconds(FAlertTime) then
     begin
       // Stop TTimer in counter mode
       if not FTimerMode then
@@ -648,127 +556,14 @@ begin
       with (FAlertThread as TAlertThread) do
       begin
         OnAlert := Self.OnAlert;
-        OnTerminate := FOnAlertEnd;
+        OnTerminate := AlertEnd;
         Start();
       end;  //of begin
     end;  //of begin
-
-    // Automatically abort alert after 1 minute
-     if ((FTimeAlert.Hour = FTime.Hour) and (FTime.Min = FTimeAlert.Min + 1) and (FTime.Sec = 0)) then
-       SetAlertEnabled(False);
   end; //of begin
 end;
 
-{ public TClock.GetTimeRemaining
-
-  Returns remaining hours and minutes until alert will be called. }
-
-procedure TClock.GetTimeRemaining(var AHour, AMin, ASec: string);
-var
-  CurrentHour, CurrentMin, CurrentSec, Ms: Word;
-  TimeRemain: TDateTime;
-
-begin
-  if (FTimeAlert.GetDateTime > FTime.GetDateTime) then
-    TimeRemain := FTimeAlert.GetDateTime - FTime.GetDateTime
-  else
-    TimeRemain := FTime.GetDateTime - FTimeAlert.GetDateTime;
-
-  DecodeTime(TimeRemain, CurrentHour, CurrentMin, CurrentSec, Ms);
-
-  AHour := Format('%.*d', [2, CurrentHour]);
-  AMin := Format('%.*d', [2, CurrentMin]);
-  ASec := Format('%.*d', [2, CurrentSec]);
-end;
-
-{ private TClock.DoNotifyOnCounting
-
-  Notifies about counting. }
-
-procedure TClock.DoNotifyOnCounting();
-begin
-  if Assigned(FOnCounting) then
-    FOnCounting(Self);
-end;
-
-{ public TClock.PlaySound
-
-  Plays a predefined sound. }
-
-function TClock.PlaySound(ASound: TAlertType; ASynchronized: Boolean = False
-  {$IFDEF MSWINDOWS}; AResource: Boolean = False{$ENDIF}): Boolean;
-var
-  Sound: string;
-
-begin
-  case ASound of
-    atClock: Sound := 'bell';
-    atHorn:  Sound := 'horn';
-    atBing:  Sound := 'bing';
-    atBeep:  Sound := 'beep';
-    else     Sound := '';
-  end;  //of case
-
-  if ((Sound <> ''){$IFDEF MSWINDOWS}and not AResource{$ENDIF}) then
-    Sound := Sound +'.wav';
-
-  Result := PlaySound(Sound, ASynchronized{$IFDEF MSWINDOWS}, AResource{$ENDIF});
-end;
-
-{ private TClock.SetAlertEnabled
-
-  Enables or disables the current alert. }
-
-procedure TClock.SetAlertEnabled(const AAlertEnabled: Boolean);
-begin
-  FAlertEnabled := AAlertEnabled;
-
-  // Start/Stop TTimer in counter mode
-  if not FTimerMode then
-    FTimer.Enabled := AAlertEnabled;
-
-  if (not AAlertEnabled and Assigned(FAlertThread)) then
-  begin
-    FAlertThread.Terminate();
-    FAlertThread := nil;
-  end;  //of begin
-end;
-
-{ private TClock.SetTimerMode
-
-  Changes between the modes. }
-
-procedure TClock.SetTimerMode(const ATimerMode: Boolean);
-var
-  Combine: Boolean;
-
-begin
-  if (FTimerMode = ATimerMode) then
-    Exit;
-
-  FTimerMode := ATimerMode;
-  FTimer.Enabled := ATimerMode;
-  Combine := FTimeAlert.Combine;
-  FTimeAlert.Free;
-
-  if ATimerMode then
-  begin
-    FTimeAlert := TTimerMode.Create(Combine);
-    FTime.SetSystemTime();
-  end  //of begin
-  else
-  begin
-    FTimeAlert := TCounterMode.Create(Combine);
-    FTime.Reset();
-  end;  //of if
-end;
-
-{ public TClock.PlaySound
-
-  Plays a *.wav file. }
-
-function TClock.PlaySound(const ASound: string; ASynchronized: Boolean = False
-  {$IFDEF MSWINDOWS}; AResource: Boolean = False{$ENDIF}): Boolean;
+function TClock.PlaySound(const AFileName: string; ASynchronized: Boolean = False): Boolean;
 var
 {$IFNDEF MSWINDOWS}
   Process: TProcess;
@@ -777,7 +572,7 @@ var
 {$ENDIF}
 
 begin
-  if (ASound = '') then
+  if (AFileName = '') then
     Exit(False);
 
 {$IFDEF MSWINDOWS}
@@ -786,22 +581,17 @@ begin
   else
     Flags := SND_ASYNC;
 
-  if AResource then
-    Inc(Flags, SND_MEMORY or SND_RESOURCE)
-  else
-    Inc(Flags, SND_FILENAME);
-
   // Add volume slider in system tray
   if CheckWin32Version(6) then
     Inc(Flags, SND_SENTRY);
 
-  Result := MMSystem.PlaySound(PChar(FSoundPath + ASound), HInstance, Flags);
+  Result := MMSystem.PlaySound(PChar(AFileName), 0, Flags or SND_FILENAME);
 {$ELSE}
   Process := TProcess.Create(nil);
 
   try
     Process.Executable := '/usr/bin/aplay';
-    Process.Parameters.Append(FSoundPath + ASound);
+    Process.Parameters.Append(AFileName);
 
     if ASynchronized then
       Process.Options := Process.Options + [poWaitOnExit];
@@ -815,24 +605,99 @@ begin
 {$ENDIF}
 end;
 
+function TClock.PlaySound(AAlertSound: TAlertSound; ASynchronized: Boolean = False): Boolean;
+{$IFDEF MSWINDOWS}
+const
+  Synchronous: array[Boolean] of DWORD = (SND_ASYNC, SND_SYNC);
+{$ENDIF}
+
+var
+  Sound: string;
+
+begin
+{$IFDEF MSWINDOWS}
+  if (AAlertSound = atBing) then
+  begin
+    // Play default Windows sound
+    Exit(MMSystem.PlaySound(PChar(SND_ALIAS_SYSTEMDEFAULT), 0,
+      Synchronous[ASynchronized] or SND_ALIAS_ID or SND_SENTRY));
+  end;  //of begin
+{$ENDIF}
+
+  case AAlertSound of
+    atClock: Sound := 'bell';
+    atHorn:  Sound := 'horn';
+    atBing:  Sound := 'bing';
+    atBeep:  Sound := 'beep';
+    else     Exit(False);
+  end;  //of case
+
+{$IFDEF PORTABLE}
+  Result := MMSystem.PlaySound(PChar(Sound), HInstance, Synchronous[ASynchronized] or
+    SND_RESOURCE or SND_SENTRY);
+{$ELSE}
+  if (FSoundPath <> '') then
+    Sound := IncludeTrailingPathDelimiter(FSoundPath) + Sound;
+
+  Result := PlaySound(ChangeFileExt(Sound, '.wav'), ASynchronized);
+{$ENDIF}
+end;
+
+procedure TClock.SetAlertEnabled(const AAlertEnabled: Boolean);
+begin
+  if (AAlertEnabled and not FTimerMode and FTime.EqualsInSeconds(FAlertTime)) then
+    raise EAssertionFailed.Create('Alert time and current time cannot be equal!');
+
+  FAlertEnabled := AAlertEnabled;
+
+  // Start/Stop TTimer in counter mode
+  if not FTimerMode then
+    FTimer.Enabled := AAlertEnabled;
+
+  if (not AAlertEnabled and Assigned(FAlertThread)) then
+  begin
+    FAlertThread.Terminate();
+    FAlertThread := nil;
+  end;  //of begin
+end;
+
+procedure TClock.SetAlertTime(const AAlertTime: TTime);
+begin
+  if (FAlertEnabled and not FTimerMode and FTime.EqualsInSeconds(AAlertTime)) then
+    raise EAssertionFailed.Create('Alert time and current time cannot be equal!');
+
+  FAlertTime := AAlertTime;
+end;
+
+procedure TClock.SetTime(const ATime: TTime);
+begin
+  if (FAlertEnabled and not FTimerMode and ATime.EqualsInSeconds(FAlertTime)) then
+    raise EAssertionFailed.Create('Alert time and current time cannot be equal!');
+
+  FTime := ATime;
+end;
+
+procedure TClock.SetTimerMode(const ATimerMode: Boolean);
+begin
+  FTimerMode := ATimerMode;
+  FTimer.Enabled := ATimerMode;
+
+  if ATimerMode then
+    FTime := SysUtils.Time()
+  else
+    FTime := 0;
+end;
+
 
 { TAlertThread }
 
-{ public TAlertThread.Create
-
-  Constructor for creating a TAlertThread instance. }
-
-constructor TAlertThread.Create(AClock: TClock; AAlertType: TAlertType);
+constructor TAlertThread.Create(AClock: TClock; AAlertSound: TAlertSound);
 begin
   inherited Create(True);
   FreeOnTerminate := True;
   FClock := AClock;
-  FAlertType := AAlertType;
+  FAlertSound := AAlertSound;
 end;
-
-{ private TAlertThread.DoNotifyOnAlert
-
-  Notifies the alert. }
 
 procedure TAlertThread.DoNotifyOnAlert;
 begin
@@ -840,17 +705,23 @@ begin
     FOnAlert(Self);
 end;
 
-{ protected TAlertThread.Execute
-
-  Thread main method that plays a *.wav file. }
-
 procedure TAlertThread.Execute();
+var
+  AlertEndTime: TTime;
+
 begin
+  // Stop alarm after 1 minute
+  AlertEndTime := IncMinute(Time());
+
   while not Terminated do
   begin
     Synchronize(DoNotifyOnAlert);
-    FClock.PlaySound(FAlertType, True{$IFDEF PORTABLE}, True{$ENDIF});
+    FClock.PlaySound(FAlertSound, True);
+
+    if (Time() >= AlertEndTime) then
+      Break;
   end;  //of begin
 end;
 
 end.
+

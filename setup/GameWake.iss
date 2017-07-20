@@ -1,10 +1,10 @@
 #define MyAppName "Game Wake"
 #define MyAppURL "http://www.pm-codeworks.de"
-#define MyAppExeName "Game Wake.exe"
-#define MyAppExePath32 "..\bin\Win32\"
-#define MyAppExePath64 "..\bin\Win64\"
+#define MyAppExeName "GameWake.exe"
+#define MyAppExePath32 "..\bin\Win32\Release\"
+#define MyAppExePath64 "..\bin\Win64\Release\"
 #define FileVersion GetFileVersion(MyAppExePath32 + MyAppExeName)
-#define ProductVersion GetFileProductVersion(MyAppExeName)
+#define ProductVersion GetFileProductVersion(MyAppExePath32 + MyAppExeName)
 
 [Setup]
 AppId={{36300BAF-CB39-4551-A54E-53F263EB0595}
@@ -61,8 +61,12 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram, {#MyAppName}
 Root: HKCU; Subkey: "SOFTWARE\PM Code Works\{#MyAppName}"; Flags: deletekey
 Root: HKCU; Subkey: "SOFTWARE\PM Code Works"; Flags: uninsdeletekeyifempty  
 
+[InstallDelete]
+; Replace "Game Wake.exe" by "GameWake.exe"
+Type: files; Name: "{app}\Game Wake.exe"
+
 [UninstallDelete]
-Type: files; Name: "{userappdata}\Game Wake\gamewake.ini"
+Type: files; Name: "{userappdata}\{#MyAppName}\gamewake.ini"
 
 [Messages]
 BeveledLabel=Inno Setup

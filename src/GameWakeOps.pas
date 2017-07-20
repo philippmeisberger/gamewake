@@ -29,7 +29,6 @@ type
     cbSavePos: TCheckBox;
     bReset: TButton;
     gbGeneral: TGroupBox;
-    cbCombine: TCheckBox;
     procedure FormShow(Sender: TObject);
     procedure bCancelClick(Sender: TObject);
     procedure bOkClick(Sender: TObject);
@@ -87,7 +86,6 @@ begin
       cbSaveSound.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdSaveSound, True);
       cbSaveColor.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdSaveColor, True);
       cbSavePos.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdSavePos, False);
-      cbCombine.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdCombine, False);
     {$IFDEF MSWINDOWS}
       cbUpdate.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdAutoUpdate, True);
     {$ELSE}
@@ -120,7 +118,6 @@ begin
     cbSaveSound.Caption := GetString(LID_STORE_SOUND);
     cbSaveColor.Caption := GetString(LID_STORE_COLOR);
     gbGeneral.Caption := GetString(LID_GENERAL);
-    cbCombine.Caption := GetString(LID_COMBINE_MIN_SEC);
     cbUpdate.Caption := GetString(LID_AUTO_UPDATE);
     bReset.Caption := GetString(LID_DEFAULT_VALUES);
     bCancel.Caption := GetString(LID_CANCEL);
@@ -148,7 +145,6 @@ begin
   cbSaveSound.Checked := True;
   cbSaveColor.Checked := True;
   cbSavePos.Checked := False;
-  cbCombine.Checked := False;
 {$IFDEF MSWINDOWS}
   cbUpdate.Checked := True;
 {$ENDIF}
@@ -181,11 +177,9 @@ begin
       Config.WriteBool(Config.SectionGlobal, Config.IdSaveSound, cbSaveSound.Checked);
       Config.WriteBool(Config.SectionGlobal, Config.IdSaveColor, cbSaveColor.Checked);
       Config.WriteBool(Config.SectionGlobal, Config.IdSavePos, cbSavePos.Checked);
-      Config.WriteBool(Config.SectionGlobal, Config.IdCombine, cbCombine.Checked);
     {$IFDEF MSWINDOWS}
       Config.WriteBool(Config.SectionGlobal, Config.IdAutoUpdate, cbUpdate.Checked);
     {$ENDIF}
-      FClock.Alert.Combine := cbCombine.Checked;
 
     finally
       Config.Free;

@@ -11,4 +11,5 @@ Package: gamewake
 Depends: xdg-utils, alsa-utils, ${misc:Depends}, ${shlibs:Depends}
 Architecture: any
 Description: Alarm clock application
- Game Wake is a simple to configure virtual alarm clock application. It provides multiple types of alerts and features both a timer and counter mode.
+ Game Wake is a simple to configure virtual alarm clock application. It provides
+ multiple types of alerts and features both a timer and counter mode.
