@@ -8,7 +8,7 @@
 
 unit GameWakeMain;
 
-{$IFDEF FPC}{$mode delphi}{$ENDIF}
+{$IFDEF FPC}{$MODE Delphi}{$ENDIF}
 
 interface
 
@@ -122,6 +122,7 @@ type
     procedure Alert(Sender: TObject);
     procedure BlinkEnd(Sender: TObject);
     procedure Counting(Sender: TObject);
+    procedure LanguageChanged();
     procedure LoadFromIni();
   {$IFDEF MSWINDOWS}
     procedure OnUpdate(Sender: TObject; const ANewBuild: Cardinal);
@@ -129,7 +130,7 @@ type
   {$ENDIF}
     procedure SaveToIni();
     procedure Shutdown();
-    procedure LanguageChanged();
+    procedure ShowAlertTime();
   end;
 
 var
@@ -770,6 +771,12 @@ begin
 end;
 {$ENDIF}
 
+procedure TMain.ShowAlertTime();
+begin
+  eHour.Text := FClock.Alert.HourToString();
+  eMin.Text := FClock.Alert.MinuteToString();
+end;
+
 procedure TMain.TrayIconMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var
@@ -841,8 +848,7 @@ end;
 procedure TMain.bIncHourClick(Sender: TObject);
 begin
   FClock.Alert := IncHour(FClock.Alert);
-  eHour.Text := FClock.Alert.HourToString();
-  eMin.Text := FClock.Alert.MinuteToString();
+  ShowAlertTime();
 end;
 
 { TMain.bDecHourClick
@@ -852,8 +858,7 @@ end;
 procedure TMain.bDecHourClick(Sender: TObject);
 begin
   FClock.Alert := IncHour(FClock.Alert, -1);
-  eHour.Text := FClock.Alert.HourToString();
-  eMin.Text := FClock.Alert.MinuteToString();
+  ShowAlertTime();
 end;
 
 { TMain.bIncMinClick
@@ -863,8 +868,7 @@ end;
 procedure TMain.bIncMinClick(Sender: TObject);
 begin
   FClock.Alert := IncMinute(FClock.Alert);
-  eHour.Text := FClock.Alert.HourToString();
-  eMin.Text := FClock.Alert.MinuteToString();
+  ShowAlertTime();
 end;
 
 { TMain.bDecMinClick
@@ -874,8 +878,7 @@ end;
 procedure TMain.bDecMinClick(Sender: TObject);
 begin
   FClock.Alert := IncMinute(FClock.Alert, -1);
-  eHour.Text := FClock.Alert.HourToString();
-  eMin.Text := FClock.Alert.MinuteToString();
+  ShowAlertTime();
 end;
 
 { TMain.bPlayClockClick
@@ -976,8 +979,7 @@ begin
   // Try to set alert time
   try
     FClock.Alert.SetTime(StrToInt(eHour.Text), StrToInt(eMin.Text));
-    eHour.Text := FClock.Alert.HourToString();
-    eMin.Text := FClock.Alert.MinuteToString();
+    ShowAlertTime();
 
     // Start alert
     FClock.AlertEnabled := True;
@@ -1200,8 +1202,7 @@ begin
     mmCounter.Checked := False;
     mmTimer.Checked := True;
     FClock.TimerMode := True;
-    eHour.Text := FClock.Alert.HourToString();
-    eMin.Text := FClock.Alert.MinuteToString();
+    ShowAlertTime();
     eHour.SetFocus;
   end;  //of begin
 end;
@@ -1218,8 +1219,7 @@ begin
     mmCounter.Checked := True;
     FClock.TimerMode := False;
     lHour.Caption := FClock.Time.ToString();
-    eHour.Text := FClock.Alert.HourToString();
-    eMin.Text := FClock.Alert.MinuteToString();
+    ShowAlertTime();
     eHour.SetFocus;
   end;  //of begin
 end;
