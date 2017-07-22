@@ -165,10 +165,10 @@ var
 {$ENDIF}
 
 begin
+  FColor := clRed;
 {$IFNDEF MSWINDOWS}
   LanguageFileName := ExtractFilePath(Application.ExeName) +'languages';
   FConfigPath := GetUserDir() +'.gamewake';
-  FColor := clRed;
 
   // Parse arguments
   for i := 1 to Paramcount() do
