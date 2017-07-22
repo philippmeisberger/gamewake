@@ -20,7 +20,7 @@ uses
   Winapi.Windows, System.UITypes, Winapi.ShlObj, Winapi.KnownFolders,
   Winapi.Messages, PMCW.Dialogs.Updater, PMCW.CA;
 {$ELSE}
-  LCLType, Process;
+  LCLType;
 
 const
   MAINICON = '/usr/share/pixmaps/gamewake.ico';
@@ -113,6 +113,7 @@ type
       Shift: TShiftState; X, Y: Integer);
   private
     FClock: TClock;
+    FAlertThread: TAlertThread;
     FLang: TLanguageFile;
     FColor: TColor;
     FConfigPath: string;
@@ -129,7 +130,6 @@ type
     procedure PowerBroadcast(var AMsg: TMessage); message WM_POWERBROADCAST;
   {$ENDIF}
     procedure SaveToIni();
-    procedure Shutdown();
     procedure ShowAlertTime();
   end;
 
@@ -289,13 +289,7 @@ begin
 
     eHour.Text := Alert.HourToString();
     eMin.Text := Alert.MinuteToString();
-
-  {$IFNDEF MSWINDOWS}
-    SoundPath := '/usr/lib/gamewake/';
-  {$ENDIF}
-    OnAlert := Blink;
-    OnAlertBegin := Self.Alert;
-    OnAlertEnd := BlinkEnd;
+    OnAlert := Self.Alert;
     OnCounting := Self.Counting;
   end;  //of with
 end;
@@ -322,16 +316,10 @@ end;
 
 procedure TMain.Alert(Sender: TObject);
 begin
-  Application.Restore;
-  Show;
-  Application.BringToFront;
-
   bAlert.Default := False;
   bStop.Default := True;
   // TODO: In Lazarus disabling the complete group box will not change the color when blinking
   rgSounds.Enabled := False;
-
-  // Disable components in "at alert" TGroupBox
   bPlayBeep.Enabled := False;
   bPlayBing.Enabled := False;
   bPlayClock.Enabled := False;
@@ -341,16 +329,25 @@ begin
   cbBlink.Enabled := False;
   cbText.Enabled := False;
 
-  // Get alert type
-  FClock.AlertType := TAlertType(rgSounds.ItemIndex);
+  // Show text?
+  if cbText.Checked then
+  begin
+    pText.Visible := True;
+    pText.BringToFront;
+  end;   //of begin
 
-  // Check for shutdown
-  if (FClock.AlertType = atShutdown) then
+  cbText.Enabled := False;
+
+  // Remove tray icon and show form
+  pmOpen.Click;
+
+  // Shutdown selected?
+  if (rgSounds.ItemIndex = 4) then
   begin
     try
       Shutdown();
       FClock.AlertEnabled := False;
-      Close;
+      Close();
 
     except
       on E: EOSError do
@@ -362,16 +359,16 @@ begin
   end  //of begin
   else
   begin
-    // Show text?
-    if cbText.Checked then
-    begin
-      pText.Visible := True;
-      pText.BringToFront;
-    end;   //of begin
+    // Start playing sound
+    FAlertThread := TAlertThread.Create(TAlertSound(rgSounds.ItemIndex));
 
-    cbText.Enabled := False;
-    pmOpen.Click;
-  end;  //of if
+    with FAlertThread do
+    begin
+      OnAlert := Blink;
+      OnTerminate := BlinkEnd;
+      Start();
+    end;  //of begin
+  end;  //of begin
 end;
 
 {$IFDEF MSWINDOWS}
@@ -435,6 +432,9 @@ end;
 procedure TMain.BlinkEnd(Sender: TObject);
 begin
   Color := clBtnFace;
+
+  // Thread is terminated after 1 minute and variable holds address of a freed object
+  FAlertThread := nil;
 end;
 
 { private TMain.Counting
@@ -681,96 +681,6 @@ begin
   end;  //of with
 end;
 
-{ private TMain.Shutdown
-
-  Tells the OS to shutdown the computer. }
-
-procedure TMain.Shutdown();
-{$IFNDEF MSWINDOWS}
-const
-  SHUTDOWN_INITD_BIN   = '/usr/bin/dbus-send';
-  SHUTDOWN_SYSTEMD_BIN = '/bin/systemctl';
-
-var
-  Process: TProcess;
-
-begin
-  Process := TProcess.Create(nil);
-
-  try
-    // systemd Linux?
-    if FileExists(SHUTDOWN_SYSTEMD_BIN) then
-    begin
-      Process.Executable := SHUTDOWN_SYSTEMD_BIN;
-      Process.Parameters.Append('poweroff');
-    end  //of begin
-    else
-      if FileExists(SHUTDOWN_INITD_BIN) then
-      begin
-        Process.Executable := SHUTDOWN_INITD_BIN;
-
-        with Process.Parameters do
-        begin
-          Append('--system');
-          Append('--print-reply');
-          Append('--dest=org.freedesktop.ConsoleKit');
-          Append('/org/freedesktop/ConsoleKit/Manager');
-          Append('org.freedesktop.ConsoleKit.Manager.Stop');
-        end;  //of with
-      end  //of begin
-      else
-        raise EOSError.Create('No program found to shutdown');
-
-    Process.Execute();
-
-  finally
-    Process.Free;
-  end;  //of try
-end;
-{$ELSE}
-const
-  SE_SHUTDOWN_NAME               = 'SeShutdownPrivilege';
-  SHTDN_REASON_MAJOR_APPLICATION = $00040000;
-  SHTDN_REASON_MINOR_MAINTENANCE = 1;
-
-var
-  TokenHandle: THandle;
-  NewState: TTokenPrivileges;
-  ReturnLength: DWORD;
-  Luid: TLargeInteger;
-
-begin
-  if not OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES or
-    TOKEN_QUERY, TokenHandle) then
-    raise EOSError.Create(SysErrorMessage(GetLastError()));
-
-  try
-    // Get LUID of shutdown privilege
-    if not LookupPrivilegeValue(nil, SE_SHUTDOWN_NAME, Luid) then
-      raise EOSError.Create(SysErrorMessage(GetLastError()));
-
-    // Enable shutdown privilege
-    with NewState do
-    begin
-      PrivilegeCount := 1;
-      Privileges[0].Luid := Luid;
-      Privileges[0].Attributes := SE_PRIVILEGE_ENABLED;
-    end;  //of with
-
-    if not AdjustTokenPrivileges(TokenHandle, False, NewState, 0, nil, ReturnLength) then
-      raise EOSError.Create(SysErrorMessage(GetLastError()));
-
-    // Shutdown
-    if not ExitWindowsEx(EWX_SHUTDOWN or EWX_FORCE, SHTDN_REASON_MAJOR_APPLICATION or
-      SHTDN_REASON_MINOR_MAINTENANCE) then
-      raise EOSError.Create(SysErrorMessage(GetLastError()));
-
-  finally
-    CloseHandle(TokenHandle);
-  end;  //of try
-end;
-{$ENDIF}
-
 procedure TMain.ShowAlertTime();
 begin
   eHour.Text := FClock.Alert.HourToString();
@@ -887,7 +797,7 @@ end;
 
 procedure TMain.bPlayClockClick(Sender: TObject);
 begin
-  FClock.PlaySound(atClock);
+  atClock.PlayAlarmSound();
 end;
 
 { TMain.bPlayHornClick
@@ -896,7 +806,7 @@ end;
 
 procedure TMain.bPlayHornClick(Sender: TObject);
 begin
-  FClock.PlaySound(atHorn);
+  atHorn.PlayAlarmSound();
 end;
 
 { TMain.bPlayBingClick
@@ -905,7 +815,7 @@ end;
 
 procedure TMain.bPlayBingClick(Sender: TObject);
 begin
-  FClock.PlaySound(atBing);
+  atBing.PlayAlarmSound();
 end;
 
 { TMain.bPlayBeepClick
@@ -914,7 +824,7 @@ end;
 
 procedure TMain.bPlayBeepClick(Sender: TObject);
 begin
-  FClock.PlaySound(atBeep);
+  atBeep.PlayAlarmSound();
 end;
 
 { TMain.eHourKeyPress
@@ -1018,7 +928,14 @@ end;
 
 procedure TMain.bStopClick(Sender: TObject);
 begin
-  // Stop alert
+  // Stop playing sound
+  if Assigned(FAlertThread) then
+  begin
+    FAlertThread.Terminate();
+    FAlertThread := nil;
+  end;  //of begin
+
+  // Disable alert
   FClock.AlertEnabled := False;
 
   if mmCounter.Checked then

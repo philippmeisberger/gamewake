@@ -1,6 +1,5 @@
 program GameWake;
 
-{$mode delphi}{$H+}
 {$define UseCThreads}
 
 {$R 'changelog.res' 'changelog.rc'}
@@ -21,4 +20,3 @@ begin
   Application.CreateForm(TMain, Main);
   Application.Run;
 end.
-
