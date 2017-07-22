@@ -1309,7 +1309,7 @@ begin
   try
   {$IFDEF LINUX}
     AboutDialog.Title := mmAbout.Caption;
-    AboutDialog.ImageFile := MAINICON;
+    AboutDialog.Icon.LoadFromFile(MAINICON);
   {$ELSE}
     AboutDialog.Title := StripHotkey(mmAbout.Caption);
   {$ENDIF}
