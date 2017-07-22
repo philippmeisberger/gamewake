@@ -695,7 +695,7 @@ var
 
 begin
 {$IFDEF MSWINDOWS}
-  if (AAlertSound = atBing) then
+  if (Self = atBing) then
   begin
     // Play default Windows sound
     Exit(MMSystem.PlaySound(PChar(SND_ALIAS_SYSTEMDEFAULT), 0,
