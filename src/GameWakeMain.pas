@@ -21,9 +21,6 @@ uses
   Winapi.Messages, PMCW.Dialogs.Updater, PMCW.CA;
 {$ELSE}
   LCLType;
-
-const
-  MAINICON = '/usr/share/pixmaps/gamewake.ico';
 {$ENDIF}
 
 type
@@ -273,7 +270,6 @@ begin
   mmUpdate.Visible := False;
   N2.Visible := False;
   mmInstallCertificate.Visible := False;
-  Icon.LoadFromFile(MAINICON);
 {$ENDIF}
 
   // Init Clock
@@ -1226,7 +1222,7 @@ begin
   try
   {$IFDEF LINUX}
     AboutDialog.Title := mmAbout.Caption;
-    AboutDialog.Icon.LoadFromFile(MAINICON);
+    AboutDialog.Icon.LoadFromResourceName(HINSTANCE, 'MAINICON');
   {$ELSE}
     AboutDialog.Title := StripHotkey(mmAbout.Caption);
   {$ENDIF}
@@ -1299,7 +1295,7 @@ begin
     {$IFDEF MSWINDOWS}
       Icon.Handle := Application.Icon.Handle;
     {$ELSE}
-      Icon.LoadFromFile(MAINICON);
+      Icon.LoadFromResourceName(HINSTANCE, 'MAINICON');
     {$ENDIF}
       Visible := True;
     end;  //of with
