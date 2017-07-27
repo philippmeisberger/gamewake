@@ -1,10 +1,13 @@
 [Desktop Entry]
-Type=Application
 Name=Game Wake
-Comment=Alert clock application
-Comment[de]=Wecker Anwendung
-Exec=/usr/bin/gamewake
-Icon=/usr/share/pixmaps/gamewake.xpm
+GenericName=Alarm clock application
+GenericName[de]=Wecker-Anwendung
+GenericName[fr]=Application de réveil
+Comment=Set alarm for specific time
+Comment[de]=Alarm für bestimmte Uhrzeit stellen
+Comment[fr]=Alarme réglée pour un certain temps
+Exec=gamewake
+Icon=gamewake
 Terminal=false
+Type=Application
 Categories=Utility;
-StartupNotify=false
