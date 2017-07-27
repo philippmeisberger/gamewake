@@ -1,3 +1,5 @@
-?package(gamewake):needs="X11" section="Applications/Sound" \
-  title="Game Wake" command="/usr/bin/gamewake" \
+?package(gamewake): needs="X11" \
+  section="Applications/Sound" \
+  title="Game Wake" \
+  command="/usr/bin/gamewake" \
   icon="/usr/share/pixmaps/gamewake.xpm"
