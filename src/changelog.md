@@ -3,7 +3,7 @@
 
 An open-source project of PM Code Works
 
-Version 3.5  [*??.??.17*]
+Version 3.5  [*??.09.17*]
 -----------
 
 * Usage of Delphi/FPC TTime
@@ -14,6 +14,7 @@ Version 3.5  [*??.??.17*]
   * Exception when loading default time (00:00) at startup in counter mode
   * Automatic alarm termination after 1 minute does not work in counter mode
   * Portable Edition does not play bing sound
+  * Loading primary language if requested locale could not be found in language file
 * Updater v3.1
   * Removed dependency to "Indy" component suite
   * Executable up to 1MB smaller
