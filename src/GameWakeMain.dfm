@@ -324,10 +324,6 @@ object Main: TMain
       object N2: TMenuItem
         Caption = '-'
       end
-      object mmWebsite: TMenuItem
-        Caption = 'Go to website'
-        OnClick = mmWebsiteClick
-      end
       object mmInstallCertificate: TMenuItem
         Caption = 'Install certificate'
         OnClick = mmInstallCertificateClick

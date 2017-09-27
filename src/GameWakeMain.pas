@@ -34,7 +34,6 @@ type
     mmInstallCertificate: TMenuItem;
     pmClose: TMenuItem;
     pmOpen: TMenuItem;
-    mmWebsite: TMenuItem;
     mmCounter: TMenuItem;
     mmTimer: TMenuItem;
     mmUpdate: TMenuItem;
@@ -76,7 +75,6 @@ type
     procedure pmCloseClick(Sender: TObject);
     procedure pmOpenClick(Sender: TObject);
     procedure mmUpdateClick(Sender: TObject);
-    procedure mmWebsiteClick(Sender: TObject);
     procedure bIncHourClick(Sender: TObject);
     procedure bDecHourClick(Sender: TObject);
     procedure bIncMinClick(Sender: TObject);
@@ -264,11 +262,7 @@ begin
       CheckForUpdate();
   {$ENDIF}
   end;  //of with
-
-  mmWebsite.Visible := False;
 {$ELSE}
-  mmUpdate.Visible := False;
-  N2.Visible := False;
   mmInstallCertificate.Visible := False;
 {$ENDIF}
 
@@ -647,11 +641,14 @@ begin
     mmView.Caption := GetString(LID_VIEW);
     mmLang.Caption := GetString(LID_SELECT_LANGUAGE);
     mmHelp.Caption := GetString(LID_HELP);
+  {$IFDEF MSWINDOWS}
     mmUpdate.Caption:= GetString(LID_UPDATE_SEARCH);
+  {$ELSE}
+    mmUpdate.Caption := GetString(LID_TO_WEBSITE);
+  {$ENDIF}
     mmInstallCertificate.Caption := GetString(LID_CERTIFICATE_INSTALL);
     mmReport.Caption := GetString(LID_REPORT_BUG);
-    mmWebsite.Caption := GetString(LID_TO_WEBSITE);
-    lCopy.Hint := mmWebsite.Caption;
+    lCopy.Hint := GetString(LID_TO_WEBSITE);
     mmAbout.Caption := Format(LID_ABOUT, [Application.Title]);
 
     // Set captions for "alert type" TRadioGroup
@@ -1183,16 +1180,9 @@ begin
 {$IFDEF MSWINDOWS}
   FUpdateCheck.NotifyNoUpdate := True;
   FUpdateCheck.CheckForUpdate();
-{$ENDIF}
-end;
-
-{ TMain.mmWebsiteClick
-
-  Opens the homepage of Game Wake in a web browser. }
-
-procedure TMain.mmWebsiteClick(Sender: TObject);
-begin
+{$ELSE}
   OpenUrl(URL_BASE +'gamewake.html');
+{$ENDIF}
 end;
 
 { TMain.mmReportClick
