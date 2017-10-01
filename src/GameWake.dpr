@@ -15,7 +15,10 @@ uses
 
 {$R *.res}
 
-begin          
+begin
+{$IFDEF DEBUG}
+  ReportMemoryLeaksOnShutdown := True;
+{$ENDIF}
   Application.Initialize;
   Application.Title := 'Game Wake';
   Application.MainFormOnTaskbar := True;
