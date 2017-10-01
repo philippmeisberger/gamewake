@@ -995,6 +995,10 @@ begin
       ColorDialog := TColorDialog.Create(Self);
 
       try
+        // Select current color
+        ColorDialog.Color := FColor;
+
+        // Load stored custom colors?
         if (Save and SaveColor) then
           for i := Low(Colors) to High(Colors) do
             ColorDialog.CustomColors.Insert(i, Config.IdColor + Chr(Ord('A') + i) +'='+ Colors[i]);
