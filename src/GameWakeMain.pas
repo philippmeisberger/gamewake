@@ -239,10 +239,7 @@ begin
 
   {$IFDEF MSWINDOWS}
     // Check for Updates?
-    if Config.ValueExists(Config.SectionGlobal, Config.IdAutoUpdate) then
-      AutoUpdate := Config.ReadBool(Config.SectionGlobal, Config.IdAutoUpdate, True)
-    else
-      AutoUpdate := True;
+    AutoUpdate := Config.ReadBool(Config.SectionGlobal, Config.IdAutoUpdate, True);
   {$ENDIF}
 
   finally
