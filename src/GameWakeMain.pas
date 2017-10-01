@@ -977,7 +977,6 @@ procedure TMain.bColorClick(Sender: TObject);
 var
   ColorDialog: TColorDialog;
   Config: TConfigFile;
-  ChosenColor: TColor;
   Save, SaveColor: Boolean;
   Colors: array[0..15] of string;
   i: Byte;
@@ -1006,12 +1005,10 @@ begin
         // Action "Ok" was called
         if ColorDialog.Execute then
         begin
-          ChosenColor := ColorDialog.Color;
+          FColor := ColorDialog.Color;
 
           if (Save and SaveColor) then
           begin
-            FColor := ChosenColor;
-
             for i := Low(Colors) to High(Colors) do
               Colors[i] := ColorDialog.CustomColors.Values[Config.IdColor + Chr(Ord('A') + i)];
 

@@ -15,6 +15,7 @@ Version 3.5  [*??.09.17*]
   * Automatic alarm termination after 1 minute does not work in counter mode
   * Portable Edition does not play bing sound
   * Loading primary language if requested locale could not be found in language file
+  * Color could not be changed if nothing should be saved
 * Updater v3.1
   * Removed dependency to "Indy" component suite
   * Executable up to 1MB smaller
