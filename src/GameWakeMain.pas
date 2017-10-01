@@ -977,7 +977,7 @@ procedure TMain.bColorClick(Sender: TObject);
 var
   ColorDialog: TColorDialog;
   Config: TConfigFile;
-  Save, SaveColor: Boolean;
+  SaveColor: Boolean;
   Colors: array[0..15] of string;
   i: Byte;
 
@@ -986,7 +986,6 @@ begin
 
   try
     try
-      Save := Config.ReadBool(Config.SectionGlobal, Config.IdSave, True);
       SaveColor := Config.ReadBool(Config.SectionGlobal, Config.IdSaveColor, True);
       Config.ReadColors(Colors);
 
@@ -998,7 +997,7 @@ begin
         ColorDialog.Color := FColor;
 
         // Load stored custom colors?
-        if (Save and SaveColor) then
+        if (mmSave.Checked and SaveColor) then
           for i := Low(Colors) to High(Colors) do
             ColorDialog.CustomColors.Insert(i, Config.IdColor + Chr(Ord('A') + i) +'='+ Colors[i]);
 
@@ -1007,7 +1006,7 @@ begin
         begin
           FColor := ColorDialog.Color;
 
-          if (Save and SaveColor) then
+          if (mmSave.Checked and SaveColor) then
           begin
             for i := Low(Colors) to High(Colors) do
               Colors[i] := ColorDialog.CustomColors.Values[Config.IdColor + Chr(Ord('A') + i)];
