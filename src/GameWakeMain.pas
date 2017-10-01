@@ -826,8 +826,8 @@ end;
 
 procedure TMain.eHourKeyPress(Sender: TObject; var Key: Char);
 begin
-  // Only allow digits, arrow-left and arrow-right key and delete key
-  if not (Key in [#25, #27, #08, '0'..'9']) then
+  // Only allow digits and backspace
+  if not CharInSet(Key, ['0'..'9', Char(VK_BACK)]) then
   begin
     SysUtils.Beep();
     Key := #0;
