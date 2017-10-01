@@ -76,7 +76,7 @@ type
     /// <param name="AArray">
     ///   The array containing the colors.
     /// </param>
-    procedure ReadColors(var AArray: array of string);
+    procedure ReadColors(var AColors: array of string);
 
     /// <summary>
     ///   Writes a color to the configuration file.
@@ -98,7 +98,7 @@ type
     /// <param name="AArray">
     ///   The array containing the colors.
     /// </param>
-    procedure WriteColors(const AArray: array of string);
+    procedure WriteColors(const AColors: array of string);
   end;
 
   TTimeHelper = record helper for TTime
@@ -490,13 +490,13 @@ begin
   Result := StringToColor(ReadString(ASection, AKey, ColorToString(ADefault)));
 end;
 
-procedure TConfigFile.ReadColors(var AArray: array of string);
+procedure TConfigFile.ReadColors(var AColors: array of string);
 var
   i: Byte;
 
 begin
-  for i := Low(AArray) to High(AArray) do
-    AArray[i] := ReadString(SectionColors, IdColor + IntToStr(i), '');
+  for i := Low(AColors) to High(AColors) do
+    AColors[i] := ReadString(SectionColors, IdColor + IntToStr(i), '');
 end;
 
 procedure TConfigFile.WriteColor(const ASection, AKey: string; AColor: TColor);
@@ -504,13 +504,13 @@ begin
   WriteString(ASection, AKey, ColorToString(AColor));
 end;
 
-procedure TConfigFile.WriteColors(const AArray: array of string);
+procedure TConfigFile.WriteColors(const AColors: array of string);
 var
   i: Byte;
 
 begin
-  for i := Low(AArray) to High(AArray) do
-    WriteString(SectionColors, IdColor + IntToStr(i), AArray[i]);
+  for i := Low(AColors) to High(AColors) do
+    WriteString(SectionColors, IdColor + IntToStr(i), AColors[i]);
 end;
 
 
