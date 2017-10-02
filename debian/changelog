@@ -6,12 +6,15 @@ gamewake (3.5) UNRELEASED; urgency=medium
     * Game Wake is terminated if language file cannot be found
     * Added 48x48 PNG for better desktop icon quality
   * Bug fixes:
-    * Disabled alert after initiating a shutdown otherwise Game Wake was minimized and stayed active
-    * Blinking stayed enabled (even if deselected) after alarm has occured and was set again
+    * Disabled alert after initiating a shutdown otherwise Game Wake was
+    minimized and stayed active
+    * Blinking stayed enabled (even if deselected) after alarm has occurred and
+    was set again
     * Exception when loading default time (00:00) at startup in counter mode
     * Automatic alarm termination after 1 minute did not work in counter mode
     * Portable Edition did not play bing sound
-    * Loading primary language if requested locale could not be found in language file
+    * Loading primary language if requested locale could not be found in
+    language file
     * Color could not be changed if nothing should be saved
   * Updater v3.1
     * Removed dependency to "Indy" component suite
@@ -31,7 +34,8 @@ gamewake (3.4) stable; urgency=medium
     * New setup
     * Improved report bug system
       * Added translations for german, english and french
-      * In case no mail client is installed for sending the bug report the website will be shown
+      * In case no mail client is installed for sending the bug report the
+      website will be shown
     * Program executable is now signed with SHA-256 under Windows
   * Alert sounds have the same volume
   * Closed small memory leak when changing the mode
