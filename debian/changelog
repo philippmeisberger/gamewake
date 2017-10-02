@@ -4,19 +4,20 @@ gamewake (3.5) UNRELEASED; urgency=medium
   * Usage of Delphi/FPC TTime
   * Linux:
     * Game Wake is terminated if language file cannot be found
+    * Added 48x48 PNG for better desktop icon quality
   * Bug fixes:
-    * Disable alert after initiating a shutdown otherwise Game Wake is minimized
-      and stays active
-    * Blinking stays enabled (even if deselected) after alarm has occured and is
-      set again
+    * Disabled alert after initiating a shutdown otherwise Game Wake was minimized and stayed active
+    * Blinking stayed enabled (even if deselected) after alarm has occured and was set again
     * Exception when loading default time (00:00) at startup in counter mode
-    * Automatic alarm termination after 1 minute does not work in counter mode
-    * Portable Edition does not play bing sound
+    * Automatic alarm termination after 1 minute did not work in counter mode
+    * Portable Edition did not play bing sound
+    * Loading primary language if requested locale could not be found in language file
+    * Color could not be changed if nothing should be saved
   * Updater v3.1
     * Removed dependency to "Indy" component suite
     * Executable up to 1MB smaller
     * Removed "Search for update" under Linux
-  * Usage of Delphi/FPC TIniFile class
+  * Usage of Delphi/FPC TIniFile
 
  -- Philipp Meisberger <team@pm-codeworks.de>  Wed, 08 Feb 2017 16:29:08 +0100
 
