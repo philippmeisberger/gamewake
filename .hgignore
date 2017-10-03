@@ -4,7 +4,7 @@ backup
 __history
 __recovery
 desktop.ini
-bin/*-linux/**
+bin/*-*/**
 **.orig
 **.zip
 
@@ -20,6 +20,7 @@ bin/*-linux/**
 **.mes
 **.map
 **.drc
+**.dres
 
 # IDE files
 **.stat

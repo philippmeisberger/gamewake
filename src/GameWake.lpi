@@ -9,6 +9,10 @@
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
       <Icon Value="0"/>
+      <Resources Count="2">
+        <Resource_0 FileName="changelog.md" Type="RCDATA" ResourceName="CHANGELOG"/>
+        <Resource_1 FileName="description.txt" Type="RCDATA" ResourceName="DESCRIPTION"/>
+      </Resources>
     </General>
     <i18n>
       <EnableI18N LFM="False"/>

@@ -1,11 +1,12 @@
 program GameWake;
 
-{$R 'changelog.res' 'changelog.rc'}
-{$R 'description.res' 'description.rc'}
+
 
 {$IFDEF PORTABLE}
 {$R 'sounds.res' 'sounds.rc'}
 {$ENDIF}
+
+{$R *.dres}
 
 uses
   Vcl.Forms,
