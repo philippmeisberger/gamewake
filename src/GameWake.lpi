@@ -48,7 +48,7 @@
     </RequiredPackages>
     <Units Count="6">
       <Unit0>
-        <Filename Value="GameWake.lpr"/>
+        <Filename Value="GameWake.dpr"/>
         <IsPartOfProject Value="True"/>
       </Unit0>
       <Unit1>
@@ -56,7 +56,7 @@
         <IsPartOfProject Value="True"/>
       </Unit1>
       <Unit2>
-        <Filename Value="GameWakeMain.dfm"/>
+        <Filename Value="GameWakeMain.lfm"/>
         <IsPartOfProject Value="True"/>
       </Unit2>
       <Unit3>
@@ -67,7 +67,7 @@
         <ResourceBaseClass Value="Form"/>
       </Unit3>
       <Unit4>
-        <Filename Value="GameWakeOps.dfm"/>
+        <Filename Value="GameWakeOps.lfm"/>
         <IsPartOfProject Value="True"/>
       </Unit4>
       <Unit5>
