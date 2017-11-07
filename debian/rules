@@ -1,10 +1,12 @@
 #!/usr/bin/make -f
 
 #export DH_VERBOSE=1
-export DEB_BUILD_HARDENING=1
 
 %:
 	dh $@
 
-build: src/GameWake.lpr
+build: src/GameWake.dpr
+	## lazbuild needs a .lpr
+	cp src/GameWake.dpr src/GameWake.lpr
 	lazbuild src/GameWake.lpr
+	rm src/GameWake.lpr
