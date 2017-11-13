@@ -104,8 +104,6 @@ type
     procedure lCopyMouseLeave(Sender: TObject);
     procedure Blink(Sender: TObject);
     procedure mmLangClick(Sender: TObject);
-    procedure TrayIconMouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
   private
     FClock: TClock;
     FAlertThread: TAlertThread;
@@ -429,8 +427,17 @@ end;
   Event that is called by TClock when current time is incremented. }
 
 procedure TMain.Counting(Sender: TObject);
+var
+  TimeRemaining: TTime;
+
 begin
   lHour.Caption := FClock.Time.ToString();
+
+  if (TrayIcon.Visible and not FClock.TimerMode) then
+  begin
+    TimeRemaining := FClock.Alert - FClock.Time;
+    TrayIcon.Hint := Application.Title +' - '+ FLang.Format(LID_ALERT_REMAINING, [TimeRemaining.ToString()]);
+  end;  //of begin
 end;
 
 { private TMain.LoadFromIni
@@ -651,7 +658,7 @@ begin
     // Set captions for "alert type" TRadioGroup
     rgSounds.Caption := GetString(LID_ALERT_SELECTION);
 
-    for i := 0 to 4 do
+    for i := 0 to rgSounds.Items.Count - 1 do
       rgSounds.Items[i] := GetString(i + LID_SOUND_CLOCK);
 
     // Set captions for "at alert" TGroupBox
@@ -675,29 +682,6 @@ procedure TMain.ShowAlertTime();
 begin
   eHour.Text := FClock.Alert.HourToString();
   eMin.Text := FClock.Alert.MinuteToString();
-end;
-
-procedure TMain.TrayIconMouseUp(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
-var
-  TimeRemaining: TTime;
-
-begin
-  case Button of
-    // Show Balloon hint on left click
-    mbLeft:
-      begin
-        if not FClock.TimerMode then
-        begin
-          TimeRemaining := FClock.Alert - FClock.Time;
-          TrayIcon.BalloonHint := FLang.Format(LID_ALERT_REMAINING, [TimeRemaining.ToString()]);
-        end  //of begin
-        else
-          TrayIcon.BalloonHint := FLang.Format(LID_ALERT_AT, [FClock.Alert.ToString(False)]);
-
-        TrayIcon.ShowBalloonHint();
-      end;  //of begin
-  end;  //of case
 end;
 
 { TMain.Blink
@@ -883,7 +867,6 @@ begin
 
     // Start alert
     FClock.AlertEnabled := True;
-    Caption := Caption +' - '+ FClock.Alert.ToString(False);
 
     // Disable GUI components
     eHour.Enabled := False;
@@ -935,7 +918,6 @@ begin
   end;  //of begin
 
   // Reset GUI
-  Caption := Application.Title;
   bStop.Default := False;
   bStop.Enabled := False;
   bAlert.Enabled := True;
@@ -1275,10 +1257,10 @@ begin
   end;  //of begin
 
   try
+    // Show tray icon
     with TrayIcon do
     begin
-      BalloonTitle := Application.Title;
-      Hint := Application.Title;
+      Hint := Application.Title +' - '+ FLang.Format(LID_ALERT_AT, [FClock.Alert.ToString(False)]);
     {$IFDEF MSWINDOWS}
       Icon.Handle := Application.Icon.Handle;
     {$ELSE}

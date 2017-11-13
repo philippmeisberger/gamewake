@@ -355,9 +355,8 @@ object Main: TMain
     end
   end
   object TrayIcon: TTrayIcon
-    BalloonFlags = bfInfo
     PopupMenu = pmMenu
-    OnMouseUp = TrayIconMouseUp
+    OnClick = pmOpenClick
     Left = 216
     Top = 24
   end

@@ -7,6 +7,10 @@ Version 3.5  [*??.10.17*]
 -----------
 
 * Usage of Delphi/FPC TTime
+* Tray icon:
+  * Not showing alert time in balloon hint when minimized to tray
+    * Using tray hint instead
+  * Clicking on tray icon shows Game Wake again
 * Linux:
   * Game Wake is terminated if language file cannot be found
   * Added 48x48 PNG for better desktop icon quality
