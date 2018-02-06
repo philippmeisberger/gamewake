@@ -5,8 +5,5 @@
 %:
 	dh $@
 
-build: src/GameWake.dpr
-	## lazbuild needs a .lpr
-	cp src/GameWake.dpr src/GameWake.lpr
-	lazbuild src/GameWake.lpr
-	rm src/GameWake.lpr
+build: src/GameWake.lpi
+	lazbuild src/GameWake.lpi
