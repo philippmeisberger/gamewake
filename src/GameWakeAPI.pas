@@ -2,7 +2,7 @@
 {                                                                         }
 { Game Wake API Interface Unit                                            }
 {                                                                         }
-{ Copyright (c) 2011-2017 Philipp Meisberger (PM Code Works)              }
+{ Copyright (c) 2011-2018 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
 { *********************************************************************** }
 
@@ -19,9 +19,6 @@ uses
   Windows, MMSystem,
 {$ENDIF}
   DateUtils, SysUtils, Classes, ExtCtrls, Graphics, IniFiles;
-
-const
-  SOUND_PATH = {$IFDEF MSWINDOWS}''{$ELSE}'/usr/lib/gamewake/'{$ENDIF};
 
 type
   /// <summary>
@@ -715,10 +712,8 @@ begin
   Result := MMSystem.PlaySound(PChar(Sound), HInstance, Synchronous[ASynchronized] or
     SND_RESOURCE or SND_SENTRY);
 {$ELSE}
-  if (SOUND_PATH <> '') then
-    Sound := IncludeTrailingPathDelimiter(SOUND_PATH) + Sound;
-
-  Result := PlaySound(ChangeFileExt(Sound, '.wav'), ASynchronized);
+  Result := PlaySound(ChangeFileExt({$IFDEF LINUX}'/usr/lib/gamewake/'+{$ENDIF}Sound,
+    '.wav'), ASynchronized);
 {$ENDIF}
 end;
 
