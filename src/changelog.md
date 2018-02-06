@@ -3,7 +3,7 @@
 
 An open-source project of PM Code Works
 
-Version 3.5  [*??.10.17*]
+Version 3.5  [*??.10.18*]
 -----------
 
 * Usage of Delphi/FPC TTime

@@ -2,13 +2,13 @@
 {                                                                         }
 { Game Wake Options Unit                                                  }
 {                                                                         }
-{ Copyright (c) 2011-2017 Philipp Meisberger (PM Code Works)              }
+{ Copyright (c) 2011-2018 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
 { *********************************************************************** }
 
 unit GameWakeOps;
 
-{$IFDEF LINUX}{$mode delphi}{$ENDIF}
+{$IFDEF FPC}{$MODE Delphi}{$ENDIF}
 
 interface
 

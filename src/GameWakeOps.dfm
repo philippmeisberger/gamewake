@@ -3,7 +3,7 @@ object Options: TOptions
   Top = 188
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
-  Caption = 'Optionen'
+  Caption = 'Options'
   ClientHeight = 210
   ClientWidth = 426
   Color = clBtnFace
