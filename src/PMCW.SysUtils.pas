@@ -15,7 +15,7 @@ interface
 uses
   SysUtils,
 {$IFDEF MSWINDOWS}
-  Winapi.Windows, Winapi.ShellAPI, Winapi.ShlObj, Winapi.ActiveX, Vcl.Forms;
+  Windows, ShellAPI, ShlObj, ActiveX;
 {$ELSE}
   Process, Resource, ElfReader, VersionResource;
 {$ENDIF}
@@ -134,8 +134,8 @@ function ExpandEnvironmentVar(var AVariable: string): Boolean;
 /// <remarks>
 ///   DEPRECATED since Windows Vista! Use <c>GetKnownFolderPath()</c> instead.
 /// </remarks>
-function GetFolderPath(ACSIDL: Integer): string; deprecated 'Use GetKnownFolderPath()';
-
+function GetFolderPath(ACSIDL: Integer): string; {$IFNDEF FPC}deprecated 'Use GetKnownFolderPath()';{$ENDIF}
+{$IFNDEF FPC}
 /// <summary>
 ///   Retrieves the path of known folders identified by a GUID (Windows >= Vista!).
 /// </summary>
@@ -149,7 +149,7 @@ function GetFolderPath(ACSIDL: Integer): string; deprecated 'Use GetKnownFolderP
 ///   GUIDs are defined in <c>Winapi.KnownFolders</c> unit.
 /// </remarks>
 function GetKnownFolderPath(AFolderId: TGUID): string;
-
+{$ENDIF}
 /// <summary>
 ///   Retrieves the path of the system directory used by WOW64. Note that this
 ///   directory is not present on a 32-bit Windows!
@@ -264,6 +264,7 @@ begin
     Result := IncludeTrailingPathDelimiter(Path);
 end;
 
+{$IFNDEF FPC}
 function GetKnownFolderPath(AFolderId: TGUID): string;
 var
   Path: PChar;
@@ -275,12 +276,13 @@ begin
     CoTaskMemFree(Path);
   end;  //of begin
 end;
+{$ENDIF}
 
 function LoadResourceString(const AResource: string; const AIdent: Word;
   const ADefault: string = ''): string;
 var
   Module: HMODULE;
-  Buffer: array[0..255] of Char;
+  Buffer: array[0..1023] of Char;
 
 begin
   Module := GetModuleHandle(PChar(AResource));
@@ -329,7 +331,7 @@ begin
     nShow := SW_SHOWDEFAULT;
   end;  //of with
 
-  Result := ShellExecuteEx(@ShellExecuteInfo);
+  Result := {$IFDEF FPC}ShellExecuteExA{$ELSE}ShellExecuteEx{$ENDIF}(@ShellExecuteInfo);
 end;
 {$ENDIF}
 

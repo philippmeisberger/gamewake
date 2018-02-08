@@ -2,20 +2,23 @@
 {                                                                         }
 { PM Code Works Language File Unit v2.2                                   }
 {                                                                         }
-{ Copyright (c) 2011-2017 Philipp Meisberger (PM Code Works)              }
+{ Copyright (c) 2011-2018 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
 { *********************************************************************** }
 
 unit PMCW.LanguageFile;
 
-{$IFDEF FPC}{$mode Delphi}{$ENDIF}
+{$IFDEF FPC}{$MODE Delphi}{$ENDIF}
 
 interface
 
 uses
   Classes, SysUtils, Menus, Dialogs,
 {$IFDEF MSWINDOWS}
-  Winapi.Windows, Winapi.ShellAPI, System.NetEncoding, System.UITypes, Vcl.Forms;
+{$IFNDEF FPC}
+  Winapi.ShellAPI, System.NetEncoding, System.UITypes, Vcl.Forms,
+{$ENDIF}
+  Windows;
 {$ELSE}
   StrUtils, IniFiles;
 {$ENDIF}
@@ -139,7 +142,7 @@ type
   {$ENDIF}
     procedure SetLocale(const ALocale: TLocale);
     procedure LanguageSelected(Sender: TObject);
-  {$IFDEF MSWINDOWS}
+  {$IFNDEF FPC}
     procedure HyperlinkClicked(Sender: TObject);
   {$ENDIF}
   protected
@@ -313,6 +316,11 @@ begin
     Length(Result));
   SetLength(Result, CopiedChars);
 end;
+
+{$IFDEF FPC}
+function GetUserDefaultUILanguage(): LANGID; stdcall; external kernel32 name 'GetUserDefaultUILanguage';
+{$ENDIF}
+
 {$ELSE}
 function GetUserDefaultUILanguage(): string;
 begin
@@ -586,7 +594,7 @@ begin
   end;  //of begin
 end;
 
-{$IFDEF MSWINDOWS}
+{$IFNDEF FPC}
 procedure TLanguageFile.HyperlinkClicked(Sender: TObject);
 begin
 {$WARN SYMBOL_PLATFORM OFF}
@@ -600,7 +608,7 @@ end;
 {$ENDIF}
 
 procedure TLanguageFile.ShowException(const AMessage, ATechnicalDetails: string);
-{$IFDEF MSWINDOWS}
+{$IFNDEF FPC}
 {$WARN SYMBOL_PLATFORM OFF}
 const
   URL_MAILTO = '<a href="mailto:%s?subject=%s&body=%s">%s</a>';

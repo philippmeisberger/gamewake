@@ -2,7 +2,7 @@
 {                                                                         }
 { PM Code Works About Form v2.1                                           }
 {                                                                         }
-{ Copyright (c) 2011-2017 Philipp Meisberger (PM Code Works)              }
+{ Copyright (c) 2011-2018 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
 { *********************************************************************** }
 
@@ -14,7 +14,7 @@ interface
 
 uses
 {$IFDEF MSWINDOWS}
-  Winapi.Windows,
+  Windows,
 {$ENDIF}
   SysUtils, Classes, Controls, Forms, StdCtrls, ExtCtrls, ComCtrls, Dialogs,
   Graphics, PMCW.SysUtils;
