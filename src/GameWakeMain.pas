@@ -14,13 +14,15 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Controls, Forms, StdCtrls, ExtCtrls, Menus,
-  Dialogs, GameWakeAPI, PMCW.LanguageFile, PMCW.Dialogs.About, PMCW.SysUtils,
-  DateUtils,
+  Dialogs, DateUtils, GameWakeAPI, PMCW.LanguageFile, PMCW.Dialogs.About,
+  PMCW.SysUtils,
 {$IFDEF MSWINDOWS}
-  Winapi.Windows, System.UITypes, Winapi.ShlObj, Winapi.KnownFolders,
-  Winapi.Messages, PMCW.Dialogs.Updater, PMCW.CA;
+  Windows, ShlObj, Messages, PMCW.CA,
+{$ENDIF}
+{$IFDEF FPC}
+  LCL;
 {$ELSE}
-  LCLType;
+  System.UITypes, Winapi.KnownFolders, PMCW.Dialogs.Updater;
 {$ENDIF}
 
 type
@@ -110,7 +112,7 @@ type
     FLang: TLanguageFile;
     FColor: TColor;
     FConfigPath: string;
-  {$IFDEF MSWINDOWS}
+  {$IFNDEF FPC}
     FUpdateCheck: TUpdateCheck;
   {$ENDIF}
     procedure Alert(Sender: TObject);
@@ -118,8 +120,10 @@ type
     procedure Counting(Sender: TObject);
     procedure LanguageChanged();
     procedure LoadFromIni();
-  {$IFDEF MSWINDOWS}
+  {$IFNDEF FPC}
     procedure OnUpdate(Sender: TObject; const ANewBuild: Cardinal);
+  {$ENDIF}
+  {$IFDEF MSWINDOWS}
     procedure PowerBroadcast(var AMsg: TMessage); message WM_POWERBROADCAST;
   {$ENDIF}
     procedure SaveToIni();
@@ -150,9 +154,10 @@ procedure TMain.FormCreate(Sender: TObject);
 var
   Config: TConfigFile;
   ParsedAlertTime: TDateTime;
-{$IFDEF MSWINDOWS}
+{$IFNDEF FPC}
   AutoUpdate: Boolean;
-{$ELSE}
+{$ENDIF}
+{$IFNDEF MSWINDOWS}
   i: Integer;
   LanguageFileName: TFileName;
 {$ENDIF}
@@ -196,9 +201,11 @@ begin
   if not Assigned(FLang) then
     Exit;
 {$ELSE}
+{$IFNDEF FPC}
   if CheckWin32Version(6) then
     FConfigPath := GetKnownFolderPath(FOLDERID_RoamingAppData)
   else
+{$ENDIF}
   {$WARN SYMBOL_DEPRECATED OFF}
     FConfigPath := GetFolderPath(CSIDL_APPDATA);
   {$WARN SYMBOL_DEPRECATED ON}
@@ -235,7 +242,7 @@ begin
       mmOptions.Enabled := False;
     end;  //of if
 
-  {$IFDEF MSWINDOWS}
+  {$IFNDEF FPC}
     // Check for Updates?
     AutoUpdate := Config.ReadBool(Config.SectionGlobal, Config.IdAutoUpdate, True);
   {$ENDIF}
@@ -244,7 +251,7 @@ begin
     Config.Free;
   end;  //of finally
 
-{$IFDEF MSWINDOWS}
+{$IFNDEF FPC}
   // Init update notificator
   FUpdateCheck := TUpdateCheck.Create('GameWake', FLang);
 
@@ -257,7 +264,8 @@ begin
       CheckForUpdate();
   {$ENDIF}
   end;  //of with
-{$ELSE}
+{$ENDIF}
+{$IFNDEF MSWINDOWS}
   mmInstallCertificate.Visible := False;
 {$ENDIF}
 
@@ -290,7 +298,7 @@ begin
 
   FreeAndNil(FLang);
   FreeAndNil(FClock);
-{$IFDEF MSWINDOWS}
+{$IFNDEF FPC}
   FreeAndNil(FUpdateCheck);
 {$ENDIF}
 end;
@@ -356,7 +364,7 @@ begin
   end;  //of begin
 end;
 
-{$IFDEF MSWINDOWS}
+{$IFNDEF FPC}
 { private TMain.OnUpdate
 
   Event that is called by TUpdateCheck when TUpdateCheckThread finds an update. }
@@ -515,7 +523,7 @@ begin
       else
         FColor := clRed;
 
-    {$IFDEF MSWINDOWS}
+    {$IFNDEF FPC}
       // Missing "AutoUpdate"?
       if not Config.ValueExists(Config.SectionGlobal, Config.IdAutoUpdate) then
         Config.WriteBool(Config.SectionGlobal, Config.IdAutoUpdate, True);
@@ -540,6 +548,11 @@ end;
   Event that is called after wakeup (after suspending). }
 
 procedure TMain.PowerBroadcast(var AMsg: TMessage);
+{$IFDEF FPC}
+const
+  PBT_APMRESUMESUSPEND = $0007;
+{$ENDIF}
+
 begin
   if (AMsg.WParam = PBT_APMRESUMESUSPEND) then
     FClock.Time := Time();
@@ -645,7 +658,7 @@ begin
     mmView.Caption := GetString(LID_VIEW);
     mmLang.Caption := GetString(LID_SELECT_LANGUAGE);
     mmHelp.Caption := GetString(LID_HELP);
-  {$IFDEF MSWINDOWS}
+  {$IFNDEF FPC}
     mmUpdate.Caption:= GetString(LID_UPDATE_SEARCH);
   {$ELSE}
     mmUpdate.Caption := GetString(LID_TO_WEBSITE);
@@ -1156,7 +1169,7 @@ end;
 
 procedure TMain.mmUpdateClick(Sender: TObject);
 begin
-{$IFDEF MSWINDOWS}
+{$IFNDEF FPC}
   FUpdateCheck.NotifyNoUpdate := True;
   FUpdateCheck.CheckForUpdate();
 {$ELSE}
@@ -1189,11 +1202,13 @@ begin
   Changelog := TResourceStream.Create(HInstance, RESOURCE_CHANGELOG, RT_RCDATA);
 
   try
-  {$IFDEF LINUX}
+  {$IFDEF FPC}
     AboutDialog.Title := mmAbout.Caption;
-    AboutDialog.Icon.LoadFromResourceName(HINSTANCE, 'MAINICON');
   {$ELSE}
     AboutDialog.Title := StripHotkey(mmAbout.Caption);
+  {$ENDIF}
+  {$IFDEF LINUX}
+    AboutDialog.Icon.LoadFromResourceName(HINSTANCE, 'MAINICON');
   {$ENDIF}
     AboutDialog.Description.LoadFromStream(Description);
     AboutDialog.Changelog.LoadFromStream(Changelog);

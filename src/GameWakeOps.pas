@@ -86,7 +86,7 @@ begin
       cbSaveSound.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdSaveSound, True);
       cbSaveColor.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdSaveColor, True);
       cbSavePos.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdSavePos, False);
-    {$IFDEF MSWINDOWS}
+    {$IFNDEF FPC}
       cbUpdate.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdAutoUpdate, True);
     {$ELSE}
       cbUpdate.Enabled := False;
@@ -177,7 +177,7 @@ begin
       Config.WriteBool(Config.SectionGlobal, Config.IdSaveSound, cbSaveSound.Checked);
       Config.WriteBool(Config.SectionGlobal, Config.IdSaveColor, cbSaveColor.Checked);
       Config.WriteBool(Config.SectionGlobal, Config.IdSavePos, cbSavePos.Checked);
-    {$IFDEF MSWINDOWS}
+    {$IFNDEF FPC}
       Config.WriteBool(Config.SectionGlobal, Config.IdAutoUpdate, cbUpdate.Checked);
     {$ENDIF}
 

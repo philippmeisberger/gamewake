@@ -13,10 +13,10 @@ unit GameWakeAPI;
 interface
 
 uses
-{$IFNDEF MSWINDOWS}
-  Process,
-{$ELSE}
+{$IFDEF MSWINDOWS}
   Windows, MMSystem,
+{$ELSE}
+  Process,
 {$ENDIF}
   DateUtils, SysUtils, Classes, ExtCtrls, Graphics, IniFiles;
 
@@ -352,6 +352,11 @@ procedure Shutdown();
 
 implementation
 
+{$IFDEF FPC}
+const
+  SND_SENTRY = $80000;
+{$ENDIF}
+
 function PlaySound(const AFileName: string; ASynchronized: Boolean = False): Boolean;
 var
 {$IFNDEF MSWINDOWS}
@@ -444,7 +449,7 @@ const
 
 var
   TokenHandle: THandle;
-  NewState: TTokenPrivileges;
+  NewState, PreviousState: TTokenPrivileges;
   ReturnLength: DWORD;
   Luid: TLargeInteger;
 
@@ -466,7 +471,7 @@ begin
       Privileges[0].Attributes := SE_PRIVILEGE_ENABLED;
     end;  //of with
 
-    if not AdjustTokenPrivileges(TokenHandle, False, NewState, 0, nil, ReturnLength) then
+    if not AdjustTokenPrivileges(TokenHandle, False, NewState, 0, PreviousState, ReturnLength) then
       raise EOSError.Create(SysErrorMessage(GetLastError()));
 
     // Shutdown
