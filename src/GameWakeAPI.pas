@@ -280,7 +280,28 @@ type
   /// <summary>
   ///   Possible alert sounds.
   /// </summary>
-  TAlertSound = (atClock, atHorn, atBing, atBeep);
+  TAlertSound = (
+
+    /// <summary>
+    ///   Classical clock alarm sound.
+    /// </summary>
+    atClock,
+
+    /// <summary>
+    ///   Siren sound.
+    /// </summary>
+    atSiren,
+
+    /// <summary>
+    ///   Default Windows notification sound.
+    /// </summary>
+    atBing,
+
+    /// <summary>
+    ///   Beep beep beep sound.
+    /// </summary>
+    atBeep
+  );
 
   TAlertSoundHelper = record helper for TAlertSound
     /// <summary>
@@ -696,7 +717,7 @@ begin
 
   case Self of
     atClock: Sound := 'bell';
-    atHorn:  Sound := 'horn';
+    atSiren: Sound := 'horn';
     atBing:  Sound := 'bing';
     atBeep:  Sound := 'beep';
     else     Exit(False);

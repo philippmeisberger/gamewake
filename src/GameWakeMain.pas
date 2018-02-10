@@ -780,7 +780,7 @@ end;
 
 procedure TMain.bPlayHornClick(Sender: TObject);
 begin
-  atHorn.PlayAlarmSound();
+  atSiren.PlayAlarmSound();
 end;
 
 { TMain.bPlayBingClick
