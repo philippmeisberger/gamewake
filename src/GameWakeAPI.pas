@@ -361,18 +361,21 @@ type
 function PlaySound(const AFileName: string; ASynchronized: Boolean = False): Boolean;
 
 /// <summary>
-///   Shutdown PC.
+///   Shuts the PC down.
 /// </summary>
 procedure Shutdown();
 
 implementation
 
+{$IFDEF MSWINDOWS}
+const
+  cSynchronous: array[Boolean] of DWORD = (SND_ASYNC, SND_SYNC);
+{$ENDIF}
+
 function PlaySound(const AFileName: string; ASynchronized: Boolean = False): Boolean;
-var
 {$IFNDEF MSWINDOWS}
+var
   Process: TProcess;
-{$ELSE}
-  Flags: DWORD;
 {$ENDIF}
 
 begin
@@ -380,16 +383,8 @@ begin
     Exit(False);
 
 {$IFDEF MSWINDOWS}
-  if ASynchronized then
-    Flags := SND_SYNC
-  else
-    Flags := SND_ASYNC;
-
-  // Add volume slider in system tray
-  if CheckWin32Version(6) then
-    Inc(Flags, SND_SENTRY);
-
-  Result := MMSystem.PlaySound(PChar(AFileName), 0, Flags or SND_FILENAME);
+  Result := MMSystem.PlaySound(PChar(AFileName), 0, cSynchronous[ASynchronized] or
+    SND_FILENAME or SND_SENTRY);
 {$ELSE}
   Process := TProcess.Create(nil);
 
@@ -697,11 +692,6 @@ end;
 { TAlertSoundHelper }
 
 function TAlertSoundHelper.PlayAlarmSound(ASynchronized: Boolean = False): Boolean;
-{$IFDEF MSWINDOWS}
-const
-  Synchronous: array[Boolean] of DWORD = (SND_ASYNC, SND_SYNC);
-{$ENDIF}
-
 var
   Sound: string;
 
@@ -711,10 +701,11 @@ begin
   begin
     // Play default Windows sound
     Exit(MMSystem.PlaySound(PChar(SND_ALIAS_SYSTEMDEFAULT), 0,
-      Synchronous[ASynchronized] or SND_ALIAS_ID or SND_SENTRY));
+      cSynchronous[ASynchronized] or SND_ALIAS_ID or SND_SENTRY));
   end;  //of begin
 {$ENDIF}
 
+  // Select sound
   case Self of
     atClock: Sound := 'bell';
     atSiren: Sound := 'horn';
@@ -724,9 +715,11 @@ begin
   end;  //of case
 
 {$IFDEF PORTABLE}
-  Result := MMSystem.PlaySound(PChar(Sound), HInstance, Synchronous[ASynchronized] or
+  // Play sound form resource
+  Result := MMSystem.PlaySound(PChar(Sound), HInstance, cSynchronous[ASynchronized] or
     SND_RESOURCE or SND_SENTRY);
 {$ELSE}
+  // Play sound file
   Result := PlaySound(ChangeFileExt({$IFDEF LINUX}'/usr/lib/gamewake/'+{$ENDIF}Sound,
     '.wav'), ASynchronized);
 {$ENDIF}
