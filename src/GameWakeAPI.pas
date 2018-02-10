@@ -99,12 +99,6 @@ type
   end;
 
   TTimeHelper = record helper for TTime
-    const
-      /// <summary>
-      ///   Two digit format to add a leading zero to values between 0 and 9.
-      /// </summary>
-      TwoDigitFormat = '%.2d';
-
     /// <summary>
     ///   Checks if a given time is equal to current time ignoring milliseconds.
     /// </summary>
@@ -533,7 +527,7 @@ end;
 
 function TTimeHelper.HourToString(): string;
 begin
-  Result := Format(TwoDigitFormat, [Hour()]);
+  Result := FormatDateTime('hh', Self);
 end;
 
 function TTimeHelper.Minute(): Word;
@@ -546,7 +540,7 @@ end;
 
 function TTimeHelper.MinuteToString(): string;
 begin
-  Result := Format(TwoDigitFormat, [Minute()]);
+  Result := FormatDateTime('nn', Self);
 end;
 
 function TTimeHelper.Second(): Word;
@@ -559,7 +553,7 @@ end;
 
 function TTimeHelper.SecondToString(): string;
 begin
-  Result := Format(TwoDigitFormat, [Second()]);
+  Result := FormatDateTime('ss', Self);
 end;
 
 procedure TTimeHelper.SetHour(const AHour: Word);
