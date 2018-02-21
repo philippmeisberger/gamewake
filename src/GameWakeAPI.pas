@@ -607,6 +607,7 @@ constructor TClock.Create(ATimerMode: Boolean);
 begin
   inherited Create;
   FAlertEnabled := False;
+  FAlertTime := 0;
 
   // Init TTimer
   FTimer := TTimer.Create(nil);

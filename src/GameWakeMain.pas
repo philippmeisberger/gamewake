@@ -147,12 +147,8 @@ uses GameWakeOps;
   VCL event that is called when form is being created. }
 
 procedure TMain.FormCreate(Sender: TObject);
+{$IFNDEF MSWINDOWS}
 var
-  Config: TConfigFile;
-  ParsedAlertTime: TDateTime;
-{$IFDEF MSWINDOWS}
-  AutoUpdate: Boolean;
-{$ELSE}
   i: Integer;
   LanguageFileName: TFileName;
 {$ENDIF}
@@ -219,44 +215,10 @@ begin
     BuildLanguageMenu(mmLang);
   end;  //of with
 
-  // Init config file access
-  Config := TConfigFile.Create(FConfigPath);
-
-  try
-    // Check if anything shall be loaded from config
-    if Config.ReadBool(Config.SectionGlobal, Config.IdSave, False) then
-    begin
-      LoadFromIni();
-      mmOptions.Enabled := True;
-    end  //of begin
-    else
-    begin
-      mmSave.Checked := False;
-      mmOptions.Enabled := False;
-    end;  //of if
-
-  {$IFDEF MSWINDOWS}
-    // Check for Updates?
-    AutoUpdate := Config.ReadBool(Config.SectionGlobal, Config.IdAutoUpdate, True);
-  {$ENDIF}
-
-  finally
-    Config.Free;
-  end;  //of finally
-
 {$IFDEF MSWINDOWS}
   // Init update notificator
   FUpdateCheck := TUpdateCheck.Create('GameWake', FLang);
-
-  with FUpdateCheck do
-  begin
-    OnUpdate := Self.OnUpdate;
-  {$IFNDEF DEBUG}
-    // Search for updates on startup?
-    if AutoUpdate then
-      CheckForUpdate();
-  {$ENDIF}
-  end;  //of with
+  FUpdateCheck.OnUpdate := OnUpdate;
 {$ELSE}
   mmInstallCertificate.Visible := False;
 {$ENDIF}
@@ -266,17 +228,12 @@ begin
 
   with FClock do
   begin
-    // Config file is already loaded: Edit fields contain last alarm time
-    if TryStrToTime(eHour.Text +':'+ eMin.Text, ParsedAlertTime) then
-      Alert := ParsedAlertTime
-    else
-      Alert := 0;
-
-    eHour.Text := Alert.HourToString();
-    eMin.Text := Alert.MinuteToString();
     OnAlert := Self.Alert;
     OnCounting := Self.Counting;
   end;  //of with
+
+  // Load configuration
+  LoadFromIni();
 end;
 
 { TMain.FormDestroy
@@ -449,15 +406,34 @@ var
   Config: TConfigFile;
   Locale: TLocale;
   AlertType: Integer;
+  AlarmHour, AlarmMinute: string;
+  ParsedAlarmTime: TDateTime;
+{$IFDEF MSWINDOWS}
+  SearchForUpdate: Boolean;
+{$ENDIF}
 
 begin
   try
     Config := TConfigFile.Create(FConfigPath);
 
     try
+      // Check if anything shall be loaded from config
+      if not Config.ReadBool(Config.SectionGlobal, Config.IdSave, False) then
+      begin
+        mmSave.Checked := False;
+        mmOptions.Enabled := False;
+      {$IFDEF MSWINDOWS}
+        SearchForUpdate := True;
+      {$ENDIF}
+        Exit;
+      end  //of begin
+      else
+        mmOptions.Enabled := True;
+
       // Load language from config
     {$IFDEF MSWINDOWS}
       Locale := Config.ReadInteger(Config.SectionGlobal, Config.IdLocale, 0);
+      SearchForUpdate := Config.ReadBool(Config.SectionGlobal, Config.IdAutoUpdate, True);
     {$ELSE}
       Locale := Config.ReadString(Config.SectionGlobal, Config.IdLocale, '');
     {$ENDIF}
@@ -466,14 +442,21 @@ begin
       FLang.Locale := Locale;
 
       // Load last mode
-      mmTimer.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdTimerMode, True);
+      FClock.TimerMode := Config.ReadBool(Config.SectionGlobal, Config.IdTimerMode, True);
+      mmTimer.Checked := FClock.TimerMode;
       mmCounter.Checked := not mmTimer.Checked;
 
       // Load last time?
       if Config.ReadBool(Config.SectionGlobal, Config.IdSaveClock, False) then
       begin
-        eHour.Text := Config.ReadString(Config.SectionAlert, Config.IdHour, '00');
-        eMin.Text := Config.ReadString(Config.SectionAlert, Config.IdMinute, '00');
+        AlarmHour := Config.ReadString(Config.SectionAlert, Config.IdHour, '00');
+        AlarmMinute := Config.ReadString(Config.SectionAlert, Config.IdMinute, '00');
+
+        if TryStrToTime(AlarmHour + FormatSettings.TimeSeparator + AlarmMinute, ParsedAlarmTime) then
+          FClock.Alert := ParsedAlarmTime;
+
+        eHour.Text := FClock.Alert.HourToString();
+        eMin.Text := FClock.Alert.MinuteToString();
       end;  //of begin
 
       // Load last sound?
@@ -481,7 +464,7 @@ begin
       begin
         AlertType := Config.ReadInteger(Config.SectionAlert, Config.IdSound, 0);
 
-        if (AlertType in [0..4]) then
+        if (AlertType in [Ord(Low(TAlertSound))..Ord(High(TAlertSound))]) then
           rgSounds.ItemIndex := AlertType
         else
           rgSounds.ItemIndex := 0;
@@ -515,14 +498,16 @@ begin
       else
         FColor := clRed;
 
-    {$IFDEF MSWINDOWS}
-      // Missing "AutoUpdate"?
-      if not Config.ValueExists(Config.SectionGlobal, Config.IdAutoUpdate) then
-        Config.WriteBool(Config.SectionGlobal, Config.IdAutoUpdate, True);
-    {$ENDIF}
-
     finally
       Config.Free;
+
+    {$IFDEF MSWINDOWS}
+    {$IFNDEF DEBUG}
+      // Search for update?
+      if SearchForUpdate then
+        FUpdateCheck.CheckForUpdate();
+    {$ENDIF}
+    {$ENDIF}
     end;  //of try
 
   except
@@ -645,11 +630,7 @@ begin
     mmView.Caption := GetString(LID_VIEW);
     mmLang.Caption := GetString(LID_SELECT_LANGUAGE);
     mmHelp.Caption := GetString(LID_HELP);
-  {$IFDEF MSWINDOWS}
-    mmUpdate.Caption:= GetString(LID_UPDATE_SEARCH);
-  {$ELSE}
-    mmUpdate.Caption := GetString(LID_TO_WEBSITE);
-  {$ENDIF}
+    mmUpdate.Caption:= GetString({$IFDEF MSWINDOWS}LID_UPDATE_SEARCH{$ELSE}LID_TO_WEBSITE{$ENDIF});
     mmInstallCertificate.Caption := GetString(LID_CERTIFICATE_INSTALL);
     mmReport.Caption := GetString(LID_REPORT_BUG);
     lCopy.Hint := GetString(LID_TO_WEBSITE);
