@@ -413,6 +413,10 @@ var
 {$ENDIF}
 
 begin
+{$IFDEF MSWINDOWS}
+  SearchForUpdate := True;
+{$ENDIF}
+
   try
     Config := TConfigFile.Create(FConfigPath);
 
@@ -422,9 +426,6 @@ begin
       begin
         mmSave.Checked := False;
         mmOptions.Enabled := False;
-      {$IFDEF MSWINDOWS}
-        SearchForUpdate := True;
-      {$ENDIF}
         Exit;
       end  //of begin
       else
