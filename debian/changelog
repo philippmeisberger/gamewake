@@ -1,4 +1,4 @@
-gamewake (3.5) UNRELEASED; urgency=medium
+gamewake (3.5) stable; urgency=medium
 
   * Minor release
   * Usage of Delphi/FPC TTime
@@ -22,7 +22,7 @@ gamewake (3.5) UNRELEASED; urgency=medium
     * Removed "Search for update" under Linux
   * Usage of Delphi/FPC TIniFile
 
- -- Philipp Meisberger <team@pm-codeworks.de>  Wed, 08 Feb 2017 16:29:08 +0100
+ -- Philipp Meisberger <team@pm-codeworks.de>  Wed, 21 Feb 2018 18:39:44 +0100
 
 gamewake (3.4) stable; urgency=medium
 
