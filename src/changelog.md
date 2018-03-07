@@ -3,6 +3,11 @@
 
 An open-source project of PM Code Works
 
+Version 3.5.1  [*??.03.18*]
+-------------
+
+* Fixed german language is always loaded at first start
+
 Version 3.5  [*23.02.18*]
 -----------
 

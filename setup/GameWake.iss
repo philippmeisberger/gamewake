@@ -41,7 +41,6 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "{#MyAppExePath32}{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion; Check: not Is64BitInstallMode
 Source: "{#MyAppExePath64}{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion; Check: Is64BitInstallMode
-Source: "gamewake.ini"; DestDir: "{userappdata}\{#MyAppName}"; Flags: onlyifdoesntexist
 Source: "..\bin\bell.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\bin\beep.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\bin\horn.wav"; DestDir: "{app}"; Flags: ignoreversion
@@ -58,6 +57,7 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: 
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram, {#MyAppName}}"; Flags: postinstall shellexec
 
 [Registry]
+; Delete obsolete registry key
 Root: HKCU; Subkey: "SOFTWARE\PM Code Works\{#MyAppName}"; Flags: deletekey
 Root: HKCU; Subkey: "SOFTWARE\PM Code Works"; Flags: uninsdeletekeyifempty
 
