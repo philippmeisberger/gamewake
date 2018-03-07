@@ -465,7 +465,7 @@ begin
       begin
         AlertType := Config.ReadInteger(Config.SectionAlert, Config.IdSound, 0);
 
-        if (AlertType in [Ord(Low(TAlertSound))..Ord(High(TAlertSound))]) then
+        if (AlertType in [0..4]) then
           rgSounds.ItemIndex := AlertType
         else
           rgSounds.ItemIndex := 0;

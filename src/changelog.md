@@ -7,6 +7,7 @@ Version 3.5.1  [*??.03.18*]
 -------------
 
 * Fixed german language is always loaded at first start
+* Fixed "Shutdown" selection mark is not loaded
 
 Version 3.5  [*23.02.18*]
 -----------
