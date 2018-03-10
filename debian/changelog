@@ -1,11 +1,11 @@
-gamewake (3.5.1) UNRELEASED; urgency=high
+gamewake (3.5.1) stable; urgency=high
 
   * Bug fix release
   * Fixed german language is always loaded at first start
   * Fixed "Shutdown" selection mark is not loaded
   * Fixed canceling options dialog stores partial settings
 
- -- Philipp Meisberger <team@pm-codeworks.de>  Sat, 10 Mar 2018 16:03:31 +0100
+ -- Philipp Meisberger <team@pm-codeworks.de>  Sat, 10 Mar 2018 19:03:31 +0100
 
 gamewake (3.5) stable; urgency=medium
 

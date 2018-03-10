@@ -673,7 +673,6 @@ var
   Options: TOptions;
 
 begin
-  Result := False;
   Options := TOptions.Create(Self, FClock, FLang, FConfigPath);
 
   try
