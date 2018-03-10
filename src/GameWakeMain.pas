@@ -124,6 +124,7 @@ type
   {$ENDIF}
     procedure SaveToIni();
     procedure ShowAlertTime();
+    function ShowOptionsDialog(): Boolean;
   end;
 
 var
@@ -422,9 +423,10 @@ begin
 
     try
       // Check if anything shall be loaded from config
-      if not Config.ReadBool(Config.SectionGlobal, Config.IdSave, False) then
+      mmSave.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdSave, False);
+
+      if not mmSave.Checked then
       begin
-        mmSave.Checked := False;
         mmOptions.Enabled := False;
         Exit;
       end  //of begin
@@ -664,6 +666,22 @@ procedure TMain.ShowAlertTime();
 begin
   eHour.Text := FClock.Alert.HourToString();
   eMin.Text := FClock.Alert.MinuteToString();
+end;
+
+function TMain.ShowOptionsDialog(): Boolean;
+var
+  Options: TOptions;
+
+begin
+  Result := False;
+  Options := TOptions.Create(Self, FClock, FLang, FConfigPath);
+
+  try
+    Result := (Options.ShowModal() = mrOk);
+
+  finally
+    FreeAndNil(Options);
+  end;  //of try
 end;
 
 { TMain.Blink
@@ -1042,10 +1060,14 @@ end;
 
 procedure TMain.mmSaveClick(Sender: TObject);
 begin
-  mmOptions.Enabled := mmSave.Checked;
+  // Show options dialog after checking
+  if not mmSave.Checked then
+    mmSave.Checked := ShowOptionsDialog()
+  else
+    mmSave.Checked := False;
 
-  if mmSave.Checked then
-    mmOptions.Click;
+  // Options only available if settings should be saved
+  mmOptions.Enabled := mmSave.Checked;
 end;
 
 { TMain.mmOptionsClick
@@ -1053,13 +1075,8 @@ end;
   MainMenu entry that allows to edit the configuration. }
 
 procedure TMain.mmOptionsClick(Sender: TObject);
-var
-  Options: TOptions;
-
 begin
-  Options := TOptions.Create(Self, FClock, FLang, FConfigPath);
-  Options.ShowModal;
-  Options.Free;
+  ShowOptionsDialog();
 end;
 
 { TMain.mmTimerClick

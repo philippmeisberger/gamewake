@@ -281,9 +281,7 @@ object Main: TMain
     object mmFile: TMenuItem
       Caption = 'File'
       object mmSave: TMenuItem
-        AutoCheck = True
         Caption = 'Store settings'
-        Checked = True
         OnClick = mmSaveClick
       end
     end

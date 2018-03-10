@@ -8,6 +8,7 @@ Version 3.5.1  [*??.03.18*]
 
 * Fixed german language is always loaded at first start
 * Fixed "Shutdown" selection mark is not loaded
+* Fixed canceling options dialog stores partial settings
 
 Version 3.5  [*23.02.18*]
 -----------
