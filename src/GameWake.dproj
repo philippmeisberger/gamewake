@@ -65,9 +65,11 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <Icon_MainIcon>gamewake.ico</Icon_MainIcon>
+        <BRCC_CodePage>65001</BRCC_CodePage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
         <Icon_MainIcon>gamewake.ico</Icon_MainIcon>
+        <BRCC_CodePage>65001</BRCC_CodePage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <VerInfo_AutoIncVersion>false</VerInfo_AutoIncVersion>

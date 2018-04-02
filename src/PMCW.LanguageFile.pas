@@ -302,7 +302,11 @@ type
 implementation
 
 {$IFDEF MSWINDOWS}
+{$IFDEF FPC}
+{$R languages.rc}
+{$ELSE}
 {$R languages.res}
+{$ENDIF}
 
 { TLocaleHelper }
 
