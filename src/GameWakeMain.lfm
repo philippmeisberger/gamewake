@@ -6,7 +6,7 @@ object Main: TMain
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Game Wake'
-  ClientHeight = 271
+  ClientHeight = 270
   ClientWidth = 297
   Color = clBtnFace
   Font.Color = clBlack
@@ -17,7 +17,7 @@ object Main: TMain
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   Position = poScreenCenter
-  LCLVersion = '1.6.2.0'
+  LCLVersion = '1.8.2.0'
   object pText: TPanel
     Left = 8
     Height = 128
@@ -34,9 +34,9 @@ object Main: TMain
   end
   object lDp: TLabel
     Left = 144
-    Height = 27
+    Height = 29
     Top = 26
-    Width = 8
+    Width = 7
     Caption = ':'
     Font.CharSet = ANSI_CHARSET
     Font.Color = clBlack
@@ -48,17 +48,17 @@ object Main: TMain
   end
   object lHour: TLabel
     Left = 8
-    Height = 12
+    Height = 14
     Top = 8
     Width = 42
     Caption = '00:00:00'
     ParentColor = False
   end
   object lCopy: TLabel
-    Left = 107
-    Height = 12
-    Top = 257
-    Width = 83
+    Left = 104
+    Height = 14
+    Top = 254
+    Width = 88
     Anchors = [akBottom]
     Caption = 'PM Code Works'
     Font.CharSet = ANSI_CHARSET
@@ -77,7 +77,7 @@ object Main: TMain
   object bAlert: TButton
     Left = 8
     Height = 33
-    Top = 215
+    Top = 214
     Width = 136
     Anchors = [akLeft, akBottom]
     Caption = 'Alert'
@@ -87,17 +87,17 @@ object Main: TMain
   end
   object gpOther: TGroupBox
     Left = 152
-    Height = 128
+    Height = 127
     Top = 80
     Width = 137
     Anchors = [akTop, akLeft, akBottom]
     Caption = 'At alert'
-    ClientHeight = 114
+    ClientHeight = 108
     ClientWidth = 133
     TabOrder = 10
     object cbBlink: TCheckBox
       Left = 12
-      Height = 21
+      Height = 19
       Top = 18
       Width = 57
       Caption = 'Flash'
@@ -106,7 +106,7 @@ object Main: TMain
     end
     object cbText: TCheckBox
       Left = 12
-      Height = 21
+      Height = 19
       Top = 38
       Width = 88
       Caption = 'Show text'
@@ -136,7 +136,7 @@ object Main: TMain
   end
   object rgSounds: TRadioGroup
     Left = 8
-    Height = 128
+    Height = 127
     Top = 80
     Width = 137
     Anchors = [akTop, akLeft, akBottom]
@@ -150,7 +150,7 @@ object Main: TMain
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 114
+    ClientHeight = 108
     ClientWidth = 133
     ItemIndex = 0
     Items.Strings = (
@@ -199,7 +199,7 @@ object Main: TMain
   object bStop: TButton
     Left = 152
     Height = 33
-    Top = 215
+    Top = 214
     Width = 136
     Anchors = [akBottom]
     Cancel = True
@@ -320,28 +320,6 @@ object Main: TMain
     end
     object mmHelp: TMenuItem
       Caption = 'Help'
-      object mmUpdate: TMenuItem
-        Caption = 'Search for update'
-        OnClick = mmUpdateClick
-      end
-      object N2: TMenuItem
-        Caption = '-'
-      end
-      object mmInstallCertificate: TMenuItem
-        Caption = 'Install certificate'
-        OnClick = mmInstallCertificateClick
-      end
-      object mmReport: TMenuItem
-        Caption = 'Report bug'
-        OnClick = mmReportClick
-      end
-      object N3: TMenuItem
-        Caption = '-'
-      end
-      object mmAbout: TMenuItem
-        Caption = 'About'
-        OnClick = mmAboutClick
-      end
     end
   end
   object pmMenu: TPopupMenu
