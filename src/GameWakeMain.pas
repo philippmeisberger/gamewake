@@ -15,7 +15,7 @@ interface
 uses
   SysUtils, Classes, Graphics, Controls, Forms, StdCtrls, ExtCtrls, Menus,
   Dialogs, GameWakeAPI, PMCW.LanguageFile, PMCW.Dialogs.About, PMCW.SysUtils,
-  DateUtils,
+  DateUtils, PMCW.Dialogs,
 {$IFDEF MSWINDOWS}
   Winapi.Windows, System.UITypes, Winapi.ShlObj, Winapi.KnownFolders,
   Winapi.Messages, PMCW.Dialogs.Updater, PMCW.CA;
@@ -295,7 +295,7 @@ begin
     except
       on E: EOSError do
       begin
-        FLang.ShowException(FLang.GetString([LID_SHUTDOWN, LID_IMPOSSIBLE]), E.Message);
+        ExceptionDlg(FLang, FLang.GetString([LID_SHUTDOWN, LID_IMPOSSIBLE]), E.Message);
         bStop.Click;
       end;
     end;  //of try
@@ -516,7 +516,7 @@ begin
   except
     on E: Exception do
     begin
-      FLang.ShowException(FLang.Format(LID_LOADING_CONFIG_FAILED, [FConfigPath]),
+      ExceptionDlg(FLang, FLang.Format(LID_LOADING_CONFIG_FAILED, [FConfigPath]),
         E.Message);
     end;
   end;  //of try
@@ -606,7 +606,7 @@ begin
   except
     on E: Exception do
     begin
-      FLang.ShowException(FLang.Format(LID_STORING_CONFIG_FAILED, [FConfigPath]),
+      ExceptionDlg(FLang, FLang.Format(LID_STORING_CONFIG_FAILED, [FConfigPath]),
         E.Message);
     end;
   end;  //of try
@@ -1007,7 +1007,7 @@ begin
 
   except
     on E: Exception do
-      FLang.ShowException(FLang.GetString(LID_COLORS_INVALID), E.Message);
+      ExceptionDlg(FLang, FLang.GetString(LID_COLORS_INVALID), E.Message);
   end;  //of try
 end;
 
@@ -1118,20 +1118,7 @@ end;
 procedure TMain.mmInstallCertificateClick(Sender: TObject);
 begin
 {$IFDEF MSWINDOWS}
-  try
-    // Certificate already installed?
-    if CertificateExists() then
-    begin
-      MessageDlg(FLang.GetString(LID_CERTIFICATE_ALREADY_INSTALLED),
-        mtInformation, [mbOK], 0);
-    end  //of begin
-    else
-      InstallCertificate();
-
-  except
-    on E: EOSError do
-      MessageDlg(E.Message, mtError, [mbOK], 0);
-  end;  //of try
+  InstallCertificateDlg(FLang);
 {$ENDIF}
 end;
 
@@ -1169,7 +1156,7 @@ end;
 
 procedure TMain.mmReportClick(Sender: TObject);
 begin
-  FLang.ReportBug();
+  ReportBugDlg(FLang, '');
 end;
 
 { TMain.mmAboutClick
@@ -1177,31 +1164,8 @@ end;
   MainMenu entry that shows a info page with build number and version history. }
 
 procedure TMain.mmAboutClick(Sender: TObject);
-var
-  AboutDialog: TAboutDialog;
-  Description, Changelog: TResourceStream;
-
 begin
-  AboutDialog := TAboutDialog.Create(Self);
-  Description := TResourceStream.Create(HInstance, RESOURCE_DESCRIPTION, RT_RCDATA);
-  Changelog := TResourceStream.Create(HInstance, RESOURCE_CHANGELOG, RT_RCDATA);
-
-  try
-  {$IFDEF LINUX}
-    AboutDialog.Title := mmAbout.Caption;
-    AboutDialog.Icon.LoadFromResourceName(HINSTANCE, 'MAINICON');
-  {$ELSE}
-    AboutDialog.Title := StripHotkey(mmAbout.Caption);
-  {$ENDIF}
-    AboutDialog.Description.LoadFromStream(Description);
-    AboutDialog.Changelog.LoadFromStream(Changelog);
-    AboutDialog.Execute();
-
-  finally
-    Changelog.Free;
-    Description.Free;
-    AboutDialog.Free;
-  end;  //of begin
+  AboutDlg({$IFDEF LINUX}mmAbout.Caption{$ELSE}StripHotkey(mmAbout.Caption){$ENDIF});
 end;
 
 { TMain.lCopyClick
@@ -1274,7 +1238,7 @@ begin
     on E: Exception do
     begin
       Show();
-      FLang.ShowException(FLang.GetString(LID_TRAY_CREATION_FAILED), E.Message);
+      ExceptionDlg(FLang, FLang.GetString(LID_TRAY_CREATION_FAILED), E.Message);
     end;
   end;  //of try
 
