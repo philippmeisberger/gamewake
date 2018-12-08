@@ -50,6 +50,16 @@ Install the package
 
     ~# dpkg -i ../gamewake*.deb
 
+### Building for i386 using Docker
+
+Build Docker image
+
+    ~# docker build -t gamewake-i386:latest .
+
+Build Debian package inside Docker container
+
+    ~# docker run --rm -d -v ${PWD}/build:/build gamewake-i386:latest
+
 Installation for Windows
 ------------------------
 
