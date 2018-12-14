@@ -1,6 +1,8 @@
 Game Wake
 =========
 
+[![Build Status](https://travis-ci.org/philippmeisberger/gamewake.svg?branch=master)](https://travis-ci.org/philippmeisberger/gamewake)
+
 Game Wake is a simple to configure virtual alarm clock application. It provides multiple types of alerts and features both a timer and counter mode.
 
 Installation for Linux
