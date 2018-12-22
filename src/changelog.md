@@ -3,6 +3,11 @@
 
 An open-source project of PM Code Works
 
+Version 3.5.2  [*??.??.??*]
+-------------
+
+* New report bug feature
+
 Version 3.5.1  [*11.03.18*]
 -------------
 
