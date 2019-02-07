@@ -2,9 +2,6 @@ language: generic
 sudo: required
 dist: xenial
 
-os:
-  - linux
-
 install:
   - sudo apt-get update
   - sudo apt-get install -y debhelper fakeroot devscripts fpc lcl
@@ -12,3 +9,8 @@ install:
 script:
   - lazbuild -v
   - dpkg-buildpackage -uc -us
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
