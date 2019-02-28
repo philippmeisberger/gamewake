@@ -4,7 +4,8 @@ dist: xenial
 
 install:
   - sudo apt-get update
-  - sudo apt-get install -y debhelper fakeroot devscripts fpc lcl
+  - sudo apt-get install -y debhelper fakeroot devscripts
+  - sudo mk-build-deps -i -r -t 'apt-get -y' debian/control
 
 script:
   - lazbuild -v
