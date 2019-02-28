@@ -23,7 +23,7 @@ Version 3.5  [*23.02.18*]
   * Added 48x48 PNG for better desktop icon quality
 * Bug fixes:
   * Disabled alert after initiating a shutdown otherwise Game Wake was minimized and stayed active
-  * Blinking stayed enabled (even if deselected) after alarm has occured and was set again
+  * Blinking stayed enabled (even if deselected) after alarm has occurred and was set again
   * Exception when loading default time (00:00) at startup in counter mode
   * Automatic alarm termination after 1 minute did not work in counter mode
   * Portable Edition did not play bing sound
