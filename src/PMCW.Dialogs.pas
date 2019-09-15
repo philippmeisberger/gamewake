@@ -2,7 +2,7 @@
 {                                                                         }
 { PM Code Works Dialogs Unit v1.0                                         }
 {                                                                         }
-{ Copyright (c) 2011-2018 Philipp Meisberger (PM Code Works)              }
+{ Copyright (c) 2011-2019 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
 { *********************************************************************** }
 
@@ -14,7 +14,7 @@ interface
 
 uses
 {$IFDEF FPC}
-  PMCW.SysUtils,
+  PMCW.SysUtils, UITypes,
 {$ELSE}
   System.UITypes, PMCW.Dialogs.ReportBug,
 {$ENDIF}
@@ -86,8 +86,9 @@ begin
 {$WARN SYMBOL_PLATFORM ON}
 {$ELSE}
 begin
-  MessageDlg(ALanguageFile[LID_FATAL_ERROR] +': '+ AMessage + sLineBreak
-    + ADetails, mtError, [mbClose], 0);
+  if (MessageDlg(ALanguageFile[LID_FATAL_ERROR], AMessage +': '+ ADetails + sLineBreak +
+    ALanguageFile[LID_REPORT_BUG]+'?', mtError, [mbYes, mbClose], 0) = mrYes) then
+    ReportBugDlg(ALanguageFile, AMessage);
 {$ENDIF}
 end;
 
