@@ -6,7 +6,9 @@ An open-source project of PM Code Works
 Version 3.5.2  [*??.??.??*]
 -------------
 
-* New report bug feature
+* Introduced sending bug reports without mail client
+* Introduced translation dialog (in menu "Help")
+* Introduced donate button (in menu "Help")
 
 Version 3.5.1  [*11.03.18*]
 -------------
