@@ -315,28 +315,6 @@ object Main: TMain
     end
     object mmHelp: TMenuItem
       Caption = 'Help'
-      object mmUpdate: TMenuItem
-        Caption = 'Search for update'
-        OnClick = mmUpdateClick
-      end
-      object N2: TMenuItem
-        Caption = '-'
-      end
-      object mmInstallCertificate: TMenuItem
-        Caption = 'Install certificate'
-        OnClick = mmInstallCertificateClick
-      end
-      object mmReport: TMenuItem
-        Caption = 'Report bug'
-        OnClick = mmReportClick
-      end
-      object N3: TMenuItem
-        Caption = '-'
-      end
-      object mmAbout: TMenuItem
-        Caption = 'About'
-        OnClick = mmAboutClick
-      end
     end
   end
   object pmMenu: TPopupMenu
