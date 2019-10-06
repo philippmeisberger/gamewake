@@ -2,7 +2,7 @@
 {                                                                         }
 { Game Wake Main Unit                                                     }
 {                                                                         }
-{ Copyright (c) 2011-2018 Philipp Meisberger (PM Code Works)              }
+{ Copyright (c) 2011-2019 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
 { *********************************************************************** }
 
@@ -170,7 +170,7 @@ begin
     // File could not be found or file contains no languages -> Terminate anyway!
     on E: Exception do
     begin
-      MessageDlg(E.Message, mtError, [mbOK], 0);
+      MessageDlg(E.Message, mtError, [mbClose], 0);
       Application.Terminate;
     end;
   end;  //of try
