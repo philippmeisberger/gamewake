@@ -1,3 +1,10 @@
+gamewake (3.5.2) UNRELEASED; urgency=low
+
+  * Introduced sending bug reports without mail client
+  * Introduced donate button (in menu "Help")
+
+ -- Philipp Meisberger <phil@asgaard>  Sun, 06 Oct 2019 12:00:23 +0200
+
 gamewake (3.5.1) stable; urgency=high
 
   * Bug fix release
