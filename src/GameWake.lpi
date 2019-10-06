@@ -29,8 +29,8 @@
       <StringTable CompanyName="PM Code Works" FileDescription="Game Wake" LegalCopyright="Philipp Meisberger 2018" LegalTrademarks="PM Code Works" ProductName="Game Wake" ProductVersion="3.5"/>
     </VersionInfo>
     <BuildModes Count="2">
-      <Item1 Name="Debug" Default="True"/>
-      <Item2 Name="Release">
+      <Item1 Name="Release" Default="True"/>
+      <Item2 Name="Debug">
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
@@ -44,22 +44,26 @@
             <SyntaxOptions>
               <SyntaxMode Value="Delphi"/>
               <CStyleOperator Value="False"/>
+              <IncludeAssertionCode Value="True"/>
               <AllowLabel Value="False"/>
               <CPPInline Value="False"/>
             </SyntaxOptions>
           </Parsing>
           <CodeGeneration>
-            <SmartLinkUnit Value="True"/>
-            <Optimizations>
-              <OptimizationLevel Value="3"/>
-            </Optimizations>
+            <Checks>
+              <IOChecks Value="True"/>
+              <RangeChecks Value="True"/>
+              <OverflowChecks Value="True"/>
+              <StackChecks Value="True"/>
+            </Checks>
+            <VerifyObjMethodCallValidity Value="True"/>
           </CodeGeneration>
           <Linking>
             <Debugging>
-              <GenerateDebugInfo Value="False"/>
+              <UseHeaptrc Value="True"/>
+              <TrashVariables Value="True"/>
               <StripSymbols Value="True"/>
             </Debugging>
-            <LinkSmart Value="True"/>
           </Linking>
         </CompilerOptions>
       </Item2>
@@ -131,26 +135,22 @@
       <SyntaxOptions>
         <SyntaxMode Value="Delphi"/>
         <CStyleOperator Value="False"/>
-        <IncludeAssertionCode Value="True"/>
         <AllowLabel Value="False"/>
         <CPPInline Value="False"/>
       </SyntaxOptions>
     </Parsing>
     <CodeGeneration>
-      <Checks>
-        <IOChecks Value="True"/>
-        <RangeChecks Value="True"/>
-        <OverflowChecks Value="True"/>
-        <StackChecks Value="True"/>
-      </Checks>
-      <VerifyObjMethodCallValidity Value="True"/>
+      <SmartLinkUnit Value="True"/>
+      <Optimizations>
+        <OptimizationLevel Value="3"/>
+      </Optimizations>
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <UseHeaptrc Value="True"/>
-        <TrashVariables Value="True"/>
+        <GenerateDebugInfo Value="False"/>
         <StripSymbols Value="True"/>
       </Debugging>
+      <LinkSmart Value="True"/>
     </Linking>
   </CompilerOptions>
 </CONFIG>
