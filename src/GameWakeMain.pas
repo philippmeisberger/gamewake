@@ -2,7 +2,7 @@
 {                                                                         }
 { Game Wake Main Unit                                                     }
 {                                                                         }
-{ Copyright (c) 2011-2018 Philipp Meisberger (PM Code Works)              }
+{ Copyright (c) 2011-2019 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
 { *********************************************************************** }
 
@@ -14,32 +14,27 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Controls, Forms, StdCtrls, ExtCtrls, Menus,
-  Dialogs, DateUtils, GameWakeAPI, PMCW.LanguageFile, PMCW.Dialogs.About,
-  PMCW.SysUtils,
+  Dialogs, DateUtils, GameWakeAPI, PMCW.LanguageFile, PMCW.SysUtils, PMCW.Dialogs,
+  PMCW.Application,
 {$IFDEF MSWINDOWS}
-  Windows, ShlObj, Messages, PMCW.CA,
+  Windows, ShlObj, Messages,
+{$IFNDEF FPC}
+  System.UITypes, Winapi.KnownFolders;
 {$ENDIF}
-{$IFDEF FPC}
-  LCL;
-{$ELSE}
-  System.UITypes, Winapi.KnownFolders, PMCW.Dialogs.Updater;
 {$ENDIF}
 
 type
   { TMain }
-  TMain = class(TForm, IChangeLanguageListener)
+  TMain = class(TMainForm)
     eHour: TEdit;
     eMin: TEdit;
     bAlert: TButton;
     bStop: TButton;
     lDp: TLabel;
-    mmInstallCertificate: TMenuItem;
     pmClose: TMenuItem;
     pmOpen: TMenuItem;
     mmCounter: TMenuItem;
     mmTimer: TMenuItem;
-    mmUpdate: TMenuItem;
-    N2: TMenuItem;
     pmMenu: TPopupMenu;
     rgSounds: TRadioGroup;
     lHour: TLabel;
@@ -55,13 +50,11 @@ type
     mmFile: TMenuItem;
     mmSave: TMenuItem;
     mmHelp: TMenuItem;
-    mmAbout: TMenuItem;
     bColor: TButton;
     mmEdit: TMenuItem;
     mmOptions: TMenuItem;
     bPlayHorn: TButton;
     pText: TPanel;
-    N3: TMenuItem;
     bIncHour: TButton;
     bDecHour: TButton;
     bDecMin: TButton;
@@ -69,14 +62,11 @@ type
     N4: TMenuItem;
     mmView: TMenuItem;
     mmLang: TMenuItem;
-    mmReport: TMenuItem;
     TrayIcon: TTrayIcon;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure mmInstallCertificateClick(Sender: TObject);
     procedure pmCloseClick(Sender: TObject);
     procedure pmOpenClick(Sender: TObject);
-    procedure mmUpdateClick(Sender: TObject);
     procedure bIncHourClick(Sender: TObject);
     procedure bDecHourClick(Sender: TObject);
     procedure bIncMinClick(Sender: TObject);
@@ -98,8 +88,6 @@ type
     procedure mmOptionsClick(Sender: TObject);
     procedure mmTimerClick(Sender: TObject);
     procedure mmCounterClick(Sender: TObject);
-    procedure mmReportClick(Sender: TObject);
-    procedure mmAboutClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure lCopyClick(Sender: TObject);
     procedure lCopyMouseEnter(Sender: TObject);
@@ -109,25 +97,20 @@ type
   private
     FClock: TClock;
     FAlertThread: TAlertThread;
-    FLang: TLanguageFile;
     FColor: TColor;
     FConfigPath: string;
-  {$IFNDEF FPC}
-    FUpdateCheck: TUpdateCheck;
-  {$ENDIF}
     procedure Alert(Sender: TObject);
     procedure BlinkEnd(Sender: TObject);
     procedure Counting(Sender: TObject);
-    procedure LanguageChanged();
     procedure LoadFromIni();
-  {$IFNDEF FPC}
-    procedure OnUpdate(Sender: TObject; const ANewBuild: Cardinal);
-  {$ENDIF}
   {$IFDEF MSWINDOWS}
     procedure PowerBroadcast(var AMsg: TMessage); message WM_POWERBROADCAST;
   {$ENDIF}
     procedure SaveToIni();
     procedure ShowAlertTime();
+    function ShowOptionsDialog(): Boolean;
+  protected
+    procedure LanguageChanged(); override;
   end;
 
 var
@@ -151,13 +134,8 @@ uses GameWakeOps;
   VCL event that is called when form is being created. }
 
 procedure TMain.FormCreate(Sender: TObject);
-var
-  Config: TConfigFile;
-  ParsedAlertTime: TDateTime;
-{$IFNDEF FPC}
-  AutoUpdate: Boolean;
-{$ENDIF}
 {$IFNDEF MSWINDOWS}
+var
   i: Integer;
   LanguageFileName: TFileName;
 {$ENDIF}
@@ -192,7 +170,7 @@ begin
     // File could not be found or file contains no languages -> Terminate anyway!
     on E: Exception do
     begin
-      MessageDlg(E.Message, mtError, [mbOK], 0);
+      MessageDlg(E.Message, mtError, [mbClose], 0);
       Application.Terminate;
     end;
   end;  //of try
@@ -220,71 +198,23 @@ begin
   // Setup language
   FLang := TLanguageFile.Create(100);
 {$ENDIF}
-  with FLang do
-  begin
-    AddListener(Self);
-    BuildLanguageMenu(mmLang);
-  end;  //of with
+  FLang.AddListener(Self);
 
-  // Init config file access
-  Config := TConfigFile.Create(FConfigPath);
-
-  try
-    // Check if anything shall be loaded from config
-    if Config.ReadBool(Config.SectionGlobal, Config.IdSave, False) then
-    begin
-      LoadFromIni();
-      mmOptions.Enabled := True;
-    end  //of begin
-    else
-    begin
-      mmSave.Checked := False;
-      mmOptions.Enabled := False;
-    end;  //of if
-
-  {$IFNDEF FPC}
-    // Check for Updates?
-    AutoUpdate := Config.ReadBool(Config.SectionGlobal, Config.IdAutoUpdate, True);
-  {$ENDIF}
-
-  finally
-    Config.Free;
-  end;  //of finally
-
-{$IFNDEF FPC}
-  // Init update notificator
-  FUpdateCheck := TUpdateCheck.Create('GameWake', FLang);
-
-  with FUpdateCheck do
-  begin
-    OnUpdate := Self.OnUpdate;
-  {$IFNDEF DEBUG}
-    // Search for updates on startup?
-    if AutoUpdate then
-      CheckForUpdate();
-  {$ENDIF}
-  end;  //of with
-{$ENDIF}
-{$IFNDEF MSWINDOWS}
-  mmInstallCertificate.Visible := False;
-{$ENDIF}
+  // Build menus
+  BuildLanguageMenu(mmLang);
+  BuildHelpMenu(mmHelp);
 
   // Init Clock
   FClock := TClock.Create(mmTimer.Checked);
 
   with FClock do
   begin
-    // Config file is already loaded: Edit fields contain last alarm time
-    if TryStrToTime(eHour.Text +':'+ eMin.Text, ParsedAlertTime) then
-      Alert := ParsedAlertTime
-    else
-      Alert := 0;
-
-    eHour.Text := Alert.HourToString();
-    eMin.Text := Alert.MinuteToString();
     OnAlert := Self.Alert;
     OnCounting := Self.Counting;
   end;  //of with
+
+  // Load configuration
+  LoadFromIni();
 end;
 
 { TMain.FormDestroy
@@ -296,11 +226,7 @@ begin
   // Save configuration
   SaveToIni();
 
-  FreeAndNil(FLang);
   FreeAndNil(FClock);
-{$IFNDEF FPC}
-  FreeAndNil(FUpdateCheck);
-{$ENDIF}
 end;
 
 { private TMain.Alert
@@ -345,7 +271,7 @@ begin
     except
       on E: EOSError do
       begin
-        FLang.ShowException(FLang.GetString([LID_SHUTDOWN, LID_IMPOSSIBLE]), E.Message);
+        ExceptionDlg(FLang, FLang.GetString([LID_SHUTDOWN, LID_IMPOSSIBLE]), E.Message);
         bStop.Click;
       end;
     end;  //of try
@@ -363,60 +289,6 @@ begin
     end;  //of begin
   end;  //of begin
 end;
-
-{$IFNDEF FPC}
-{ private TMain.OnUpdate
-
-  Event that is called by TUpdateCheck when TUpdateCheckThread finds an update. }
-
-procedure TMain.OnUpdate(Sender: TObject; const ANewBuild: Cardinal);
-var
-  Updater: TUpdateDialog;
-
-begin
-  // Ask user to permit download
-  if (TaskMessageDlg(FLang.Format(LID_UPDATE_AVAILABLE, [ANewBuild]),
-    FLang.GetString(LID_UPDATE_CONFIRM_DOWNLOAD), mtConfirmation, mbYesNo, 0) = idYes) then
-  begin
-    Updater := TUpdateDialog.Create(Self, FLang);
-
-    try
-      with Updater do
-      begin
-      {$IFNDEF PORTABLE}
-        FileNameLocal := 'Game Wake Setup.exe';
-        FileNameRemote := 'game_wake_setup.exe';
-      {$ELSE}
-        FileNameLocal := 'Game Wake.exe';
-
-        // Download 64-Bit version?
-        if (TOSVersion.Architecture = arIntelX64) then
-          FileNameRemote := 'gamewake64.exe'
-        else
-          FileNameRemote := 'gamewake.exe';
-      {$ENDIF}
-      end;  //of with
-
-      // Successfully downloaded update?
-      if Updater.Execute() then
-      begin
-        // Caption "Search for update"
-        mmUpdate.Caption := FLang.GetString(LID_UPDATE_SEARCH);
-        mmUpdate.Enabled := False;
-      {$IFNDEF PORTABLE}
-        // Start with installation of new version
-        Updater.LaunchSetup();
-      {$ENDIF}
-      end;  //of begin
-
-    finally
-      Updater.Free;
-    end;  //of try
-  end  //of begin
-  else
-    mmUpdate.Caption := FLang.GetString(LID_UPDATE_DOWNLOAD);
-end;
-{$ENDIF}
 
 { private TMain.BlinkEnd
 
@@ -457,15 +329,36 @@ var
   Config: TConfigFile;
   Locale: TLocale;
   AlertType: Integer;
+  AlarmHour, AlarmMinute: string;
+  ParsedAlarmTime: TDateTime;
+{$IFDEF MSWINDOWS}
+  SearchForUpdate: Boolean;
+{$ENDIF}
 
 begin
+{$IFDEF MSWINDOWS}
+  SearchForUpdate := True;
+{$ENDIF}
+
   try
     Config := TConfigFile.Create(FConfigPath);
 
     try
+      // Check if anything shall be loaded from config
+      mmSave.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdSave, False);
+
+      if not mmSave.Checked then
+      begin
+        mmOptions.Enabled := False;
+        Exit;
+      end  //of begin
+      else
+        mmOptions.Enabled := True;
+
       // Load language from config
     {$IFDEF MSWINDOWS}
       Locale := Config.ReadInteger(Config.SectionGlobal, Config.IdLocale, 0);
+      SearchForUpdate := Config.ReadBool(Config.SectionGlobal, Config.IdAutoUpdate, True);
     {$ELSE}
       Locale := Config.ReadString(Config.SectionGlobal, Config.IdLocale, '');
     {$ENDIF}
@@ -474,14 +367,21 @@ begin
       FLang.Locale := Locale;
 
       // Load last mode
-      mmTimer.Checked := Config.ReadBool(Config.SectionGlobal, Config.IdTimerMode, True);
+      FClock.TimerMode := Config.ReadBool(Config.SectionGlobal, Config.IdTimerMode, True);
+      mmTimer.Checked := FClock.TimerMode;
       mmCounter.Checked := not mmTimer.Checked;
 
       // Load last time?
       if Config.ReadBool(Config.SectionGlobal, Config.IdSaveClock, False) then
       begin
-        eHour.Text := Config.ReadString(Config.SectionAlert, Config.IdHour, '00');
-        eMin.Text := Config.ReadString(Config.SectionAlert, Config.IdMinute, '00');
+        AlarmHour := Config.ReadString(Config.SectionAlert, Config.IdHour, '00');
+        AlarmMinute := Config.ReadString(Config.SectionAlert, Config.IdMinute, '00');
+
+        if TryStrToTime(AlarmHour + FormatSettings.TimeSeparator + AlarmMinute, ParsedAlarmTime) then
+          FClock.Alert := ParsedAlarmTime;
+
+        eHour.Text := FClock.Alert.HourToString();
+        eMin.Text := FClock.Alert.MinuteToString();
       end;  //of begin
 
       // Load last sound?
@@ -523,20 +423,24 @@ begin
       else
         FColor := clRed;
 
-    {$IFNDEF FPC}
-      // Missing "AutoUpdate"?
-      if not Config.ValueExists(Config.SectionGlobal, Config.IdAutoUpdate) then
-        Config.WriteBool(Config.SectionGlobal, Config.IdAutoUpdate, True);
-    {$ENDIF}
-
     finally
       Config.Free;
+
+    {$IFNDEF FPC}
+      // Search for update?
+      if SearchForUpdate then
+      {$IFDEF PORTABLE}
+        CheckForUpdate('GameWake', 'gamewake.exe', 'gamewake64.exe', 'Game Wake.exe');
+      {$ELSE}
+        CheckForUpdate('GameWake', 'game_wake_setup.exe', '', 'Game Wake Setup.exe');
+      {$ENDIF}
+    {$ENDIF}
     end;  //of try
 
   except
     on E: Exception do
     begin
-      FLang.ShowException(FLang.Format(LID_LOADING_CONFIG_FAILED, [FConfigPath]),
+      ExceptionDlg(FLang, FLang.Format(LID_LOADING_CONFIG_FAILED, [FConfigPath]),
         E.Message);
     end;
   end;  //of try
@@ -631,7 +535,7 @@ begin
   except
     on E: Exception do
     begin
-      FLang.ShowException(FLang.Format(LID_STORING_CONFIG_FAILED, [FConfigPath]),
+      ExceptionDlg(FLang, FLang.Format(LID_STORING_CONFIG_FAILED, [FConfigPath]),
         E.Message);
     end;
   end;  //of try
@@ -646,6 +550,8 @@ var
   i: Byte;
 
 begin
+  inherited LanguageChanged();
+
   with FLang do
   begin
     // Set captions for TMenuItems
@@ -656,17 +562,7 @@ begin
     mmTimer.Caption := GetString(LID_MODE_TIMER);
     mmCounter.Caption := GetString(LID_MODE_COUNTER);
     mmView.Caption := GetString(LID_VIEW);
-    mmLang.Caption := GetString(LID_SELECT_LANGUAGE);
-    mmHelp.Caption := GetString(LID_HELP);
-  {$IFNDEF FPC}
-    mmUpdate.Caption:= GetString(LID_UPDATE_SEARCH);
-  {$ELSE}
-    mmUpdate.Caption := GetString(LID_TO_WEBSITE);
-  {$ENDIF}
-    mmInstallCertificate.Caption := GetString(LID_CERTIFICATE_INSTALL);
-    mmReport.Caption := GetString(LID_REPORT_BUG);
     lCopy.Hint := GetString(LID_TO_WEBSITE);
-    mmAbout.Caption := Format(LID_ABOUT, [Application.Title]);
 
     // Set captions for "alert type" TRadioGroup
     rgSounds.Caption := GetString(LID_ALERT_SELECTION);
@@ -695,6 +591,21 @@ procedure TMain.ShowAlertTime();
 begin
   eHour.Text := FClock.Alert.HourToString();
   eMin.Text := FClock.Alert.MinuteToString();
+end;
+
+function TMain.ShowOptionsDialog(): Boolean;
+var
+  Options: TOptions;
+
+begin
+  Options := TOptions.Create(Self, FClock, FLang, FConfigPath);
+
+  try
+    Result := (Options.ShowModal() = mrOk);
+
+  finally
+    FreeAndNil(Options);
+  end;  //of try
 end;
 
 { TMain.Blink
@@ -793,7 +704,7 @@ end;
 
 procedure TMain.bPlayHornClick(Sender: TObject);
 begin
-  atHorn.PlayAlarmSound();
+  atSiren.PlayAlarmSound();
 end;
 
 { TMain.bPlayBingClick
@@ -1021,7 +932,7 @@ begin
 
   except
     on E: Exception do
-      FLang.ShowException(FLang.GetString(LID_COLORS_INVALID), E.Message);
+      ExceptionDlg(FLang, FLang.GetString(LID_COLORS_INVALID), E.Message);
   end;  //of try
 end;
 
@@ -1073,10 +984,14 @@ end;
 
 procedure TMain.mmSaveClick(Sender: TObject);
 begin
-  mmOptions.Enabled := mmSave.Checked;
+  // Show options dialog after checking
+  if not mmSave.Checked then
+    mmSave.Checked := ShowOptionsDialog()
+  else
+    mmSave.Checked := False;
 
-  if mmSave.Checked then
-    mmOptions.Click;
+  // Options only available if settings should be saved
+  mmOptions.Enabled := mmSave.Checked;
 end;
 
 { TMain.mmOptionsClick
@@ -1084,13 +999,8 @@ end;
   MainMenu entry that allows to edit the configuration. }
 
 procedure TMain.mmOptionsClick(Sender: TObject);
-var
-  Options: TOptions;
-
 begin
-  Options := TOptions.Create(Self, FClock, FLang, FConfigPath);
-  Options.ShowModal;
-  Options.Free;
+  ShowOptionsDialog();
 end;
 
 { TMain.mmTimerClick
@@ -1126,30 +1036,6 @@ begin
   end;  //of begin
 end;
 
-{ TMain.mmInstallCertificateClick
-
-  MainMenu entry that allows to install the PM Code Works certificate. }
-
-procedure TMain.mmInstallCertificateClick(Sender: TObject);
-begin
-{$IFDEF MSWINDOWS}
-  try
-    // Certificate already installed?
-    if CertificateExists() then
-    begin
-      MessageDlg(FLang.GetString(LID_CERTIFICATE_ALREADY_INSTALLED),
-        mtInformation, [mbOK], 0);
-    end  //of begin
-    else
-      InstallCertificate();
-
-  except
-    on E: EOSError do
-      MessageDlg(E.Message, mtError, [mbOK], 0);
-  end;  //of try
-{$ENDIF}
-end;
-
 procedure TMain.mmLangClick(Sender: TObject);
 var
   i: Integer;
@@ -1161,64 +1047,6 @@ begin
   {$ELSE}
     mmLang.Items[i].Checked := (mmLang.Items[i].Hint = FLang.Locale);
   {$ENDIF}
-end;
-
-{ TMain.mmUpdateClick
-
-  MainMenu entry that allows users to manually search for updates. }
-
-procedure TMain.mmUpdateClick(Sender: TObject);
-begin
-{$IFNDEF FPC}
-  FUpdateCheck.NotifyNoUpdate := True;
-  FUpdateCheck.CheckForUpdate();
-{$ELSE}
-  OpenUrl(URL_BASE +'gamewake.html');
-{$ENDIF}
-end;
-
-{ TMain.mmReportClick
-
-  MainMenu entry that allows users to easily report a bug by opening the web
-  browser and using the "report bug" formular. }
-
-procedure TMain.mmReportClick(Sender: TObject);
-begin
-  OpenUrl(URL_CONTACT);
-end;
-
-{ TMain.mmAboutClick
-
-  MainMenu entry that shows a info page with build number and version history. }
-
-procedure TMain.mmAboutClick(Sender: TObject);
-var
-  AboutDialog: TAboutDialog;
-  Description, Changelog: TResourceStream;
-
-begin
-  AboutDialog := TAboutDialog.Create(Self);
-  Description := TResourceStream.Create(HInstance, RESOURCE_DESCRIPTION, RT_RCDATA);
-  Changelog := TResourceStream.Create(HInstance, RESOURCE_CHANGELOG, RT_RCDATA);
-
-  try
-  {$IFDEF FPC}
-    AboutDialog.Title := mmAbout.Caption;
-  {$ELSE}
-    AboutDialog.Title := StripHotkey(mmAbout.Caption);
-  {$ENDIF}
-  {$IFDEF LINUX}
-    AboutDialog.Icon.LoadFromResourceName(HINSTANCE, 'MAINICON');
-  {$ENDIF}
-    AboutDialog.Description.LoadFromStream(Description);
-    AboutDialog.Changelog.LoadFromStream(Changelog);
-    AboutDialog.Execute();
-
-  finally
-    Changelog.Free;
-    Description.Free;
-    AboutDialog.Free;
-  end;  //of begin
 end;
 
 { TMain.lCopyClick
@@ -1291,7 +1119,7 @@ begin
     on E: Exception do
     begin
       Show();
-      FLang.ShowException(FLang.GetString(LID_TRAY_CREATION_FAILED), E.Message);
+      ExceptionDlg(FLang, FLang.GetString(LID_TRAY_CREATION_FAILED), E.Message);
     end;
   end;  //of try
 

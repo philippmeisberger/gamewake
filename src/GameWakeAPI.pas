@@ -99,12 +99,6 @@ type
   end;
 
   TTimeHelper = record helper for TTime
-    const
-      /// <summary>
-      ///   Two digit format to add a leading zero to values between 0 and 9.
-      /// </summary>
-      TwoDigitFormat = '%.2d';
-
     /// <summary>
     ///   Checks if a given time is equal to current time ignoring milliseconds.
     /// </summary>
@@ -286,7 +280,28 @@ type
   /// <summary>
   ///   Possible alert sounds.
   /// </summary>
-  TAlertSound = (atClock, atHorn, atBing, atBeep);
+  TAlertSound = (
+
+    /// <summary>
+    ///   Classical clock alarm sound.
+    /// </summary>
+    atClock,
+
+    /// <summary>
+    ///   Siren sound.
+    /// </summary>
+    atSiren,
+
+    /// <summary>
+    ///   Default Windows notification sound.
+    /// </summary>
+    atBing,
+
+    /// <summary>
+    ///   Beep beep beep sound.
+    /// </summary>
+    atBeep
+  );
 
   TAlertSoundHelper = record helper for TAlertSound
     /// <summary>
@@ -346,23 +361,24 @@ type
 function PlaySound(const AFileName: string; ASynchronized: Boolean = False): Boolean;
 
 /// <summary>
-///   Shutdown PC.
+///   Shuts the PC down.
 /// </summary>
 procedure Shutdown();
 
 implementation
 
+{$IFDEF MSWINDOWS}
+const
+  cSynchronous: array[Boolean] of DWORD = (SND_ASYNC, SND_SYNC);
+{$ENDIF}
 {$IFDEF FPC}
 const
   SND_SENTRY = $80000;
 {$ENDIF}
-
 function PlaySound(const AFileName: string; ASynchronized: Boolean = False): Boolean;
-var
 {$IFNDEF MSWINDOWS}
+var
   Process: TProcess;
-{$ELSE}
-  Flags: DWORD;
 {$ENDIF}
 
 begin
@@ -370,16 +386,8 @@ begin
     Exit(False);
 
 {$IFDEF MSWINDOWS}
-  if ASynchronized then
-    Flags := SND_SYNC
-  else
-    Flags := SND_ASYNC;
-
-  // Add volume slider in system tray
-  if CheckWin32Version(6) then
-    Inc(Flags, SND_SENTRY);
-
-  Result := MMSystem.PlaySound(PChar(AFileName), 0, Flags or SND_FILENAME);
+  Result := MMSystem.PlaySound(PChar(AFileName), 0, cSynchronous[ASynchronized] or
+    SND_FILENAME or SND_SENTRY);
 {$ELSE}
   Process := TProcess.Create(nil);
 
@@ -538,7 +546,7 @@ end;
 
 function TTimeHelper.HourToString(): string;
 begin
-  Result := Format(TwoDigitFormat, [Hour()]);
+  Result := FormatDateTime('hh', Self);
 end;
 
 function TTimeHelper.Minute(): Word;
@@ -551,7 +559,7 @@ end;
 
 function TTimeHelper.MinuteToString(): string;
 begin
-  Result := Format(TwoDigitFormat, [Minute()]);
+  Result := FormatDateTime('nn', Self);
 end;
 
 function TTimeHelper.Second(): Word;
@@ -564,7 +572,7 @@ end;
 
 function TTimeHelper.SecondToString(): string;
 begin
-  Result := Format(TwoDigitFormat, [Second()]);
+  Result := FormatDateTime('ss', Self);
 end;
 
 procedure TTimeHelper.SetHour(const AHour: Word);
@@ -602,6 +610,7 @@ constructor TClock.Create(ATimerMode: Boolean);
 begin
   inherited Create;
   FAlertEnabled := False;
+  FAlertTime := 0;
 
   // Init TTimer
   FTimer := TTimer.Create(nil);
@@ -687,11 +696,6 @@ end;
 { TAlertSoundHelper }
 
 function TAlertSoundHelper.PlayAlarmSound(ASynchronized: Boolean = False): Boolean;
-{$IFDEF MSWINDOWS}
-const
-  Synchronous: array[Boolean] of DWORD = (SND_ASYNC, SND_SYNC);
-{$ENDIF}
-
 var
   Sound: string;
 
@@ -701,22 +705,25 @@ begin
   begin
     // Play default Windows sound
     Exit(MMSystem.PlaySound(PChar(SND_ALIAS_SYSTEMDEFAULT), 0,
-      Synchronous[ASynchronized] or SND_ALIAS_ID or SND_SENTRY));
+      cSynchronous[ASynchronized] or SND_ALIAS_ID or SND_SENTRY));
   end;  //of begin
 {$ENDIF}
 
+  // Select sound
   case Self of
     atClock: Sound := 'bell';
-    atHorn:  Sound := 'horn';
+    atSiren: Sound := 'horn';
     atBing:  Sound := 'bing';
     atBeep:  Sound := 'beep';
     else     Exit(False);
   end;  //of case
 
 {$IFDEF PORTABLE}
-  Result := MMSystem.PlaySound(PChar(Sound), HInstance, Synchronous[ASynchronized] or
+  // Play sound form resource
+  Result := MMSystem.PlaySound(PChar(Sound), HInstance, cSynchronous[ASynchronized] or
     SND_RESOURCE or SND_SENTRY);
 {$ELSE}
+  // Play sound file
   Result := PlaySound(ChangeFileExt({$IFDEF LINUX}'/usr/lib/gamewake/'+{$ENDIF}Sound,
     '.wav'), ASynchronized);
 {$ENDIF}

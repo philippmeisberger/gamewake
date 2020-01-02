@@ -13,7 +13,8 @@ unit GameWakeOps;
 interface
 
 uses
-  Forms, StdCtrls, Classes, Controls, SysUtils, PMCW.LanguageFile, GameWakeAPI;
+  Forms, StdCtrls, Classes, Controls, SysUtils, PMCW.LanguageFile, GameWakeAPI,
+  PMCW.Dialogs;
 
 type
   { TOptions }
@@ -98,7 +99,7 @@ begin
 
   except
     on E: Exception do
-      FLang.ShowException(FLang.Format(LID_STORING_FAILED, [FConfigPath]), E.Message);
+      ExceptionDlg(FLang, FLang.Format(LID_STORING_FAILED, [FConfigPath]), E.Message);
   end;  //of try
 end;
 
@@ -190,7 +191,7 @@ begin
   except
     on E: Exception do
     begin
-      FLang.ShowException(FLang.Format(LID_STORING_CONFIG_FAILED, [FConfigPath]), E.Message);
+      ExceptionDlg(FLang, FLang.Format(LID_STORING_CONFIG_FAILED, [FConfigPath]), E.Message);
       ModalResult := mrAbort;
     end;  //of begin
   end;  //of try

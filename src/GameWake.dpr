@@ -27,7 +27,7 @@ begin
   ReportMemoryLeaksOnShutdown := True;
 {$ENDIF}
   Application.Initialize;
-  Application.Title := 'Game Wake';
+  Application.Title:='Game Wake';
 {$IFDEF MSWINDOWS}
   Application.MainFormOnTaskbar := True;
 {$ENDIF}

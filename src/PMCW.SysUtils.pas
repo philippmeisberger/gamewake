@@ -2,7 +2,7 @@
 {                                                                         }
 { PM Code Works System Utilities Unit v1.0                                }
 {                                                                         }
-{ Copyright (c) 2011-2018 Philipp Meisberger (PM Code Works)              }
+{ Copyright (c) 2011-2019 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
 { *********************************************************************** }
 
@@ -24,16 +24,16 @@ const
   /// <summary>
   ///   URL to the website.
   /// </summary>
-  URL_BASE    = 'http://www.pm-codeworks.de/';
+  URL_BASE     = 'https://www.pm-codeworks.de/';
 
   /// <summary>
-  ///   URL to the report bug formular on the website.
+  ///   Contact mail.
   /// </summary>
-  URL_CONTACT = URL_BASE +'kontakt.html';
+  MAIL_CONTACT = 'team@pm-codeworks.de';
 
 type
   /// <summary>
-  ///   Contains product version information.
+  ///   Contains file version information.
   /// </summary>
   TFileVersion = record
 
@@ -79,6 +79,84 @@ type
     function ToString(const AFormat: string = '%d.%d.%d.%d'): string;
   end;
 
+{$IFDEF MSWINDOWS}
+  /// <summary>
+  ///   Contains information stored in a .exe file.
+  /// </summary>
+  TExeFileInformation = record
+    /// <summary>
+    ///   The comments field.
+    /// </summary>
+    Comments: string;
+
+    /// <summary>
+    ///   The internal name.
+    /// </summary>
+    InternalName: string;
+
+    /// <summary>
+    ///   The product name.
+    /// </summary>
+    ProductName: string;
+
+    /// <summary>
+    ///   The company name.
+    /// </summary>
+    CompanyName: string;
+
+    /// <summary>
+    ///   Copyright owner.
+    /// </summary>
+    LegalCopyright: string;
+
+    /// <summary>
+    ///   The product version.
+    /// </summary>
+    ProductVersion: string;
+
+    /// <summary>
+    ///   The file description.
+    /// </summary>
+    FileDescription: string;
+
+    /// <summary>
+    ///   Trademark information.
+    /// </summary>
+    LegalTrademarks: string;
+
+    /// <summary>
+    ///   Private build identifier.
+    /// </summary>
+    PrivateBuild: string;
+
+    /// <summary>
+    ///   The file version.
+    /// </summary>
+    FileVersion: string;
+
+    /// <summary>
+    ///   The original filename.
+    /// </summary>
+    OriginalFilename: string;
+
+    /// <summary>
+    ///   Special build identifier.
+    /// </summary>
+    SpecialBuild: string;
+
+    /// <summary>
+    ///   Reads the <see cref="TExeFileInformation"/> from a .exe file.
+    /// </summary>
+    /// <param name="AFileName">
+    ///   The .exe file.
+    /// </param>
+    /// <returns>
+    ///   <c>True</c> if information could be read or <c>False</c> otherwise.
+    /// </returns>
+    function FromFile(const AFileName: string): Boolean;
+  end;
+{$ENDIF}
+
 /// <summary>
 ///   Opens a given URL.
 /// </summary>
@@ -91,6 +169,23 @@ type
 function OpenUrl(const AUrl: string): Boolean;
 
 {$IFDEF MSWINDOWS}
+/// <summary>
+///   Loads a string from a <c>STRINGTABLE</c> resource.
+/// </summary>
+/// <param name="AResource">
+///   Path to the resource.
+/// </param>
+/// <param name="AIdent">
+///   ID of the string.
+/// </param>
+/// <param name="ADefault">
+///   Optional: The default string to use if loading failed.
+/// </param>
+/// <returns>
+///   The string.
+/// </returns>
+function LoadResourceString(const AIdent: Word; const ADefault: string = ''): string; overload; inline;
+
 /// <summary>
 ///   Loads a string from a resource.
 /// </summary>
@@ -107,7 +202,25 @@ function OpenUrl(const AUrl: string): Boolean;
 ///   The string.
 /// </returns>
 function LoadResourceString(const AResource: string; const AIdent: Word;
-  const ADefault: string = ''): string;
+  const ADefault: string = ''): string; overload; inline;
+
+/// <summary>
+///   Loads a string from a resource.
+/// </summary>
+/// <param name="AInstance">
+///   The instance.
+/// </param>
+/// <param name="AIdent">
+///   ID of the string.
+/// </param>
+/// <param name="ADefault">
+///   Optional: The default string to use if loading failed.
+/// </param>
+/// <returns>
+///   The string.
+/// </returns>
+function LoadResourceString(AInstance: HINST; const AIdent: Word;
+  const ADefault: string = ''): string; overload;
 
 /// <summary>
 ///   Expands an environment variable.
@@ -191,9 +304,14 @@ function Wow64RevertWow64FsRedirection(OldValue: BOOL): BOOL; stdcall;
 implementation
 
 {$IFDEF MSWINDOWS}
-function GetSystemWow64Directory(lpBuffer: LPTSTR; uSize: UINT): UINT; stdcall; external kernel32 name 'GetSystemWow64Directory'+{$IFDEF UNICODE}'W'{$ELSE}'A'{$ENDIF}; overload;
+function GetSystemWow64Directory(lpBuffer: LPTSTR; uSize: UINT): UINT; stdcall;
+  external kernel32 name 'GetSystemWow64Directory'+{$IFDEF UNICODE}'W'{$ELSE}'A'{$ENDIF}; overload;
 function Wow64DisableWow64FsRedirection; external kernel32 name 'Wow64DisableWow64FsRedirection';
 function Wow64RevertWow64FsRedirection; external kernel32 name 'Wow64RevertWow64FsRedirection';
+{$IFDEF FPC}
+function SHGetKnownFolderPath(const rfid: TIID; dwFlags: DWORD; hToken: THandle;
+  var ppszPath: LPWSTR): HRESULT; external shell32 name 'SHGetKnownFolderPath';
+{$ENDIF}
 
 function DisableWow64FsRedirection(): Boolean;
 {$IFDEF WIN32}
@@ -267,7 +385,7 @@ end;
 {$IFNDEF FPC}
 function GetKnownFolderPath(AFolderId: TGUID): string;
 var
-  Path: PChar;
+  Path: PWideChar;
 
 begin
   if Succeeded(SHGetKnownFolderPath(AFolderId, 0, 0, Path)) then
@@ -278,17 +396,28 @@ begin
 end;
 {$ENDIF}
 
+function LoadResourceString(const AIdent: Word; const ADefault: string = ''): string;
+begin
+  Result := LoadResourceString(HInstance, AIdent, ADefault);
+end;
+
 function LoadResourceString(const AResource: string; const AIdent: Word;
   const ADefault: string = ''): string;
+begin
+  Result := LoadResourceString(GetModuleHandle(PChar(AResource)), AIdent, ADefault);
+end;
+
+function LoadResourceString(AInstance: HINST; const AIdent: Word;
+  const ADefault: string = ''): string;
 var
-  Module: HMODULE;
-  Buffer: array[0..1023] of Char;
+  CharsCopied: Integer;
 
 begin
-  Module := GetModuleHandle(PChar(AResource));
+  SetLength(Result, 1023);
+  CharsCopied := LoadString(AInstance, AIdent, PChar(Result), Length(Result));
 
-  if ((Module <> 0) and (LoadString(Module, AIdent, @Buffer[0], SizeOf(Buffer)) <> 0)) then
-    Result := Buffer
+  if (CharsCopied > 0) then
+    SetLength(Result, CharsCopied)
   else
     Result := ADefault;
 end;
@@ -331,7 +460,83 @@ begin
     nShow := SW_SHOWDEFAULT;
   end;  //of with
 
-  Result := {$IFDEF FPC}ShellExecuteExA{$ELSE}ShellExecuteEx{$ENDIF}(@ShellExecuteInfo);
+  Result := {$IFDEF UNICODE}ShellExecuteExW{$ELSE}ShellExecuteExA{$ENDIF}(@ShellExecuteInfo);
+end;
+
+
+{ TExeFileInformation }
+
+function TExeFileInformation.FromFile(const AFileName: string): Boolean;
+var
+  FileInfo: TSHFileInfo;
+  VersionSize, VersionHandle: DWORD;
+  BufferSize: UINT;
+  VersionInfo: PChar;
+  Buffer: Pointer;
+  ExeFileInfo: string;
+
+begin
+  // File is .exe file
+  if (SHGetFileInfo(PChar(AFileName), 0, FileInfo, SizeOf(FileInfo), SHGFI_EXETYPE) = 0) then
+    Exit(False);
+
+  VersionSize := GetFileVersionInfoSize(PChar(AFileName), VersionHandle);
+
+  if (VersionSize = 0) then
+    Exit(False);
+
+  GetMem(VersionInfo, VersionSize);
+
+  try
+    if not GetFileVersionInfo(PChar(AFileName), VersionHandle, VersionSize, VersionInfo) then
+      Exit(False);
+
+    if not VerQueryValue(VersionInfo, '\VarFileInfo\Translation', Buffer, BufferSize) then
+      Exit(False);
+
+    ExeFileInfo := Format('\StringFileInfo\%.4x%.4x\', [LoWord(DWORD(Buffer^)), HiWord(DWORD(Buffer^))]);
+
+    if VerQueryValue(VersionInfo, PChar(ExeFileInfo +'Comments'), Buffer, BufferSize) then
+      Comments := PChar(Buffer);
+
+    if VerQueryValue(VersionInfo, PChar(ExeFileInfo +'InternalName'), Buffer, BufferSize) then
+      InternalName := PChar(Buffer);
+
+    if VerQueryValue(VersionInfo, PChar(ExeFileInfo +'ProductName'), Buffer, BufferSize) then
+      ProductName := PChar(Buffer);
+
+    if VerQueryValue(VersionInfo, PChar(ExeFileInfo +'CompanyName'), Buffer, BufferSize) then
+      CompanyName := PChar(Buffer);
+
+    if VerQueryValue(VersionInfo, PChar(ExeFileInfo +'LegalCopyright'), Buffer, BufferSize) then
+      LegalCopyright := PChar(Buffer);
+
+    if VerQueryValue(VersionInfo, PChar(ExeFileInfo +'ProductVersion'), Buffer, BufferSize) then
+      ProductVersion := PChar(Buffer);
+
+    if VerQueryValue(VersionInfo, PChar(ExeFileInfo +'FileDescription'), Buffer, BufferSize) then
+      FileDescription := PChar(Buffer);
+
+    if VerQueryValue(VersionInfo, PChar(ExeFileInfo +'LegalTrademarks'), Buffer, BufferSize) then
+      LegalTrademarks := PChar(Buffer);
+
+    if VerQueryValue(VersionInfo, PChar(ExeFileInfo +'PrivateBuild'), Buffer, BufferSize) then
+      PrivateBuild := PChar(Buffer);
+
+    if VerQueryValue(VersionInfo, PChar(ExeFileInfo +'FileVersion'), Buffer, BufferSize) then
+      FileVersion := PChar(Buffer);
+
+    if VerQueryValue(VersionInfo, PChar(ExeFileInfo +'OriginalFilename'), Buffer, BufferSize) then
+      OriginalFilename := PChar(Buffer);
+
+    if VerQueryValue(VersionInfo, PChar(ExeFileInfo +'SpecialBuild'), Buffer, BufferSize) then
+      SpecialBuild := PChar(Buffer);
+
+    Result := True;
+
+  finally
+    FreeMem(VersionInfo, VersionSize);
+  end;  //of try
 end;
 {$ENDIF}
 

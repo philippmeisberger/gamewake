@@ -23,7 +23,7 @@ DisableProgramGroupPage=yes
 LicenseFile=..\LICENSE.txt
 OutputDir=.
 OutputBaseFilename=game_wake_setup
-Compression=lzma
+Compression=lzma2
 SolidCompression=yes
 ArchitecturesInstallIn64BitMode=x64
 UninstallDisplayIcon={app}\{#MyAppExeName}
@@ -36,12 +36,11 @@ Name: "french"; MessagesFile: "compiler:Languages\French.isl"
 Name: "german"; MessagesFile: "compiler:Languages\German.isl"
 
 [Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
+Name: "DesktopIcon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
 
 [Files]
 Source: "{#MyAppExePath32}{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion; Check: not Is64BitInstallMode
 Source: "{#MyAppExePath64}{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion; Check: Is64BitInstallMode
-Source: "gamewake.ini"; DestDir: "{userappdata}\{#MyAppName}"; Flags: onlyifdoesntexist
 Source: "..\bin\bell.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\bin\beep.wav"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\bin\horn.wav"; DestDir: "{app}"; Flags: ignoreversion
@@ -50,20 +49,22 @@ Source: "..\bin\horn.wav"; DestDir: "{app}"; Flags: ignoreversion
 Name: "{userappdata}\{#MyAppName}"; Flags: uninsalwaysuninstall
 
 [Icons]
-Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
-Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: DesktopIcon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram, {#MyAppName}}"; Flags: postinstall shellexec
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: postinstall shellexec skipifsilent
 
 [Registry]
+; Delete obsolete registry key
 Root: HKCU; Subkey: "SOFTWARE\PM Code Works\{#MyAppName}"; Flags: deletekey
 Root: HKCU; Subkey: "SOFTWARE\PM Code Works"; Flags: uninsdeletekeyifempty
 
 [InstallDelete]
 ; Replace "Game Wake.exe" by "GameWake.exe"
 Type: files; Name: "{app}\Game Wake.exe"
+; Delete old start menu group
+Type: filesandordirs; Name: "{group}"
 
 [UninstallDelete]
 Type: files; Name: "{userappdata}\{#MyAppName}\gamewake.ini"

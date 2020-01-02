@@ -1,0 +1,17 @@
+language: generic
+sudo: required
+dist: xenial
+
+install:
+  - sudo apt-get update
+  - sudo apt-get install -y debhelper fakeroot devscripts equivs
+  - sudo mk-build-deps -i -r -t 'apt-get -y' debian/control
+
+script:
+  - lazbuild -v
+  - dpkg-buildpackage -uc -us
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change

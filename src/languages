@@ -5,7 +5,7 @@
 103=Frage
 104=Information
 105=
-106=abbrechen
+106=Abbrechen
 107=Abgebrochen!
 108=Fertig!
 109=
@@ -35,9 +35,9 @@
 133=Datei
 134=
 135=
-136=Registry Datei *.reg|*.reg
+136=
 137=
-138=
+138=Spenden
 139=
 140=
 141=
@@ -127,9 +127,9 @@
 133=File
 134=
 135=
-136=Registy file *.reg|*.reg
+136=
 137=
-138=
+138=Donate
 139=
 140=
 141=
@@ -219,9 +219,9 @@
 133=Fichier
 134=
 135=
-136=Fichier enregistrement *.reg|*.reg
+136=
 137=
-138=
+138=Donner
 139=
 140=
 141=

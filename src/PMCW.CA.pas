@@ -2,7 +2,7 @@
 {                                                                         }
 { PM Code Works Certificate unit                                          }
 {                                                                         }
-{ Copyright (c) 2011-2018 Phlipp Meisberger (PM Code Works)               }
+{ Copyright (c) 2011-2019 Phlipp Meisberger (PM Code Works)               }
 {                                                                         }
 { *********************************************************************** }
 
@@ -99,7 +99,7 @@ begin
       nShow := SW_HIDE;
     end;  //of with
 
-    if not {$IFDEF FPC}ShellExecuteExA{$ELSE}ShellExecuteEx{$ENDIF}(@ShellExecuteInfo) then
+    if not {$IFDEF UNICODE}ShellExecuteExW{$ELSE}ShellExecuteExA{$ENDIF}(@ShellExecuteInfo) then
       raise EOSError.Create(SysErrorMessage(GetLastError()));
 
   finally

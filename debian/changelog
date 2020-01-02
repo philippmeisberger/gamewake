@@ -1,4 +1,20 @@
-gamewake (3.5) UNRELEASED; urgency=medium
+gamewake (3.5.2) UNRELEASED; urgency=low
+
+  * Introduced sending bug reports without mail client
+  * Introduced donate button (in menu "Help")
+
+ -- Philipp Meisberger <phil@asgaard>  Sun, 06 Oct 2019 12:00:23 +0200
+
+gamewake (3.5.1) stable; urgency=high
+
+  * Bug fix release
+  * Fixed german language is always loaded at first start
+  * Fixed "Shutdown" selection mark is not loaded
+  * Fixed canceling options dialog stores partial settings
+
+ -- Philipp Meisberger <team@pm-codeworks.de>  Sat, 10 Mar 2018 19:03:31 +0100
+
+gamewake (3.5) stable; urgency=medium
 
   * Minor release
   * Usage of Delphi/FPC TTime
@@ -22,7 +38,7 @@ gamewake (3.5) UNRELEASED; urgency=medium
     * Removed "Search for update" under Linux
   * Usage of Delphi/FPC TIniFile
 
- -- Philipp Meisberger <team@pm-codeworks.de>  Wed, 08 Feb 2017 16:29:08 +0100
+ -- Philipp Meisberger <team@pm-codeworks.de>  Wed, 21 Feb 2018 18:39:44 +0100
 
 gamewake (3.4) stable; urgency=medium
 

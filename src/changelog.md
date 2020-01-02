@@ -3,7 +3,21 @@
 
 An open-source project of PM Code Works
 
-Version 3.5  [*??.10.18*]
+Version 3.5.2  [*??.??.??*]
+-------------
+
+* Introduced sending bug reports without mail client
+* Introduced translation dialog (in menu "Help")
+* Introduced donate button (in menu "Help")
+
+Version 3.5.1  [*11.03.18*]
+-------------
+
+* Fixed german language is always loaded at first start
+* Fixed "Shutdown" selection mark is not loaded
+* Fixed canceling options dialog stores partial settings
+
+Version 3.5  [*23.02.18*]
 -----------
 
 * Usage of Delphi/FPC TTime
@@ -16,7 +30,7 @@ Version 3.5  [*??.10.18*]
   * Added 48x48 PNG for better desktop icon quality
 * Bug fixes:
   * Disabled alert after initiating a shutdown otherwise Game Wake was minimized and stayed active
-  * Blinking stayed enabled (even if deselected) after alarm has occured and was set again
+  * Blinking stayed enabled (even if deselected) after alarm has occurred and was set again
   * Exception when loading default time (00:00) at startup in counter mode
   * Automatic alarm termination after 1 minute did not work in counter mode
   * Portable Edition did not play bing sound
