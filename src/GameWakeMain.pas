@@ -2,7 +2,7 @@
 {                                                                         }
 { Game Wake Main Unit                                                     }
 {                                                                         }
-{ Copyright (c) 2011-2019 Philipp Meisberger (PM Code Works)              }
+{ Copyright (c) 2011-2020 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
 { *********************************************************************** }
 
@@ -18,9 +18,11 @@ uses
   PMCW.Application,
 {$IFDEF MSWINDOWS}
   Windows, ShlObj, Messages,
-{$IFNDEF FPC}
-  System.UITypes, Winapi.KnownFolders;
 {$ENDIF}
+{$IFDEF FPC}
+  LCLType;
+{$ELSE}
+  System.UITypes, Winapi.KnownFolders;
 {$ENDIF}
 
 type
