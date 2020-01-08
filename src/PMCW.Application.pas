@@ -258,7 +258,7 @@ begin
 
   try
     AboutDialog.Title := {$IFDEF FPC}FMenuAbout.Caption{$ELSE}StripHotkey(FMenuAbout.Caption){$ENDIF};
-  {$IFDEF LINUX}
+  {$IFNDEF MSWINDOWS}
     AboutDialog.Icon.LoadFromResourceName(HINSTANCE, 'MAINICON');
   {$ENDIF}
     AboutDialog.Description.LoadFromStream(Description);

@@ -130,8 +130,7 @@ type
     FLanguages: TStringList;
   {$IFDEF MSWINDOWS}
     FInterval: Integer;
-  {$ENDIF}
-  {$IFDEF LINUX}
+  {$ELSE}
     FIni: TIniFile;
   {$ENDIF}
     function GetCount(): Integer;
@@ -341,7 +340,7 @@ end;
 
 { TLanguageFile }
 
-constructor TLanguageFile.Create({$IFDEF LINUX}const AIniFile: TFileName{$ELSE}
+constructor TLanguageFile.Create({$IFNDEF MSWINDOWS}const AIniFile: TFileName{$ELSE}
   const AInterval: Word = 200{$ENDIF});
 begin
   inherited Create;
