@@ -1,8 +1,8 @@
 { *********************************************************************** }
 {                                                                         }
-{ PM Code Works System Utilities Unit v1.0                                }
+{ PM Code Works System Utilities Unit v1.1                                }
 {                                                                         }
-{ Copyright (c) 2011-2019 Philipp Meisberger (PM Code Works)              }
+{ Copyright (c) 2011-2020 Philipp Meisberger (PM Code Works)              }
 {                                                                         }
 { *********************************************************************** }
 
@@ -17,7 +17,10 @@ uses
 {$IFDEF MSWINDOWS}
   Windows, ShellAPI, ShlObj, ActiveX;
 {$ELSE}
-  Process, Resource, ElfReader, VersionResource;
+  Classes, Process, FileInfo,
+{$ENDIF}
+{$IFDEF LINUX}
+  ElfReader;
 {$ENDIF}
 
 const
@@ -40,22 +43,22 @@ type
     /// <summary>
     ///   The major version.
     /// </summary>
-    Major: Cardinal;
+    Major: Word;
 
     /// <summary>
     ///   The minor version.
     /// </summary>
-    Minor: Cardinal;
+    Minor: Word;
 
     /// <summary>
     ///   The service version.
     /// </summary>
-    Service: Cardinal;
+    Service: Word;
 
     /// <summary>
     ///   The build number.
     /// </summary>
-    Build: Cardinal;
+    Build: Word;
 
     /// <summary>
     ///   Gets the complete version information of a file.
@@ -574,42 +577,37 @@ begin
 end;
 {$ELSE}
 var
-  Resources: TResources;
-  ResourceReader: TElfResourceReader;
-  VersionResource: TVersionResource;
-  i: Integer;
+  FileVersionInfo: TFileVersionInfo;
+  ProgramVersion: TProgramVersion;
 
 begin
-  Result := False;
-  VersionResource := nil;
-  Resources := TResources.Create;
-  ResourceReader := TElfResourceReader.Create;
-  i := 0;
+  FileVersionInfo := TFileVersionInfo.Create(nil);
 
   try
-    Resources.LoadFromFile(AFileName, ResourceReader);
+    try
+      FileVersionInfo.FileName := AFileName;
+      FileVersionInfo.ReadFileInfo();
 
-    while (not Assigned(VersionResource) and (i < Resources.Count)) do
-    begin
-      if (Resources.Items[i] is TVersionResource) then
-        VersionResource := TVersionResource(Resources.Items[i]);
+      if TryStrToProgramVersion(FileVersionInfo.VersionStrings.Values['FileVersion'], ProgramVersion) then
+      begin
+        Major := ProgramVersion.Major;
+        Minor := ProgramVersion.Minor;
+        Service := ProgramVersion.Revision;
+        Build := ProgramVersion.Build;
+        Result := True;
+      end  //of begin
+      else
+        Result := False;
 
-      Inc(i);
-    end;  //of while
-
-    if Assigned(VersionResource) then
-    begin
-      Major := VersionResource.FixedInfo.FileVersion[0];
-      Minor := VersionResource.FixedInfo.FileVersion[1];
-      Service := VersionResource.FixedInfo.FileVersion[2];
-      Build := VersionResource.FixedInfo.FileVersion[3];
-      Result := True;
-    end;  //of begin
+    except
+      on E: EFOpenError do
+        // File does not exist
+        Exit(False);
+    end;
 
   finally
-    ResourceReader.Free;
-    Resources.FRee;
-  end;  //of try
+    FileVersionInfo.Free;
+  end;
 end;
 {$ENDIF}
 
